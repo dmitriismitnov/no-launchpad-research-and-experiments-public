@@ -1,0 +1,47 @@
+# Build output
+dist
+storybook-static
+
+# Generated code
+src/shared/styled-system
+
+# Isolated git worktrees for parallel work
+.worktrees
+
+# Plan execution workspace
+.superpowers
+
+# Shared project files
+.output
+
+# Logs
+logs
+coverage
+test-results
+playwright-report
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.*
+.env*.local
+
+# Dependencies
+/node_modules
+
+# Editors and IDE
+/.idea
+.project
+.classpath
+*.launch
+.settings/
+
+# Local and temporary files
+gitignore
+*.local
+.mise.local.toml
+
+# System files
+.DS_Store
+Thumbs.db

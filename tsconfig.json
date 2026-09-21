@@ -1,0 +1,68 @@
+{
+    "compilerOptions": {
+        // Type checking
+        // Bundlers emit JS, tsc only checks.
+        "noEmit": true,
+
+        // Modules and resolution
+        // Preserve/Bundler matches Bun and modern bundlers.
+        "module": "Preserve",
+        "moduleResolution": "Bundler",
+        "moduleDetection": "force",
+        "jsx": "react-jsx",
+        "verbatimModuleSyntax": true,
+        "allowJs": true,
+        "allowImportingTsExtensions": true,
+        "resolvePackageJsonExports": true,
+        "resolvePackageJsonImports": true,
+
+        // Isolated transpilation
+        "isolatedModules": true,
+        "forceConsistentCasingInFileNames": true,
+
+        // Runtime targets
+        "target": "ESNext",
+        "lib": ["ESNext", "DOM", "DOM.Iterable"],
+        "skipLibCheck": true,
+
+        // Global types
+        // Bun APIs are needed by configs and tests.
+        "types": ["bun"],
+        "typeRoots": ["./node_modules/@types"],
+
+        // Strictness
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "useUnknownInCatchVariables": true,
+        "noUncheckedIndexedAccess": true,
+
+        "resolveJsonModule": true,
+
+        "paths": {
+            "@app/*": ["./src/app/*"],
+            "@shared/*": ["./src/shared/*"]
+        }
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.mts",
+        "src/**/*.cts",
+        "src/**/*.d.ts",
+        "test/**/*.ts",
+        "test/**/*.tsx",
+        ".storybook/**/*.ts",
+        ".storybook/**/*.tsx",
+        "*.config.ts",
+        "*.config.mts",
+        "*.config.cts",
+        "*.config.js",
+        "*.config.mjs",
+        "*.config.cjs"
+    ],
+    "exclude": ["gitignore", "dist", "node_modules"]
+}

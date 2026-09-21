@@ -1,0 +1,152 @@
+[tools]
+bun = "1.4.2"
+
+[env]
+# Dev server port; keep personal values in .mise.local.toml (git-ignored).
+APP_PORT = { default = "5173" }
+# App URL for local development and future browser checks.
+APP_URL = { default = "http://127.0.0.1:${APP_PORT}" }
+# Storybook port and URL.
+STORYBOOK_PORT = { default = "6006" }
+STORYBOOK_URL = { default = "http://127.0.0.1:${STORYBOOK_PORT}" }
+
+[tasks.install]
+description = "Install project dependencies with Bun."
+run = "bun install"
+
+[tasks.prepare]
+description = "Install git hooks and regenerate codegen artifacts after dependency changes."
+run = "mise run husky && mise run gen"
+
+[tasks.husky]
+description = "Install Husky git hooks."
+run = "bunx --no-install husky"
+
+[tasks."dev:start"]
+description = "Start the Vite dev server on APP_PORT."
+run = "mise run gen && bunx --no-install vite --host 127.0.0.1 --port $APP_PORT"
+
+[tasks."dev:stop"]
+description = "Stop the Vite dev server on APP_PORT."
+run = '''
+pid="$(lsof -ti tcp:${APP_PORT} || true)"
+if [ -n "$pid" ]; then
+  kill $pid
+fi
+'''
+
+[tasks."dev:restart"]
+description = "Restart the Vite dev server on APP_PORT."
+run = "mise run dev:stop && mise run dev:start"
+
+[tasks."dev:storybook"]
+description = "Start Storybook on STORYBOOK_PORT."
+run = "mise run gen && bunx --no-install storybook dev -p $STORYBOOK_PORT --no-open"
+
+[tasks.check]
+description = "Run the main local checks."
+run = "mise run check:lint && mise run check:types && mise run check:format && mise run test"
+
+[tasks."check:lint"]
+description = "Lint sources and configs without autofixes."
+run = "bunx --no-install eslint . --config ./eslint.config.mjs --max-warnings=0"
+
+[tasks."check:types"]
+description = "Type-check the project without writing files."
+run = "bunx --no-install tsc6 -p ./tsconfig.json --noEmit"
+
+[tasks."check:types-watch"]
+description = "Watch TypeScript errors without writing files."
+run = "bunx --no-install tsc6 -p ./tsconfig.json --noEmit --watch --preserveWatchOutput"
+
+[tasks."check:format"]
+description = "Check formatting with dprint."
+run = "bunx --no-install dprint check --allow-no-files --incremental=false"
+
+[tasks."check:deps"]
+description = "Check unused dependencies, files and exports with Knip."
+run = "bunx --no-install knip --no-config-hints"
+
+[tasks."fix:all"]
+description = "Apply lint and formatter autofixes across the project."
+run = "mise run fix:lint && mise run fix:format"
+
+[tasks."fix:lint"]
+description = "Lint all supported files and apply safe autofixes."
+run = "bunx --no-install eslint . --config ./eslint.config.mjs --no-warn-ignored --max-warnings=0 --fix"
+
+[tasks."fix:format"]
+description = "Format all configured files with dprint."
+run = "bunx --no-install dprint fmt --allow-no-files --incremental=false"
+
+[tasks."fix:staged"]
+description = "Run checks and autofixes for staged files."
+run = "bunx --no-install lint-staged --allow-empty"
+
+[tasks."fix:lint-staged"]
+description = "lint-staged helper: apply ESLint to staged files."
+run = "bunx --no-install eslint --config ./eslint.config.mjs --no-warn-ignored --max-warnings=0 --fix \"$@\""
+
+[tasks."fix:format-staged"]
+description = "lint-staged helper: apply dprint to staged files."
+run = "bunx --no-install dprint fmt --allow-no-files --incremental=false \"$@\""
+
+[tasks.test]
+description = "Run unit and browser tests."
+run = "mise run test:unit && mise run test:browser"
+
+[tasks."test:unit"]
+description = "Run Bun unit tests."
+run = "bun test src --pass-with-no-tests"
+
+[tasks."test:browser"]
+description = "Run Vitest browser and Storybook tests."
+run = "bunx --no-install vitest run --config ./vitest.config.ts"
+
+[tasks."test:visual"]
+description = "Run Playwright visual tests against APP_URL."
+run = "bunx --no-install playwright test"
+
+[tasks."test:visual:update"]
+description = "Update Playwright visual snapshots."
+run = "bunx --no-install playwright test --update-snapshots"
+
+[tasks."test:install-browsers"]
+description = "Install Playwright Chromium for browser and visual tests."
+run = "bunx --no-install playwright install chromium"
+
+[tasks.build]
+description = "Build the production bundle with Vite."
+run = "mise run gen && bunx --no-install vite build"
+
+[tasks."storybook:build"]
+description = "Build the static Storybook site."
+run = "mise run gen && bunx --no-install storybook build"
+
+[tasks.gen]
+description = "Generate codegen artifacts."
+run = "mise run panda:gen && mise run panda:cssgen"
+
+[tasks."panda:gen"]
+description = "Generate PandaCSS styled-system output."
+run = "bunx --no-install panda codegen"
+
+[tasks."panda:cssgen"]
+description = "Generate PandaCSS stylesheet output."
+run = "bunx --no-install panda cssgen --outfile src/shared/styled-system/styles.css"
+
+[tasks."panda:watch"]
+description = "Watch and regenerate PandaCSS output."
+run = "bunx --no-install panda codegen -w"
+
+[tasks."panda:clean"]
+description = "Remove generated PandaCSS output."
+run = "bunx --no-install panda codegen --clean"
+
+[tasks.clean]
+description = "Remove generated artifacts."
+run = "mise run panda:clean"
+
+[tasks.commitlint]
+description = "Lint the commit message file with commitlint."
+run = "bunx --no-install commitlint --edit \"$@\""

@@ -1,0 +1,30 @@
+{
+    "name": "design_system_v1",
+    "kind": "visual-projection-manifest",
+    "version": "0.1.0",
+    "axes": {
+        "theme": {
+            "values": ["light", "dark"],
+            "default": "light"
+        }
+    },
+    "resolutionOrder": [
+        "base",
+        "theme",
+        "tone",
+        "size",
+        "hover",
+        "focusVisible"
+    ],
+    "vocabulary": {
+        "static": "./vocabulary/static.json"
+    },
+    "components": ["./components/button.json"],
+    "excluded": [
+        "behavior",
+        "contrast",
+        "density",
+        "motion",
+        "dynamicVocabulary"
+    ]
+}

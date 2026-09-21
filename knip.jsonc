@@ -1,0 +1,41 @@
+{
+    "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+
+    // Entry points missing from Knip's standard plugins.
+    "entry": [
+        "src/main.tsx",
+        ".storybook/*.ts",
+        "test/**/*.{ts,tsx}",
+        "*.config.{js,mjs,cjs,ts,mts,cts}"
+    ],
+
+    // Hand-written files included in the analysis.
+    "project": [
+        "src/**/*.{ts,tsx}",
+        "test/**/*.{ts,tsx}",
+        ".storybook/**/*.{ts,tsx}",
+        "*.{js,mjs,cjs,ts,mts,cts}",
+        "*.config.{js,mjs,cjs,ts,mts,cts}"
+    ],
+
+    // Used through mise, hooks or external CLI configs.
+    "ignoreDependencies": [
+        "@commitlint/cli",
+        "@pandacss/dev",
+        "@storybook/addon-a11y",
+        "@storybook/addon-docs",
+        "@storybook/addon-vitest",
+        "@storybook/react-vite",
+        "@vitest/browser",
+        "@vitest/browser-playwright",
+        "dprint",
+        "husky",
+        "lint-staged",
+        "playwright",
+        "postcss",
+        "storybook"
+    ],
+
+    // `mise` is a project tool, not an npm dependency.
+    "ignoreBinaries": ["mise"]
+}

@@ -1,0 +1,59 @@
+{
+    "$schema": "https://dprint.dev/schemas/v0.json",
+
+    "indentWidth": 4,
+    "lineWidth": 120,
+    "newLineKind": "lf",
+    "useTabs": false,
+
+    "includes": [
+        ".agents/**/*.md",
+        ".changeset/**/*.{json,md}",
+        ".storybook/**/*.{ts,mts,cts,tsx,js,mjs,cjs,jsx,json,jsonc,md}",
+        "src/**/*.{ts,mts,cts,tsx,js,mjs,cjs,jsx}",
+        "test/**/*.{ts,mts,cts,tsx,js,mjs,cjs,jsx}",
+        "*.{ts,mts,tsx,cts,js,mjs,cjs,jsx,json,jsonc,md}",
+        ".vscode/*.json"
+    ],
+
+    "excludes": [
+        "dist/**",
+        "node_modules/**",
+        "styled-system/**",
+        "src/shared/styled-system/**",
+        "storybook-static/**",
+        "test-results/**",
+        "playwright-report/**"
+    ],
+
+    "plugins": [
+        "https://plugins.dprint.dev/typescript-0.96.0.wasm",
+        "https://plugins.dprint.dev/json-0.21.3.wasm",
+        "https://plugins.dprint.dev/markdown-0.22.0.wasm"
+    ],
+
+    "typescript": {
+        "arguments.preferHanging": "always",
+        "arguments.preferSingleLine": false,
+        "arguments.spaceAround": false,
+        "arguments.trailingCommas": "onlyMultiLine",
+        "arrowFunction.useParentheses": "force",
+        "jsx.bracketPosition": "nextLine",
+        "jsx.quoteStyle": "preferDouble",
+
+        "parameters.preferHanging": "always",
+        "parameters.preferSingleLine": false,
+        "parameters.spaceAround": false,
+        "parameters.trailingCommas": "onlyMultiLine",
+        "quoteStyle": "preferDouble",
+        "semiColons": "always",
+        "spaceAround": true,
+        "trailingCommas": "always"
+    },
+
+    "json": {
+        "indentWidth": 4,
+        "lineWidth": 80,
+        "trailingCommas": "never"
+    }
+}
