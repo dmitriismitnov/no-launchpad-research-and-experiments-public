@@ -8,8 +8,18 @@ src/
   main.tsx        app bootstrap
   shared/
     styles/
-      panda/      hand-written PandaCSS theme
-      (../styled-system is generated)
+      manifest.json
+      index.ts      barrel: collects every preset
+      settings/     global policies: preflight, globalCss
+      foundation/   reusable visual scales + system conditions
+        colors.ts
+        layout/
+        shape/
+        effects/
+        typography/
+    components/
+      button/       component, preset, stories, tests
+    styled-system/  (generated)
 ```
 
 ## Zones and import rules
@@ -28,5 +38,13 @@ src/
 
 ## Styling
 
-- Hand-written theme: `src/shared/styles/panda/`.
-- Generated output: `src/shared/styled-system/` (git-ignored). Run `mise run gen` after theme or config changes.
+Visual design system is built from isolated PandaCSS presets:
+
+- `settings` (`src/shared/styles/settings/`) owns only `preflight` and `globalCss`.
+- `foundation` (`src/shared/styles/foundation/`) owns only tokens and system conditions.
+- Each component preset lives next to its component, e.g. `src/shared/components/button/preset.ts`, and owns only that component's recipe.
+- `src/shared/styles/index.ts` collects the presets; root `panda.config.ts` is technical compilation only.
+- Presets must not have overlapping ownership: no component-family overrides, no hidden inheritance, no `extends`.
+- Foundation tokens are conservative, reusable scales with minimal semantics (`brand`, `surface`, `x1`); no CSS property names or component-part names.
+- `colors.ts` declares the `theme` axis (`_light`/`_dark`); other foundation groups may use it but never redeclare it.
+- Generated output: `src/shared/styled-system/` (git-ignored). Run `mise run gen` after any theme, preset or config change.

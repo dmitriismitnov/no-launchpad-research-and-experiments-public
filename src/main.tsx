@@ -5,6 +5,8 @@ import { App, } from "@app/App";
 
 import "./shared/styled-system/styles.css";
 
+document.documentElement.dataset["theme"] = "light";
+
 const container = document.getElementById("root");
 
 if ( !container ) {

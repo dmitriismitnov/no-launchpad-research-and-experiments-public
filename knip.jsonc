@@ -4,6 +4,10 @@
     // Entry points missing from Knip's standard plugins.
     "entry": [
         "src/main.tsx",
+        "src/shared/styles/index.ts",
+        "src/shared/styles/settings/index.ts",
+        "src/shared/styles/foundation/index.ts",
+        "src/shared/components/button/index.ts",
         ".storybook/*.ts",
         "test/**/*.{ts,tsx}",
         "*.config.{js,mjs,cjs,ts,mts,cts}"

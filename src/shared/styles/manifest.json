@@ -1,0 +1,29 @@
+{
+    "name": "@no-launchpad/landing",
+    "kind": "visual-projection-manifest",
+    "version": "0.1.0",
+    "axes": {
+        "theme": {
+            "values": ["light", "dark"],
+            "default": "light"
+        }
+    },
+    "resolutionOrder": [
+        "base",
+        "theme",
+        "tone",
+        "size",
+        "hover",
+        "focusVisible"
+    ],
+    "settings": "./settings/preset.ts",
+    "foundation": "./foundation/preset.ts",
+    "components": ["../components/button/preset.ts"],
+    "excluded": [
+        "behavior",
+        "contrast",
+        "density",
+        "motion",
+        "dynamicVocabulary"
+    ]
+}
