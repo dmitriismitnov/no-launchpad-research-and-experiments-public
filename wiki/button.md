@@ -1,10 +1,11 @@
 ---
 confidence: high
-last_verified: 2026-09-21
+last_verified: 2026-09-22
 sources:
   - raw/migration/design_system_v1/components/button.json
   - raw/migration/design_system_v1_panda/src/theme/button.recipe.ts
   - raw/migration/design_system_v1_panda_pen_example/src/theme/button.recipe.ts
+  - outputs/experiments/panda-design-system-rules/crystallizations/foundation-and-preset-rules.md
 ---
 
 # Button
@@ -35,7 +36,7 @@ System context: `theme` (`light`, `dark`) приходит с application root �
 
 ## Открытые моменты
 
-- `compoundVariants` tone×size в PEN — кандидат на пересмотр: правило 9 разрешает их только когда пересечение не выразить независимым merge.
+- `compoundVariants` tone×size в PEN — кандидат на пересмотр: правило 9 разрешает их только когда пересечение не выразить независимым merge. **Решено (2026-09-22):** в landing осталось 3 `compoundVariants` — `icon × sm`, `icon × md` (сброс padding) и `secondary × md` (22px вместо 24px); остальные выражаются независимым merge. См. [[panda-rules]].
 - icon-only режим потребует доступного имени (`aria-label`) в будущем behavior-слое.
 
 ## Источники

@@ -1,9 +1,10 @@
 ---
 confidence: high
-last_verified: 2026-09-21
+last_verified: 2026-09-22
 sources:
   - raw/migration/design_system_v1/vocabulary/static.json
   - raw/migration/component-projection-crystallization.md
+  - outputs/experiments/panda-design-system-rules/crystallizations/foundation-and-preset-rules.md
 ---
 
 # Static Vocabulary
@@ -21,6 +22,14 @@ sources:
 - `borderWidth` — `x1` 1px, `x2` 2px
 
 PEN-пример использует другую, семантическую палитру (`surface`, `ink`, `line`, `accent`, `shadow1..8`) и значения `x10/x22/x24`, `x16/x32/x50`, radii `control/surface`, font `Geist` 15px — см. [[button]].
+
+## Конфликт шкал: v1 против landing
+
+**Прежнее значение (v1, выше).** `space` — `xN = N * 0.25rem`: `x1` 0.25rem, `x2` 0.5rem, `x4` 1rem.
+
+**Текущее решение (landing).** `xN = N * 0.125rem`: `x1` 0.125rem. Регулярная шкала введена в эксперименте и проверена тестом foundation. PEN-пример уже использует этот шаг (`x5` 0.625rem, `x8` 1rem, `x16` 2rem).
+
+**Почему изменено.** v1-шкала с шагом 0.25rem не совместима с PEN-значениями и не даёт достаточно шагов для плотных размеров Button. Шаг 0.125rem выбран как единый знаменатель и заменяет v1-числа в новом codebase. Значения v1 не удаляются: они остаются историей дизайн-системы. См. crystallization [[panda-rules]].
 
 ## dynamic vocabulary
 
