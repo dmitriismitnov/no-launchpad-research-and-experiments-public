@@ -23,7 +23,12 @@
         "src/shared/styled-system/**",
         "storybook-static/**",
         "test-results/**",
-        "playwright-report/**"
+        "playwright-report/**",
+
+        // Knowledge vault: raw/ is immutable, wiki/ and outputs/ are content.
+        "raw/**",
+        "wiki/**",
+        "outputs/**"
     ],
 
     "plugins": [

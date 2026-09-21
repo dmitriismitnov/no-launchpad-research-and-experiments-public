@@ -102,6 +102,11 @@ const ignoredGlobs = [
     ".local",
     "gitignore",
 
+    // Knowledge vault: raw/ is immutable, wiki/ and outputs/ are content.
+    "raw",
+    "wiki",
+    "outputs",
+
     // Git worktrees and plan execution workspace.
     ".worktrees",
     ".superpowers",
