@@ -12,7 +12,7 @@ src/
       index.ts      barrel: collects every preset
       settings/     global policies: preflight, globalCss
       foundation/   reusable visual scales + system conditions
-        colors.ts
+        colors/     palette, system roles, theme conditions
         layout/
         shape/
         effects/
