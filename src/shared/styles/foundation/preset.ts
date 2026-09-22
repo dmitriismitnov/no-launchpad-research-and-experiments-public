@@ -1,6 +1,6 @@
-import { definePreset, } from "@pandacss/dev";
+import { definePreset, defineTokens, } from "@pandacss/dev";
 
-import { colors, themeConditions, } from "./colors";
+import { roles, staticPalette, themeConditions, } from "./colors";
 import { shadowColors, } from "./effects";
 import { sizes, spacing, } from "./layout";
 import { borderWidths, radii, } from "./shape";
@@ -14,8 +14,11 @@ export const foundationPreset = definePreset({
     name: "@no-launchpad/foundation",
     conditions: { extend: themeConditions, },
     theme: {
-        tokens: {
-            colors: { ...colors, ...shadowColors, },
+        // Only the primitive palette families are exposed as runtime
+        // `colorPalette` values; roles are consumed through explicit tokens.
+        colorPalette: { include: [ "neutral", "brand", "danger", ], },
+        tokens: defineTokens({
+            colors: { ...staticPalette, ...roles, ...shadowColors, },
             spacing,
             sizes,
             radii,
@@ -23,6 +26,6 @@ export const foundationPreset = definePreset({
             fontSizes,
             fontWeights,
             fonts,
-        },
+        }),
     },
 });

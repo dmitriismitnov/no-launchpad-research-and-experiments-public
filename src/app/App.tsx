@@ -6,12 +6,12 @@ const tones = [ "primary", "secondary", "ghost", ] as const;
 const section = css({
     padding: "x12",
     backgroundColor: {
-        _light: "surfaceRaised.light",
-        _dark: "surfaceRaised.dark",
+        _light: "surface.raised.light",
+        _dark: "surface.raised.dark",
     },
     color: {
-        _light: "ink.light",
-        _dark: "ink.dark",
+        _light: "ink.strong.light",
+        _dark: "ink.strong.dark",
     },
 });
 

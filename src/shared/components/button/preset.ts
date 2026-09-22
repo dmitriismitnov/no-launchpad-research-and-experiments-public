@@ -1,6 +1,12 @@
 import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
+ * Component-owned label size. Specific to the Button label with no other
+ * consumer, so it lives in the component instead of the typography foundation.
+ */
+const LABEL_FONT_SIZE = "0.9375rem";
+
+/**
  * Button visual projection.
  * Anatomy, public variants and all visual rules live together.
  * Slots: root / prefixIcon / label / suffixIcon.
@@ -16,9 +22,9 @@ export const buttonRecipe = defineSlotRecipe({
             justifyContent: "center",
             height: "x25",
             gap: "x5",
-            borderRadius: "control",
+            borderRadius: "sm",
             fontFamily: "body",
-            fontSize: "button",
+            fontSize: LABEL_FONT_SIZE,
             fontWeight: "medium",
             cursor: "pointer",
             boxShadow: {
@@ -26,11 +32,11 @@ export const buttonRecipe = defineSlotRecipe({
                 _dark: "0 2px 8px {colors.shadow3.dark}",
             },
             outlineStyle: { _focusVisible: "solid", },
-            outlineWidth: { _focusVisible: "{borderWidths.x2}", },
-            outlineOffset: { _focusVisible: "{borderWidths.x1}", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "{borderWidths.thin}", },
             outlineColor: {
-                _light: { _focusVisible: "accent.light", },
-                _dark: { _focusVisible: "accent.dark", },
+                _light: { _focusVisible: "accent.base.light", },
+                _dark: { _focusVisible: "accent.base.dark", },
             },
         },
 
@@ -55,57 +61,57 @@ export const buttonRecipe = defineSlotRecipe({
         tone: {
             primary: {
                 root: {
-                    borderWidth: "x1",
+                    borderWidth: "thin",
                     borderStyle: "solid",
                     backgroundColor: {
-                        _light: { base: "ink.light", _hover: "accentDeep.light", },
-                        _dark: { base: "ink.dark", _hover: "accent.dark", },
+                        _light: { base: "ink.strong.light", _hover: "accent.deep.light", },
+                        _dark: { base: "ink.strong.dark", _hover: "accent.base.dark", },
                     },
                     borderColor: {
-                        _light: { base: "ink.light", _hover: "accentDeep.light", },
-                        _dark: { base: "ink.dark", _hover: "accent.dark", },
+                        _light: { base: "ink.strong.light", _hover: "accent.deep.light", },
+                        _dark: { base: "ink.strong.dark", _hover: "accent.base.dark", },
                     },
                     color: {
-                        _light: "surface.light",
-                        _dark: "ink.light",
+                        _light: "surface.base.light",
+                        _dark: "ink.strong.light",
                     },
                 },
             },
 
             secondary: {
                 root: {
-                    borderWidth: "x1",
+                    borderWidth: "thin",
                     borderStyle: "solid",
                     backgroundColor: {
-                        _light: { base: "transparent", _hover: "surfaceRaised.light", },
-                        _dark: { base: "transparent", _hover: "surfaceRaised.dark", },
+                        _light: { base: "transparent", _hover: "surface.raised.light", },
+                        _dark: { base: "transparent", _hover: "surface.raised.dark", },
                     },
                     borderColor: {
-                        _light: "line.light",
-                        _dark: "line.dark",
+                        _light: "line.strong.light",
+                        _dark: "line.strong.dark",
                     },
                     color: {
-                        _light: "ink.light",
-                        _dark: "ink.dark",
+                        _light: "ink.strong.light",
+                        _dark: "ink.strong.dark",
                     },
                 },
             },
 
             ghost: {
                 root: {
-                    borderWidth: "x1",
+                    borderWidth: "thin",
                     borderStyle: "solid",
                     backgroundColor: {
-                        _light: { base: "surface.light", _hover: "surfaceRaised.light", },
-                        _dark: { base: "surface.dark", _hover: "surfaceRaised.dark", },
+                        _light: { base: "surface.base.light", _hover: "surface.raised.light", },
+                        _dark: { base: "surface.base.dark", _hover: "surface.raised.dark", },
                     },
                     borderColor: {
-                        _light: "lineSoft.light",
-                        _dark: "lineSoft.dark",
+                        _light: "line.soft.light",
+                        _dark: "line.soft.dark",
                     },
                     color: {
-                        _light: "ink2.light",
-                        _dark: "ink2.dark",
+                        _light: "ink.soft.light",
+                        _dark: "ink.soft.dark",
                     },
                 },
             },
@@ -117,12 +123,12 @@ export const buttonRecipe = defineSlotRecipe({
                     borderWidth: "none",
                     borderStyle: "none",
                     backgroundColor: {
-                        _light: { base: "transparent", _hover: "surfaceRaised.light", },
-                        _dark: { base: "transparent", _hover: "surfaceRaised.dark", },
+                        _light: { base: "transparent", _hover: "surface.raised.light", },
+                        _dark: { base: "transparent", _hover: "surface.raised.dark", },
                     },
                     color: {
-                        _light: "ink2.light",
-                        _dark: "ink2.dark",
+                        _light: "ink.soft.light",
+                        _dark: "ink.soft.dark",
                     },
                 },
             },
