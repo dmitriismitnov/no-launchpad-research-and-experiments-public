@@ -7,14 +7,8 @@ import { Button, } from "./button";
 
 const shell = css({
     padding: "x12",
-    backgroundColor: {
-        _light: "surface.raised.light",
-        _dark: "surface.raised.dark",
-    },
-    color: {
-        _light: "ink.strong.light",
-        _dark: "ink.strong.dark",
-    },
+    backgroundColor: "semantic.primary.100.background",
+    color: "semantic.primary.100.text",
 });
 
 const row = css({

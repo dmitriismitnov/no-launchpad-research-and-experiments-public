@@ -1,30 +1,58 @@
 import { describe, expect, test, } from "bun:test";
 
-import { PALETTE_STEPS, roles, staticPalette, themeConditions, } from "./colors";
+import { contrastRatio, } from "@shared/utils";
+
+import {
+    OPACITY_STEPS,
+    PALETTE_FAMILIES,
+    PALETTE_STEPS,
+    paletteValues,
+    SEMANTIC_GROUPS,
+    SEMANTIC_PROJECTIONS,
+    semanticColors,
+    staticPalette,
+    themeConditions,
+} from "./colors";
 import { sizes, spacing, } from "./layout";
 import { SCALE_STEP_REM, } from "./layout/scale";
 
 type Token = { value: string; };
-type Palette = Record<string, Record<string, Token> | Token>;
+type PaletteTokens = Record<string, Record<string, Token>>;
+type ThemePair = { value: { _light: string; _dark: string; }; };
+type SemanticContexts = Record<string, Record<string, Record<string, ThemePair>>>;
 
-const palette = staticPalette as Palette;
+const paletteTokens = ( staticPalette as unknown as { palette: PaletteTokens; } ).palette;
+const semanticContexts = ( semanticColors as unknown as { semantic: SemanticContexts; } ).semantic;
 
-const paletteValue = (path: string): string => {
-    const [ family, step, ] = path.split(".");
-    const token = ( palette[family!] as Record<string, Token> | undefined )?.[step!];
+const themes = [ "_light", "_dark", ] as const;
 
-    if ( token === undefined ) {
-        throw new Error(`Unknown palette token: ${path}`);
+const paletteHex = (family: string, step: string): string => {
+    const value = ( paletteValues as Record<string, Record<number, string>> )[family]?.[
+        Number(step)
+    ];
+
+    if ( value === undefined ) {
+        throw new Error(`Unknown palette token: ${family}.${step}`);
     }
 
-    return token.value;
+    return value;
 };
 
-const roleEntries = Object.entries(roles).flatMap(([ group, groupRoles, ]) =>
-    Object.entries(groupRoles as Record<string, { light: Token; dark: Token; }>).map(
-        ([ name, pair, ]) => ( { path: `${group}.${name}`, pair, } ),
-    )
-);
+const refHex = (reference: string): string => {
+    const match = /^\{colors\.palette\.([a-z]+)\.(\d+)\}$/.exec(reference);
+
+    if ( match === null ) {
+        throw new Error(`Unknown palette reference: ${reference}`);
+    }
+
+    return paletteHex(match[1]!, match[2]!);
+};
+
+// Canonical same-step pairs that intentionally miss the threshold.
+// Every entry needs a reason; empty means none.
+const CONTRAST_EXCEPTIONS: Record<string, string> = {};
+
+const contrastThreshold = (projection: string): number => projection === "text" ? 4.5 : 3;
 
 describe("foundation", () => {
     test("spacing scale is regular: xN = N * step", () => {
@@ -45,52 +73,81 @@ describe("foundation", () => {
         expect(themeConditions.dark).toContain("[data-theme");
     });
 
-    test("static palette families share the full step set", () => {
-        expect(Object.keys(staticPalette)).toEqual([ "neutral", "brand", "danger", ]);
+    test("palette has the declared families, each with the full step set", () => {
+        expect(Object.keys(paletteTokens)).toEqual([ ...PALETTE_FAMILIES, ]);
 
-        for ( const steps of Object.values(staticPalette) ) {
+        for ( const family of PALETTE_FAMILIES ) {
+            const steps = paletteTokens[family]!;
             expect(Object.keys(steps)).toEqual(PALETTE_STEPS.map(String));
-            for ( const token of Object.values(steps) ) {
-                expect(token.value).toMatch(/^#[0-9A-F]{6}$/);
+
+            for ( const step of PALETTE_STEPS ) {
+                expect(steps[`${step}`]!.value).toMatch(/^#[0-9A-F]{6}$/);
+                expect(paletteValues[family][step]).toBe(steps[`${step}`]!.value);
             }
         }
     });
 
-    test("roles reference palette tokens and keep both theme branches", () => {
-        expect(roleEntries.length).toBeGreaterThan(0);
+    test("opacity uses the approved technical steps as percents", () => {
+        const expected: number[] = [ 0, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, ];
+        const actual: number[] = [ ...OPACITY_STEPS, ];
+        expect(actual).toEqual(expected);
+    });
 
-        for ( const { pair, } of roleEntries ) {
-            expect(Object.keys(pair)).toEqual([ "light", "dark", ]);
+    test("semantic context groups expose the full matrix", () => {
+        expect(Object.keys(semanticContexts)).toEqual([ ...SEMANTIC_GROUPS, "shadow", ]);
 
-            for ( const branch of [ "light", "dark", ] as const ) {
-                const match = /^\{colors\.([a-z]+)\.(\d+)\}$/.exec(pair[branch].value);
-                expect(match).not.toBeNull();
-                expect(paletteValue(`${match![1]}.${match![2]}`)).toMatch(/^#[0-9A-F]{6}$/);
+        for ( const group of SEMANTIC_GROUPS ) {
+            const steps = semanticContexts[group]!;
+            expect(Object.keys(steps)).toEqual(PALETTE_STEPS.map(String));
+
+            for ( const step of PALETTE_STEPS ) {
+                const projections = steps[`${step}`]!;
+                expect(Object.keys(projections)).toEqual([ "background", "text", "icon", "border", ]);
+
+                for ( const projection of SEMANTIC_PROJECTIONS ) {
+                    const pair = projections[projection]!;
+                    expect(Object.keys(pair.value)).toEqual([ "_light", "_dark", ]);
+
+                    for ( const theme of themes ) {
+                        expect(refHex(pair.value[theme])).toMatch(/^#[0-9A-F]{6}$/);
+                    }
+                }
             }
         }
     });
 
-    test("roles preserve the existing visual values", () => {
-        const anchors: Record<string, { light: string; dark: string; }> = {
-            "surface.base": { light: "#FFFFFF", dark: "#0D1016", },
-            "surface.raised": { light: "#F7F8FA", dark: "#151A22", },
-            "ink.strong": { light: "#1A1A1A", dark: "#F3F5F8", },
-            "ink.soft": { light: "#666666", dark: "#A8B0BB", },
-            "line.strong": { light: "#1A1A1A", dark: "#4A5462", },
-            "line.soft": { light: "#EDEFF2", dark: "#212831", },
-            "accent.base": { light: "#4A9FD8", dark: "#5AB0EA", },
-            "accent.deep": { light: "#1B5FA8", dark: "#1E6BB8", },
-            "status.danger": { light: "#C0392B", dark: "#F87171", },
-        };
+    test("canonical same-step pairs satisfy the contrast thresholds", () => {
+        const failures: string[] = [];
+        const seenFailures = new Set<string>();
 
-        for ( const { path, pair, } of roleEntries ) {
-            const expected = anchors[path];
-            expect(expected).toBeDefined();
+        for ( const group of SEMANTIC_GROUPS ) {
+            for ( const step of PALETTE_STEPS ) {
+                for ( const theme of themes ) {
+                    const projections = semanticContexts[group]![`${step}`]!;
+                    const background = refHex(projections["background"]!.value[theme]);
 
-            for ( const branch of [ "light", "dark", ] as const ) {
-                const match = /^\{colors\.([a-z]+)\.(\d+)\}$/.exec(pair[branch].value);
-                expect(paletteValue(`${match![1]}.${match![2]}`)).toBe(expected![branch]);
+                    for ( const projection of [ "text", "icon", "border", ] as const ) {
+                        const foreground = refHex(projections[projection]!.value[theme]);
+                        const ratio = contrastRatio(foreground, background);
+                        const key = `${group}.${step}.${projection}.${theme}`;
+
+                        if ( ratio + 0.001 < contrastThreshold(projection) ) {
+                            seenFailures.add(key);
+
+                            if ( CONTRAST_EXCEPTIONS[key] === undefined ) {
+                                failures.push(`${key} -> ${ratio.toFixed(2)}`);
+                            }
+                        }
+                    }
+                }
             }
+        }
+
+        expect(failures).toEqual([]);
+
+        // An exception that no longer fails is stale and must be removed.
+        for ( const key of Object.keys(CONTRAST_EXCEPTIONS) ) {
+            expect(seenFailures.has(key)).toBe(true);
         }
     });
 });

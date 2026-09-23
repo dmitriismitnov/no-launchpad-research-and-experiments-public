@@ -10,6 +10,9 @@ const LABEL_FONT_SIZE = "0.9375rem";
  * Button visual projection.
  * Anatomy, public variants and all visual rules live together.
  * Slots: root / prefixIcon / label / suffixIcon.
+ *
+ * Colors come from the semantic layer, which switches theme inside the token;
+ * the recipe no longer branches on `_light` / `_dark`.
  */
 export const buttonRecipe = defineSlotRecipe({
     className: "button",
@@ -27,17 +30,11 @@ export const buttonRecipe = defineSlotRecipe({
             fontSize: LABEL_FONT_SIZE,
             fontWeight: "medium",
             cursor: "pointer",
-            boxShadow: {
-                _light: "0 2px 8px {colors.shadow3.light}",
-                _dark: "0 2px 8px {colors.shadow3.dark}",
-            },
+            boxShadow: "0 2px 8px {colors.semantic.shadow.300}",
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "{borderWidths.thin}", },
-            outlineColor: {
-                _light: { _focusVisible: "accent.base.light", },
-                _dark: { _focusVisible: "accent.base.dark", },
-            },
+            outlineColor: { _focusVisible: "semantic.brand.500.background", },
         },
 
         prefixIcon: {
@@ -64,16 +61,16 @@ export const buttonRecipe = defineSlotRecipe({
                     borderWidth: "thin",
                     borderStyle: "solid",
                     backgroundColor: {
-                        _light: { base: "ink.strong.light", _hover: "accent.deep.light", },
-                        _dark: { base: "ink.strong.dark", _hover: "accent.base.dark", },
+                        base: "semantic.primary.900.background",
+                        _hover: "semantic.brand.700.background",
                     },
                     borderColor: {
-                        _light: { base: "ink.strong.light", _hover: "accent.deep.light", },
-                        _dark: { base: "ink.strong.dark", _hover: "accent.base.dark", },
+                        base: "semantic.primary.900.border",
+                        _hover: "semantic.brand.700.border",
                     },
                     color: {
-                        _light: "surface.base.light",
-                        _dark: "ink.strong.light",
+                        base: "semantic.primary.900.text",
+                        _hover: "semantic.brand.700.text",
                     },
                 },
             },
@@ -83,17 +80,11 @@ export const buttonRecipe = defineSlotRecipe({
                     borderWidth: "thin",
                     borderStyle: "solid",
                     backgroundColor: {
-                        _light: { base: "transparent", _hover: "surface.raised.light", },
-                        _dark: { base: "transparent", _hover: "surface.raised.dark", },
+                        base: "transparent",
+                        _hover: "semantic.primary.100.background",
                     },
-                    borderColor: {
-                        _light: "line.strong.light",
-                        _dark: "line.strong.dark",
-                    },
-                    color: {
-                        _light: "ink.strong.light",
-                        _dark: "ink.strong.dark",
-                    },
+                    borderColor: "semantic.primary.700.background",
+                    color: "semantic.primary.50.text",
                 },
             },
 
@@ -102,17 +93,11 @@ export const buttonRecipe = defineSlotRecipe({
                     borderWidth: "thin",
                     borderStyle: "solid",
                     backgroundColor: {
-                        _light: { base: "surface.base.light", _hover: "surface.raised.light", },
-                        _dark: { base: "surface.base.dark", _hover: "surface.raised.dark", },
+                        base: "semantic.primary.50.background",
+                        _hover: "semantic.primary.100.background",
                     },
-                    borderColor: {
-                        _light: "line.soft.light",
-                        _dark: "line.soft.dark",
-                    },
-                    color: {
-                        _light: "ink.soft.light",
-                        _dark: "ink.soft.dark",
-                    },
+                    borderColor: "semantic.primary.200.background",
+                    color: "semantic.primary.600.background",
                 },
             },
 
@@ -123,13 +108,10 @@ export const buttonRecipe = defineSlotRecipe({
                     borderWidth: "none",
                     borderStyle: "none",
                     backgroundColor: {
-                        _light: { base: "transparent", _hover: "surface.raised.light", },
-                        _dark: { base: "transparent", _hover: "surface.raised.dark", },
+                        base: "transparent",
+                        _hover: "semantic.primary.100.background",
                     },
-                    color: {
-                        _light: "ink.soft.light",
-                        _dark: "ink.soft.dark",
-                    },
+                    color: "semantic.primary.600.background",
                 },
             },
         },

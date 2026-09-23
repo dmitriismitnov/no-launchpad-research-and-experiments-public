@@ -1,24 +1,27 @@
 import { definePreset, defineTokens, } from "@pandacss/dev";
 
-import { roles, staticPalette, themeConditions, } from "./colors";
-import { shadowColors, } from "./effects";
+import { opacity, staticPalette, themeConditions, } from "./colors";
+import { semanticColors, } from "./colors/semantic";
 import { sizes, spacing, } from "./layout";
 import { borderWidths, radii, } from "./shape";
 import { fonts, fontSizes, fontWeights, } from "./typography";
 
 /**
  * Foundation preset.
- * Owns only tokens and the system conditions declared by its fragments.
+ * Owns primitive tokens, semantic tokens and the system conditions declared by
+ * its fragments.
  */
 export const foundationPreset = definePreset({
     name: "@no-launchpad/foundation",
     conditions: { extend: themeConditions, },
     theme: {
         // Only the primitive palette families are exposed as runtime
-        // `colorPalette` values; roles are consumed through explicit tokens.
-        colorPalette: { include: [ "neutral", "brand", "danger", ], },
+        // `colorPalette` values; semantic colors are consumed through explicit
+        // tokens.
+        colorPalette: { include: [ "palette.*", ], },
         tokens: defineTokens({
-            colors: { ...staticPalette, ...roles, ...shadowColors, },
+            colors: { ...staticPalette, },
+            opacity,
             spacing,
             sizes,
             radii,
@@ -27,5 +30,6 @@ export const foundationPreset = definePreset({
             fontWeights,
             fonts,
         }),
+        semanticTokens: { colors: semanticColors, },
     },
 });

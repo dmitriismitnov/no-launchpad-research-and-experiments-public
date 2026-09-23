@@ -6,13 +6,7 @@ export const globalCss = {
     body: {
         margin: "0",
         fontFamily: "body",
-        backgroundColor: {
-            _light: "surface.raised.light",
-            _dark: "surface.raised.dark",
-        },
-        color: {
-            _light: "ink.strong.light",
-            _dark: "ink.strong.dark",
-        },
+        backgroundColor: "semantic.primary.100.background",
+        color: "semantic.primary.100.text",
     },
 };
