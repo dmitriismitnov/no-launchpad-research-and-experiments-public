@@ -33,16 +33,23 @@
 ## Semantic context groups
 
 - Путь: `colors.semantic.<group>.<step>.<projection>`.
-- Groups: `primary`, `secondary`, `tertiary`, `brand`, `positive`,
-  `negative`.
+- Groups: `common`, `occasional`, `rare`, `brand`, `positive`, `negative`.
 - Steps: `50…950`.
-- Projections: `background`, `text`, `icon`, `border`.
-- Контракт полный: каждый group содержит `11 × 4` токенов.
+- Projections: `background`, `text`, `icon`, `border`, `divider`.
+- Контракт полный: каждый group содержит `11 × 5` токенов.
 - Каждый токен имеет theme branches (`_light` / `_dark`) и ссылается на
   `colors.palette.*`.
-- Один step — canonical согласованный quartett; смешивание steps разрешено.
+- Один step — canonical согласованный набор; смешивание steps разрешено.
 - `50…950` — property-independent шкала вариаций.
-- Имя группы означает ожидаемую частоту применения; не hue, не иерархию.
+- Имя группы означает ожидаемую частоту применения; не hue, не иерархию:
+  `common` — самый частый neutral-контекст, `occasional` — периодический,
+  `rare` — исключительный. Это осознанно не акцентные роли Material 3.
+- `text` и `icon` остаются разными projection: оба контрастируют с
+  `background`, но `text` держит AA (`4.5:1`), а `icon` допускает `3:1`.
+- `divider` — всегда тише `border` в том же canonical context
+  (`contrast(divider, background) < contrast(border, background)`) и не имеет
+  WCAG-порога: это разделение layout-областей, а не контент и не граница
+  интерактивного элемента.
 
 ## Specialized semantic domains
 
