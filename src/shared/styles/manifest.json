@@ -14,7 +14,9 @@
         "tone",
         "size",
         "hover",
-        "focusVisible"
+        "active",
+        "focusVisible",
+        "disabled"
     ],
     "settings": "./settings/preset.ts",
     "foundation": "./foundation/preset.ts",

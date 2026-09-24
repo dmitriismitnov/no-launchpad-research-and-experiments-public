@@ -102,7 +102,7 @@ describe("foundation", () => {
 
             for ( const step of PALETTE_STEPS ) {
                 const projections = steps[`${step}`]!;
-                expect(Object.keys(projections)).toEqual([ "background", "text", "icon", "border", ]);
+                expect(Object.keys(projections)).toEqual([ "background", "text", "icon", "border", "divider", ]);
 
                 for ( const projection of SEMANTIC_PROJECTIONS ) {
                     const pair = projections[projection]!;
@@ -149,5 +149,28 @@ describe("foundation", () => {
         for ( const key of Object.keys(CONTRAST_EXCEPTIONS) ) {
             expect(seenFailures.has(key)).toBe(true);
         }
+    });
+
+    test("divider is always quieter than border on the same background", () => {
+        const failures: string[] = [];
+
+        for ( const group of SEMANTIC_GROUPS ) {
+            for ( const step of PALETTE_STEPS ) {
+                for ( const theme of themes ) {
+                    const projections = semanticContexts[group]![`${step}`]!;
+                    const background = refHex(projections["background"]!.value[theme]);
+                    const border = contrastRatio(refHex(projections["border"]!.value[theme]), background);
+                    const divider = contrastRatio(refHex(projections["divider"]!.value[theme]), background);
+
+                    if ( divider >= border ) {
+                        failures.push(
+                            `${group}.${step}.${theme} -> divider ${divider.toFixed(2)} >= border ${border.toFixed(2)}`,
+                        );
+                    }
+                }
+            }
+        }
+
+        expect(failures).toEqual([]);
     });
 });

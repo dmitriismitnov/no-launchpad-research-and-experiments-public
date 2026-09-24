@@ -29,11 +29,10 @@ export const buttonRecipe = defineSlotRecipe({
             fontFamily: "body",
             fontSize: LABEL_FONT_SIZE,
             fontWeight: "medium",
-            cursor: "pointer",
-            boxShadow: "0 2px 8px {colors.semantic.shadow.300}",
+            cursor: { base: "pointer", _disabled: "not-allowed", },
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
-            outlineOffset: { _focusVisible: "{borderWidths.thin}", },
+            outlineOffset: { _focusVisible: "0", },
             outlineColor: { _focusVisible: "semantic.brand.500.background", },
         },
 
@@ -56,35 +55,40 @@ export const buttonRecipe = defineSlotRecipe({
 
     variants: {
         tone: {
+            // Primary feedback is opacity-only; it never swaps hue.
             primary: {
                 root: {
-                    borderWidth: "thin",
-                    borderStyle: "solid",
-                    backgroundColor: {
-                        base: "semantic.primary.900.background",
-                        _hover: "semantic.brand.700.background",
-                    },
-                    borderColor: {
-                        base: "semantic.primary.900.border",
-                        _hover: "semantic.brand.700.border",
-                    },
-                    color: {
-                        base: "semantic.primary.900.text",
-                        _hover: "semantic.brand.700.text",
+                    borderWidth: "none",
+                    borderStyle: "none",
+                    backgroundColor: { base: "semantic.common.50.text", },
+                    color: { base: "semantic.common.50.background", },
+                    boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
+                    // `_enabled` guards the interaction states so a disabled
+                    // button cannot be re-tinted by `:hover` / `:active`.
+                    opacity: {
+                        base: 1,
+                        _enabled: { _hover: 0.85, _active: 0.7, },
+                        _disabled: 0.45,
                     },
                 },
             },
 
+            // Secondary/Ghost/Icon use surface-feedback: only the fill changes.
             secondary: {
                 root: {
                     borderWidth: "thin",
                     borderStyle: "solid",
                     backgroundColor: {
                         base: "transparent",
-                        _hover: "semantic.primary.100.background",
+                        _enabled: {
+                            _hover: "semantic.common.100.background",
+                            _active: "semantic.common.200.background",
+                        },
                     },
-                    borderColor: "semantic.primary.700.background",
-                    color: "semantic.primary.50.text",
+                    borderColor: "semantic.common.700.background",
+                    color: { base: "semantic.common.50.text", },
+                    boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
+                    opacity: { base: 1, _disabled: 0.45, },
                 },
             },
 
@@ -93,11 +97,16 @@ export const buttonRecipe = defineSlotRecipe({
                     borderWidth: "thin",
                     borderStyle: "solid",
                     backgroundColor: {
-                        base: "semantic.primary.50.background",
-                        _hover: "semantic.primary.100.background",
+                        base: "semantic.common.50.background",
+                        _enabled: {
+                            _hover: "semantic.common.100.background",
+                            _active: "semantic.common.200.background",
+                        },
                     },
-                    borderColor: "semantic.primary.200.background",
-                    color: "semantic.primary.600.background",
+                    borderColor: "semantic.common.200.divider",
+                    color: { base: "semantic.common.600.background", },
+                    boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
+                    opacity: { base: 1, _disabled: 0.45, },
                 },
             },
 
@@ -109,13 +118,19 @@ export const buttonRecipe = defineSlotRecipe({
                     borderStyle: "none",
                     backgroundColor: {
                         base: "transparent",
-                        _hover: "semantic.primary.100.background",
+                        _enabled: {
+                            _hover: "semantic.common.100.background",
+                            _active: "semantic.common.200.background",
+                        },
                     },
-                    color: "semantic.primary.600.background",
+                    color: { base: "semantic.common.600.background", },
+                    boxShadow: "none",
+                    opacity: { base: 1, _disabled: 0.45, },
                 },
             },
         },
 
+        // `sm` is a code-only extension; PEN specifies the 50px `md` Button.
         size: {
             sm: {
                 root: { height: "x16", paddingInline: "x5", },

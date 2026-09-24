@@ -14,5 +14,18 @@ export default defineConfig({
     outdir: "src/shared/styled-system",
     jsxFramework: "react",
     importMap: "@shared/styled-system",
+    // Public recipe combinations are also passed as runtime variables, which the
+    // static extractor cannot resolve. Declare them here so every supported
+    // tone/size pair is always emitted.
+    staticCss: {
+        recipes: {
+            button: [
+                {
+                    tone: [ "primary", "secondary", "ghost", "icon", ],
+                    size: [ "sm", "md", ],
+                },
+            ],
+        },
+    },
     presets,
 });

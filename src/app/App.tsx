@@ -5,8 +5,8 @@ const tones = [ "primary", "secondary", "ghost", ] as const;
 
 const section = css({
     padding: "x12",
-    backgroundColor: "semantic.primary.100.background",
-    color: "semantic.primary.100.text",
+    backgroundColor: "semantic.common.100.background",
+    color: "semantic.common.100.text",
 });
 
 const row = css({

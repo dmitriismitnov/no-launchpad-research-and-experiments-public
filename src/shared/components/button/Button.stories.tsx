@@ -3,12 +3,13 @@ import type { ReactNode, } from "react";
 
 import { css, } from "@shared/styled-system/css";
 
+import type { ButtonProps, } from "./button";
 import { Button, } from "./button";
 
 const shell = css({
     padding: "x12",
-    backgroundColor: "semantic.primary.100.background",
-    color: "semantic.primary.100.text",
+    backgroundColor: "semantic.common.100.background",
+    color: "semantic.common.100.text",
 });
 
 const row = css({
@@ -18,13 +19,74 @@ const row = css({
     flexWrap: "wrap",
 });
 
+const matrix = css({
+    display: "grid",
+    gap: "x8",
+});
+
+const matrixRow = css({
+    display: "grid",
+    gridTemplateColumns: "1fr repeat(5, auto)",
+    alignItems: "center",
+    gap: "x8",
+});
+
+const cell = css({
+    display: "grid",
+    justifyItems: "center",
+    gap: "x2",
+});
+
+const stateLabel = css({ fontSize: "sm", opacity: 0.6, });
+
 const ThemeShell = ({ theme, children, }: { theme: "light" | "dark"; children: ReactNode; }) => (
     <div data-theme={theme}>
         <div className={shell}>{children}</div>
     </div>
 );
 
-const tones = [ "primary", "secondary", "ghost", ] as const;
+const tones = [ "primary", "secondary", "ghost", "icon", ] as const;
+
+// Storybook-only state metadata. Uses data attributes so interaction states are
+// deterministic and independent of pointer timing.
+const states = [ "default", "hover", "active", "focus", "disabled", ] as const;
+
+const stateProps: Record<typeof states[number], ButtonProps> = {
+    default: {},
+    hover: { "data-hover": "", } as ButtonProps,
+    active: { "data-active": "", } as ButtonProps,
+    focus: { "data-focus-visible": "", } as ButtonProps,
+    disabled: { disabled: true, },
+};
+
+const renderSample = (tone: typeof tones[number], state: typeof states[number], key: string) =>
+    tone === "icon"
+        ? (
+            <Button
+                key={key}
+                aria-label={`icon ${state}`}
+                prefixIcon={<span aria-hidden>+</span>}
+                tone="icon"
+                {...stateProps[state]}
+            />
+        )
+        : <Button key={key} tone={tone} {...stateProps[state]}>{tone}</Button>;
+
+const Matrix = () => (
+    <div className={matrix}>
+        {tones.map((tone) => (
+            <div key={tone} className={matrixRow}>
+                <span className={stateLabel}>{tone}</span>
+                {states.map((state) => (
+                    <div key={`${tone}-${state}`} className={cell}>
+                        {renderSample(tone, state, `${tone}-${state}`)}
+                        <span className={stateLabel}>{state}</span>
+                    </div>
+                ))}
+            </div>
+        ))}
+    </div>
+);
 
 const meta = {
     title: "Components/Button",
@@ -33,7 +95,7 @@ const meta = {
     argTypes: {
         tone: {
             control: { type: "select", },
-            options: [ "primary", "secondary", "ghost", ],
+            options: [ "primary", "secondary", "ghost", "icon", ],
         },
         size: {
             control: { type: "select", },
@@ -68,7 +130,11 @@ export const AllTones: Story = {
     render: () => (
         <ThemeShell theme="light">
             <div className={row}>
-                {tones.map((tone) => <Button key={tone} tone={tone}>{tone}</Button>)}
+                {tones.map((tone) =>
+                    tone === "icon"
+                        ? <Button key={tone} aria-label="icon" prefixIcon={<span aria-hidden>+</span>} tone="icon" />
+                        : <Button key={tone} tone={tone}>{tone}</Button>
+                )}
             </div>
         </ThemeShell>
     ),
@@ -85,22 +151,18 @@ export const Sizes: Story = {
     ),
 };
 
-export const LightTheme: Story = {
+export const LightStateMatrix: Story = {
     render: () => (
         <ThemeShell theme="light">
-            <div className={row}>
-                {tones.map((tone) => <Button key={tone} tone={tone}>{tone}</Button>)}
-            </div>
+            <Matrix />
         </ThemeShell>
     ),
 };
 
-export const DarkTheme: Story = {
+export const DarkStateMatrix: Story = {
     render: () => (
         <ThemeShell theme="dark">
-            <div className={row}>
-                {tones.map((tone) => <Button key={tone} tone={tone}>{tone}</Button>)}
-            </div>
+            <Matrix />
         </ThemeShell>
     ),
 };

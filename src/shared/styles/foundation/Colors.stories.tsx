@@ -38,8 +38,8 @@ const shell = css({
     display: "grid",
     gap: "x12",
     padding: "x12",
-    backgroundColor: "semantic.primary.100.background",
-    color: "semantic.primary.100.text",
+    backgroundColor: "semantic.common.100.background",
+    color: "semantic.common.100.text",
 });
 
 const block = css({ display: "grid", gap: "x6", });
@@ -60,7 +60,7 @@ const swatch = css({
     height: "x16",
     borderWidth: "thin",
     borderStyle: "solid",
-    borderColor: "semantic.primary.300.background",
+    borderColor: "semantic.common.300.background",
     borderRadius: "sm",
 });
 
@@ -144,6 +144,7 @@ const CanonicalRow = (
     const text = refHex(projections["text"]!.value[key]);
     const icon = refHex(projections["icon"]!.value[key]);
     const border = refHex(projections["border"]!.value[key]);
+    const divider = refHex(projections["divider"]!.value[key]);
 
     return (
         <div className={semanticRow}>
@@ -152,9 +153,10 @@ const CanonicalRow = (
             {textPreview(background, text)}
             {swatchCell(icon)}
             {swatchCell(border)}
+            {swatchCell(divider)}
             <span className={mono}>
                 t {contrastRatio(text, background).toFixed(2)} · i {contrastRatio(icon, background).toFixed(2)} · b{" "}
-                {contrastRatio(border, background).toFixed(2)}
+                {contrastRatio(border, background).toFixed(2)} · d {contrastRatio(divider, background).toFixed(2)}
             </span>
         </div>
     );
@@ -208,7 +210,8 @@ const SemanticSection = ({ theme, }: { theme: Theme; }) => (
     <div className={block}>
         <h2 className={title}>Semantic contexts</h2>
         <span className={subtitle}>
-            Canonical same-step sets. Ratios: text, icon, border vs background. Solid swatches for icon and border.
+            Canonical same-step sets. Ratios: text, icon, border, divider vs background. Divider stays quieter than
+            border. Solid swatches for icon, border and divider.
         </span>
         {SEMANTIC_GROUPS.map((group) => (
             <div key={group} className={semanticTable}>
