@@ -35,7 +35,11 @@
 
 Перед общим ревью всех пройденных этапов решить:
 
-1. Как работать с иконками.
+1. ~~Как работать с иконками.~~ Базовая модель сделана:
+   [icon-asset-component](../../experiments/icon-asset-component/README.md)
+   (монохромные иконки через icon font, навыки сборки и обновления). Осталось
+   отдельно: иконки из внешних паков; ассеты вне шрифта (возможно отдельный
+   `Logo`) — другой контракт изображения, а не только другой тип файла.
 2. Как работать с типографикой.
 3. Зафиксировать, что все компоненты — включая саму страницу (её `background`
    — тоже background) — не выбиваются из общей шкалы.
@@ -52,6 +56,7 @@
 ## Связанное
 
 - [semantic-color-foundation](../../experiments/semantic-color-foundation/README.md)
+- [icon-asset-component](../../experiments/icon-asset-component/README.md)
 - [pen-design-system-integration](pen-design-system-integration.md)
 - [roles](roles.md)
 
