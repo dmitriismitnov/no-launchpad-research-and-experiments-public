@@ -58,5 +58,6 @@
     `check:deps`, `build` (хэши совпали с прежними), `storybook:build`,
     `test:visual` — зелёные.
   - `README.md` и `outputs/history.md` переведены в completed.
-  - Ветка `experiment/button-icon` содержит коммиты эксперимента; решение об
-    интеграции — за пользователем.
+  - Ветка влита в `main` fast-forward (до `ab8e8d3`); ветка эксперимента
+    удалена. Проверка на собранном `main`: `check` — 104 unit / 26 browser,
+    lint, types, format — зелёные.
