@@ -64,3 +64,26 @@
     `test:visual` без изменения baseline — свёртывание не изменило ни поведение,
     ни вид.
   - `notes/comparison.md` обновлён: итог — B.
+- 2026-09-25 — ревью-комментарий 4: цвет применялся к `root`, а не к слотам
+  иконок и текста.
+  - Семантический слой уже различает роли `text` и `icon`; совпадение текущих
+    значений не делает роли взаимозаменяемыми.
+  - Решение: `root` больше не объявляет foreground-`color`; `label` читает роль
+    `text`, `prefixIcon` / `suffixIcon` — роль `icon`.
+  - Раскладка: `primary` → `common.950.text/icon` (совпадает с прежним
+    `common.50.background`, вид сохранён); `secondary` → `common.50.text/icon`
+    (вид сохранён); `ghost` → `common.50.text/icon`.
+  - У `ghost` прежний ink был ролью `background` (`common.600.background`) — это
+    намеренный «мягкий ink», зафиксированный в `design_raw.pen` как пробел
+    модели; ни один `text`/`icon` такой пары не повторяет. В ревью выбрано
+    «роли везде, ghost контрастнее»; вид `ghost` меняется осознанно.
+  - TDD: RED — 2 unit-падения (роль-проверки); GREEN — 21 unit.
+  - Browser: `WithIcons` теперь проверяет наследование от слота; добавлены
+    `SlotColourRoles` / `DarkSlotColourRoles`, которые переопределяют
+    `--colors-semantic-common-{50,950}-text` и `…-icon` разными значениями и
+    доказывают, что иконки читают роль `icon`, а не `text` (иначе тест не
+    различал бы роли при совпадающих значениях).
+  - Visual: 149 px, только подписи `ghost` в обеих темах; diff просмотрен,
+    baseline обновлён, повторный прогон зелёный.
+  - Проверки: 76 unit, 16 browser, `check:types`, `check:deps`, `build`,
+    `storybook:build`, `test:visual` — зелёные.

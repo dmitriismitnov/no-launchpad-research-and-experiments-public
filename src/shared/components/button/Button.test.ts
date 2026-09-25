@@ -87,7 +87,6 @@ describe("button recipe", () => {
             borderWidth: "none",
             borderStyle: "none",
             backgroundColor: { base: "semantic.common.50.text", },
-            color: { base: "semantic.common.50.background", },
             boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
             opacity: {
                 base: 1,
@@ -109,7 +108,6 @@ describe("button recipe", () => {
                 },
             },
             borderColor: "semantic.common.700.background",
-            color: { base: "semantic.common.50.text", },
             boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
             opacity: { base: 1, _disabled: 0.45, },
         });
@@ -127,10 +125,49 @@ describe("button recipe", () => {
                 },
             },
             borderColor: "semantic.common.200.divider",
-            color: { base: "semantic.common.600.background", },
             boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
             opacity: { base: 1, _disabled: 0.45, },
         });
+    });
+
+    test("declares no foreground colour on the base root", () => {
+        expect(buttonRecipe.base?.["root"]).not.toHaveProperty("color");
+    });
+
+    // Text and icons own separate semantic roles: the label paints from the
+    // `text` projection, the icon slots from the `icon` projection. Neither
+    // reads `root`, so the two can change independently of each other.
+    const slotColours = {
+        primary: { label: "semantic.common.950.text", icon: "semantic.common.950.icon", },
+        secondary: { label: "semantic.common.50.text", icon: "semantic.common.50.icon", },
+        ghost: { label: "semantic.common.50.text", icon: "semantic.common.50.icon", },
+    } as const;
+
+    test("paints the label from the text role and the icons from the icon role", () => {
+        for ( const [ tone, expected, ] of Object.entries(slotColours) ) {
+            const variant = buttonRecipe.variants?.["tone"]?.[tone];
+
+            expect(variant?.["root"]).not.toHaveProperty("color");
+            expect(variant?.["label"]).toMatchObject({ color: { base: expected.label, }, });
+            expect(variant?.["prefixIcon"]).toMatchObject({ color: { base: expected.icon, }, });
+            expect(variant?.["suffixIcon"]).toMatchObject({ color: { base: expected.icon, }, });
+        }
+    });
+
+    test("never assigns the text role to an icon or the icon role to the label", () => {
+        const readColour = (slot: unknown): string => {
+            const colour = ( slot as { color?: { base?: string; }; } | undefined )?.color;
+
+            return String(colour?.base);
+        };
+
+        for ( const tone of Object.keys(slotColours) ) {
+            const variant = buttonRecipe.variants?.["tone"]?.[tone];
+
+            expect(readColour(variant?.["label"])).toMatch(/\.text$/);
+            expect(readColour(variant?.["prefixIcon"])).toMatch(/\.icon$/);
+            expect(readColour(variant?.["suffixIcon"])).toMatch(/\.icon$/);
+        }
     });
 
     test("shares one focus ring and a disabled cursor", () => {

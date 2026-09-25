@@ -13,6 +13,11 @@ const LABEL_FONT_SIZE = "0.9375rem";
  *
  * Colors come from the semantic layer, which switches theme inside the token;
  * the recipe no longer branches on `_light` / `_dark`.
+ *
+ * Colour is assigned per slot, never on `root`: the label paints from the
+ * `text` projection and the icon slots from the `icon` projection, so text and
+ * glyphs read separate semantic roles and change independently. `root` keeps
+ * only what belongs to the button as a whole (fill, border, shadow, opacity).
  */
 export const buttonRecipe = defineSlotRecipe({
     className: "button",
@@ -61,7 +66,6 @@ export const buttonRecipe = defineSlotRecipe({
                     borderWidth: "none",
                     borderStyle: "none",
                     backgroundColor: { base: "semantic.common.50.text", },
-                    color: { base: "semantic.common.50.background", },
                     boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
                     // `_enabled` guards the interaction states so a disabled
                     // button cannot be re-tinted by `:hover` / `:active`.
@@ -71,6 +75,9 @@ export const buttonRecipe = defineSlotRecipe({
                         _disabled: 0.45,
                     },
                 },
+                label: { color: { base: "semantic.common.950.text", }, },
+                prefixIcon: { color: { base: "semantic.common.950.icon", }, },
+                suffixIcon: { color: { base: "semantic.common.950.icon", }, },
             },
 
             // Secondary/Ghost use surface-feedback: only the fill changes.
@@ -86,10 +93,12 @@ export const buttonRecipe = defineSlotRecipe({
                         },
                     },
                     borderColor: "semantic.common.700.background",
-                    color: { base: "semantic.common.50.text", },
                     boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
                     opacity: { base: 1, _disabled: 0.45, },
                 },
+                label: { color: { base: "semantic.common.50.text", }, },
+                prefixIcon: { color: { base: "semantic.common.50.icon", }, },
+                suffixIcon: { color: { base: "semantic.common.50.icon", }, },
             },
 
             ghost: {
@@ -104,10 +113,12 @@ export const buttonRecipe = defineSlotRecipe({
                         },
                     },
                     borderColor: "semantic.common.200.divider",
-                    color: { base: "semantic.common.600.background", },
                     boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
                     opacity: { base: 1, _disabled: 0.45, },
                 },
+                label: { color: { base: "semantic.common.50.text", }, },
+                prefixIcon: { color: { base: "semantic.common.50.icon", }, },
+                suffixIcon: { color: { base: "semantic.common.50.icon", }, },
             },
         },
 

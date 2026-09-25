@@ -83,3 +83,19 @@
 - [x] `notes/comparison.md` обновлён: итог — B.
 - Проверка: `mise run check` (73 unit / 14 browser), `check:deps`, `build`,
   `storybook:build`, `test:visual` (без изменения baseline) — зелёные.
+
+### 11. Ревью-комментарий: цвет по слотам — done
+- [x] `root` больше не объявляет foreground-`color`.
+- [x] `label` → роль `text`, `prefixIcon` / `suffixIcon` → роль `icon`.
+- [x] `primary` → `common.950.text/icon`; `secondary` / `ghost` →
+      `common.50.text/icon`. `primary` и `secondary` без изменения вида.
+- [x] Согласовано в ревью: `ghost` становится контрастнее — его прежний
+      «мягкий ink» был ролью `background`, ролевого эквивалента нет.
+- [x] TDD: RED (2 unit) → GREEN (21 unit).
+- [x] Браузерная проверка `SlotColourRoles` / `DarkSlotColourRoles` с
+      переопределением CSS-переменных `…-50/950-text` и `…-icon` разными
+      значениями — доказывает, что иконки читают роль `icon`, а не `text`.
+- [x] Visual baseline обновлён осознанно (149 пикселей, только `ghost`), diff
+      просмотрен, прогон повторён.
+- Проверка: `check` (76 unit / 16 browser), `check:types`, `check:deps`, `build`,
+  `storybook:build`, `test:visual` — зелёные.

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
-import type { ReactNode, } from "react";
+import type { CSSProperties, ReactNode, } from "react";
 
 import { useEffect, useRef, useState, } from "react";
 
@@ -177,9 +177,71 @@ export const WithIcons: Story = {
             await expect(icon).toHaveAttribute("aria-hidden", "true");
         }
 
-        // Colour is inherited: the glyph paints with the button colour.
-        await expect(getComputedStyle(icons[0] as Element).color).toBe(getComputedStyle(button).color);
+        // The colour is owned by the icon slot; the glyph inherits it.
+        for ( const selector of [ ".button__prefixIcon", ".button__suffixIcon", ] ) {
+            const slot = button.querySelector(selector) as Element;
+            const glyph = slot.querySelector(".icon") as Element;
+
+            await expect(getComputedStyle(glyph).color).toBe(getComputedStyle(slot).color);
+        }
     },
+};
+
+// Distinct sentinels make the role binding observable: the resolved values of
+// `text` and `icon` are identical today, so comparing rendered colours alone
+// would not catch an icon that reads the text role.
+const TEXT_PROBE = "rgb(17, 34, 51)";
+const ICON_PROBE = "rgb(68, 85, 102)";
+
+const roleOverrides = (tone: typeof tones[number]): CSSProperties => {
+    // `primary` sits on a dark fill and reads step 950; the surface tones read 50.
+    const step = tone === "primary" ? "950" : "50";
+
+    return {
+        [`--colors-semantic-common-${step}-text`]: TEXT_PROBE,
+        [`--colors-semantic-common-${step}-icon`]: ICON_PROBE,
+    };
+};
+
+const SlotRoleProbe = ({ theme, }: { theme: "light" | "dark"; }) => (
+    <ThemeShell theme={theme}>
+        <div className={row}>
+            {tones.map((tone) => (
+                <div key={tone} style={roleOverrides(tone)}>
+                    <Button tone={tone} prefixIcon="check" suffixIcon="arrow-right">
+                        {tone}
+                    </Button>
+                </div>
+            ))}
+        </div>
+    </ThemeShell>
+);
+
+const assertSlotRoles = async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+    const canvas = within(canvasElement);
+
+    for ( const tone of tones ) {
+        const button = canvas.getByRole("button", { name: tone, });
+        const label = button.querySelector(".button__label") as Element;
+        const icons = Array.from(button.querySelectorAll(".icon"));
+
+        // The label reads the text role, the glyphs read the icon role.
+        await expect(getComputedStyle(label).color).toBe(TEXT_PROBE);
+        await expect(icons.length).toBe(2);
+        for ( const icon of icons ) {
+            await expect(getComputedStyle(icon).color).toBe(ICON_PROBE);
+        }
+    }
+};
+
+export const SlotColourRoles: Story = {
+    render: () => <SlotRoleProbe theme="light" />,
+    play: assertSlotRoles,
+};
+
+export const DarkSlotColourRoles: Story = {
+    render: () => <SlotRoleProbe theme="dark" />,
+    play: assertSlotRoles,
 };
 
 const RefProbe = () => {
