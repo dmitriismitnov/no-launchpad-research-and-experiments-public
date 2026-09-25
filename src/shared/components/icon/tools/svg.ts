@@ -14,9 +14,9 @@
  * renders fills, so outline geometry must be flattened to filled paths first.
  */
 
-export const ICON_NAME_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const ICON_NAME_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-export const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
 const ALLOWED_ELEMENTS = new Set([
     "svg",
@@ -138,8 +138,8 @@ const compareAttributeNames = (a: string, b: string): number => {
 const normalizeAttributes = (
     attributes: { name: string; value: string; }[],
     isRoot: boolean,
-): { name: string; value: string; }[] =>
-    attributes
+): { name: string; value: string; }[] => {
+    const normalized = attributes
         .filter((attribute) => {
             if ( attribute.name.startsWith("data-") ) {
                 return false;
@@ -159,8 +159,14 @@ const normalizeAttributes = (
             attribute.name === "fill" || attribute.name === "stroke"
                 ? { name: attribute.name, value: normalizeColorValue(attribute.value), }
                 : attribute
-        )
-        .sort((a, b) => compareAttributeNames(a.name, b.name));
+        );
+
+    if ( isRoot && !normalized.some((attribute) => attribute.name === "xmlns") ) {
+        normalized.push({ name: "xmlns", value: SVG_NAMESPACE, });
+    }
+
+    return normalized.sort((a, b) => compareAttributeNames(a.name, b.name));
+};
 
 const normalizeTag = (tag: string): string => {
     const collapsed = collapseTagWhitespace(tag);
@@ -246,6 +252,14 @@ export const validateSvg = (svg: string): string[] => {
         if ( !isValid ) {
             issues.push(`root viewBox must be four finite numbers, got "${rootViewBox}"`);
         }
+    }
+
+    const rootXmlns = rootOpens[0]?.match(/\bxmlns\s*=\s*"([^"]*)"/)?.[1];
+
+    if ( rootXmlns === undefined ) {
+        issues.push("root <svg> must declare xmlns");
+    } else if ( rootXmlns !== SVG_NAMESPACE ) {
+        issues.push(`root <svg> xmlns must be "${SVG_NAMESPACE}"`);
     }
 
     let drawingElements = 0;

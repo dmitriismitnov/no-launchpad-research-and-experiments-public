@@ -25,6 +25,8 @@ mise run prepare
 | `mise run check`         | lint + types + format + tests             |
 | `mise run check:deps`    | Knip dependency and export check          |
 | `mise run gen`           | PandaCSS codegen and CSS generation       |
+| `mise run icons:build`   | Build the icon font and manifest          |
+| `mise run icons:check`   | Fail if generated icon assets drifted     |
 | `mise run build`         | production build                          |
 | `mise run test:visual`   | Playwright visual tests against `APP_URL` |
 

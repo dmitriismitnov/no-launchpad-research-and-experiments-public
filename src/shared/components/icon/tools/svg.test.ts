@@ -33,7 +33,13 @@ describe("normalizeSvg", () => {
         const source = `<svg viewBox="0 0 1 1"><title>label</title><path d="M0 0" fill="none"/></svg>`;
 
         expect(normalizeSvg(source)).toBe(
-            `<svg viewBox="0 0 1 1"><path d="M0 0" fill="none"/></svg>`,
+            `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path d="M0 0" fill="none"/></svg>`,
+        );
+    });
+
+    test("adds a missing namespace", () => {
+        expect(normalizeSvg(`<svg viewBox="0 0 1 1"><path d="M0 0"/></svg>`)).toBe(
+            `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path d="M0 0"/></svg>`,
         );
     });
 
@@ -41,7 +47,7 @@ describe("normalizeSvg", () => {
         const source = `<svg viewBox="0 0 1 1"><path d="M0 0" fill="black"/><path d="M1 1" fill="rgb(1,2,3)"/></svg>`;
 
         expect(normalizeSvg(source)).toBe(
-            `<svg viewBox="0 0 1 1"><path d="M0 0" fill="currentColor"/><path d="M1 1" fill="currentColor"/></svg>`,
+            `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path d="M0 0" fill="currentColor"/><path d="M1 1" fill="currentColor"/></svg>`,
         );
     });
 });
@@ -49,6 +55,18 @@ describe("normalizeSvg", () => {
 describe("validateSvg", () => {
     test("accepts a canonical svg", () => {
         expect(validateSvg(CANONICAL)).toEqual([]);
+    });
+
+    test("rejects a missing namespace", () => {
+        expect(validateSvg(`<svg viewBox="0 0 1 1"><path d="M0 0"/></svg>`)).toContain(
+            "root <svg> must declare xmlns",
+        );
+    });
+
+    test("rejects a foreign namespace", () => {
+        expect(
+            validateSvg(`<svg xmlns="http://example.com" viewBox="0 0 1 1"><path d="M0 0"/></svg>`),
+        ).toContain(`root <svg> xmlns must be "http://www.w3.org/2000/svg"`);
     });
 
     test("rejects a missing viewBox", () => {

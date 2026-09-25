@@ -127,6 +127,14 @@ run = "mise run gen && bunx --no-install storybook build"
 description = "Generate codegen artifacts."
 run = "mise run panda:gen && mise run panda:cssgen"
 
+[tasks."icons:build"]
+description = "Build the icon font and manifest from the canonical SVG sources."
+run = "bun run src/shared/components/icon/tools/build.ts"
+
+[tasks."icons:check"]
+description = "Fail if the generated icon font or manifest is out of date."
+run = "bun run src/shared/components/icon/tools/build.ts --check"
+
 [tasks."panda:gen"]
 description = "Generate PandaCSS styled-system output."
 run = "bunx --no-install panda codegen"

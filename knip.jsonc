@@ -8,6 +8,8 @@
         "src/shared/styles/settings/index.ts",
         "src/shared/styles/foundation/index.ts",
         "src/shared/components/button/index.ts",
+        "src/shared/components/icon/index.ts",
+        "src/shared/components/icon/tools/build.ts",
         "src/shared/utils/index.ts",
         ".storybook/*.ts",
         "test/**/*.{ts,tsx}",

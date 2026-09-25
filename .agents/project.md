@@ -19,6 +19,7 @@ src/
         typography/
     components/
       button/       component, preset, stories, tests
+      icon/         asset component: svg sources, generated font + manifest, tools
     styled-system/  (generated)
 ```
 
@@ -48,3 +49,21 @@ Visual design system is built from isolated PandaCSS presets:
 - Foundation tokens are conservative, reusable scales with minimal semantics (`brand`, `surface`, `x1`); no CSS property names or component-part names.
 - `colors.ts` declares the `theme` axis (`_light`/`_dark`); other foundation groups may use it but never redeclare it.
 - Generated output: `src/shared/styled-system/` (git-ignored). Run `mise run gen` after any theme, preset or config change.
+
+## Component classes
+
+- **Visual / behavioral components** (`Button`, later `Input`, `Card`) take
+  their source from design and business rules; each owns a preset with its
+  anatomy, public variants and visual rules.
+- **Asset components** (`Icon`) take their source from an external asset. The
+  module owns the asset pipeline and its generated artifacts; the React
+  component is a thin runtime adapter with no business behavior.
+
+An asset component lives with the other components under
+`src/shared/components/`. The class describes the data source and pipeline, not
+the file location.
+
+Generated asset artifacts (the icon font and `manifest.generated.ts`) are
+committed and produced only by the pipeline in
+`src/shared/components/icon/tools/`; never edit them by hand. `mise run icons:check`
+fails when they drift.

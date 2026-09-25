@@ -37,6 +37,13 @@ mise run test:visual:update      # refresh baselines
 2. Run `mise run gen`.
 3. Never edit `src/shared/styled-system` by hand.
 
+## Icons
+
+1. Add or normalize source SVGs: `mise run icons:build -- --from <dir>`.
+2. `mise run icons:build` regenerates the font and manifest.
+3. `mise run icons:check` fails when the committed assets are stale.
+4. Use the `build-icon-font` and `update-icon-set` skills for the guided flow.
+
 ## Commits
 
 Conventional commits. Husky runs lint-staged on commit and `check` on push.
