@@ -64,7 +64,7 @@ describe("button icon composition", () => {
         expect(markup).toContain("<button");
     });
 
-    test("keeps the internal node-based button private", () => {
+    test("exports only the public button from the module", () => {
         expect(Object.keys(buttonModule)).toEqual([ "Button", ]);
     });
 

@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode, } from "react";
+import type { ComponentProps, } from "react";
 
 import { Icon, type IconName, type IconSize, } from "@shared/components/icon";
 import { cx, } from "@shared/styled-system/css";
@@ -21,32 +21,38 @@ export type ButtonProps = ComponentProps<"button"> & {
  * pairs its size from the button size, so a consumer never picks the icon size
  * or colour, and the icon stays decorative.
  */
-export const Button = ({ prefixIcon, suffixIcon, size = "md", ...props }: ButtonProps) => {
+export const Button = ({
+    tone = "primary",
+    size = "md",
+    prefixIcon,
+    suffixIcon,
+    children,
+    className,
+    ...props
+}: ButtonProps) => {
+    const styles = button({ tone, size, });
     const iconSize = ICON_SIZE_BY_BUTTON_SIZE[size];
 
     return (
-        <_Button
-            {...props}
-            size={size}
-            prefixIcon={prefixIcon === undefined
-                ? undefined
-                : <Icon name={prefixIcon} size={iconSize} />}
-            suffixIcon={suffixIcon === undefined
-                ? undefined
-                : <Icon name={suffixIcon} size={iconSize} />}
-        />
+        <button {...props} className={cx(styles.root, className)}>
+            {prefixIcon != null && (
+                <span className={styles.prefixIcon}>
+                    <Icon name={prefixIcon} size={iconSize} />
+                </span>
+            )}
+            {children != null && <span className={styles.label}>{children}</span>}
+            {suffixIcon != null && (
+                <span className={styles.suffixIcon}>
+                    <Icon name={suffixIcon} size={iconSize} />
+                </span>
+            )}
+        </button>
     );
 };
 
 /**
- * Private implementation.
- *
- * Everything below is internal. `_Button` and its props are never exported, so
- * the node-based slot API cannot leak into the public contract.
- */
-
-/**
  * Button-owned pairing between a button size and the icon size it renders.
+ * Not exported.
  *
  * Icon and Button size names are independent; the pairing is set by the button
  * slot geometry, not by matching `sm` to `sm`. Both slots are currently `x8`,
@@ -55,39 +61,4 @@ export const Button = ({ prefixIcon, suffixIcon, size = "md", ...props }: Button
 const ICON_SIZE_BY_BUTTON_SIZE: Record<ButtonSize, IconSize> = {
     sm: "sm",
     md: "sm",
-};
-
-/**
- * Private node-based props. Only the icon slots differ from the public API, so
- * the rest is derived to keep the two shapes from drifting apart.
- */
-type InternalButtonProps = Omit<ButtonProps, "prefixIcon" | "suffixIcon"> & {
-    prefixIcon?: ReactNode;
-    suffixIcon?: ReactNode;
-};
-
-/**
- * Internal, node-based button.
- *
- * Owns the DOM, the slots and the recipe, and accepts arbitrary nodes in the
- * icon slots.
- */
-const _Button = ({
-    tone = "primary",
-    size = "md",
-    prefixIcon,
-    suffixIcon,
-    children,
-    className,
-    ...props
-}: InternalButtonProps) => {
-    const styles = button({ tone, size, });
-
-    return (
-        <button {...props} className={cx(styles.root, className)}>
-            {prefixIcon != null && <span className={styles.prefixIcon}>{prefixIcon}</span>}
-            {children != null && <span className={styles.label}>{children}</span>}
-            {suffixIcon != null && <span className={styles.suffixIcon}>{suffixIcon}</span>}
-        </button>
-    );
 };

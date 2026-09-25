@@ -6,14 +6,14 @@ Operating journal of all work products. `wiki/log.md` tracks wiki changes only.
 
 [[experiments/button-icon-composition/README]] — active (открыт 2026-09-25),
 реализация выполнена; закрытие ожидает команды: связать `Button` и `Icon`
-(публичный `Button` принимает имена иконок, внутренний `_Button` — узлы),
+(публичный `Button` принимает имена иконок и сам владеет размером и цветом),
 сопоставление размеров, `tone="icon"` удалён.
 
 ## Experiments
 
 | Experiment | Subject | Status | Outcome |
 | --- | --- | --- | --- |
-| [[experiments/button-icon-composition/README]] | Button↔Icon composition: публичный icon-based `Button`, внутренний `_Button`, сопоставление размеров | active (2026-09-25) | Реализовано: `Button` принимает `IconName`, владеет размером и цветом иконки; `_Button` приватный; `tone="icon"` удалён (кнопка только с иконкой — отдельный будущий компонент). Сравнение B/C и результаты — в заметках. Закрытие ожидает команды |
+| [[experiments/button-icon-composition/README]] | Button↔Icon composition: публичный icon-based `Button`, сравнение с приватным `_Button` | active (2026-09-25) | Реализовано: `Button` принимает `IconName`, владеет размером и цветом иконки; `tone="icon"` удалён (кнопка только с иконкой — отдельный будущий компонент). Сравнение B/C: приватный `_Button` признан избыточным и удалён. Закрытие ожидает команды |
 | [[experiments/icon-asset-component/README]] | Icon asset component: asset-классификация, SVG→font pipeline, API, навыки обновления | completed (2026-09-25) | Гипотеза подтверждена: детерминированный pipeline `SVG → WOFF2`, стабильный manifest, тонкий `Icon` (размер/цвет/a11y), навыки `build-icon-font` и `update-icon-set`, поток обновления с защитой от breaking changes. Пользователь проверил набор на 17 glyphs из design-system панели через другую сессию агента. Icon font признан рабочим для монохромного набора (прямого сравнения с inline SVG не было). Урок: повторное обсуждение согласованных решений и избыточные прогоны проверок. Выводы: [[experiments/icon-asset-component/notes/results]], [[experiments/icon-asset-component/notes/retrospective]] |
 | [[experiments/semantic-color-foundation/README]] | Semantic color foundation: palette-first, theme-aware semantic layers | completed (2026-09-24) | Гипотеза подтверждена: `colors.palette.*` + `colors.semantic.*` (6×11×5), opacity, shadow; Button/App мигрированы; Button state-контракт реализован в коде; PEN подтверждает выразимость (feasibility). Урок: побочная PEN-работа размыла фокус. Полная PEN-интеграция и следующий цикл — отдельно ([[shared/notes/landing-system-roadmap]]) |
 | [[experiments/panda-design-system-rules/README]] | PandaCSS visual design-system rules: foundation and Button preset | completed (2026-09-22) | Rules подтверждены для single-part Button; crystallization: [[experiments/panda-design-system-rules/crystallizations/foundation-and-preset-rules]] |

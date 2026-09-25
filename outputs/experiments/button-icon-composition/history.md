@@ -55,3 +55,12 @@
   - Visual: baseline обновлён осознанно (убрана квадратная icon-only кнопка,
     54 px), повторный прогон зелёный.
   - Проверки: 73 unit, 14 browser, `check:deps`, `build`, `storybook:build`.
+- 2026-09-25 — ревью-комментарий 3: приватный `_Button` признан избыточным.
+  Реализация сведена к варианту B.
+  - Удалены `_Button` и `InternalButtonProps`; `button.tsx` — 64 строки, один
+    компонент; приватной осталась только таблица `ICON_SIZE_BY_BUTTON_SIZE`.
+  - Тест приватности переименован в «exports only the public button».
+  - Проверки: 73 unit, 14 browser, `check:deps`, `build`, `storybook:build`,
+    `test:visual` без изменения baseline — свёртывание не изменило ни поведение,
+    ни вид.
+  - `notes/comparison.md` обновлён: итог — B.
