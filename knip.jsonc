@@ -8,6 +8,7 @@
         "src/shared/styles/settings/index.ts",
         "src/shared/styles/foundation/index.ts",
         "src/shared/components/button/index.ts",
+        "src/shared/components/button-icon/index.ts",
         "src/shared/components/icon/index.ts",
         "src/shared/components/icon/tools/build.ts",
         "src/shared/components/icon/tools/update.ts",
@@ -29,6 +30,7 @@
     // Used through mise, hooks or external CLI configs.
     "ignoreDependencies": [
         "@commitlint/cli",
+        "@pandacss/config",
         "@pandacss/dev",
         "@storybook/addon-a11y",
         "@storybook/addon-docs",

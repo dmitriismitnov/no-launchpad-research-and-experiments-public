@@ -25,6 +25,12 @@ export default defineConfig({
                     size: [ "sm", "md", ],
                 },
             ],
+            buttonIcon: [
+                {
+                    tone: [ "primary", "secondary", "ghost", ],
+                    size: [ "sm", "md", ],
+                },
+            ],
             icon: [
                 {
                     size: [ "sm", "md", "lg", ],
