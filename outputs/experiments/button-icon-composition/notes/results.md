@@ -33,13 +33,27 @@
 
 ## Проверки
 
-- `mise run check` — 72 unit + 14 browser, зелёный.
-- `mise run check:types` — зелёный; типы отклоняют `ReactNode` и неизвестное имя.
+- `mise run check` — 73 unit + 14 browser, зелёный.
+- `mise run check:types` — зелёный; типы отклоняют `ReactNode`, неизвестное имя
+  и удалённый `tone="icon"`.
 - `mise run check:deps` — Knip чистый.
 - `mise run build` — успешно.
 - `mise run storybook:build` — успешно.
-- `mise run test:visual` — **прошёл без обновления baseline**: DOM и внешний вид
-  не изменились (это и было целью миграции).
+- `mise run test:visual` — после осознанного обновления baseline зелёный.
+
+## Изменение по ревью: удаление `tone="icon"`
+
+`tone` — цветовая ось, а `icon` задавал форму (квадрат `x16`, `paddingInline: x0`)
+и тип содержимого. После того как `Button` начал владеть иконкой, это стало
+заметно, и кнопка только с иконкой вынесена в отдельный будущий компонент.
+
+- `ButtonTone` → `primary | secondary | ghost`; из recipe удалён вариант `icon`
+  и оба compound-variant; `staticCss` обновлён.
+- `App.tsx` и stories обновлены; `IconOnly` удалён, проверка наследования цвета
+  перенесена в `WithIcons`.
+- Visual baseline пересмотрен: убрана квадратная icon-only кнопка (54 px),
+  остальное не изменилось.
+- Критерий «кнопка только с иконкой» вынесен из рамок эксперимента.
 - TDD: RED зафиксирован (3 поведенческих теста падали; `check:types` давал 2
   unused `@ts-expect-error`), затем GREEN.
 
@@ -59,5 +73,5 @@
 
 - Нужен ли node-based слот на самом деле (иконочный `Icon` его пока не требует).
 - Достаточно ли `sm → sm`, `md → sm` на реальных макетах.
-- Нужны ли `prefixIcon`/`suffixIcon` в `tone="icon"` одновременно с `aria-label`
-  (сейчас icon-only использует `prefixIcon`).
+- Отдельный компонент для кнопки только с иконкой: форма, размеры, состояния
+  (вынесен из рамок после удаления `tone="icon"`).

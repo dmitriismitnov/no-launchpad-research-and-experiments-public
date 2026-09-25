@@ -47,9 +47,15 @@ describe("button recipe", () => {
             "primary",
             "secondary",
             "ghost",
-            "icon",
         ]);
         expect(Object.keys(buttonRecipe.variants?.["size"] ?? {})).toEqual([ "sm", "md", ]);
+    });
+
+    test("keeps no icon tone: icon-only buttons get a dedicated component", () => {
+        const compoundTones = ( buttonRecipe.compoundVariants ?? [] )
+            .map((entry) => ( entry as { tone?: string; } ).tone);
+
+        expect(compoundTones).not.toContain("icon");
     });
 
     test("uses no shorthand property names", () => {
@@ -123,25 +129,6 @@ describe("button recipe", () => {
             borderColor: "semantic.common.200.divider",
             color: { base: "semantic.common.600.background", },
             boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
-            opacity: { base: 1, _disabled: 0.45, },
-        });
-    });
-
-    test("icon keeps no shadow and uses the surface-feedback policy", () => {
-        const root = buttonRecipe.variants?.["tone"]?.["icon"]?.["root"];
-
-        expect(root).toMatchObject({
-            width: "x16",
-            height: "x16",
-            boxShadow: "none",
-            backgroundColor: {
-                base: "transparent",
-                _enabled: {
-                    _hover: "semantic.common.100.background",
-                    _active: "semantic.common.200.background",
-                },
-            },
-            color: { base: "semantic.common.600.background", },
             opacity: { base: 1, _disabled: 0.45, },
         });
     });

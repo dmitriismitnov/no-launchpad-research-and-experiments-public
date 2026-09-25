@@ -61,5 +61,15 @@
 ### 8. Итог — in progress
 - [x] `notes/results.md`, `notes/comparison.md`.
 - [x] `history.md`.
-- [ ] `README.md` (Состояние/Итог) и `outputs/history.md` — при закрытии.
+- [ ] `README.md` (Итог) и `outputs/history.md` — при закрытии.
 - [ ] Закрытие — по прямой команде пользователя.
+
+### 9. Ревью-комментарий: удаление `tone="icon"` — done
+- [x] `ButtonTone` → `primary | secondary | ghost`.
+- [x] Recipe: удалён вариант `icon` и два compound-variant; `staticCss` обновлён.
+- [x] `App.tsx` и stories обновлены; `IconOnly` удалён, проверка наследования
+      цвета перенесена в `WithIcons`.
+- [x] TDD: RED (2 unit + unused `@ts-expect-error`) → GREEN.
+- [x] Visual baseline обновлён осознанно (убрана icon-only кнопка).
+- Проверка: `mise run check`, `check:deps`, `build`, `storybook:build`,
+  `test:visual` — зелёные.

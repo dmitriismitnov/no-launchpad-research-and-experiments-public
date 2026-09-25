@@ -73,8 +73,12 @@ describe("button icon composition", () => {
         const unknownName = <Button prefixIcon="definitely-not-an-icon" />;
         // @ts-expect-error a ReactNode is not assignable to IconName
         const nodeValue = <Button prefixIcon={<span />} />;
+        // @ts-expect-error the icon tone was removed; icon-only buttons get a
+        // dedicated component
+        const iconTone = <Button tone="icon">x</Button>;
 
         expect(unknownName).toBeDefined();
         expect(nodeValue).toBeDefined();
+        expect(iconTone).toBeDefined();
     });
 });

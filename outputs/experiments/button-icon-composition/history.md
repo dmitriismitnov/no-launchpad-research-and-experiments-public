@@ -43,3 +43,15 @@
   - Minors вынесены в отчёт: статусы README/`outputs/history.md` (при закрытии),
     пробелы в покрытии, импорт generated-файла в stories, подтягивание icon CSS
     при импорте `Button`.
+- 2026-09-25 — ревью-комментарий 2: `tone="icon"` признан лишним. Под именем
+  цветовой оси лежала форма и тип содержимого, а кнопка только с иконкой станет
+  отдельным компонентом. Решение: убрать сейчас.
+  - `ButtonTone` → `primary | secondary | ghost`; из recipe удалён вариант
+    `icon` и два compound-variant; `staticCss` обновлён.
+  - Обновлены `App.tsx` и stories: `IconOnly` удалён, проверка наследования
+    цвета перенесена в `WithIcons`.
+  - TDD: RED — 2 unit-падения и unused `@ts-expect-error` для `tone="icon"`;
+    GREEN после правок.
+  - Visual: baseline обновлён осознанно (убрана квадратная icon-only кнопка,
+    54 px), повторный прогон зелёный.
+  - Проверки: 73 unit, 14 browser, `check:deps`, `build`, `storybook:build`.

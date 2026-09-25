@@ -21,7 +21,7 @@ export default defineConfig({
         recipes: {
             button: [
                 {
-                    tone: [ "primary", "secondary", "ghost", "icon", ],
+                    tone: [ "primary", "secondary", "ghost", ],
                     size: [ "sm", "md", ],
                 },
             ],

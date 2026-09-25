@@ -22,7 +22,6 @@ const ThemePanel = ({ theme, }: { theme: "light" | "dark"; }) => (
             <div className={row}>
                 {tones.map((tone) => <Button key={tone} tone={tone}>{tone}</Button>)}
                 <Button tone="secondary" suffixIcon="arrow-right">Open</Button>
-                <Button tone="icon" aria-label="Continue" prefixIcon="arrow-right" />
             </div>
         </div>
     </section>

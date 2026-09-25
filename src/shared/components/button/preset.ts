@@ -73,7 +73,7 @@ export const buttonRecipe = defineSlotRecipe({
                 },
             },
 
-            // Secondary/Ghost/Icon use surface-feedback: only the fill changes.
+            // Secondary/Ghost use surface-feedback: only the fill changes.
             secondary: {
                 root: {
                     borderWidth: "thin",
@@ -109,25 +109,6 @@ export const buttonRecipe = defineSlotRecipe({
                     opacity: { base: 1, _disabled: 0.45, },
                 },
             },
-
-            icon: {
-                root: {
-                    width: "x16",
-                    height: "x16",
-                    borderWidth: "none",
-                    borderStyle: "none",
-                    backgroundColor: {
-                        base: "transparent",
-                        _enabled: {
-                            _hover: "semantic.common.100.background",
-                            _active: "semantic.common.200.background",
-                        },
-                    },
-                    color: { base: "semantic.common.600.background", },
-                    boxShadow: "none",
-                    opacity: { base: 1, _disabled: 0.45, },
-                },
-            },
         },
 
         // `sm` is a code-only extension; PEN specifies the 50px `md` Button.
@@ -146,16 +127,6 @@ export const buttonRecipe = defineSlotRecipe({
     // Real intersections only: size sets the regular padding, these two cases
     // cannot be expressed by an independent merge of public variants.
     compoundVariants: [
-        {
-            tone: "icon",
-            size: "sm",
-            css: { root: { paddingInline: "x0", }, },
-        },
-        {
-            tone: "icon",
-            size: "md",
-            css: { root: { paddingInline: "x0", }, },
-        },
         {
             tone: "secondary",
             size: "md",

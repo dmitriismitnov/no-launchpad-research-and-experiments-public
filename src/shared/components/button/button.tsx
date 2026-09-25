@@ -4,7 +4,7 @@ import { Icon, type IconName, type IconSize, } from "@shared/components/icon";
 import { cx, } from "@shared/styled-system/css";
 import { button, } from "@shared/styled-system/recipes";
 
-export type ButtonTone = "primary" | "secondary" | "ghost" | "icon";
+export type ButtonTone = "primary" | "secondary" | "ghost";
 export type ButtonSize = "sm" | "md";
 
 export type ButtonProps = ComponentProps<"button"> & {
