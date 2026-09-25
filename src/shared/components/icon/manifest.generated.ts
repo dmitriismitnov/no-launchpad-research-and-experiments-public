@@ -3,6 +3,22 @@
 /** Public icon keys. Each key is the name of a source SVG file. */
 export const ICON_CODEPOINTS = {
     "arrow-right": 0xE001,
+    "check": 0xE002,
+    "flask-conical": 0xE003,
+    "gauge": 0xE004,
+    "mail": 0xE005,
+    "map-pin": 0xE006,
+    "menu": 0xE007,
+    "phone": 0xE008,
+    "settings": 0xE009,
+    "shield-check": 0xE00A,
+    "sliders-horizontal": 0xE00B,
+    "test-tube": 0xE00C,
+    "thermometer": 0xE00D,
+    "truck": 0xE00E,
+    "waves": 0xE00F,
+    "wrench": 0xE010,
+    "x": 0xE011,
 } as const;
 
 export type IconName = keyof typeof ICON_CODEPOINTS;
