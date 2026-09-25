@@ -27,3 +27,21 @@
     `notes/builder-run.md`.
   - Эксперимент остаётся открытым: оценка автономности и решение — за
     пользователем.
+- 2026-09-25 — ревью-комментарий: регистрация пресета. `buttonIcon` расширял
+  тему через `theme.extend`, тогда как `Button` объявляет рецепт напрямую;
+  пользователь попросил оценить разницу и привести к единой модели.
+  - Оркестратор подтвердил на `mergeConfigs` (`@pandacss/config`): прямые
+    `theme.slotRecipes` замещают раздел, а не складываются; `theme.extend` —
+    механизм объединения, а не наследование рецепта.
+  - Выбрано: компоненты объявляют рецепты напрямую, объединение словарей — явно
+    в `src/shared/styles/index.ts` (`componentsPreset`, shallow по `recipes` и
+    `slotRecipes`).
+  - Билдер (та же сессия) внёс правку, добавил регрессионный тест
+    `src/shared/styles/presets.test.ts` (RED → GREEN: 3/2 → 1/4 → 6/0) и уточнил
+    `.agents/project.md`.
+  - Отклонение: изменён `knip.jsonc` (`@pandacss/config` в `ignoreDependencies`).
+  - Проверки по отчёту: `check` (104 unit / 26 browser), типы, lint, format,
+    `check:deps`, `build` (хэши идентичны), `storybook:build`, `test:visual` без
+    обновления baseline.
+  - Детали — `notes/preset-registration-review.md`. Работа не закоммичена;
+    эксперимент открыт.
