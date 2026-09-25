@@ -43,9 +43,10 @@ Visual design system is built from isolated PandaCSS presets:
 
 - `settings` (`src/shared/styles/settings/`) owns only `preflight` and `globalCss`.
 - `foundation` (`src/shared/styles/foundation/`) owns only tokens and system conditions.
-- Each component preset lives next to its component, e.g. `src/shared/components/button/preset.ts`, and owns only that component's recipe.
-- `src/shared/styles/index.ts` collects the presets; root `panda.config.ts` is technical compilation only.
-- Presets must not have overlapping ownership: no component-family overrides, no hidden inheritance, no `extends`.
+- Each component owns its preset and recipe: the preset lives next to its component, e.g. `src/shared/components/button/preset.ts`, and declares only that component's recipe.
+- `src/shared/styles/index.ts` is the collection point. It gathers the component `theme.recipes` and `theme.slotRecipes` dictionaries into one technical component preset, then passes `settings`, `foundation` and that preset to Panda. Root `panda.config.ts` is technical compilation only.
+- Presets must not have overlapping ownership: no component-family overrides, no hidden inheritance, no `extends`. The collection point only concatenates component dictionaries; it never overrides another component's recipe.
+- Do not register several component presets with `theme.slotRecipes` directly next to each other: Panda shallow-merges `theme`, so the later `theme.slotRecipes` replaces the earlier section. Explicit collection in `src/shared/styles/index.ts` is what keeps every component recipe.
 - Foundation tokens are conservative, reusable scales with minimal semantics (`brand`, `surface`, `x1`); no CSS property names or component-part names.
 - `colors.ts` declares the `theme` axis (`_light`/`_dark`); other foundation groups may use it but never redeclare it.
 - Generated output: `src/shared/styled-system/` (git-ignored). Run `mise run gen` after any theme, preset or config change.
