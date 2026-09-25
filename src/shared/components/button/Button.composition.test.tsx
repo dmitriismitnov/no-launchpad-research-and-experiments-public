@@ -1,4 +1,5 @@
 import { describe, expect, test, } from "bun:test";
+import { createRef, } from "react";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { ICON_CODEPOINTS, } from "../icon/manifest.generated";
@@ -54,6 +55,13 @@ describe("button icon composition", () => {
         expect(markup).toContain(`type="submit"`);
         expect(markup).toContain("disabled");
         expect(markup).toContain(`aria-label="Continue"`);
+    });
+
+    test("forwards a ref to the native button", () => {
+        const ref = createRef<HTMLButtonElement>();
+        const markup = renderToStaticMarkup(<Button ref={ref} prefixIcon="check">Save</Button>);
+
+        expect(markup).toContain("<button");
     });
 
     test("keeps the internal node-based button private", () => {

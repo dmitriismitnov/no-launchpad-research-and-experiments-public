@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode, } from "react";
+import type { ComponentProps, ReactNode, } from "react";
 
 import { Icon, type IconName, type IconSize, } from "@shared/components/icon";
 import { cx, } from "@shared/styled-system/css";
@@ -19,6 +19,24 @@ const ICON_SIZE_BY_BUTTON_SIZE: Record<ButtonSize, IconSize> = {
     md: "sm",
 };
 
+export type ButtonProps = ComponentProps<"button"> & {
+    tone?: ButtonTone;
+    size?: ButtonSize;
+    /** Icon rendered before the label; the button owns its size and colour. */
+    prefixIcon?: IconName;
+    /** Icon rendered after the label; the button owns its size and colour. */
+    suffixIcon?: IconName;
+};
+
+/**
+ * Private node-based props. Only the icon slots differ from the public API, so
+ * the rest is derived to keep the two shapes from drifting apart.
+ */
+type InternalButtonProps = Omit<ButtonProps, "prefixIcon" | "suffixIcon"> & {
+    prefixIcon?: ReactNode;
+    suffixIcon?: ReactNode;
+};
+
 /**
  * Internal, node-based button.
  *
@@ -34,12 +52,7 @@ const _Button = ({
     children,
     className,
     ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & {
-    tone?: ButtonTone;
-    size?: ButtonSize;
-    prefixIcon?: ReactNode;
-    suffixIcon?: ReactNode;
-}) => {
+}: InternalButtonProps) => {
     const styles = button({ tone, size, });
 
     return (
@@ -49,15 +62,6 @@ const _Button = ({
             {suffixIcon != null && <span className={styles.suffixIcon}>{suffixIcon}</span>}
         </button>
     );
-};
-
-export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-    tone?: ButtonTone;
-    size?: ButtonSize;
-    /** Icon rendered before the label; the button owns its size and colour. */
-    prefixIcon?: IconName;
-    /** Icon rendered after the label; the button owns its size and colour. */
-    suffixIcon?: IconName;
 };
 
 /**

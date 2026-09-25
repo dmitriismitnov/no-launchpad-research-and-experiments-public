@@ -1,6 +1,8 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
+import { useEffect, useRef, useState, } from "react";
+
 import { expect, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
@@ -211,6 +213,36 @@ export const IconOnly: Story = {
 
         // Colour is inherited: the glyph paints with the button colour.
         await expect(getComputedStyle(icon as Element).color).toBe(getComputedStyle(button).color);
+    },
+};
+
+const RefProbe = () => {
+    const ref = useRef<HTMLButtonElement>(null);
+    const [ tag, setTag, ] = useState("pending");
+
+    useEffect(() => {
+        setTag(ref.current?.tagName ?? "none");
+    }, []);
+
+    return (
+        <div className={row}>
+            <Button ref={ref} prefixIcon="check">Ref</Button>
+            <span data-testid="ref-tag">{tag}</span>
+        </div>
+    );
+};
+
+export const RefForwarding: Story = {
+    render: () => (
+        <ThemeShell theme="light">
+            <RefProbe />
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        // The ref reaches the native button, not the wrapper.
+        await expect(canvas.getByTestId("ref-tag")).toHaveTextContent("BUTTON");
     },
 };
 
