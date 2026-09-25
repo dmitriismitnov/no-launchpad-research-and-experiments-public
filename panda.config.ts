@@ -25,6 +25,11 @@ export default defineConfig({
                     size: [ "sm", "md", ],
                 },
             ],
+            icon: [
+                {
+                    size: [ "sm", "md", "lg", ],
+                },
+            ],
         },
     },
     presets,

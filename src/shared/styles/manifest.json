@@ -20,7 +20,10 @@
     ],
     "settings": "./settings/preset.ts",
     "foundation": "./foundation/preset.ts",
-    "components": ["../components/button/preset.ts"],
+    "components": [
+        "../components/button/preset.ts",
+        "../components/icon/preset.ts"
+    ],
     "excluded": [
         "behavior",
         "contrast",

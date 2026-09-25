@@ -1,0 +1,18 @@
+/*
+ * Asset registration for the generated icon font.
+ *
+ * This is the font's runtime wiring, not visual projection: sizes and colour
+ * live in the PandaCSS recipe. It sits with the component so the font loads
+ * exactly when the component is used, and Vite can fingerprint the `.woff2`
+ * referenced from here.
+ *
+ * The family name must match `ICON_FONT_FAMILY` and the recipe; a unit test
+ * enforces that.
+ */
+@font-face {
+    font-family: "no-launchpad-icon";
+    src: url("./assets/font/icon.woff2") format("woff2");
+    font-style: normal;
+    font-weight: normal;
+    font-display: block;
+}
