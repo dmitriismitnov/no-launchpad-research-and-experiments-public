@@ -8,7 +8,9 @@ Operating journal of all work products. `wiki/log.md` tracks wiki changes only.
 иконкой (`ButtonIcon`), отложенная прошлым экспериментом. Проверяется, можно ли
 вывести API, оформление и композицию компонента из существующих правил, заметок
 и кода. Ветка `experiment/button-icon`; закрытие — по прямой команде
-пользователя.
+пользователя. Прогон билдера выполнен: компонент реализован (не закоммичен),
+отчёт и открытый вопрос по сборке пресетов Panda — в
+[[experiments/button-icon/notes/builder-run]].
 
 ## Experiments
 
