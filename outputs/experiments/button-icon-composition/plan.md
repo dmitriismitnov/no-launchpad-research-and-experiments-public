@@ -58,11 +58,13 @@
       свёрнуто до B.
 - Проверка: `notes/comparison.md`.
 
-### 8. Итог — in progress
+### 8. Итог — done
 - [x] `notes/results.md`, `notes/comparison.md`.
 - [x] `history.md`.
-- [ ] `README.md` (Итог) и `outputs/history.md` — при закрытии.
-- [ ] Закрытие — по прямой команде пользователя.
+- [x] `notes/retrospective.md` — цели, достигнутое, отменённое, ограничения
+      доказательств, архитектурные и процессные выводы.
+- [x] `README.md` (Итог) и `outputs/history.md`.
+- [x] Закрытие по прямой команде пользователя (2026-09-25).
 
 ### 9. Ревью-комментарий: удаление `tone="icon"` — done
 - [x] `ButtonTone` → `primary | secondary | ghost`.
