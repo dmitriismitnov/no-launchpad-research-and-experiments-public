@@ -21,6 +21,7 @@
         "node_modules/**",
         "styled-system/**",
         "src/shared/styled-system/**",
+        "**/*.generated.*",
         "storybook-static/**",
         "test-results/**",
         "playwright-report/**",
