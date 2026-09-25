@@ -45,3 +45,18 @@
     обновления baseline.
   - Детали — `notes/preset-registration-review.md`. Работа не закоммичена;
     эксперимент открыт.
+- 2026-09-25 — эксперимент закрыт по прямой команде пользователя.
+  - Код и правила закоммичены: `fa45fb0` (`feat: add button icon component` —
+    модуль `button-icon`, сборка пресетов, `presets.test.ts`, `panda.config.ts`,
+    `knip.jsonc`, `App.tsx`, visual baseline) и `dafd40a`
+    (`docs(agents): clarify component preset composition`).
+  - Добавлена `notes/retrospective.md`: цели, условия и ход, достигнутое, оценка
+    автономности (наблюдение оркестратора), отменённое, ограничения
+    доказательств, архитектурные и процессные выводы.
+  - Проверки при закрытии (свежие, на дереве с закоммиченной работой):
+    `check` — 104 unit / 26 browser, `check:types`, `check:lint`, `check:format`,
+    `check:deps`, `build` (хэши совпали с прежними), `storybook:build`,
+    `test:visual` — зелёные.
+  - `README.md` и `outputs/history.md` переведены в completed.
+  - Ветка `experiment/button-icon` содержит коммиты эксперимента; решение об
+    интеграции — за пользователем.
