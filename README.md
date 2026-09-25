@@ -27,6 +27,7 @@ mise run prepare
 | `mise run gen`           | PandaCSS codegen and CSS generation       |
 | `mise run icons:build`   | Build the icon font and manifest          |
 | `mise run icons:check`   | Fail if generated icon assets drifted     |
+| `mise run icons:update`  | Update the icon set and report breakages  |
 | `mise run build`         | production build                          |
 | `mise run test:visual`   | Playwright visual tests against `APP_URL` |
 

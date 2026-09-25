@@ -42,7 +42,8 @@ mise run test:visual:update      # refresh baselines
 1. Add or normalize source SVGs: `mise run icons:build -- --from <dir>`.
 2. `mise run icons:build` regenerates the font and manifest.
 3. `mise run icons:check` fails when the committed assets are stale.
-4. Use the `build-icon-font` and `update-icon-set` skills for the guided flow.
+4. `mise run icons:update -- --from <dir>` reports breaking changes before
+   touching anything; see the `build-icon-font` and `update-icon-set` skills.
 
 ## Commits
 

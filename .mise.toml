@@ -135,6 +135,10 @@ run = "bun run src/shared/components/icon/tools/build.ts"
 description = "Fail if the generated icon font or manifest is out of date."
 run = "bun run src/shared/components/icon/tools/build.ts --check"
 
+[tasks."icons:update"]
+description = "Update the icon set from a directory and report breaking changes."
+run = "bun run src/shared/components/icon/tools/update.ts"
+
 [tasks."panda:gen"]
 description = "Generate PandaCSS styled-system output."
 run = "bunx --no-install panda codegen"
