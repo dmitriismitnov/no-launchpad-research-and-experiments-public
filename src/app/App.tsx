@@ -1,5 +1,4 @@
 import { Button, } from "@shared/components/button";
-import { Icon, } from "@shared/components/icon";
 import { css, } from "@shared/styled-system/css";
 
 const tones = [ "primary", "secondary", "ghost", ] as const;
@@ -22,12 +21,8 @@ const ThemePanel = ({ theme, }: { theme: "light" | "dark"; }) => (
         <div className={section}>
             <div className={row}>
                 {tones.map((tone) => <Button key={tone} tone={tone}>{tone}</Button>)}
-                <Button tone="secondary" suffixIcon={<Icon name="arrow-right" size="sm" />}>Open</Button>
-                <Button
-                    tone="icon"
-                    aria-label="Continue"
-                    prefixIcon={<Icon name="arrow-right" size="sm" />}
-                />
+                <Button tone="secondary" suffixIcon="arrow-right">Open</Button>
+                <Button tone="icon" aria-label="Continue" prefixIcon="arrow-right" />
             </div>
         </div>
     </section>

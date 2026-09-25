@@ -1,10 +1,15 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
+import { expect, within, } from "storybook/test";
+
 import { css, } from "@shared/styled-system/css";
 
+import { ICON_CODEPOINTS, type IconName, } from "../icon/manifest.generated";
 import type { ButtonProps, } from "./button";
 import { Button, } from "./button";
+
+const iconNames = Object.keys(ICON_CODEPOINTS) as IconName[];
 
 const shell = css({
     padding: "x12",
@@ -65,7 +70,7 @@ const renderSample = (tone: typeof tones[number], state: typeof states[number], 
             <Button
                 key={key}
                 aria-label={`icon ${state}`}
-                prefixIcon={<span aria-hidden>+</span>}
+                prefixIcon="settings"
                 tone="icon"
                 {...stateProps[state]}
             />
@@ -101,6 +106,14 @@ const meta = {
             control: { type: "select", },
             options: [ "sm", "md", ],
         },
+        prefixIcon: {
+            control: { type: "select", },
+            options: iconNames,
+        },
+        suffixIcon: {
+            control: { type: "select", },
+            options: iconNames,
+        },
         children: {
             control: { type: "text", },
         },
@@ -116,6 +129,8 @@ export const Playground: Story = {
         children: "Button",
         tone: "primary",
         size: "md",
+        prefixIcon: "check",
+        suffixIcon: "arrow-right",
     },
     render: (args) => (
         <ThemeShell theme="light">
@@ -132,7 +147,7 @@ export const AllTones: Story = {
             <div className={row}>
                 {tones.map((tone) =>
                     tone === "icon"
-                        ? <Button key={tone} aria-label="icon" prefixIcon={<span aria-hidden>+</span>} tone="icon" />
+                        ? <Button key={tone} aria-label="icon" prefixIcon="settings" tone="icon" />
                         : <Button key={tone} tone={tone}>{tone}</Button>
                 )}
             </div>
@@ -144,11 +159,59 @@ export const Sizes: Story = {
     render: () => (
         <ThemeShell theme="light">
             <div className={row}>
-                <Button size="sm">Small</Button>
-                <Button size="md">Medium</Button>
+                <Button size="sm" prefixIcon="check">Small</Button>
+                <Button size="md" prefixIcon="check">Medium</Button>
             </div>
         </ThemeShell>
     ),
+};
+
+export const WithIcons: Story = {
+    render: () => (
+        <ThemeShell theme="light">
+            <div className={row}>
+                <Button tone="secondary" prefixIcon="check" suffixIcon="arrow-right">
+                    Continue
+                </Button>
+            </div>
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const button = canvas.getByRole("button", { name: "Continue", });
+        const icons = button.querySelectorAll(".icon");
+
+        // Both slots render an icon, and the button keeps a single accessible
+        // name from its label; the icons stay decorative.
+        await expect(icons.length).toBe(2);
+        for ( const icon of icons ) {
+            await expect(icon).toHaveAttribute("aria-hidden", "true");
+        }
+    },
+};
+
+export const IconOnly: Story = {
+    render: () => (
+        <ThemeShell theme="light">
+            <div className={row}>
+                <Button tone="icon" aria-label="Settings" prefixIcon="settings" />
+                <Button tone="icon" size="sm" aria-label="Close" prefixIcon="x" />
+            </div>
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const button = canvas.getByRole("button", { name: "Settings", });
+        const icon = button.querySelector(".icon");
+
+        // The icon is decorative and adds no second name.
+        await expect(icon).toHaveAttribute("aria-hidden", "true");
+        await expect(icon).not.toHaveAttribute("role");
+        await expect(icon).not.toHaveAttribute("aria-label");
+
+        // Colour is inherited: the glyph paints with the button colour.
+        await expect(getComputedStyle(icon as Element).color).toBe(getComputedStyle(button).color);
+    },
 };
 
 export const LightStateMatrix: Story = {
