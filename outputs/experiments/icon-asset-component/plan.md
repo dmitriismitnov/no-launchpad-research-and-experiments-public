@@ -1,76 +1,70 @@
-# Icon Asset Component — план реализации
+# Icon Asset Component — план и ledger
 
-Ledger эксперимента. Статус задач обновляется по ходу. Основание — `README.md`.
-
-Обозначения: `[ ]` todo, `[~]` in progress, `[x]` done.
-Для каждой задачи фиксируется проверочная команда и результат.
+Основание — `README.md`. Статус задач: `[x]` done.
 
 ## Решения по умолчанию
 
 - Исходные SVG (canonical): `src/shared/components/icon/assets/svg/`.
-- Сгенерированные: `assets/font/icon.woff2`, `assets/font/icon.woff`,
-  `manifest.generated.ts` — коммитятся.
+- Сгенерированные: `assets/font/icon.woff2`, `manifest.generated.ts` — коммитятся.
 - Pipeline: `src/shared/components/icon/tools/`.
 - Font-face: компонентный `icon.css`, импортируется `icon.tsx`.
 - Размеры: `sm=x8`, `md=x10`, `lg=x12` (шкала `xN = N * 0.125rem`).
-- Kanonical набор для эксперимента: seed `arrow-right` из drop `assets/icons/`
-  (копия, drop не изменяется).
+- Canonical набор: seed `arrow-right` из drop `assets/icons/` (drop не изменён).
 
 ## Задачи
 
-### 1. Контракт исходных SVG: нормализация и валидация
-- [ ] `tools/svg.ts`: `normalizeSvg`, `validateSvg`.
-- [ ] `tools/svg.test.ts`: валидный/невалидный вход, диагностика, идемпотентность.
-- [ ] Проверка: `bun test src/shared/components/icon/tools/svg.test.ts`.
+### 1. Контракт исходных SVG — done
+- [x] `tools/svg.ts`: `normalizeSvg`, `validateSvg`.
+- [x] `tools/svg.test.ts`.
+- Проверка: `bun test .../svg.test.ts` → 16 pass (включая 3 найденных бага:
+  self-closing теги, `xmlns` как внешняя ссылка, порядок атрибутов).
 
-### 2. Manifest и codepoint-политика
-- [ ] `tools/manifest.ts`: назначение codepoint, рендер/парсинг `manifest.generated.ts`.
-- [ ] `tools/manifest.test.ts`: стабильность существующих ключей, порядок новых,
-      отсутствие коллизий.
-- [ ] Проверка: `bun test src/shared/components/icon/tools/manifest.test.ts`.
+### 2. Manifest и codepoint-политика — done
+- [x] `tools/manifest.ts`, `tools/manifest.test.ts`.
+- Проверка: 9 pass. Решение: существующие ключи сохраняют codepoint, удалённый
+  может быть переиспользован (шрифт и manifest пересобираются вместе).
 
-### 3. Font pipeline и генерация ассетов
-- [ ] `tools/font.ts`: SVG list → SVG font → TTF → WOFF/WOFF2 (детерминированно).
-- [ ] `tools/build.ts`: нормализация → валидация → font + manifest, отчёт, `--check`.
-- [ ] Seed canonical `assets/svg/arrow-right.svg` (нормализованный).
-- [ ] Прогон сборки; проверка детерминизма (`--check` дважды).
-- [ ] Проверка: `bun run src/shared/components/icon/tools/build.ts` и `--check`.
+### 3. Font pipeline и генерация — done
+- [x] `tools/font.ts`, `tools/font.test.ts`, `tools/assets.ts`, `tools/build.ts`.
+- [x] Seed canonical `assets/svg/arrow-right.svg`.
+- Проверка: `icons:build`; `icons:check` дважды; хеши шрифта и manifest
+  идентичны; `font.test.ts` → 3 pass (`wOF2`, детерминизм, зависимость от codepoint).
 
-### 4. Компонент Icon
-- [ ] `preset.ts`: `defineRecipe` c `size`, longhand-only, без theme-ветвлений.
-- [ ] `icon.tsx`: API `name/size/label`, accessibility, `currentColor`.
-- [ ] `icon.css`: `@font-face`.
-- [ ] `index.ts`: barrel.
-- [ ] `Icon.test.ts`: recipe и manifest-контракт.
-- [ ] `Icon.stories.tsx`: набор, размеры, light/dark, decorative/labelled + play.
-- [ ] Проверка: `bun test src/shared/components/icon` и `mise run test:browser`.
+### 4. Компонент Icon — done
+- [x] `preset.ts` (`defineRecipe`, `size`, longhand-only, без colour).
+- [x] `icon.tsx`, `icon.css`, `index.ts`.
+- [x] `Icon.test.ts` → 10 pass.
+- [x] `Icon.stories.tsx` (5 историй, play-проверка a11y).
+- Проверка: browser-тесты 12 pass.
 
-### 5. Подключение в проект
-- [ ] Регистрация `iconPreset` в `src/shared/styles/index.ts` + `manifest.json`.
-- [ ] Использование `Icon` в `App.tsx` вместо placeholder-иконок.
-- [ ] `knip.jsonc`: entry для tools.
-- [ ] `mise run icons:build` / `icons:check` / `icons:update` + синхронизация
-      README и `.agents/workflows.md`.
-- [ ] Проверка: `mise run gen`, `check:types`, `check:lint`, `check:deps`.
+### 5. Подключение в проект — done
+- [x] Preset в `styles/index.ts` и `styles/manifest.json`; `staticCss` для icon.
+- [x] `Icon` в `App.tsx`.
+- [x] `knip.jsonc`: entry для barrel и tools.
+- [x] `icons:build` / `icons:check` в `.mise.toml` + README, `.agents`.
+- Проверка: `check:types`, `check:lint`, `check:deps`, `build` — зелёные.
 
-### 6. Навыки
-- [ ] `.opencode/skills/build-icon-font/SKILL.md`.
-- [ ] `.opencode/skills/update-icon-set/SKILL.md`.
-- [ ] Проверка: `skill` tool перечисляет оба навыка.
+### 6. Навыки — done
+- [x] `.opencode/skills/build-icon-font/SKILL.md`.
+- [x] `.opencode/skills/update-icon-set/SKILL.md`.
+- Проверка: оба навыка обнаружены `skill` tool.
 
-### 7. Обновление набора и breaking changes
-- [ ] `tools/update.ts`: diff набора против manifest, классификация, usages,
-      режимы `--apply` и подтверждение.
-- [ ] `tools/update.test.ts`: addition / glyph change / rename / removal /
-      collision.
-- [ ] Проверка: `bun test src/shared/components/icon/tools/update.test.ts`.
+### 7. Обновление набора и breaking changes — done
+- [x] `tools/diff.ts` (`classifyChanges`, `scanIconUsages`, `migrateUsages`),
+      `tools/diff.test.ts` → 6 pass.
+- [x] `tools/update.ts` с `--apply`, `--allow-glyph-change`, `--allow-remove`,
+      `--keep-alias`, `--migrate-usage`; `icons:update` в `.mise.toml`.
+- Проверка (вручную): same → 0; add → 0; changed → 1 (blocked, показаны usages);
+  collision → 1; empty → 1; keep-alias → 0 и `--apply` сохранил оба ключа;
+  migrate-usage → 0. Тестовые артефакты удалены, состояние восстановлено.
 
-### 8. Проверки и visual
-- [ ] `mise run check`, `check:deps`, `build`, `storybook:build`.
-- [ ] `mise run test:visual` с осознанным пересмотром baseline.
-- [ ] Проверка: см. команды.
+### 8. Проверки и visual — done
+- [x] `mise run check` — 65 unit + 12 browser, зелёный.
+- [x] `mise run check:deps`, `mise run build`, `mise run storybook:build`.
+- [x] `mise run test:visual` — baseline обновлён и проверен визуально.
 
-### 9. Итог и кристаллизация
-- [ ] `notes/` с выводами и решением по технологии.
-- [ ] Обновление `README.md` (Итог) и `history.md`.
-- [ ] Статус эксперимента и `outputs/history.md`.
+### 9. Итог и кристаллизация — done
+- [x] `notes/results.md` с выводами и решением по технологии.
+- [x] README (Состояние), `history.md`, `outputs/history.md`.
+- [ ] Закрытие эксперимента — по прямой команде пользователя.
+- [ ] Кристаллизация правил в `wiki/` — по прямой команде.
