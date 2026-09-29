@@ -44,8 +44,8 @@ description = "Start Storybook on STORYBOOK_PORT."
 run = "mise run gen && bunx --no-install storybook dev -p $STORYBOOK_PORT --no-open"
 
 [tasks.check]
-description = "Run the main local checks."
-run = "mise run check:lint && mise run check:types && mise run check:format && mise run test"
+description = "Run the main local checks, including generated asset drift."
+run = "mise run check:lint && mise run check:types && mise run check:format && mise run icons:check && mise run fonts:check && mise run test"
 
 [tasks."check:lint"]
 description = "Lint sources and configs without autofixes."

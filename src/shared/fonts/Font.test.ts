@@ -6,15 +6,24 @@ import { WEB_FONT_FACES, } from "./manifest.generated";
 
 const fontCss = readFileSync(new URL("./font.css", import.meta.url), "utf8");
 
+const fontFaceBlocks = fontCss
+    .split("@font-face")
+    .slice(1)
+    .map((block) => block.slice(0, block.indexOf("}")));
+
 describe("web font registration", () => {
-    test("registers normal and italic Inter variable faces from generated WOFF2", () => {
-        expect(fontCss).toContain('font-family: "Inter"');
-        expect(fontCss).toContain('url("./assets/web/inter/inter-normal.woff2") format("woff2")');
-        expect(fontCss).toContain('url("./assets/web/inter/inter-italic.woff2") format("woff2")');
-        expect(fontCss.match(/font-weight: 100 900/g)).toHaveLength(2);
-        expect(fontCss).toContain("font-style: normal");
-        expect(fontCss).toContain("font-style: italic");
-        expect(fontCss.match(/font-display: swap/g)).toHaveLength(2);
+    test("registers exactly one block per manifest face, with matching metadata", () => {
+        expect(fontFaceBlocks).toHaveLength(WEB_FONT_FACES.length);
+
+        for ( const face of WEB_FONT_FACES ) {
+            const block = fontFaceBlocks.find((candidate) => candidate.includes(face.fileName));
+
+            expect(block, `no @font-face block points at ${face.fileName}`).toBeDefined();
+            expect(block).toContain(`font-family: "${FONT_FAMILY}"`);
+            expect(block).toContain(`font-style: ${face.style}`);
+            expect(block).toContain(`font-weight: ${face.weightRange}`);
+            expect(block).toContain("font-display: swap");
+        }
     });
 
     test("keeps CSS, manifest and generated files in one shared family contract", () => {

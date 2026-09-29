@@ -27,13 +27,21 @@ const EXPECTED_WEIGHT = { min: 100, max: 900, };
 
 type ParsedAxis = { min: number; max: number; };
 
-type ParsedFont = {
+/** The subset of a parsed font the canonical contract inspects. */
+export type ParsedFontDescriptor = {
     familyName?: string;
     italicAngle?: number;
     variationAxes?: Record<string, ParsedAxis>;
 };
 
-const parse = (bytes: Buffer): ParsedFont => create(bytes) as unknown as ParsedFont;
+/** The face identity a diagnostic needs, without the file paths. */
+export type CanonicalFaceIdentity = {
+    id: FontFaceSource["id"];
+    style: FontFaceSource["style"];
+    sourcePath: string;
+};
+
+const parse = (bytes: Buffer): ParsedFontDescriptor => create(bytes) as unknown as ParsedFontDescriptor;
 
 /**
  * Axis tags present in a font, sorted for a deterministic contract.
@@ -46,10 +54,13 @@ export const readVariationAxes = (bytes: Buffer): readonly string[] =>
  * Applies the canonical Inter contract to an already-parsed font.
  * Shared by the source and the converted WOFF2 so both are held to the same
  * rules; the stage only shapes the diagnostics.
+ *
+ * Exported so every rule is testable from a plain descriptor: the weight-range
+ * rule cannot be produced by a generated fixture.
  */
-const validateParsedFont = (
-    font: ParsedFont,
-    face: FontFaceSource,
+export const assertCanonicalFont = (
+    font: ParsedFontDescriptor,
+    face: CanonicalFaceIdentity,
     stage: "source" | "woff2",
 ): readonly FontVariationAxis[] => {
     const where = `font face "${face.id}" ${stage} at ${face.sourcePath}`;
@@ -95,7 +106,7 @@ const validateParsedFont = (
  */
 export const readAndValidateFace = async (face: FontFaceSource): Promise<ValidatedFontFace> => {
     const source = await readFile(face.sourcePath);
-    const axes = validateParsedFont(parse(source), face, "source");
+    const axes = assertCanonicalFont(parse(source), face, "source");
 
     return {
         id: face.id,
@@ -122,7 +133,7 @@ export const buildWoff2 = async (face: FontFaceSource): Promise<Buffer> => {
         throw new Error(`font face "${face.id}": conversion output is not a WOFF2 file`);
     }
 
-    validateParsedFont(parse(woff2), face, "woff2");
+    assertCanonicalFont(parse(woff2), face, "woff2");
 
     return woff2;
 };

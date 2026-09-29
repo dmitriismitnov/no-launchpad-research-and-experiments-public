@@ -22,7 +22,7 @@ mise run prepare
 | `mise run dev:start`     | Vite dev server on `APP_PORT`                |
 | `mise run dev:stop`      | Stop the dev server                          |
 | `mise run dev:storybook` | Storybook on `STORYBOOK_PORT`                |
-| `mise run check`         | lint + types + format + tests                |
+| `mise run check`         | lint + types + format + asset drift + tests  |
 | `mise run check:deps`    | Knip dependency and export check             |
 | `mise run gen`           | PandaCSS codegen and CSS generation          |
 | `mise run fonts:build`   | Build the web font WOFF2 assets and manifest |

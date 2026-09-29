@@ -21,7 +21,7 @@ Use `mise run <task>`. There are no `package.json` scripts.
 - `mise run prepare` - install git hooks and run codegen.
 - `mise run dev:start` / `dev:stop` / `dev:restart` - Vite dev server.
 - `mise run dev:storybook` - Storybook.
-- `mise run check` - lint + types + format + tests.
+- `mise run check` - lint + types + format + asset drift checks + tests.
 - `mise run check:deps` - Knip, run after dependency or export changes.
 - `mise run gen` - PandaCSS codegen and CSS generation.
 - `mise run fonts:build` / `fonts:check` - build or verify the web font assets.

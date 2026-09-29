@@ -6,7 +6,7 @@ import { join, } from "node:path";
 import svg2ttf from "svg2ttf";
 
 import { fontFaces, } from "./assets";
-import { buildWoff2, readAndValidateFace, readVariationAxes, } from "./font";
+import { assertCanonicalFont, buildWoff2, readAndValidateFace, readVariationAxes, } from "./font";
 
 const [ normalFace, italicFace, ] = fontFaces as [ typeof fontFaces[number], typeof fontFaces[number], ];
 
@@ -94,4 +94,40 @@ describe("buildWoff2", () => {
             expect(readVariationAxes(result)).toEqual([ "opsz", "wght", ]);
         }
     }, 30_000);
+});
+
+/**
+ * The contract is checked on a pure descriptor as well as on real files, so
+ * every rule — including the weight range, which no generated fixture can
+ * exercise — is pinned by its own test.
+ */
+describe("assertCanonicalFont", () => {
+    const canonical = {
+        familyName: "Inter",
+        italicAngle: 0,
+        variationAxes: {
+            opsz: { min: 14, max: 32, },
+            wght: { min: 100, max: 900, },
+        },
+    };
+
+    test("accepts a descriptor matching the canonical Inter contract", () => {
+        expect(() => assertCanonicalFont(canonical, normalFace, "source")).not.toThrow();
+    });
+
+    test("rejects a source whose wght range is not the canonical 100 900", () => {
+        expect(() =>
+            assertCanonicalFont(
+                {
+                    ...canonical,
+                    variationAxes: {
+                        opsz: { min: 14, max: 32, },
+                        wght: { min: 200, max: 800, },
+                    },
+                },
+                normalFace,
+                "source",
+            )
+        ).toThrow(/expected wght range 100 900/i);
+    });
 });
