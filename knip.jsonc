@@ -27,6 +27,13 @@
         "*.config.{js,mjs,cjs,ts,mts,cts}"
     ],
 
+    // Generated artifacts are produced by a pipeline, not hand-written; their
+    // usage is validated by their own build/check tasks, not by dead-code
+    // analysis. Keep this in sync with dprint and ESLint.
+    "ignore": [
+        "**/*.generated.*"
+    ],
+
     // Used through mise, hooks or external CLI configs.
     "ignoreDependencies": [
         "@commitlint/cli",

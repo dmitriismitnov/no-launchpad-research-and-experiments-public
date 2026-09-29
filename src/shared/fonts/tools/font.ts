@@ -14,6 +14,8 @@ export type ValidatedFontFace = {
     style: FontFaceSource["style"];
     weightRange: FontFaceSource["weightRange"];
     axes: readonly FontVariationAxis[];
+    sourcePath: string;
+    outputPath: string;
     source: Buffer;
 };
 
@@ -101,6 +103,8 @@ export const readAndValidateFace = async (face: FontFaceSource): Promise<Validat
         style: face.style,
         weightRange: face.weightRange,
         axes,
+        sourcePath: face.sourcePath,
+        outputPath: face.outputPath,
         source,
     };
 };
