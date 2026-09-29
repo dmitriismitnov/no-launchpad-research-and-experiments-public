@@ -35,10 +35,12 @@ export type ParsedFontDescriptor = {
 };
 
 /** The face identity a diagnostic needs, without the file paths. */
-export type CanonicalFaceIdentity = {
-    id: FontFaceSource["id"];
-    style: FontFaceSource["style"];
-    sourcePath: string;
+export type CanonicalFaceIdentity = Pick<FontFaceSource, "id" | "style">;
+
+/** Where a validation ran, so a diagnostic can name the right artifact. */
+export type FontValidationLocation = {
+    stage: "source" | "generated WOFF2";
+    path: string;
 };
 
 const parse = (bytes: Buffer): ParsedFontDescriptor => create(bytes) as unknown as ParsedFontDescriptor;
@@ -61,14 +63,18 @@ export const readVariationAxes = (bytes: Buffer): readonly string[] =>
 export const assertCanonicalFont = (
     font: ParsedFontDescriptor,
     face: CanonicalFaceIdentity,
-    stage: "source" | "woff2",
+    location: FontValidationLocation,
 ): readonly FontVariationAxis[] => {
-    const where = `font face "${face.id}" ${stage} at ${face.sourcePath}`;
+    const where = `font face "${face.id}" ${location.stage} at ${location.path}`;
 
     if ( font.familyName !== FONT_FAMILY ) {
         throw new Error(
             `${where}: expected family ${FONT_FAMILY}, got "${font.familyName}"`,
         );
+    }
+
+    if ( font.italicAngle === undefined ) {
+        throw new Error(`${where}: missing italicAngle needed to validate style`);
     }
 
     const actualStyle = font.italicAngle === 0 ? "normal" : "italic";
@@ -106,7 +112,11 @@ export const assertCanonicalFont = (
  */
 export const readAndValidateFace = async (face: FontFaceSource): Promise<ValidatedFontFace> => {
     const source = await readFile(face.sourcePath);
-    const axes = assertCanonicalFont(parse(source), face, "source");
+    const axes = assertCanonicalFont(
+        parse(source),
+        face,
+        { stage: "source", path: face.sourcePath, },
+    );
 
     return {
         id: face.id,
@@ -125,15 +135,18 @@ export const readAndValidateFace = async (face: FontFaceSource): Promise<Validat
  * The compressed bytes are parsed again and re-validated, so a conversion that
  * silently drops the `opsz` or `wght` axis fails instead of shipping.
  */
-export const buildWoff2 = async (face: FontFaceSource): Promise<Buffer> => {
-    const validated = await readAndValidateFace(face);
-    const woff2 = Buffer.from(await compress(validated.source));
+export const buildWoff2 = async (face: ValidatedFontFace): Promise<Buffer> => {
+    const woff2 = Buffer.from(await compress(face.source));
 
     if ( woff2.subarray(0, 4).toString("ascii") !== "wOF2" ) {
         throw new Error(`font face "${face.id}": conversion output is not a WOFF2 file`);
     }
 
-    assertCanonicalFont(parse(woff2), face, "woff2");
+    assertCanonicalFont(
+        parse(woff2),
+        face,
+        { stage: "generated WOFF2", path: face.outputPath, },
+    );
 
     return woff2;
 };

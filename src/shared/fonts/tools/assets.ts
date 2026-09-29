@@ -65,14 +65,12 @@ export type FontAssetBuild = {
 
 /** Builds every face and the manifest in memory without touching the disk. */
 export const buildFontAssets = async (): Promise<FontAssetBuild> => {
-    const files = await Promise.all(
-        fontFaces.map(async (face) => ( {
-            faceId: face.id,
-            path: face.outputPath,
-            bytes: await buildWoff2(face),
-        } )),
-    );
     const faces = await Promise.all(fontFaces.map((face) => readAndValidateFace(face)));
+    const files = await Promise.all(faces.map(async (face) => ( {
+        faceId: face.id,
+        path: face.outputPath,
+        bytes: await buildWoff2(face),
+    } )));
 
     return { faces, files, manifestSource: renderManifest(faces), };
 };

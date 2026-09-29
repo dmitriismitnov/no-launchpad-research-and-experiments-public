@@ -88,11 +88,21 @@ describe("readAndValidateFace", () => {
 describe("buildWoff2", () => {
     test("keeps Inter's variable axes in each generated WOFF2", async () => {
         for ( const face of fontFaces ) {
-            const result = await buildWoff2(face);
+            const validated = await readAndValidateFace(face);
+            const result = await buildWoff2(validated);
 
             expect(result.subarray(0, 4).toString("ascii")).toBe("wOF2");
             expect(readVariationAxes(result)).toEqual([ "opsz", "wght", ]);
         }
+    }, 30_000);
+
+    test("does not reread the raw source after validation", async () => {
+        const validated = await readAndValidateFace(normalFace);
+        const sourcePathThatMustNotBeRead = join(tmpdir(), "missing-source.ttf");
+
+        const result = await buildWoff2({ ...validated, sourcePath: sourcePathThatMustNotBeRead, });
+
+        expect(result.subarray(0, 4).toString("ascii")).toBe("wOF2");
     }, 30_000);
 });
 
@@ -112,7 +122,8 @@ describe("assertCanonicalFont", () => {
     };
 
     test("accepts a descriptor matching the canonical Inter contract", () => {
-        expect(() => assertCanonicalFont(canonical, normalFace, "source")).not.toThrow();
+        expect(() => assertCanonicalFont(canonical, normalFace, { stage: "source", path: "fixture.ttf", })).not
+            .toThrow();
     });
 
     test("rejects a source whose wght range is not the canonical 100 900", () => {
@@ -126,8 +137,28 @@ describe("assertCanonicalFont", () => {
                     },
                 },
                 normalFace,
-                "source",
+                { stage: "source", path: "fixture.ttf", },
             )
         ).toThrow(/expected wght range 100 900/i);
+    });
+
+    test("reports a missing italicAngle instead of guessing the style", () => {
+        expect(() =>
+            assertCanonicalFont(
+                { ...canonical, italicAngle: undefined, },
+                { id: "inter-normal", style: "normal", },
+                { stage: "source", path: "fixture.ttf", },
+            )
+        ).toThrow(/missing italicAngle/i);
+    });
+
+    test("reports the generated WOFF2 path when converted bytes violate the contract", () => {
+        expect(() =>
+            assertCanonicalFont(
+                { ...canonical, familyName: "Wrong Family", },
+                { id: "inter-normal", style: "normal", },
+                { stage: "generated WOFF2", path: "assets/web/inter/inter-normal.woff2", },
+            )
+        ).toThrow(/generated WOFF2 at assets\/web\/inter\/inter-normal\.woff2.*expected family Inter/i);
     });
 });
