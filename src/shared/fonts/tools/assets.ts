@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync, } from "node:fs";
 import { fileURLToPath, } from "node:url";
 
+import { renderFontCss, } from "./css";
 import { buildWoff2, readAndValidateFace, type ValidatedFontFace, } from "./font";
 import { renderManifest, } from "./manifest";
 
@@ -32,6 +33,9 @@ export const licencePath = url("../assets/raw/inter/OFL.txt");
 /** Committed, generated web-font manifest. */
 export const manifestPath = url("../manifest.generated.ts");
 
+/** Committed, generated runtime font CSS. */
+export const fontCssPath = url("../font.generated.css");
+
 export const fontFaces: readonly FontFaceSource[] = [
     {
         id: "inter-normal",
@@ -50,32 +54,46 @@ export const fontFaces: readonly FontFaceSource[] = [
 ];
 
 /** One generated WOFF2 file, paired with the face it came from. */
-type BuiltFontAsset = {
+export type BuiltFontAsset = {
     faceId: FontFaceSource["id"];
     path: string;
     bytes: Buffer;
 };
 
-/** The complete generated output for one build: fonts plus the manifest. */
+/** One generated text artifact, tagged by kind and target path. */
+export type BuiltTextAsset = {
+    kind: "manifest" | "css";
+    path: string;
+    source: string;
+};
+
+/** The complete generated output for one build: fonts plus text artifacts. */
 export type FontAssetBuild = {
     faces: readonly ValidatedFontFace[];
     files: readonly BuiltFontAsset[];
-    manifestSource: string;
+    textFiles: readonly BuiltTextAsset[];
 };
 
-/** Builds every face and the manifest in memory without touching the disk. */
+/** Builds every face and text artifact in memory without touching the disk. */
 export const buildFontAssets = async (): Promise<FontAssetBuild> => {
     const faces = await Promise.all(fontFaces.map((face) => readAndValidateFace(face)));
-    const files = await Promise.all(faces.map(async (face) => ( {
-        faceId: face.id,
-        path: face.outputPath,
-        bytes: await buildWoff2(face),
-    } )));
+    const files: BuiltFontAsset[] = [];
 
-    return { faces, files, manifestSource: renderManifest(faces), };
+    // Compress one face at a time: `wawoff2` is not re-entrant, so concurrent
+    // compressions corrupt each other's output and break determinism.
+    for ( const face of faces ) {
+        files.push({ faceId: face.id, path: face.outputPath, bytes: await buildWoff2(face), });
+    }
+
+    const textFiles = [
+        { kind: "manifest", path: manifestPath, source: renderManifest(faces), },
+        { kind: "css", path: fontCssPath, source: renderFontCss(faces, fontCssPath), },
+    ] as const;
+
+    return { faces, files, textFiles, };
 };
 
-/** Writes the generated fonts and manifest. Only the build task calls this. */
+/** Writes the generated fonts and text artifacts. Only the build task calls this. */
 export const writeFontAssets = (build: FontAssetBuild): void => {
     mkdirSync(webDir, { recursive: true, });
 
@@ -83,7 +101,9 @@ export const writeFontAssets = (build: FontAssetBuild): void => {
         writeFileSync(file.path, file.bytes);
     }
 
-    writeFileSync(manifestPath, build.manifestSource);
+    for ( const text of build.textFiles ) {
+        writeFileSync(text.path, text.source);
+    }
 };
 
 /** Disk access used by the check, injectable so drift is testable in isolation. */
@@ -92,7 +112,7 @@ export type FontAssetIo = {
     read: (path: string) => Buffer;
 };
 
-const nodeFontAssetIo: FontAssetIo = {
+export const nodeFontAssetIo: FontAssetIo = {
     exists: (path) => existsSync(path),
     read: (path) => readFileSync(path),
 };
@@ -104,7 +124,6 @@ const nodeFontAssetIo: FontAssetIo = {
  */
 export const checkFontAssets = (
     build: FontAssetBuild,
-    manifest: string = manifestPath,
     io: FontAssetIo = nodeFontAssetIo,
 ): readonly string[] => {
     const problems: string[] = [];
@@ -117,10 +136,12 @@ export const checkFontAssets = (
         }
     }
 
-    if ( !io.exists(manifest) ) {
-        problems.push(`missing generated manifest: ${manifest}`);
-    } else if ( io.read(manifest).toString("utf8") !== build.manifestSource ) {
-        problems.push(`stale generated manifest: ${manifest}`);
+    for ( const text of build.textFiles ) {
+        if ( !io.exists(text.path) ) {
+            problems.push(`missing generated ${text.kind}: ${text.path}`);
+        } else if ( io.read(text.path).toString("utf8") !== text.source ) {
+            problems.push(`stale generated ${text.kind}: ${text.path}`);
+        }
     }
 
     return problems;

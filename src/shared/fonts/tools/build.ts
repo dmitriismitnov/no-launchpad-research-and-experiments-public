@@ -1,4 +1,4 @@
-import { buildFontAssets, checkFontAssets, manifestPath, writeFontAssets, } from "./assets";
+import { buildFontAssets, checkFontAssets, writeFontAssets, } from "./assets";
 
 const parseArgs = (argv: readonly string[]): { check: boolean; } => {
     let check = false;
@@ -43,7 +43,9 @@ const run = async (): Promise<number> => {
         console.log(`font: ${file.faceId} ${file.bytes.length} B -> ${file.path}`);
     }
 
-    console.log(`manifest -> ${manifestPath}`);
+    for ( const text of built.textFiles ) {
+        console.log(`${text.kind} -> ${text.path}`);
+    }
 
     return 0;
 };
