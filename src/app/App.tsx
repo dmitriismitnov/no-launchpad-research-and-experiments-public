@@ -1,6 +1,6 @@
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
-import { css, } from "@shared/styled-system/css";
+import { css, cx, } from "@shared/styled-system/css";
 
 const tones = [ "primary", "secondary", "ghost", ] as const;
 
@@ -29,9 +29,84 @@ const ThemePanel = ({ theme, }: { theme: "light" | "dark"; }) => (
     </section>
 );
 
+/*
+ * Experiment-local Inter specimen.
+ *
+ * This is not a reusable typography API: it exists to prove that the generated
+ * WOFF2 faces load and that a component can compose its text from individual
+ * foundation atoms. It deliberately uses one `css()` class per atomic token
+ * instead of a shared `textStyles` layer.
+ */
+const specimen = css({
+    display: "grid",
+    gap: "x4",
+    padding: "x12",
+    backgroundColor: "semantic.common.100.background",
+    color: "semantic.common.100.text",
+});
+
+const specimenLine = css({
+    fontFamily: "body",
+    fontWeight: "regular",
+    lineHeight: "normal",
+    letterSpacing: "normal",
+});
+
+const specimenSize = {
+    xs: css({ fontSize: "xs", }),
+    sm: css({ fontSize: "sm", }),
+    md: css({ fontSize: "md", }),
+    lg: css({ fontSize: "lg", }),
+    xl: css({ fontSize: "xl", }),
+};
+
+const specimenWeight = {
+    regular: css({ fontWeight: "regular", }),
+    medium: css({ fontWeight: "medium", }),
+    semibold: css({ fontWeight: "semibold", }),
+};
+
+const specimenItalic = css({
+    fontFamily: "body",
+    fontStyle: "italic",
+    fontSize: "sm",
+    fontWeight: "semibold",
+    lineHeight: "normal",
+});
+
+const specimenTitle = css({
+    fontFamily: "body",
+    fontSize: "lg",
+    fontWeight: "semibold",
+    lineHeight: "tight",
+    letterSpacing: "tight",
+});
+
+const InterSpecimen = () => (
+    <section data-testid="inter-specimen" className={specimen}>
+        <p className={specimenTitle}>Inter specimen</p>
+        <p className={cx(specimenLine, specimenSize["sm"], specimenWeight["regular"])}>
+            Regular 400 — Launch / Запуск
+        </p>
+        <p className={cx(specimenLine, specimenSize["sm"], specimenWeight["medium"])}>
+            Medium 500 — Launch / Запуск
+        </p>
+        <p className={cx(specimenLine, specimenSize["sm"], specimenWeight["semibold"])}>
+            Semibold 600 — Launch / Запуск
+        </p>
+        <p className={specimenItalic}>Italic 600 — Launch / Запуск</p>
+        <p className={specimenSize["xs"]}>xs · Launch / Запуск</p>
+        <p className={specimenSize["sm"]}>sm · Launch / Запуск</p>
+        <p className={specimenSize["md"]}>md · Launch / Запуск</p>
+        <p className={specimenSize["lg"]}>lg · Launch / Запуск</p>
+        <p className={specimenSize["xl"]}>xl · Launch / Запуск</p>
+    </section>
+);
+
 export const App = () => (
     <main className={css({ display: "grid", gap: "x8", padding: "x12", })}>
         <h1 className={css({ fontSize: "xl", fontWeight: "semibold", lineHeight: "tight", })}>No Launchpad</h1>
+        <InterSpecimen />
         <ThemePanel theme="light" />
         <ThemePanel theme="dark" />
     </main>
