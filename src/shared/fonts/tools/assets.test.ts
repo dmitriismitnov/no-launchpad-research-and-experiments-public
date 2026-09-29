@@ -18,7 +18,9 @@ describe("font asset contract", () => {
         expect(rawDir.includes("/public/")).toBe(false);
         expect(existsSync(licencePath)).toBe(true);
         expect(readFileSync(licencePath, "utf8")).toContain("SIL OPEN FONT LICENSE");
-        for ( const face of fontFaces ) expect(existsSync(face.sourcePath)).toBe(true);
+        for ( const face of fontFaces ) {
+            expect(existsSync(face.sourcePath)).toBe(true);
+        }
         expect(webDir.includes("/public/")).toBe(false);
     });
 });
