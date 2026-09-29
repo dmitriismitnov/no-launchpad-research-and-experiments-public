@@ -24,3 +24,16 @@ describe("font asset contract", () => {
         expect(webDir.includes("/public/")).toBe(false);
     });
 });
+
+describe("font asset documentation", () => {
+    test("documents the generated-asset workflow", () => {
+        const skill = readFileSync(
+            new URL("../../../../.opencode/skills/build-web-font/SKILL.md", import.meta.url),
+            "utf8",
+        );
+
+        expect(skill).toContain("mise run fonts:build");
+        expect(skill).toContain("mise run fonts:check");
+        expect(skill).toContain("Never edit generated WOFF2 files or manifest.generated.ts by hand");
+    });
+});

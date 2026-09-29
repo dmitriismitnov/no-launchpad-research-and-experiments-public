@@ -45,6 +45,14 @@ mise run test:visual:update      # refresh baselines
 4. `mise run icons:update -- --from <dir>` reports breaking changes before
    touching anything; see the `build-icon-font` and `update-icon-set` skills.
 
+## Fonts
+
+1. Add the variable normal/italic sources and their licence under
+   `src/shared/fonts/assets/raw/`; never below `public/`.
+2. `mise run fonts:build` regenerates the WOFF2 assets and manifest.
+3. `mise run fonts:check` fails when the committed assets are stale.
+4. See the `build-web-font` skill.
+
 ## Commits
 
 Conventional commits. Husky runs lint-staged on commit and `check` on push.

@@ -24,6 +24,8 @@ Use `mise run <task>`. There are no `package.json` scripts.
 - `mise run check` - lint + types + format + tests.
 - `mise run check:deps` - Knip, run after dependency or export changes.
 - `mise run gen` - PandaCSS codegen and CSS generation.
+- `mise run fonts:build` / `fonts:check` - build or verify the web font assets.
+- `mise run icons:build` / `icons:check` / `icons:update` - build or update the icon font.
 - `mise run build` - production build.
 
 ## Rules

@@ -42,6 +42,11 @@
 
 `gen` -> `panda:gen`, `panda:cssgen`; `clean` -> `panda:clean`.
 
+### Asset pipelines
+
+Fonts: `fonts:build`, `fonts:check` -> `src/shared/fonts/tools/build.ts`.
+Icons: `icons:build`, `icons:check`, `icons:update`.
+
 ### Storybook
 
 `dev:storybook`, `storybook:build`.

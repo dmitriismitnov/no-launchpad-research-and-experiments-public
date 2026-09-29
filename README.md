@@ -17,19 +17,21 @@ mise run prepare
 
 ## Commands
 
-| Command                  | Description                               |
-| ------------------------ | ----------------------------------------- |
-| `mise run dev:start`     | Vite dev server on `APP_PORT`             |
-| `mise run dev:stop`      | Stop the dev server                       |
-| `mise run dev:storybook` | Storybook on `STORYBOOK_PORT`             |
-| `mise run check`         | lint + types + format + tests             |
-| `mise run check:deps`    | Knip dependency and export check          |
-| `mise run gen`           | PandaCSS codegen and CSS generation       |
-| `mise run icons:build`   | Build the icon font and manifest          |
-| `mise run icons:check`   | Fail if generated icon assets drifted     |
-| `mise run icons:update`  | Update the icon set and report breakages  |
-| `mise run build`         | production build                          |
-| `mise run test:visual`   | Playwright visual tests against `APP_URL` |
+| Command                  | Description                                  |
+| ------------------------ | -------------------------------------------- |
+| `mise run dev:start`     | Vite dev server on `APP_PORT`                |
+| `mise run dev:stop`      | Stop the dev server                          |
+| `mise run dev:storybook` | Storybook on `STORYBOOK_PORT`                |
+| `mise run check`         | lint + types + format + tests                |
+| `mise run check:deps`    | Knip dependency and export check             |
+| `mise run gen`           | PandaCSS codegen and CSS generation          |
+| `mise run fonts:build`   | Build the web font WOFF2 assets and manifest |
+| `mise run fonts:check`   | Fail if generated web font assets drifted    |
+| `mise run icons:build`   | Build the icon font and manifest             |
+| `mise run icons:check`   | Fail if generated icon assets drifted        |
+| `mise run icons:update`  | Update the icon set and report breakages     |
+| `mise run build`         | production build                             |
+| `mise run test:visual`   | Playwright visual tests against `APP_URL`    |
 
 Environment defaults live in `.mise.toml`; personal overrides go in `.mise.local.toml`.
 
