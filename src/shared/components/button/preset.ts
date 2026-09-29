@@ -1,12 +1,6 @@
 import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
- * Component-owned label size. Specific to the Button label with no other
- * consumer, so it lives in the component instead of the typography foundation.
- */
-const LABEL_FONT_SIZE = "0.9375rem";
-
-/**
  * Button visual projection.
  * Anatomy, public variants and all visual rules live together.
  * Slots: root / prefixIcon / label / suffixIcon.
@@ -18,6 +12,10 @@ const LABEL_FONT_SIZE = "0.9375rem";
  * `text` projection and the icon slots from the `icon` projection, so text and
  * glyphs read separate semantic roles and change independently. `root` keeps
  * only what belongs to the button as a whole (fill, border, shadow, opacity).
+ *
+ * Typography belongs to the `label` slot. The button composes it from atomic
+ * foundation tokens (family, size, weight, line height, tracking) instead of
+ * inheriting it from `root` or owning a bespoke size constant.
  */
 export const buttonRecipe = defineSlotRecipe({
     className: "button",
@@ -31,9 +29,6 @@ export const buttonRecipe = defineSlotRecipe({
             height: "x25",
             gap: "x5",
             borderRadius: "sm",
-            fontFamily: "body",
-            fontSize: LABEL_FONT_SIZE,
-            fontWeight: "medium",
             cursor: { base: "pointer", _disabled: "not-allowed", },
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
@@ -49,6 +44,11 @@ export const buttonRecipe = defineSlotRecipe({
 
         label: {
             whiteSpace: "nowrap",
+            fontFamily: "body",
+            fontSize: "sm",
+            fontWeight: "medium",
+            lineHeight: "tight",
+            letterSpacing: "normal",
         },
 
         suffixIcon: {

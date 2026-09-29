@@ -7,5 +7,9 @@ import { defineTokens, } from "@pandacss/dev";
  * the component preset.
  */
 export const fontSizes = defineTokens.fontSizes({
-    heading: { value: "1.5rem", },
+    xs: { value: "0.75rem", },
+    sm: { value: "0.875rem", },
+    md: { value: "1rem", },
+    lg: { value: "1.25rem", },
+    xl: { value: "1.5rem", },
 });

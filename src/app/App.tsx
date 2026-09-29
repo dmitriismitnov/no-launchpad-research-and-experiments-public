@@ -31,7 +31,7 @@ const ThemePanel = ({ theme, }: { theme: "light" | "dark"; }) => (
 
 export const App = () => (
     <main className={css({ display: "grid", gap: "x8", padding: "x12", })}>
-        <h1 className={css({ fontSize: "heading", fontWeight: "semibold", })}>No Launchpad</h1>
+        <h1 className={css({ fontSize: "xl", fontWeight: "semibold", lineHeight: "tight", })}>No Launchpad</h1>
         <ThemePanel theme="light" />
         <ThemePanel theme="dark" />
     </main>

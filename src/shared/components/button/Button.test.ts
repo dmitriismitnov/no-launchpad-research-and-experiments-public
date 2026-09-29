@@ -185,4 +185,22 @@ describe("button recipe", () => {
     test("does not branch on theme inside the recipe", () => {
         expect(JSON.stringify(buttonRecipe)).not.toMatch(/_(light|dark)\b/);
     });
+
+    test("composes label typography from foundation atoms", () => {
+        expect(buttonRecipe.base?.["label"]).toMatchObject({
+            fontFamily: "body",
+            fontSize: "sm",
+            fontWeight: "medium",
+            lineHeight: "tight",
+            letterSpacing: "normal",
+        });
+    });
+
+    test("keeps typography out of the button root", () => {
+        const root = buttonRecipe.base?.["root"] ?? {};
+
+        for ( const property of [ "fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing", ] ) {
+            expect(root).not.toHaveProperty(property);
+        }
+    });
 });

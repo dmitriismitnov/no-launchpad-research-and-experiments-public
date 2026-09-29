@@ -31,9 +31,7 @@ const refHex = (reference: string): string => {
 
 const themeKey = (theme: Theme): "_light" | "_dark" => theme === "light" ? "_light" : "_dark";
 
-// Gallery-only label size. The foundation has no generic UI text size yet.
-const GALLERY_LABEL_SIZE = "0.9375rem";
-
+// Gallery-only label styling. The foundation now provides the UI text scale.
 const shell = css({
     display: "grid",
     gap: "x12",
@@ -44,9 +42,9 @@ const shell = css({
 
 const block = css({ display: "grid", gap: "x6", });
 
-const title = css({ fontSize: "heading", fontWeight: "semibold", });
+const title = css({ fontSize: "xl", fontWeight: "semibold", lineHeight: "tight", });
 
-const subtitle = css({ fontSize: GALLERY_LABEL_SIZE, opacity: 0.7, });
+const subtitle = css({ fontSize: "sm", opacity: 0.7, });
 
 const row = css({
     display: "grid",
@@ -64,11 +62,11 @@ const swatch = css({
     borderRadius: "sm",
 });
 
-const label = css({ fontSize: GALLERY_LABEL_SIZE, opacity: 0.8, });
+const label = css({ fontSize: "sm", opacity: 0.8, });
 
 const mono = css({
     fontFamily: "body",
-    fontSize: GALLERY_LABEL_SIZE,
+    fontSize: "sm",
     opacity: 0.6,
 });
 

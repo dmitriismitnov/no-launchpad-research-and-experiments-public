@@ -5,5 +5,5 @@ import { defineTokens, } from "@pandacss/dev";
  * Declares no system axis.
  */
 export const fonts = defineTokens.fonts({
-    body: { value: "Geist, system-ui, sans-serif", },
+    body: { value: "Inter, system-ui, sans-serif", },
 });

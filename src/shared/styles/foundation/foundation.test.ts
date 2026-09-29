@@ -15,6 +15,7 @@ import {
 } from "./colors";
 import { sizes, spacing, } from "./layout";
 import { SCALE_STEP_REM, } from "./layout/scale";
+import { fonts, fontSizes, fontWeights, letterSpacings, lineHeights, } from "./typography";
 
 type Token = { value: string; };
 type PaletteTokens = Record<string, Record<string, Token>>;
@@ -172,5 +173,63 @@ describe("foundation", () => {
         }
 
         expect(failures).toEqual([]);
+    });
+});
+
+describe("typography foundation", () => {
+    test("exposes one atomic font family", () => {
+        expect(fonts).toEqual({ body: { value: "Inter, system-ui, sans-serif", }, });
+    });
+
+    test("exposes the atomic size scale", () => {
+        expect(fontSizes).toEqual({
+            xs: { value: "0.75rem", },
+            sm: { value: "0.875rem", },
+            md: { value: "1rem", },
+            lg: { value: "1.25rem", },
+            xl: { value: "1.5rem", },
+        });
+    });
+
+    test("exposes the atomic weight scale", () => {
+        expect(fontWeights).toEqual({
+            regular: { value: 400, },
+            medium: { value: 500, },
+            semibold: { value: 600, },
+            bold: { value: 700, },
+        });
+    });
+
+    test("exposes the atomic line-height scale", () => {
+        expect(lineHeights).toEqual({
+            tight: { value: 1.2, },
+            normal: { value: 1.5, },
+            relaxed: { value: 1.75, },
+        });
+    });
+
+    test("exposes the atomic letter-spacing scale", () => {
+        expect(letterSpacings).toEqual({
+            tight: { value: "-0.01em", },
+            normal: { value: "0", },
+            wide: { value: "0.02em", },
+        });
+    });
+
+    test("keeps typography token names free of component and CSS-property roles", () => {
+        const forbidden = [ "button", "label", "heading", "root", "fontsize", "lineheight", ];
+        const names = [
+            ...Object.keys(fonts),
+            ...Object.keys(fontSizes),
+            ...Object.keys(fontWeights),
+            ...Object.keys(lineHeights),
+            ...Object.keys(letterSpacings),
+        ];
+
+        for ( const name of names ) {
+            for ( const word of forbidden ) {
+                expect(name.toLowerCase()).not.toContain(word);
+            }
+        }
     });
 });

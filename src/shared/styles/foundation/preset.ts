@@ -4,7 +4,7 @@ import { opacity, staticPalette, themeConditions, } from "./colors";
 import { semanticColors, } from "./colors/semantic";
 import { sizes, spacing, } from "./layout";
 import { borderWidths, radii, } from "./shape";
-import { fonts, fontSizes, fontWeights, } from "./typography";
+import { fonts, fontSizes, fontWeights, letterSpacings, lineHeights, } from "./typography";
 
 /**
  * Foundation preset.
@@ -29,6 +29,8 @@ export const foundationPreset = definePreset({
             fontSizes,
             fontWeights,
             fonts,
+            letterSpacings,
+            lineHeights,
         }),
         semanticTokens: { colors: semanticColors, },
     },
