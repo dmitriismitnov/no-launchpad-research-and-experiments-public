@@ -6,13 +6,14 @@
 ## Что сделано
 
 - **Asset-модуль.** `src/shared/fonts/` владеет raw-источниками, WOFF2,
-  manifest, `@font-face` и скриптами сборки. Класс — asset, а не компонент:
-  React-адаптера у шрифта нет.
+  manifest, generated CSS (`@font-face`) и скриптами сборки. Класс — asset, а не
+  компонент: React-адаптера у шрифта нет.
 - **Контракт источника.** Канонический вход — два variable TTF Inter (normal,
   italic) и `OFL.txt`. Static-набор и исходный дистрибутив удалены; ничто из
   этого не осталось под `public/`.
-- **Pipeline.** `variable TTF → WOFF2`; каждый источник и результат парсится и
-  валидируется на семью, стиль, наличие осей `opsz`/`wght` и диапазон `100 900`.
+- **Pipeline.** `variable TTF → WOFF2 + TS manifest + generated CSS`; каждый
+  источник и результат парсится и валидируется на семью, стиль, наличие осей
+  `opsz`/`wght` и диапазон `100 900`.
 - **Manifest.** Типизированный `manifest.generated.ts` с `id`, `family`,
   `style`, `weightRange`, `axes`, `fileName`.
 - **Задачи.** `fonts:build` и `fonts:check` — тонкие обёртки над
@@ -20,9 +21,10 @@
 - **Навык.** `build-web-font` (`.opencode/skills/build-web-font/SKILL.md`) и
   документация задач в README, AGENTS, `.agents/tooling.md`,
   `.agents/workflows.md`.
-- **Регистрация.** `font.css` объявляет два `@font-face` одним семейством
-  `Inter`, `font-display: swap`; подключён в `src/main.tsx` и
-  `.storybook/preview.ts`.
+- **Регистрация.** `font.generated.css` (generated) объявляет два `@font-face`
+  одним семейством `Inter`, `font-display: swap`; подключён в `src/main.tsx` и
+  `.storybook/preview.ts`. Handwritten CSS удалён — generated CSS сам является
+  runtime-контрактом.
 - **Типографическая foundation.** Атомарные шкалы `fonts`, `fontSizes`
   (`xs…xl`), `fontWeights` (`regular…bold`), `lineHeights` (`tight/normal/relaxed`),
   `letterSpacings` (`tight/normal/wide`). Geist заменён на Inter; `heading`
@@ -42,6 +44,7 @@
 | `Inter-Italic-VariableFont_opsz,wght.ttf` (raw, italic) | 904 532 B (~883 KiB) |
 | `inter-normal.woff2` | 349 436 B (~341 KiB) |
 | `inter-italic.woff2` | 385 120 B (~376 KiB) |
+| `font.generated.css` | 495 B |
 
 WOFF2 меньше raw TTF примерно на 60 % (normal) и 57 % (italic). Суммарно
 ~717 KiB web-ассетов против ~1.7 MiB исходников. Subsetting не выполнялся —
@@ -54,12 +57,20 @@ WOFF2 меньше raw TTF примерно на 60 % (normal) и 57 % (italic).
 - `inter-normal.woff2` — `45ae7b9bf689d6add79a9ae38913ebc06bbc207f1d3eaa3ac4fa60d53f768f7c`
 - `inter-italic.woff2` — `58c061410da49077f626cbd492e963b0c2d0d90e7d82116c8af2b8071d3d08c9`
 - `manifest.generated.ts` — `cf03ebabda1c71697ba08476518d7102fc674e9e235ff3d1b553f825a0c7f510`
+- `font.generated.css` — `ba87f869432b48fb4cdc9a4a2ee1f2272869e05189e6d2f5f828862e33e5f593`
+
+Проверить все артефакты одной командой:
+
+```bash
+shasum -a 256 src/shared/fonts/assets/web/inter/*.woff2 \
+    src/shared/fonts/manifest.generated.ts src/shared/fonts/font.generated.css
+```
 
 ## Проверки (фактические результаты)
 
 - `mise run fonts:build` — 2 faces; `mise run fonts:check` →
   `✓ web fonts up to date (2 faces)`.
-- `mise run check` — 127 unit-тестов, 0 fail; browser/Storybook — 26 тестов,
+- `mise run check` — 136 unit-тестов, 0 fail; browser/Storybook — 26 тестов,
   4 файла, 0 fail; lint, types, format — чисто.
 - `mise run check:deps` — Knip без замечаний.
 - `mise run build` — успешно. В `dist/assets/`:

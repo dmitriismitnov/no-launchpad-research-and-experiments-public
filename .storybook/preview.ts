@@ -1,6 +1,6 @@
 import type { Preview, } from "@storybook/react-vite";
 
-import "../src/shared/fonts/font.css";
+import "../src/shared/fonts/font.generated.css";
 import "../src/shared/styled-system/styles.css";
 
 const preview: Preview = {

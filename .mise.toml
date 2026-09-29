@@ -128,11 +128,11 @@ description = "Generate codegen artifacts."
 run = "mise run panda:gen && mise run panda:cssgen"
 
 [tasks."fonts:build"]
-description = "Build WOFF2 web-font assets and manifest from canonical font sources."
+description = "Build WOFF2 web-font assets, manifest and generated CSS from canonical font sources."
 run = "bun run src/shared/fonts/tools/build.ts"
 
 [tasks."fonts:check"]
-description = "Fail if generated web-font assets or manifest are out of date."
+description = "Fail if generated web-font assets, manifest or CSS are out of date."
 run = "bun run src/shared/fonts/tools/build.ts --check"
 
 [tasks."icons:build"]

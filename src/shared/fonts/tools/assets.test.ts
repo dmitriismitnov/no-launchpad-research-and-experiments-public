@@ -34,6 +34,7 @@ describe("font asset documentation", () => {
 
         expect(skill).toContain("mise run fonts:build");
         expect(skill).toContain("mise run fonts:check");
-        expect(skill).toContain("Never edit generated WOFF2 files or manifest.generated.ts by hand");
+        expect(skill).toContain("font.generated.css");
+        expect(skill).toMatch(/Never edit generated[\s\S]*by hand/);
     });
 });

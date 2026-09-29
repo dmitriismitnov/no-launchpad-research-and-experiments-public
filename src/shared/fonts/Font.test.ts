@@ -4,7 +4,12 @@ import { existsSync, readFileSync, } from "node:fs";
 import { FONT_FAMILY, } from "./constants";
 import { WEB_FONT_FACES, } from "./manifest.generated";
 
-const fontCss = readFileSync(new URL("./font.css", import.meta.url), "utf8");
+const fontCss = readFileSync(new URL("./font.generated.css", import.meta.url), "utf8");
+const mainSource = readFileSync(new URL("../../main.tsx", import.meta.url), "utf8");
+const storybookPreview = readFileSync(
+    new URL("../../../.storybook/preview.ts", import.meta.url),
+    "utf8",
+);
 
 const fontFaceBlocks = fontCss
     .split("@font-face")
@@ -31,5 +36,12 @@ describe("web font registration", () => {
         for ( const face of WEB_FONT_FACES ) {
             expect(existsSync(new URL(`./assets/web/inter/${face.fileName}`, import.meta.url))).toBe(true);
         }
+    });
+
+    test("imports the generated registration CSS at both runtime roots", () => {
+        expect(mainSource).toContain('import "./shared/fonts/font.generated.css";');
+        expect(storybookPreview).toContain('import "../src/shared/fonts/font.generated.css";');
+        expect(mainSource).not.toContain('import "./shared/fonts/font.css";');
+        expect(storybookPreview).not.toContain('import "../src/shared/fonts/font.css";');
     });
 });

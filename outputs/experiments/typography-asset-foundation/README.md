@@ -18,8 +18,9 @@ Source of truth — код модуля `src/shared/fonts`, задачи `fonts:
 ## Классификация
 
 Шрифт — **asset-модуль**, а не компонент и не часть foundation: он владеет
-исходными файлами, сгенерированными WOFF2, manifest, `@font-face` и скриптами
-сборки. Foundation владеет только токенами-шкалами и не знает о файлах.
+исходными файлами, сгенерированными WOFF2, TS manifest, generated CSS
+(`@font-face`) и скриптами сборки. Foundation владеет только токенами-шкалами и
+не знает о файлах.
 
 Модуль живёт отдельно от components (`src/shared/fonts/`), потому что это
 класс по источнику данных и pipeline, а не React-адаптер: в отличие от `Icon`,
@@ -31,9 +32,9 @@ Source of truth — код модуля `src/shared/fonts`, задачи `fonts:
 В рамках:
 
 - канонические variable TTF Inter (normal + italic) как единственный источник;
-- pipeline `variable TTF → WOFF2 + manifest`, детерминированный по выходу;
+- pipeline `variable TTF → WOFF2 + TS manifest + generated CSS`, детерминированный по выходу;
 - manifest с family/style/weight range/axes и относительным именем файла;
-- регистрация `@font-face` в приложении и Storybook;
+- регистрация `@font-face` через `font.generated.css` в приложении и Storybook;
 - project-local навык `build-web-font` и задачи `fonts:build` / `fonts:check`;
 - атомарные typography-шкалы в foundation (family, size, weight, line height,
   tracking);
@@ -90,7 +91,7 @@ Source of truth — код модуля `src/shared/fonts`, задачи `fonts:
 ## Итог
 
 - Добавлен asset-модуль `src/shared/fonts/` с детерминированным pipeline
-  `variable TTF → WOFF2 + manifest` и проверкой дрейфа.
+  `variable TTF → WOFF2 + TS manifest + generated CSS` и проверкой дрейфа.
 - Появился навык `build-web-font` и задачи `fonts:build` / `fonts:check`.
 - Inter заменил Geist в foundation и реально подключается в приложении и
   Storybook.

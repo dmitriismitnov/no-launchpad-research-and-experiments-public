@@ -49,8 +49,10 @@ mise run test:visual:update      # refresh baselines
 
 1. Add the variable normal/italic sources and their licence under
    `src/shared/fonts/assets/raw/`; never below `public/`.
-2. `mise run fonts:build` regenerates the WOFF2 assets and manifest.
-3. `mise run fonts:check` fails when the committed assets are stale.
+2. `mise run fonts:build` regenerates the WOFF2 assets, manifest and generated
+   CSS.
+3. `mise run fonts:check` fails when the committed assets, manifest or CSS are
+   stale.
 4. See the `build-web-font` skill.
 
 ## Commits

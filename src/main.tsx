@@ -3,7 +3,7 @@ import { createRoot, } from "react-dom/client";
 
 import { App, } from "@app/App";
 
-import "./shared/fonts/font.css";
+import "./shared/fonts/font.generated.css";
 import "./shared/styled-system/styles.css";
 
 document.documentElement.dataset["theme"] = "light";

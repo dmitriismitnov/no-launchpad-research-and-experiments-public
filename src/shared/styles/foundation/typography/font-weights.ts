@@ -2,7 +2,6 @@ import { defineTokens, } from "@pandacss/dev";
 
 /**
  * Font weight foundation.
- * Declares no system axis.
  */
 export const fontWeights = defineTokens.fontWeights({
     regular: { value: 400, },
