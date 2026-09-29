@@ -42,10 +42,11 @@
    `Logo`) — другой контракт изображения, а не только другой тип файла.
 2. ~~Как работать с типографикой.~~ Базовая модель сделана:
    [typography-asset-foundation](../../experiments/typography-asset-foundation/README.md)
-   (детерминированный pipeline `variable TTF → WOFF2 + manifest`, навык
-   `build-web-font`, атомарные typography-шкалы и первая композиция
+   (детерминированный pipeline `variable TTF → WOFF2 + manifest + generated CSS`,
+   навык `build-web-font`, атомарные typography-шкалы и первая композиция
    `Button.label`). Осталось отдельно: subsetting, preload, composite text
-   styles, responsive-шкалы, деструктивное обновление шрифта.
+   styles, responsive-шкалы, деструктивное обновление шрифта — детали в
+   [backlog](backlog.md).
 3. Зафиксировать, что все компоненты — включая саму страницу (её `background`
    — тоже background) — не выбиваются из общей шкалы.
 4. Сделать Input со сложным поведением (возможно, интеграция zagjs).
