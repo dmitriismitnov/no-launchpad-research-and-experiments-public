@@ -41,13 +41,17 @@ const meta = {
     component: Input,
     parameters: {
         layout: "fullscreen",
-        controls: { sort: "none", },
+        controls: {
+            sort: "none",
+            include: [ "label", "placeholder", "invalid", "error", "disabled", ],
+        },
     },
     argTypes: {
         label: { control: { type: "text", }, },
         placeholder: { control: { type: "text", }, },
         invalid: { control: { type: "boolean", }, },
         error: { control: { type: "text", }, },
+        disabled: { control: { type: "boolean", }, },
     },
 } satisfies Meta<typeof Input>;
 
