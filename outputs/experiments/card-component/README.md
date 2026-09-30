@@ -1,6 +1,6 @@
 # Эксперимент: Card Component
 
-**Статус:** in progress (2026-09-30).
+**Статус:** closed (2026-09-30).
 
 Ветка: `experiment/card-component` от `main`.
 
@@ -50,7 +50,7 @@
 - **Публичный контракт:**
 
   ```ts
-  type CardProps = Omit<ComponentProps<"article">, "children"> & {
+   type CardProps = Omit<ComponentProps<"article">, "children" | "dangerouslySetInnerHTML"> & {
       title: string;
       description?: string;
       media?: { src: string; alt: string; };
@@ -75,9 +75,9 @@
   появляется пустой блок и разделитель без содержимого). `media.alt` —
   исключение: пустой `alt` значим.
 - **`actionButton` — это `ButtonProps`**, а не урезанная копия API `Button`.
-  Card передаёт `size="sm"` до спреда, поэтому явный `size` потребителя
-  побеждает. Это компромисс между «жёстким узким контрактом» и «любым
-  `ReactNode`».
+   Card применяет `actionButton.size ?? "sm"`, поэтому явный размер побеждает,
+   а `undefined` сохраняет компактный default. Это компромисс между «жёстким
+   узким контрактом» и «любым `ReactNode`».
 - **Нет визуальных вариантов.** Одна проекция по референсу, цвета и
   типографика — из существующих semantic/foundation токенов, без веток
   `_light` / `_dark` внутри recipe.
@@ -128,12 +128,25 @@
   поверхности», поэтому используются `.background`-проекции. Их контраст
   покрыт тестом Card, но foundation по-прежнему не проверяет эти
   cross-projection пары как системное правило.
-- Эксперимент **не закрыт**: закрытие — по прямой команде пользователя. Ветка
-  не влита.
+- В Storybook есть reference/composition stories и интерактивный Playground:
+  вложенные props представлены сгруппированными section-controls, а Code panel
+  включён только для Card.
 
 ## Итог
 
-Заполняется при закрытии эксперимента.
+Эксперимент подтвердил, что текущая модель shared-компонента достаточна для
+первого составного, но статического surface-компонента: slot recipe, явная
+регистрация preset, изолированный ассет рядом с компонентом, строгий API и
+Storybook-композиция дают переиспользуемый `Card` без доменных данных в
+контракте.
+
+Выполнены все критерии успеха и follow-up review. Вне v1 сознательно остались
+интерактивная Card-семантика, варианты, responsive-типографика, image-error
+fallback и production image pipeline. Ветка не влита: решение об интеграции
+остаётся за пользователем.
+
+Подробный итог, оценка автономности и backlog процесса —
+[`notes/results.md`](notes/results.md).
 
 ## Ссылки
 
