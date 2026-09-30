@@ -9,6 +9,7 @@
         "src/shared/styles/foundation/index.ts",
         "src/shared/components/button/index.ts",
         "src/shared/components/button-icon/index.ts",
+        "src/shared/components/card/index.ts",
         "src/shared/components/icon/index.ts",
         "src/shared/components/icon/tools/build.ts",
         "src/shared/components/icon/tools/update.ts",
