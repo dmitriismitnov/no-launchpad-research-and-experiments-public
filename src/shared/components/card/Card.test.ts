@@ -71,6 +71,14 @@ describe("card recipe", () => {
         expect(JSON.stringify(cardRecipe)).not.toMatch(/_(light|dark)\b/);
     });
 
+    test("uses CSS-valid axis values, not PEN's snake_case names", () => {
+        // PEN writes `space_between`; that is invalid CSS and is silently
+        // dropped by the browser, so the icon would not reach the far edge.
+        expect(cardRecipe.base?.["header"]).toMatchObject({ justifyContent: "space-between", });
+        expect(cardRecipe.base?.["footer"]).toMatchObject({ justifyContent: "space-between", });
+        expect(JSON.stringify(cardRecipe)).not.toMatch(/space_(between|around)/);
+    });
+
     test("paints text and icons from explicit slots, never the root", () => {
         const root = cardRecipe.base?.["root"] ?? {};
 

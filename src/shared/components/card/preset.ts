@@ -90,7 +90,7 @@ export const cardRecipe = defineSlotRecipe({
 
         header: {
             display: "flex",
-            justifyContent: "space_between",
+            justifyContent: "space-between",
             alignItems: "center",
             gap: "x4",
             color: "semantic.common.600.background",
@@ -116,7 +116,7 @@ export const cardRecipe = defineSlotRecipe({
         // A top divider only: the card's own border already draws the sides.
         footer: {
             display: "flex",
-            justifyContent: "space_between",
+            justifyContent: "space-between",
             alignItems: "center",
             gap: "x4",
             borderTopWidth: "thin",
