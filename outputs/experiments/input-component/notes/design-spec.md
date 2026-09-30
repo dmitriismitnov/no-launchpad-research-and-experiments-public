@@ -118,6 +118,8 @@ and colour belong to `label`, `control` and `error`.
 - Muted text and accents use `.background` projections, following existing
   precedents (focus ring on Button = `brand.500.background`; muted text on Card
   = `common.<step>.background`).
+- Control text is set in `body`/`sm`/`regular`/`normal` (14px) and does not
+  inherit the UA default size.
 
 ## Integration and Verification
 
@@ -130,8 +132,8 @@ point, following the Button/Card convention.
 
 Unit tests assert the recipe contract (anatomy, public variants, no theme
 branches, no shorthands, shared focus ring, disabled styling, placeholder
-projection, invalid border, label typography, typography kept out of root and
-control). Composition tests render to static markup and prove label binding,
+projection, invalid border, label and control typography, typography kept out of
+the root). Composition tests render to static markup and prove label binding,
 native attribute forwarding, blank-region omission, invalid/error a11y wiring,
 consumer-id reuse, and `className` forwarding. Stories cover a reference-like
 composition, minimal, invalid, disabled and light/dark shells, with browser

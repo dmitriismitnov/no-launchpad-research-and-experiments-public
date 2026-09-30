@@ -114,11 +114,18 @@ describe("input recipe", () => {
         });
     });
 
-    test("keeps typography out of the control and root", () => {
-        for ( const slot of [ "control", "root", ] ) {
-            for ( const property of [ "fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing", ] ) {
-                expect(inputRecipe.base?.[slot]).not.toHaveProperty(property);
-            }
+    test("composes control typography from foundation atoms", () => {
+        expect(inputRecipe.base?.["control"]).toMatchObject({
+            fontFamily: "body",
+            fontSize: "sm",
+            fontWeight: "regular",
+            lineHeight: "normal",
+        });
+    });
+
+    test("keeps typography out of the root", () => {
+        for ( const property of [ "fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing", ] ) {
+            expect(inputRecipe.base?.["root"]).not.toHaveProperty(property);
         }
     });
 });

@@ -91,7 +91,7 @@ focus/disabled/invalid-состояниями и a11y), не создавая н
 | control fill `common/50/background` | `semantic.common.50.background` | точное |
 | control stroke `common/200/divider`, 1px | `semantic.common.200.divider`, `borderWidth: "thin"` | точное |
 | placeholder `common/500/background` | `semantic.common.500.background` через `&::placeholder` | точное |
-| вводимый текст | `semantic.common.50.text` | подразумевается |
+| вводимый текст | `semantic.common.50.text` + `body`/`sm`/`regular`/`normal` | типографика текста задана явно |
 | control height `46` | `x25` (50px) | снэп вверх, выравнивание с Button md |
 | padding horizontal `14` | `x6` (12px) | снэп вниз |
 | label→control gap `7` | `x3` (6px) | снэп вниз |

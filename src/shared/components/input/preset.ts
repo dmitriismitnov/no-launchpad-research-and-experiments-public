@@ -3,8 +3,12 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 /**
  * Input visual projection. Slots: root / label / control / error.
  * Colors come from the semantic layer; the recipe never branches on
- * `_light` / `_dark`. Label typography is composed from foundation atoms;
- * the mono field-label face is approximated with `body` (see design-spec).
+ * `_light` / `_dark`.
+ *
+ * The label face is a deliberate approximation: the reference uses a mono
+ * field-label face, but the foundation ships only the `body` (Inter) font,
+ * so the label composes `body` + `xs` + `medium` + `wide` + `uppercase`.
+ * Adding a mono face is a separate font-pipeline step (see design-spec).
  */
 export const inputRecipe = defineSlotRecipe({
     className: "input",
@@ -38,6 +42,10 @@ export const inputRecipe = defineSlotRecipe({
             borderColor: "semantic.common.200.divider",
             backgroundColor: "semantic.common.50.background",
             color: "semantic.common.50.text",
+            fontFamily: "body",
+            fontSize: "sm",
+            fontWeight: "regular",
+            lineHeight: "normal",
             boxShadow: "0 1px 2px {colors.semantic.shadow.200}",
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
