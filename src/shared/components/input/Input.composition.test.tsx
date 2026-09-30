@@ -48,10 +48,11 @@ describe("Input composition", () => {
         expect(markup).toContain('aria-describedby="email-error"');
     });
 
-    test("className is forwarded", () => {
+    test("className is merged with the control class, not replacing it", () => {
         const markup = renderToStaticMarkup(<Input className="my-field" />);
 
         expect(markup).toContain("my-field");
+        expect(markup).toContain("input__control");
     });
 
     test("invalid without a non-blank error keeps aria-invalid and renders no message", () => {
