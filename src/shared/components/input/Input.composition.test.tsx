@@ -1,0 +1,63 @@
+import { describe, expect, test, } from "bun:test";
+import { renderToStaticMarkup, } from "react-dom/server";
+
+import { Input, } from "./input";
+
+describe("Input composition", () => {
+    test("links a label to the control and forwards native attributes", () => {
+        const markup = renderToStaticMarkup(
+            <Input label="Имя" name="name" type="text" placeholder="Как к вам обращаться" required />,
+        );
+
+        expect(markup).toContain("<label");
+        expect(markup).toContain('for="');
+        expect(markup).toContain("Имя");
+        expect(markup).toContain('name="name"');
+        expect(markup).toContain('type="text"');
+        expect(markup).toContain('placeholder="Как к вам обращаться"');
+        expect(markup).toContain("required");
+    });
+
+    test("omits the label element when label is absent or blank", () => {
+        expect(renderToStaticMarkup(<Input />)).not.toContain("<label");
+        expect(renderToStaticMarkup(<Input label="   " />)).not.toContain("<label");
+    });
+
+    test("invalid input sets aria-invalid and links the error via aria-describedby", () => {
+        const markup = renderToStaticMarkup(<Input invalid error="Заполните поле" />);
+
+        expect(markup).toContain('aria-invalid="true"');
+        expect(markup).toContain('aria-describedby="');
+        expect(markup).toContain("Заполните поле");
+        expect(markup).toContain("<p");
+    });
+
+    test("error without invalid renders no message and no aria-invalid", () => {
+        const markup = renderToStaticMarkup(<Input error="Заполните поле" />);
+
+        expect(markup).not.toContain("aria-invalid");
+        expect(markup).not.toContain("Заполните поле");
+    });
+
+    test("consumer id is reused for htmlFor and aria-describedby", () => {
+        const markup = renderToStaticMarkup(<Input id="email" label="Email" invalid error="Нужен email" />);
+
+        expect(markup).toContain('for="email"');
+        expect(markup).toContain('id="email"');
+        expect(markup).toContain('id="email-error"');
+        expect(markup).toContain('aria-describedby="email-error"');
+    });
+
+    test("className is forwarded", () => {
+        const markup = renderToStaticMarkup(<Input className="my-field" />);
+
+        expect(markup).toContain("my-field");
+    });
+
+    test("rejects the size prop", () => {
+        // @ts-expect-error size is not a public prop in v1
+        const withSize = <Input size="sm" />;
+
+        expect(withSize).toBeDefined();
+    });
+});

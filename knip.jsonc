@@ -13,6 +13,7 @@
         "src/shared/components/icon/index.ts",
         "src/shared/components/icon/tools/build.ts",
         "src/shared/components/icon/tools/update.ts",
+        "src/shared/components/input/index.ts",
         "src/shared/utils/index.ts",
         ".storybook/*.ts",
         "test/**/*.{ts,tsx}",
