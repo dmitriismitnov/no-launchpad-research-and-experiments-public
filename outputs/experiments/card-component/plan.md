@@ -10,6 +10,14 @@
 
 **Spec:** `outputs/experiments/card-component/notes/design-spec.md`
 
+> **Execution note:** this plan is the approved plan of record. Two of its steps
+> were deliberately adjusted during execution, and the spec was updated to match:
+> the no-media skeleton is **inlined** (`?raw`) rather than rendered as
+> `<img alt="">` so its `currentColor` inherits the media slot, and the footer
+> anchors the note pair with `justifyContent: "flex-end"` plus an automatic end
+> margin on `footerPrimary` rather than `justifyContent: "space-between"`. See
+> `README.md` and the execution ledger for the rationale.
+
 ## Global Constraints
 
 - Implement only static Card v1: no `onClick`, link behavior, `children`, compound API, variants, image loading state, or error fallback.
