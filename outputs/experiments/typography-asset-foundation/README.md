@@ -1,6 +1,7 @@
 # Эксперимент: Typography Asset Foundation
 
-**Статус:** completed (2026-09-30). Пользовательское ревью — следующий шаг.
+**Статус:** completed (2026-09-30). Пользовательское ревью выполнено;
+эксперимент закрыт.
 
 Source of truth — код модуля `src/shared/fonts`, задачи `fonts:build` / `fonts:check`
 и навык `build-web-font`.
@@ -102,9 +103,22 @@ Source of truth — код модуля `src/shared/fonts`, задачи `fonts:
 
 Ограничения и отложенные решения — `notes/results.md`.
 
+## Закрытие (2026-09-30)
+
+- Пользовательское ревью выполнено; эксперимент закрыт по прямой команде.
+- Проверки на закрытии: `mise run check` (136 unit, 26 browser), `fonts:check`
+  (2 faces), `check:deps`, `build` — зелёные; в production output нет
+  `.ttf`/`.otf`.
+- Оценка реализации, урок процесса и границы — `notes/results.md`; отложенное
+  собрано в `../../../shared/notes/backlog.md`.
+- Ветки `experiment/typography-asset-foundation` и
+  `experiment/font-pipeline-hardening` влиты в `main` fast-forward и удалены.
+
 ## Ссылки
 
-- `notes/results.md` — фактические результаты и измеренные размеры
+- `history.md` — хронология эксперимента и запись закрытия
+- `notes/results.md` — результаты, измеренные размеры, оценка и открытые вопросы
 - `plan.md` — утверждённый план реализации
 - `../../../shared/notes/landing-system-roadmap.md` — общий следующий цикл
+- `../../../shared/notes/backlog.md` — отложенное по эксперименту
 - `../../../shared/components/icon` — asset-компонент, чей pipeline стал образцом
