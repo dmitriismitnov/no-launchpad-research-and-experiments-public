@@ -49,6 +49,39 @@ describe("card composition", () => {
         expect(markup).not.toContain('viewBox="0 0 1600 900"');
     });
 
+    test("treats empty and whitespace-only optional text as absent", () => {
+        const markup = renderToStaticMarkup(
+            <Card
+                title="Pressure sensors"
+                description="   "
+                header={{ label: "", }}
+                footer={{ primaryNote: "", secondaryNote: "  ", }}
+            />,
+        );
+
+        for ( const slot of [ "card__header", "card__description", "card__footer", ] ) {
+            expect(markup).not.toContain(slot);
+        }
+    });
+
+    test("omits a blank secondary note but keeps a real primary note", () => {
+        const markup = renderToStaticMarkup(
+            <Card title="Pressure sensors" footer={{ primaryNote: "0…400 бар", secondaryNote: "", }} />,
+        );
+
+        expect(markup).toContain("card__footerPrimary");
+        expect(markup).not.toContain("card__footerSecondary");
+    });
+
+    test("keeps an icon-only header alive without a blank label", () => {
+        const markup = renderToStaticMarkup(
+            <Card title="Pressure sensors" header={{ label: "   ", icon: "gauge", }} />,
+        );
+
+        expect(markup).toContain("card__header");
+        expect(markup).toContain("icon--size_sm");
+    });
+
     test("omits every optional region on a title-only card", () => {
         const markup = renderToStaticMarkup(<Card title="Only title" />);
 

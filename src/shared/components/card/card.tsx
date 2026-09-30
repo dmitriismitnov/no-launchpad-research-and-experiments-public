@@ -34,6 +34,15 @@ export type CardProps = Omit<ComponentProps<"article">, "children"> & {
 };
 
 /**
+ * Optional text is present only when it carries non-blank content. A blank
+ * string would otherwise create an empty region with visible padding and, in
+ * the footer, a divider with nothing under it.
+ *
+ * Deliberately not applied to `media.alt`: an empty alt is meaningful.
+ */
+const hasText = (value: string | undefined): boolean => value != null && value.trim() !== "";
+
+/**
  * Public static card.
  *
  * A single non-interactive `<article>` that owns its whole structure: there is
@@ -60,10 +69,10 @@ export const Card = ({
     ...props
 }: CardProps) => {
     const styles = card();
-    const hasHeader = header?.label != null || header?.icon != null;
-    const hasFooter = footer?.primaryNote != null
-        || footer?.secondaryNote != null
-        || actionButton != null;
+    const hasHeader = hasText(header?.label) || header?.icon != null;
+    const hasPrimaryNote = hasText(footer?.primaryNote);
+    const hasSecondaryNote = hasText(footer?.secondaryNote);
+    const hasFooter = hasPrimaryNote || hasSecondaryNote || actionButton != null;
 
     return (
         <article {...props} className={cx(styles.root, className)}>
@@ -87,23 +96,19 @@ export const Card = ({
             <div className={styles.body}>
                 {hasHeader && (
                     <div className={styles.header}>
-                        {header?.label != null && <span>{header.label}</span>}
+                        {hasText(header?.label) && <span>{header?.label}</span>}
                         {header?.icon != null && <Icon name={header.icon} size="sm" />}
                     </div>
                 )}
 
                 <h3 className={styles.title}>{title}</h3>
 
-                {description != null && <p className={styles.description}>{description}</p>}
+                {hasText(description) && <p className={styles.description}>{description}</p>}
 
                 {hasFooter && (
                     <div className={styles.footer}>
-                        {footer?.primaryNote != null && (
-                            <span className={styles.footerPrimary}>{footer.primaryNote}</span>
-                        )}
-                        {footer?.secondaryNote != null && (
-                            <span className={styles.footerSecondary}>{footer.secondaryNote}</span>
-                        )}
+                        {hasPrimaryNote && <span className={styles.footerPrimary}>{footer?.primaryNote}</span>}
+                        {hasSecondaryNote && <span className={styles.footerSecondary}>{footer?.secondaryNote}</span>}
                         {actionButton != null && (
                             <span className={styles.actionButton}>
                                 <Button size="sm" {...actionButton} />
