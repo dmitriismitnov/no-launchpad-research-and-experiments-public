@@ -54,6 +54,25 @@ describe("Input composition", () => {
         expect(markup).toContain("my-field");
     });
 
+    test("invalid without a non-blank error keeps aria-invalid and renders no message", () => {
+        const noError = renderToStaticMarkup(<Input invalid />);
+        const blankError = renderToStaticMarkup(<Input invalid error="   " />);
+
+        for ( const markup of [ noError, blankError, ] ) {
+            expect(markup).toContain('aria-invalid="true"');
+            expect(markup).not.toContain("<p");
+            expect(markup).not.toContain("aria-describedby");
+        }
+    });
+
+    test("forwards value, defaultValue and onChange without owning state", () => {
+        const controlled = renderToStaticMarkup(<Input value="typed" onChange={() => {}} readOnly />);
+        const uncontrolled = renderToStaticMarkup(<Input defaultValue="initial" />);
+
+        expect(controlled).toContain('value="typed"');
+        expect(uncontrolled).toContain('value="initial"');
+    });
+
     test("rejects the size prop", () => {
         // @ts-expect-error size is not a public prop in v1
         const withSize = <Input size="sm" />;
