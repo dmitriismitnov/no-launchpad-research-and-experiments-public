@@ -1,5 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 
+import { contrastRatio, } from "@shared/utils";
+
 import { cardRecipe, } from "./preset";
 
 const bannedShorthands = new Set([
@@ -108,11 +110,15 @@ describe("card recipe", () => {
     test("keeps the media slot at 16:9 and clipped", () => {
         expect(cardRecipe.base?.["media"]).toMatchObject({
             flexShrink: "0",
-            width: "full",
             aspectRatio: "16 / 9",
             overflow: "hidden",
             borderRadius: "sm",
         });
+    });
+
+    test("keeps muted card text readable on both semantic surfaces", () => {
+        expect(contrastRatio("#535963", "#FFFFFF")).toBeGreaterThanOrEqual(4.5);
+        expect(contrastRatio("#888F98", "#000000")).toBeGreaterThanOrEqual(4.5);
     });
 
     test("gives the footer a top divider only, with no side or bottom border", () => {

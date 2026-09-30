@@ -2,7 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import * as cardModule from "./card";
-import { Card, } from "./card";
+import { Card, type CardProps, } from "./card";
 
 describe("card composition", () => {
     test("renders an article with its required title and forwarded attributes", () => {
@@ -47,6 +47,17 @@ describe("card composition", () => {
         expect(markup).toContain('src="/decorative.jpg"');
         expect(markup).toContain('alt=""');
         expect(markup).not.toContain('viewBox="0 0 1600 900"');
+    });
+
+    test("ignores unsafe article HTML from untyped callers", () => {
+        const untypedProps = {
+            title: "Pressure sensors",
+            dangerouslySetInnerHTML: { __html: "<p>Injected markup</p>", },
+        } as unknown as CardProps;
+        const markup = renderToStaticMarkup(<Card {...untypedProps} />);
+
+        expect(markup).toContain("Pressure sensors");
+        expect(markup).not.toContain("Injected markup");
     });
 
     test("treats empty and whitespace-only optional text as absent", () => {
@@ -95,13 +106,21 @@ describe("card composition", () => {
 
     test("renders a header marker and a decorative icon when supplied", () => {
         const markup = renderToStaticMarkup(
-            <Card title="Pressure sensors" header={{ label: "01", icon: "gauge", }} />,
+            <Card
+                title="Pressure sensors"
+                media={{ src: "/sensor.jpg", alt: "Pressure gauge", }}
+                header={{ label: "01", icon: "gauge", }}
+            />,
         );
+        const header = /<div class="card__header">([\s\S]*?)<\/div>/.exec(markup)?.[1];
 
-        expect(markup).toContain("card__header");
-        expect(markup).toContain("01");
-        expect(markup).toContain("icon--size_sm");
-        expect(markup).toContain('aria-hidden="true"');
+        if ( header === undefined ) {
+            throw new Error("Card must render the supplied header");
+        }
+
+        expect(header).toContain("01");
+        expect(header).toContain("icon--size_sm");
+        expect(header).toContain('aria-hidden="true"');
     });
 
     test("renders both footer notes when supplied", () => {
@@ -128,6 +147,15 @@ describe("card composition", () => {
         expect(markup).toContain("<button");
         expect(markup).toContain("button__root--size_sm");
         expect(markup).toContain("Details");
+    });
+
+    test("keeps the small action button default when its size is undefined", () => {
+        const markup = renderToStaticMarkup(
+            <Card title="Pressure sensors" actionButton={{ children: "Details", size: undefined, }} />,
+        );
+
+        expect(markup).toContain("button__root--size_sm");
+        expect(markup).not.toContain("button__root--size_md");
     });
 
     test("lets an explicit action button size override the default", () => {
@@ -164,13 +192,16 @@ describe("card composition", () => {
         expect(Object.keys(cardModule)).toEqual([ "Card", ]);
     });
 
-    test("rejects children and incomplete media at the type level", () => {
+    test("rejects children, injected HTML and incomplete media at the type level", () => {
         // @ts-expect-error the card owns its structure; children are not public
         const withChildren = <Card title="x">child</Card>;
+        // @ts-expect-error card owns its content and cannot accept injected HTML
+        const injectedHtml = <Card title="x" dangerouslySetInnerHTML={{ __html: "<p>x</p>", }} />;
         // @ts-expect-error supplied media requires both src and alt
         const withoutAlt = <Card title="x" media={{ src: "/x.jpg", }} />;
 
         expect(withChildren).toBeDefined();
+        expect(injectedHtml).toBeDefined();
         expect(withoutAlt).toBeDefined();
     });
 });

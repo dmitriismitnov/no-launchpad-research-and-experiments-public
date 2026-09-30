@@ -1,33 +1,6 @@
 import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
-/**
- * Card visual projection.
- * Anatomy, public variants and all visual rules live together.
- * Slots: root / media / body / header / title / description / footer /
- *        footerPrimary / footerSecondary / actionButton.
- *
- * `Card / Catalog` in the PEN design system is the visual source. The card is a
- * single static surface: one light fill, a hairline divider, a surface radius
- * and a soft shadow. There are deliberately no public `tone` or `size`
- * variants in v1.
- *
- * Colours come from the semantic layer, which switches theme inside the token;
- * the recipe does not branch on `_light` / `_dark`.
- *
- * Colour is assigned per slot, never on `root`: text slots paint from the
- * semantic `.text` / `.icon` / `.background` projections the reference uses, so
- * `root` keeps only what belongs to the card as a whole (fill, border, radius,
- * shadow).
- *
- * Note on muted text: the semantic layer has no dedicated "quiet on surface"
- * text role. The PEN reference resolves muted text (the header marker, the
- * description, the footer secondary note) with `common.<step>.background`
- * projections, and this recipe mirrors that mapping rather than inventing a new
- * role. See the experiment's design notes.
- *
- * Typography is composed per text slot from atomic foundation tokens (family,
- * size, weight, line height, tracking); `root` owns none of it.
- */
+/** Fixed Card anatomy; semantic tokens own theme projection. */
 export const cardRecipe = defineSlotRecipe({
     className: "card",
     slots: [
@@ -57,12 +30,9 @@ export const cardRecipe = defineSlotRecipe({
             boxShadow: "0 8px 22px {colors.semantic.shadow.500}",
         },
 
-        // The media slot is always present. `color` is the skeleton's paint:
-        // the asset is monochrome `currentColor`, so the slot drives both the
-        // tile fill and the glyph tone.
         media: {
             flexShrink: "0",
-            width: "full",
+            width: "100%",
             aspectRatio: "16 / 9",
             overflow: "hidden",
             borderRadius: "sm",
@@ -70,14 +40,14 @@ export const cardRecipe = defineSlotRecipe({
             color: "semantic.common.500.background",
             "& > img": {
                 display: "block",
-                width: "full",
-                height: "full",
+                width: "100%",
+                height: "100%",
                 objectFit: "cover",
             },
             "& > svg": {
                 display: "block",
-                width: "full",
-                height: "full",
+                width: "100%",
+                height: "100%",
             },
         },
 
@@ -113,14 +83,7 @@ export const cardRecipe = defineSlotRecipe({
             color: "semantic.common.600.background",
         },
 
-        // A top divider only: the card's own border already draws the sides.
-        //
-        // The trailing group packs to the end (`flex-end`), while the primary
-        // note's automatic end margin takes the remaining space and pins it to
-        // the start. That keeps the note pair at opposite edges when only notes
-        // are present, keeps a lone secondary note at the trailing edge, and
-        // keeps the secondary note adjacent to the action button when both are
-        // present — without an extra wrapper element.
+        // The primary note's auto margin separates it from the trailing group.
         footer: {
             display: "flex",
             justifyContent: "flex-end",

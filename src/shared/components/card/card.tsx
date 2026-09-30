@@ -22,42 +22,18 @@ export type CardFooter = {
     secondaryNote?: string;
 };
 
-export type CardProps = Omit<ComponentProps<"article">, "children"> & {
-    /** Card title. Rendered as an `h3`; the caller owns the document outline. */
+export type CardProps = Omit<ComponentProps<"article">, "children" | "dangerouslySetInnerHTML"> & {
     title: string;
     description?: string;
     media?: CardMedia;
     header?: CardHeader;
     footer?: CardFooter;
-    /** Footer action. Card creates the `Button` and defaults it to `sm`. */
     actionButton?: ButtonProps;
 };
 
-/**
- * Optional text is present only when it carries non-blank content. A blank
- * string would otherwise create an empty region with visible padding and, in
- * the footer, a divider with nothing under it.
- *
- * Deliberately not applied to `media.alt`: an empty alt is meaningful.
- */
+/** `media.alt` is deliberately exempt: an empty alt is meaningful. */
 const hasText = (value: string | undefined): boolean => value != null && value.trim() !== "";
 
-/**
- * Public static card.
- *
- * A single non-interactive `<article>` that owns its whole structure: there is
- * no `children` position and no card-level click or hover behaviour. Layout is a
- * media slot plus a body of optional regions; each region renders only when its
- * data is present.
- *
- * `media` is all-or-nothing. Supplied media renders as an `<img>` with the
- * caller's `alt`. Without `media` the card shows its bundled monochrome
- * skeleton, inlined so the asset's `currentColor` inherits the media slot's
- * colour in both themes; the slot is marked decorative.
- *
- * `actionButton` reuses `ButtonProps` rather than a reduced Card-specific copy:
- * Card supplies `size="sm"` before spreading, so an explicit size wins.
- */
 export const Card = ({
     title,
     description,
@@ -69,13 +45,18 @@ export const Card = ({
     ...props
 }: CardProps) => {
     const styles = card();
+    const {
+        children: _children,
+        dangerouslySetInnerHTML: _dangerouslySetInnerHTML,
+        ...articleProps
+    } = props as ComponentProps<"article">;
     const hasHeader = hasText(header?.label) || header?.icon != null;
     const hasPrimaryNote = hasText(footer?.primaryNote);
     const hasSecondaryNote = hasText(footer?.secondaryNote);
     const hasFooter = hasPrimaryNote || hasSecondaryNote || actionButton != null;
 
     return (
-        <article {...props} className={cx(styles.root, className)}>
+        <article {...articleProps} className={cx(styles.root, className)}>
             {media != null
                 ? (
                     <span className={styles.media}>
@@ -83,9 +64,7 @@ export const Card = ({
                     </span>
                 )
                 : (
-                    // Trusted, local, id-free monochrome asset. Inlining it is
-                    // what lets `currentColor` inherit the media slot colour,
-                    // which an `<img>` boundary would block.
+                    // Must be inline so the trusted local SVG inherits the slot's `currentColor`.
                     <span
                         className={styles.media}
                         aria-hidden="true"
@@ -111,7 +90,7 @@ export const Card = ({
                         {hasSecondaryNote && <span className={styles.footerSecondary}>{footer?.secondaryNote}</span>}
                         {actionButton != null && (
                             <span className={styles.actionButton}>
-                                <Button size="sm" {...actionButton} />
+                                <Button {...actionButton} size={actionButton.size ?? "sm"} />
                             </span>
                         )}
                     </div>

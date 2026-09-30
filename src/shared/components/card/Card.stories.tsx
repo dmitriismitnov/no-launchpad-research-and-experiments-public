@@ -1,10 +1,11 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, within, } from "storybook/test";
+import { expect, waitFor, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
+import cardMediaFixture from "./assets/card-media.fixture.png";
 import { Card, type CardProps, } from "./card";
 
 const shell = css({
@@ -106,17 +107,34 @@ export const Media: Story = {
         title: "Supplied media",
         description: "A supplied source replaces the bundled skeleton.",
         media: {
-            src: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=640&q=70&auto=format&fit=crop",
-            alt: "A green sofa in a living room",
+            src: cardMediaFixture,
+            alt: "Card media fixture",
         },
     },
     render: renderIn("light"),
     play: async ({ canvasElement, }) => {
         const canvas = within(canvasElement);
-        const image = canvas.getByRole("img", { name: "A green sofa in a living room", });
+        const image = canvas.getByRole("img", { name: "Card media fixture", });
+        const media = image.closest(".card__media");
 
-        await expect(image.getAttribute("src")).toContain("unsplash");
+        if ( !( image instanceof HTMLImageElement ) ) {
+            throw new Error("Supplied Card media must render as an HTML image");
+        }
+
+        if ( media === null ) {
+            throw new Error("Supplied image must render inside the Card media slot");
+        }
+
         await expect(canvasElement.querySelectorAll("svg").length).toBe(0);
+        await waitFor(() => expect(image.complete).toBe(true));
+        await waitFor(() => expect(image.naturalWidth).toBeGreaterThan(0));
+        await expect(getComputedStyle(image).objectFit).toBe("cover");
+
+        const imageRect = image.getBoundingClientRect();
+        const mediaRect = media.getBoundingClientRect();
+
+        await expect(Math.abs(imageRect.width - mediaRect.width)).toBeLessThan(1);
+        await expect(Math.abs(imageRect.height - mediaRect.height)).toBeLessThan(1);
     },
 };
 
@@ -138,6 +156,7 @@ export const ActionButton: Story = {
 
 export const FooterAlignments: Story = {
     args: { title: "Footer alignments", },
+    parameters: { controls: { disable: true, }, },
     render: () => (
         <ThemeShell theme="light">
             <div className={stack}>
@@ -194,7 +213,17 @@ export const Light: Story = {
     args: { ...catalog, actionButton: { children: "Details", }, },
     render: renderIn("light"),
     play: async ({ canvasElement, }) => {
-        await expect(canvasElement.querySelector("article")).not.toBeNull();
+        const article = canvasElement.querySelector("article");
+        const title = canvasElement.querySelector(".card__title");
+        const description = canvasElement.querySelector(".card__description");
+
+        if ( article === null || title === null || description === null ) {
+            throw new Error("Light Card story must render its surface and text slots");
+        }
+
+        await expect(getComputedStyle(article).backgroundColor).toBe("rgb(255, 255, 255)");
+        await expect(getComputedStyle(title).color).toBe("rgb(0, 0, 0)");
+        await expect(getComputedStyle(description).color).toBe("rgb(83, 89, 99)");
     },
 };
 
@@ -202,6 +231,16 @@ export const Dark: Story = {
     args: { ...catalog, actionButton: { children: "Details", }, },
     render: renderIn("dark"),
     play: async ({ canvasElement, }) => {
-        await expect(canvasElement.querySelector("article")).not.toBeNull();
+        const article = canvasElement.querySelector("article");
+        const title = canvasElement.querySelector(".card__title");
+        const description = canvasElement.querySelector(".card__description");
+
+        if ( article === null || title === null || description === null ) {
+            throw new Error("Dark Card story must render its surface and text slots");
+        }
+
+        await expect(getComputedStyle(article).backgroundColor).toBe("rgb(0, 0, 0)");
+        await expect(getComputedStyle(title).color).toBe("rgb(255, 255, 255)");
+        await expect(getComputedStyle(description).color).toBe("rgb(136, 143, 152)");
     },
 };

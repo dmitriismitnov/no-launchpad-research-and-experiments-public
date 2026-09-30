@@ -23,7 +23,7 @@ Add a reusable, non-interactive `Card` component to the shared design system. It
 
 ## Public API
 
-`Card` renders a native `<article>`. It accepts native article attributes except `children`; Card owns the complete internal structure.
+`Card` renders a native `<article>`. It accepts native article attributes except `children` and `dangerouslySetInnerHTML`; Card owns the complete internal structure.
 
 ```ts
 export type CardMedia = {
@@ -41,7 +41,7 @@ export type CardFooter = {
     secondaryNote?: string;
 };
 
-export type CardProps = Omit<ComponentProps<"article">, "children"> & {
+export type CardProps = Omit<ComponentProps<"article">, "children" | "dangerouslySetInnerHTML"> & {
     title: string;
     description?: string;
     media?: CardMedia;
@@ -61,7 +61,7 @@ Optional text is present only when it contains non-whitespace content. Blank str
 
 `footer` renders only when it has a `primaryNote`, a `secondaryNote`, or `actionButton` is also present. `primaryNote` is visually dominant and left-aligned; `secondaryNote` is quieter and right-aligned.
 
-`actionButton` is passed to a Card-created `Button`. Card supplies `size="sm"` before spreading the supplied props, so an explicit `actionButton.size` overrides that default. This deliberately reuses `ButtonProps` rather than creating a reduced Card-specific copy of Button's API.
+`actionButton` is passed to a Card-created `Button`. Card normalizes its size as `actionButton.size ?? "sm"`, so an explicit Button size wins while an explicit `undefined` retains Card's small default. This deliberately reuses `ButtonProps` rather than creating a reduced Card-specific copy of Button's API.
 
 ## Rendered Anatomy
 
@@ -94,7 +94,7 @@ Only `root`, `media`, `body`, `title`, and supplied optional regions occur in th
 
 ## Behavior and Failure Boundaries
 
-Card is static. It has no Card-level `onClick`, pointer or keyboard behavior, or hover/active/focus style contract. Native article attributes including `aria-label`, `id`, `data-*`, and `className` pass to the root article.
+Card is static: it creates no Card-level click, pointer or keyboard behavior, and has no hover/active/focus style contract. Supported native article attributes — including caller-owned event callbacks, `aria-label`, `id`, `data-*`, and `className` — pass to the root article. This is not a clickable-card API.
 
 Card does not maintain image state. A supplied broken URL remains a normal broken `<img>`; it never switches to the skeleton. The skeleton is only the absence-of-media branch. No loading indicator, retry, or `aria-busy` state belongs to v1.
 
@@ -106,4 +106,4 @@ Copy the existing SVG unchanged from `outputs/experiments/card-media-skeleton/ca
 
 Register `cardPreset` with `componentPresetSources` in `src/shared/styles/index.ts`, then run `mise run gen`. Never hand-edit `src/shared/styled-system`.
 
-Stories cover a reference-like catalog composition, a minimal title-only card, supplied media versus skeleton, an action-button footer, and light/dark shells. Tests prove the public render contract, recipe anatomy, no theme branches/shorthands, default-versus-overridden action-button sizing, and native article attribute forwarding.
+Stories cover a reference-like catalog composition, a minimal title-only card, supplied media versus skeleton, an action-button footer, footer geometry, and light/dark shells. The supplied-media story uses a local square PNG fixture and verifies decoding, `object-fit: cover`, and exact fill of the 16:9 slot. Tests prove the public render contract, recipe anatomy, no theme branches/shorthands, visible light/dark token projection, default-versus-overridden action-button sizing (including `undefined`), and safe article attribute forwarding.
