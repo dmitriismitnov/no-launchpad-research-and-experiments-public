@@ -142,8 +142,8 @@ Storybook-композиция дают переиспользуемый `Card` 
 
 Выполнены все критерии успеха и follow-up review. Вне v1 сознательно остались
 интерактивная Card-семантика, варианты, responsive-типографика, image-error
-fallback и production image pipeline. Ветка не влита: решение об интеграции
-остаётся за пользователем.
+fallback и production image pipeline. После закрытия ветка влита локально в
+`main`; PR не создавался.
 
 Подробный итог, оценка автономности и backlog процесса —
 [`notes/results.md`](notes/results.md).
