@@ -5,7 +5,7 @@ import { expect, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
-import { Card, } from "./card";
+import { Card, type CardProps, } from "./card";
 
 const shell = css({
     padding: "x12",
@@ -28,13 +28,24 @@ const ThemeShell = ({ theme, children, }: { theme: "light" | "dark"; children: R
     </div>
 );
 
-const CardFrame = ({ theme, children, }: { theme: "light" | "dark"; children: ReactNode; }) => (
+const renderIn = (theme: "light" | "dark") => (args: CardProps) => (
     <ThemeShell theme={theme}>
         <div className={stack}>
-            <div className={frame}>{children}</div>
+            <div className={frame}>
+                <Card {...args} />
+            </div>
         </div>
     </ThemeShell>
 );
+
+// The PEN reference (`Card / Catalog`) expressed as an ordinary composition.
+// Its domain data stays in the story, never in the public Card API.
+const catalog: CardProps = {
+    title: "Датчики давления",
+    description: "Измерение давления жидкостей и газов в трубопроводах и резервуарах.",
+    header: { label: "01", icon: "gauge", },
+    footer: { primaryNote: "0…400 бар", secondaryNote: "4…20 мА", },
+};
 
 const meta = {
     title: "Components/Card",
@@ -56,32 +67,17 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
     args: {
+        ...catalog,
         title: "Card title",
         description: "Supporting description that explains the card's subject.",
-        header: { label: "01", icon: "gauge", },
-        footer: { primaryNote: "0…400 бар", secondaryNote: "4…20 мА", },
         actionButton: { children: "Details", },
     },
-    render: (args) => (
-        <CardFrame theme="light">
-            <Card {...args} />
-        </CardFrame>
-    ),
+    render: renderIn("light"),
 };
 
-// The PEN reference (`Card / Catalog`) expressed as an ordinary composition.
-// Its domain data stays in the story, never in the public Card API.
 export const CatalogReference: Story = {
-    render: () => (
-        <CardFrame theme="light">
-            <Card
-                title="Датчики давления"
-                description="Измерение давления жидкостей и газов в трубопроводах и резервуарах."
-                header={{ label: "01", icon: "gauge", }}
-                footer={{ primaryNote: "0…400 бар", secondaryNote: "4…20 мА", }}
-            />
-        </CardFrame>
-    ),
+    args: catalog,
+    render: renderIn("light"),
     play: async ({ canvasElement, }) => {
         await expect(canvasElement.querySelectorAll("article").length).toBe(1);
         await expect(canvasElement.textContent).toContain("Датчики давления");
@@ -90,11 +86,8 @@ export const CatalogReference: Story = {
 };
 
 export const Minimal: Story = {
-    render: () => (
-        <CardFrame theme="light">
-            <Card title="Only a title" />
-        </CardFrame>
-    ),
+    args: { title: "Only a title", },
+    render: renderIn("light"),
     play: async ({ canvasElement, }) => {
         // A title-only card keeps the media slot and drops every other region.
         await expect(canvasElement.querySelectorAll("article").length).toBe(1);
@@ -109,18 +102,15 @@ export const Minimal: Story = {
 };
 
 export const Media: Story = {
-    render: () => (
-        <CardFrame theme="light">
-            <Card
-                title="Supplied media"
-                description="A supplied source replaces the bundled skeleton."
-                media={{
-                    src: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=640&q=70&auto=format&fit=crop",
-                    alt: "A green sofa in a living room",
-                }}
-            />
-        </CardFrame>
-    ),
+    args: {
+        title: "Supplied media",
+        description: "A supplied source replaces the bundled skeleton.",
+        media: {
+            src: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=640&q=70&auto=format&fit=crop",
+            alt: "A green sofa in a living room",
+        },
+    },
+    render: renderIn("light"),
     play: async ({ canvasElement, }) => {
         const canvas = within(canvasElement);
         const image = canvas.getByRole("img", { name: "A green sofa in a living room", });
@@ -131,17 +121,13 @@ export const Media: Story = {
 };
 
 export const ActionButton: Story = {
-    render: () => (
-        <CardFrame theme="light">
-            <Card
-                title="Pressure sensors"
-                description="The footer action is a Card-created Button."
-                header={{ label: "01", icon: "gauge", }}
-                footer={{ primaryNote: "0…400 бар", secondaryNote: "4…20 мА", }}
-                actionButton={{ children: "Details", }}
-            />
-        </CardFrame>
-    ),
+    args: {
+        ...catalog,
+        title: "Pressure sensors",
+        description: "The footer action is a Card-created Button.",
+        actionButton: { children: "Details", },
+    },
+    render: renderIn("light"),
     play: async ({ canvasElement, }) => {
         const canvas = within(canvasElement);
         const button = canvas.getByRole("button", { name: "Details", });
@@ -151,34 +137,16 @@ export const ActionButton: Story = {
 };
 
 export const Light: Story = {
-    render: () => (
-        <CardFrame theme="light">
-            <Card
-                title="Датчики давления"
-                description="Измерение давления жидкостей и газов в трубопроводах и резервуарах."
-                header={{ label: "01", icon: "gauge", }}
-                footer={{ primaryNote: "0…400 бар", secondaryNote: "4…20 мА", }}
-                actionButton={{ children: "Details", }}
-            />
-        </CardFrame>
-    ),
+    args: { ...catalog, actionButton: { children: "Details", }, },
+    render: renderIn("light"),
     play: async ({ canvasElement, }) => {
         await expect(canvasElement.querySelector("article")).not.toBeNull();
     },
 };
 
 export const Dark: Story = {
-    render: () => (
-        <CardFrame theme="dark">
-            <Card
-                title="Датчики давления"
-                description="Измерение давления жидкостей и газов в трубопроводах и резервуарах."
-                header={{ label: "01", icon: "gauge", }}
-                footer={{ primaryNote: "0…400 бар", secondaryNote: "4…20 мА", }}
-                actionButton={{ children: "Details", }}
-            />
-        </CardFrame>
-    ),
+    args: { ...catalog, actionButton: { children: "Details", }, },
+    render: renderIn("dark"),
     play: async ({ canvasElement, }) => {
         await expect(canvasElement.querySelector("article")).not.toBeNull();
     },
