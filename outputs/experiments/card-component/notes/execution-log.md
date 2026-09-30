@@ -18,9 +18,9 @@
 
 | Проверка | Результат |
 | --- | --- |
-| `bun test src` (`test:unit`) | 164 pass / 0 fail |
+| `bun test src` (`test:unit`) | 166 pass / 0 fail |
 | `mise run test:browser` | 34 pass / 0 fail (5 файлов) |
-| `mise run check` | lint, types, format, `icons:check`, `fonts:check`, unit + browser — зелёные (164 / 34) |
+| `mise run check` | lint, types, format, `icons:check`, `fonts:check`, unit + browser — зелёные (166 / 34) |
 | `mise run check:deps` (Knip) | чисто |
 | Визуальная проверка | Chromium-рендер stories light/dark, референсные композиции, геометрия футера |
 

@@ -5,8 +5,13 @@ import { expect, waitFor, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
+import { type ButtonSize, type ButtonTone, } from "@shared/components/button";
+import { ICON_CODEPOINTS, type IconName, } from "@shared/components/icon/manifest.generated";
+
 import cardMediaFixture from "./assets/card-media.fixture.png";
 import { Card, type CardProps, } from "./card";
+
+const iconNames = Object.keys(ICON_CODEPOINTS) as IconName[];
 
 const shell = css({
     padding: "x12",
@@ -39,6 +44,52 @@ const renderIn = (theme: "light" | "dark") => (args: CardProps) => (
     </ThemeShell>
 );
 
+type PlaygroundArgs = CardProps & {
+    useSuppliedMedia: boolean;
+    mediaSrc: string;
+    mediaAlt: string;
+    showHeader: boolean;
+    headerLabel: string;
+    headerIcon: IconName;
+    showFooter: boolean;
+    footerPrimaryNote: string;
+    footerSecondaryNote: string;
+    showAction: boolean;
+    actionLabel: string;
+    actionTone: ButtonTone;
+    actionSize: ButtonSize;
+};
+
+const renderPlayground = ({
+    useSuppliedMedia,
+    mediaSrc,
+    mediaAlt,
+    showHeader,
+    headerLabel,
+    headerIcon,
+    showFooter,
+    footerPrimaryNote,
+    footerSecondaryNote,
+    showAction,
+    actionLabel,
+    actionTone,
+    actionSize,
+    media: _media,
+    header: _header,
+    footer: _footer,
+    actionButton: _actionButton,
+    ...cardProps
+}: PlaygroundArgs) =>
+    renderIn("light")({
+        ...cardProps,
+        media: useSuppliedMedia ? { src: mediaSrc, alt: mediaAlt, } : undefined,
+        header: showHeader ? { label: headerLabel, icon: headerIcon, } : undefined,
+        footer: showFooter
+            ? { primaryNote: footerPrimaryNote, secondaryNote: footerSecondaryNote, }
+            : undefined,
+        actionButton: showAction ? { children: actionLabel, tone: actionTone, size: actionSize, } : undefined,
+    });
+
 // The PEN reference (`Card / Catalog`) expressed as an ordinary composition.
 // Its domain data stays in the story, never in the public Card API.
 const catalog: CardProps = {
@@ -53,27 +104,90 @@ const meta = {
     component: Card,
     parameters: { layout: "fullscreen", },
     argTypes: {
-        title: { control: { type: "text", }, },
-        description: { control: { type: "text", }, },
-        header: { control: { type: "object", }, },
-        footer: { control: { type: "object", }, },
-        media: { control: { type: "object", }, },
-        actionButton: { control: { type: "object", }, },
+        title: { control: { type: "text", }, table: { category: "Content", }, },
+        description: { control: { type: "text", }, table: { category: "Content", }, },
+        media: { control: false, },
+        header: { control: false, },
+        footer: { control: false, },
+        actionButton: { control: false, },
+        useSuppliedMedia: { control: { type: "boolean", }, table: { category: "Media", }, },
+        mediaSrc: {
+            control: { type: "text", },
+            if: { arg: "useSuppliedMedia", },
+            table: { category: "Media", },
+        },
+        mediaAlt: {
+            control: { type: "text", },
+            if: { arg: "useSuppliedMedia", },
+            table: { category: "Media", },
+        },
+        showHeader: { control: { type: "boolean", }, table: { category: "Header", }, },
+        headerLabel: {
+            control: { type: "text", },
+            if: { arg: "showHeader", },
+            table: { category: "Header", },
+        },
+        headerIcon: {
+            control: { type: "select", },
+            options: iconNames,
+            if: { arg: "showHeader", },
+            table: { category: "Header", },
+        },
+        showFooter: { control: { type: "boolean", }, table: { category: "Footer", }, },
+        footerPrimaryNote: {
+            control: { type: "text", },
+            if: { arg: "showFooter", },
+            table: { category: "Footer", },
+        },
+        footerSecondaryNote: {
+            control: { type: "text", },
+            if: { arg: "showFooter", },
+            table: { category: "Footer", },
+        },
+        showAction: { control: { type: "boolean", }, table: { category: "Action", }, },
+        actionLabel: {
+            control: { type: "text", },
+            if: { arg: "showAction", },
+            table: { category: "Action", },
+        },
+        actionTone: {
+            control: { type: "select", },
+            options: [ "primary", "secondary", "ghost", ],
+            if: { arg: "showAction", },
+            table: { category: "Action", },
+        },
+        actionSize: {
+            control: { type: "select", },
+            options: [ "sm", "md", ],
+            if: { arg: "showAction", },
+            table: { category: "Action", },
+        },
     },
-} satisfies Meta<typeof Card>;
+} satisfies Meta<PlaygroundArgs>;
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<PlaygroundArgs>;
 
 export const Playground: Story = {
     args: {
-        ...catalog,
         title: "Card title",
         description: "Supporting description that explains the card's subject.",
-        actionButton: { children: "Details", },
+        useSuppliedMedia: false,
+        mediaSrc: cardMediaFixture,
+        mediaAlt: "Card media fixture",
+        showHeader: true,
+        headerLabel: "01",
+        headerIcon: "gauge",
+        showFooter: true,
+        footerPrimaryNote: "0…400 бар",
+        footerSecondaryNote: "4…20 мА",
+        showAction: true,
+        actionLabel: "Details",
+        actionTone: "primary",
+        actionSize: "sm",
     },
-    render: renderIn("light"),
+    render: renderPlayground,
 };
 
 export const CatalogReference: Story = {

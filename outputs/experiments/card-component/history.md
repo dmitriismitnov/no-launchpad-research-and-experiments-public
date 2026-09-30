@@ -54,3 +54,8 @@
   `Media` использует ранний `if` для supplied media и default skeleton-return;
   публичный API, slot recipe и DOM-контракт не изменены. `check` (164 unit,
   34 browser) и `check:deps` — зелёные.
+- 2026-09-30 — `Card` Playground получил story-only adapter для вложенных
+  props: flat controls сгруппированы по Media, Header, Footer и Action, а
+  переключатели условно скрывают соответствующие поля и передают Card
+  `undefined`. Object-controls публичного API не интерактивны, но сам API и
+  компонент не менялись. Реальные object-примеры остаются в остальных stories.
