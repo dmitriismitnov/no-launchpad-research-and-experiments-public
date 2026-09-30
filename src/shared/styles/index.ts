@@ -3,11 +3,12 @@ import { definePreset, } from "@pandacss/dev";
 
 import { buttonIconPreset, } from "../components/button-icon/preset";
 import { buttonPreset, } from "../components/button/preset";
+import { cardPreset, } from "../components/card/preset";
 import { iconPreset, } from "../components/icon/preset";
 import { foundationPreset, } from "./foundation";
 import { preflight, settingsPreset, } from "./settings";
 
-export { buttonIconPreset, buttonPreset, foundationPreset, iconPreset, preflight, settingsPreset, };
+export { buttonIconPreset, buttonPreset, cardPreset, foundationPreset, iconPreset, preflight, settingsPreset, };
 
 /**
  * Component presets own only their own recipe. Panda shallow-merges `theme`
@@ -17,7 +18,7 @@ export { buttonIconPreset, buttonPreset, foundationPreset, iconPreset, preflight
  * shallow, two-key collection. No deep merge, no component overrides and no
  * hidden inheritance.
  */
-export const componentPresetSources: readonly Preset[] = [ buttonPreset, buttonIconPreset, iconPreset, ];
+export const componentPresetSources: readonly Preset[] = [ buttonPreset, buttonIconPreset, cardPreset, iconPreset, ];
 
 export const collectComponentDictionaries = (
     sources: readonly Preset[],
