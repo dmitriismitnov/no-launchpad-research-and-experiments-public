@@ -21,7 +21,7 @@
 | --- | --- |
 | `bun test src/shared/components/input` | 20 pass / 0 fail |
 | `mise run test:browser` | 41 pass / 0 fail (6 файлов; `Input.stories.tsx` — 7) |
-| `mise run check` | lint, types, format, `icons:check`, `fonts:check`, unit (184) + browser (41) — зелёные |
+| `mise run check` | lint, types, format, `icons:check`, `fonts:check`, unit (186) + browser (41) — зелёные |
 | `mise run check:deps` (Knip) | чисто |
 | Визуальная проверка (headless Chromium, `iframe.html`) | геометрия, токены, фокус-кольцо, invalid/disabled, light/dark |
 
@@ -66,7 +66,7 @@
   label Inter 12/500 uppercase, placeholder `neutral.500`, focus-visible
   `solid 2px brand.500`, invalid рамка и текст `negative.600` (`rgb(166,29,18)`),
   disabled `opacity .45` + `not-allowed`, фон `rgb(255,255,255)` / `rgb(0,0,0)` в
-  light/dark; контент не обрезан (см. скриншоты в рабочей области плана);
+  light/dark; контент не обрезан;
 - проектные проверки: `mise run check` и `check:deps` зелёные, barrel учтён
   Knip, регрессия сборки пресетов дополнена `input`.
 
@@ -80,6 +80,24 @@
 - нет size-вариантов, textarea, headless-интеграции, hint/счётчика/иконок —
   сознательно вне v1;
 - оценка автономности и решение о закрытии — за пользователем.
+
+## Независимое ревью
+
+Отдельный агент в чистом контексте, по диффу всей ветки (`a5444ed..`):
+**0 Critical, 1 Important, 6 Minor.**
+
+- **Important закрыт:** тест `className` проверял только проброс, а не мерж с
+  классом рецепта (план Self-Review ошибочно считал `Review Focus` 1–6
+  покрытыми). Тест усилен проверкой `input__control`; провал зафиксирован
+  мутацией `className={className}` (RED → откат → GREEN). Прогон ветки после
+  правки: `mise run check` — 186 unit / 41 browser, зелёные.
+- **6 Minor отложены** (см. `Final: minor (deferred)` в журнале рабочей области):
+  ownership `aria-invalid`/`aria-describedby`, отсутствие DOM-регрессии на
+  invalid-рамку, дублирование литералов фокус-кольца, дублирование `hasText`,
+  отсутствие проверки отсутствия `<p>` в «error without invalid».
+- Ревьюер отметил как приемлемые: аппроксимацию mono-шрифта, отсутствие
+  size/hint/icons/textarea, отсутствие `aria-live`, runtime-сравнение
+  фокус-кольца и контраст cross-projection пар.
 
 ## Открытые вопросы
 

@@ -125,7 +125,7 @@ focus/disabled/invalid-состояниями и a11y), не создавая н
 - Пресет зарегистрирован в явной точке сбора `src/shared/styles/index.ts`;
   регрессионный тест `src/shared/styles/presets.test.ts` дополнен `input`;
   barrel зарегистрирован в `knip.jsonc` как entry-точка.
-- Проверки: `mise run check` (184 unit / 41 browser) и `mise run check:deps` —
+- Проверки: `mise run check` (186 unit / 41 browser) и `mise run check:deps` —
   зелёные. Визуальная проверка (headless Chromium) подтвердила геометрию,
   токены, фокус-кольцо, invalid/disabled и light/dark.
 - Закрыт разрыв плана: два входа `Review Focus`, обещанные Self-Review, но не

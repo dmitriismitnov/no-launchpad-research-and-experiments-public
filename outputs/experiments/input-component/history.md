@@ -26,6 +26,12 @@
   dev-сервером) и остановлен после проверки.
 - 2026-09-30 — интеграционные проверки: `mise run check` (184 unit / 41 browser,
   lint/types/format/icons/fonts) и `check:deps` — зелёные.
+- 2026-09-30 — независимое ревью ветки (`a5444ed..`, чистый контекст):
+  0 Critical, 1 Important, 6 Minor. Important — тест `className` проверял
+  проброс, а не мерж с классом рецепта — закрыт усилением теста и мутацией
+  (`className={className}` → RED → откат → GREEN). 6 Minor отложены и записаны
+  в журнале рабочей области. Финальный прогон: `mise run check` — 186 unit /
+  41 browser, зелёные.
 - 2026-09-30 — закрыт разрыв плана: два входа `Review Focus` (п.2 `invalid` без
   непустого `error`, п.6 controlled/uncontrolled), обещанные Self-Review, но не
   покрытые перечнем тестов Task 2, добавлены composition-регрессиями

@@ -15,7 +15,8 @@
 | Фокус-кольцо и `disabled` как у `Button` | Выполнено: focus-visible `solid 2px brand.500`, `_disabled` → `opacity .45` + `not-allowed`. |
 | Пустые опциональные области | Выполнено: пустой/пробельный `label`/`error` не рендерятся. |
 | Storybook и browser-проверки | Выполнено: 7 stories (Playground, Reference, Minimal, Invalid, Disabled, Light, Dark) с play-проверками; 7 browser-тестов зелёные. |
-| Проверки и зависимости | Выполнено: `mise run check` (184 unit / 41 browser) и `check:deps` — зелёные. |
+| Проверки и зависимости | Выполнено: `mise run check` (186 unit / 41 browser) и `check:deps` — зелёные. |
+| Независимое ревью | Выполнено: 0 Critical, 1 Important (пробел в тесте мержа `className`), 6 Minor. Important закрыт с проверкой мутацией; 6 Minor отложены и записаны. |
 
 ## Что не делалось намеренно
 
