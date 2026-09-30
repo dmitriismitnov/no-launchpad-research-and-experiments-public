@@ -4,6 +4,11 @@ import { useId, } from "react";
 import { cx, } from "@shared/styled-system/css";
 import { input, } from "@shared/styled-system/recipes";
 
+/**
+ * Публичные пропсы Input. Компонент владеет `aria-invalid` и
+ * `aria-describedby`: потребительские значения этих двух атрибутов
+ * игнорируются, чтобы связь «контрол ↔ ошибка» оставалась корректной.
+ */
 export type InputProps = Omit<ComponentProps<"input">, "size" | "children"> & {
     /** Лейбл над контролом; связывается с контролом через htmlFor/id. */
     label?: string;
@@ -24,6 +29,8 @@ export const Input = ({
     const {
         size: _size,
         children: _children,
+        "aria-invalid": _ariaInvalid,
+        "aria-describedby": _ariaDescribedBy,
         ...inputProps
     } = props as ComponentProps<"input">;
     const generatedId = useId();
@@ -55,7 +62,7 @@ export const Input = ({
     );
 };
 
-/** Пустая/пробельная строка — отсутствие (урок Card). */
+/** Пустая или пробельная строка считается отсутствующей и не рендерит область. */
 function hasText(value: string | undefined): boolean {
     return value != null && value.trim() !== "";
 }

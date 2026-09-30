@@ -91,4 +91,13 @@ describe("Input composition", () => {
         expect(markup).not.toContain('size="sm"');
         expect(markup).not.toContain("injected");
     });
+
+    test("owns aria-invalid and aria-describedby, ignoring consumer values", () => {
+        const markup = renderToStaticMarkup(
+            <Input invalid error="Заполните поле" aria-invalid={false} aria-describedby="external" />,
+        );
+
+        expect(markup).toContain('aria-invalid="true"');
+        expect(markup).not.toContain("external");
+    });
 });

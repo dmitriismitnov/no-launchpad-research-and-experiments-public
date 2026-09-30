@@ -89,6 +89,9 @@ and colour belong to `label`, `control` and `error`.
   `aria-describedby={errorId}` and an `<p id={errorId}>{error}</p>` is rendered.
   An `invalid` input without a non-blank `error` shows only the negative border
   and `aria-invalid` — no `<p>` and no `aria-describedby`.
+- **ARIA ownership.** `aria-invalid` and `aria-describedby` belong to the
+  component: consumer-supplied values of those two attributes are ignored, and
+  the component sets them from its own `invalid`/`error`.
 - **`disabled`.** Owned by the recipe: `_disabled` sets `cursor: not-allowed`
   and `opacity: 0.45`, matching `Button`. The native attribute also prevents
   focus and editing.
