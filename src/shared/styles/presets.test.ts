@@ -7,6 +7,7 @@ import { buttonIconRecipe, } from "../components/button-icon/preset";
 import { buttonRecipe, } from "../components/button/preset";
 import { cardRecipe, } from "../components/card/preset";
 import { iconRecipe, } from "../components/icon/preset";
+import { inputRecipe, } from "../components/input/preset";
 import { foundationPreset, } from "./foundation";
 import { collectComponentDictionaries, componentPresetSources, presets, settingsPreset, } from "./index";
 
@@ -31,7 +32,12 @@ describe("preset composition", () => {
     test("the assembled component preset owns every component recipe", () => {
         const componentPreset = presets[2];
 
-        expect(Object.keys(componentPreset?.theme?.slotRecipes ?? {})).toEqual([ "button", "buttonIcon", "card", ]);
+        expect(Object.keys(componentPreset?.theme?.slotRecipes ?? {})).toEqual([
+            "button",
+            "buttonIcon",
+            "card",
+            "input",
+        ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([ "icon", ]);
     });
 
@@ -39,6 +45,7 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["button"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["buttonIcon"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["card"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["input"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
     });
 
@@ -46,6 +53,7 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["button"]).toEqual(buttonRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["buttonIcon"]).toEqual(buttonIconRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["card"]).toEqual(cardRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["input"]).toEqual(inputRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
     });
 
@@ -65,8 +73,8 @@ describe("preset composition", () => {
         const forward = collectComponentDictionaries(componentPresetSources);
         const reversed = collectComponentDictionaries([ ...componentPresetSources, ].reverse());
 
-        expect(Object.keys(forward.slotRecipes)).toEqual([ "button", "buttonIcon", "card", ]);
-        expect(Object.keys(reversed.slotRecipes)).toEqual([ "card", "buttonIcon", "button", ]);
+        expect(Object.keys(forward.slotRecipes)).toEqual([ "button", "buttonIcon", "card", "input", ]);
+        expect(Object.keys(reversed.slotRecipes)).toEqual([ "input", "card", "buttonIcon", "button", ]);
         expect(Object.keys(reversed.recipes)).toEqual([ "icon", ]);
     });
 });
