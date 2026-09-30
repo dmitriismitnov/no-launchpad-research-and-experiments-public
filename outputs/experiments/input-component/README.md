@@ -119,9 +119,19 @@ focus/disabled/invalid-состояниями и a11y), не создавая н
 
 ## Состояние (2026-09-30)
 
-- Эксперимент открыт; созданы артефакты (этот README, `plan.md`, `history.md`,
-  `notes/design-spec.md`, `notes/execution-log.md`). Код ещё не написан.
-- `notes/results.md` создаётся в конце эксперимента.
+- Компонент реализован на ветке `experiment/input-component`:
+  `src/shared/components/input/` (preset, компонент, barrel, unit, composition и
+  browser-проверки, 7 stories).
+- Пресет зарегистрирован в явной точке сбора `src/shared/styles/index.ts`;
+  регрессионный тест `src/shared/styles/presets.test.ts` дополнен `input`;
+  barrel зарегистрирован в `knip.jsonc` как entry-точка.
+- Проверки: `mise run check` (184 unit / 41 browser) и `mise run check:deps` —
+  зелёные. Визуальная проверка (headless Chromium) подтвердила геометрию,
+  токены, фокус-кольцо, invalid/disabled и light/dark.
+- Закрыт разрыв плана: два входа `Review Focus`, обещанные Self-Review, но не
+  покрытые перечнем тестов Task 2, добавлены composition-регрессиями.
+- Эксперимент **не закрыт**; ветка не влита. Итоги — в
+  [`notes/results.md`](notes/results.md).
 
 ## Ссылки
 
