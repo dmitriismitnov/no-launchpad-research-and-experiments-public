@@ -31,9 +31,6 @@ export type CardProps = Omit<ComponentProps<"article">, "children" | "dangerousl
     actionButton?: ButtonProps;
 };
 
-/** `media.alt` is deliberately exempt: an empty alt is meaningful. */
-const hasText = (value: string | undefined): boolean => value != null && value.trim() !== "";
-
 export const Card = ({
     title,
     description,
@@ -50,52 +47,109 @@ export const Card = ({
         dangerouslySetInnerHTML: _dangerouslySetInnerHTML,
         ...articleProps
     } = props as ComponentProps<"article">;
-    const hasHeader = hasText(header?.label) || header?.icon != null;
-    const hasPrimaryNote = hasText(footer?.primaryNote);
-    const hasSecondaryNote = hasText(footer?.secondaryNote);
-    const hasFooter = hasPrimaryNote || hasSecondaryNote || actionButton != null;
 
     return (
         <article {...articleProps} className={cx(styles.root, className)}>
-            {media != null
-                ? (
-                    <span className={styles.media}>
-                        <img src={media.src} alt={media.alt} />
-                    </span>
-                )
-                : (
-                    // Must be inline so the trusted local SVG inherits the slot's `currentColor`.
-                    <span
-                        className={styles.media}
-                        aria-hidden="true"
-                        dangerouslySetInnerHTML={{ __html: cardMediaSkeleton, }}
-                    />
-                )}
-
-            <div className={styles.body}>
-                {hasHeader && (
-                    <div className={styles.header}>
-                        {hasText(header?.label) && <span>{header?.label}</span>}
-                        {header?.icon != null && <Icon name={header.icon} size="sm" />}
-                    </div>
-                )}
-
-                <h3 className={styles.title}>{title}</h3>
-
-                {hasText(description) && <p className={styles.description}>{description}</p>}
-
-                {hasFooter && (
-                    <div className={styles.footer}>
-                        {hasPrimaryNote && <span className={styles.footerPrimary}>{footer?.primaryNote}</span>}
-                        {hasSecondaryNote && <span className={styles.footerSecondary}>{footer?.secondaryNote}</span>}
-                        {actionButton != null && (
-                            <span className={styles.actionButton}>
-                                <Button {...actionButton} size={actionButton.size ?? "sm"} />
-                            </span>
-                        )}
-                    </div>
-                )}
-            </div>
+            <Media media={media} styles={styles} />
+            <Body
+                title={title}
+                description={description}
+                header={header}
+                footer={footer}
+                actionButton={actionButton}
+                styles={styles}
+            />
         </article>
     );
 };
+
+type CardStyles = ReturnType<typeof card>;
+
+type MediaProps = Pick<CardProps, "media"> & {
+    styles: CardStyles;
+};
+
+type BodyProps = Pick<CardProps, "title" | "description" | "header" | "footer" | "actionButton"> & {
+    styles: CardStyles;
+};
+
+type BodyHeaderProps = Pick<CardProps, "header"> & {
+    styles: CardStyles;
+};
+
+type BodyFooterProps = Pick<CardProps, "footer" | "actionButton"> & {
+    styles: CardStyles;
+};
+
+function Media({ media, styles, }: MediaProps) {
+    if ( media != null ) {
+        return (
+            <span className={styles.media}>
+                <img src={media.src} alt={media.alt} />
+            </span>
+        );
+    }
+
+    // Must be inline so the trusted local SVG inherits the slot's `currentColor`.
+    return (
+        <span
+            className={styles.media}
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{ __html: cardMediaSkeleton, }}
+        />
+    );
+}
+
+function Body({ title, description, header, footer, actionButton, styles, }: BodyProps) {
+    return (
+        <div className={styles.body}>
+            <BodyHeader header={header} styles={styles} />
+            <h3 className={styles.title}>{title}</h3>
+            {hasText(description) && <p className={styles.description}>{description}</p>}
+            <BodyFooter footer={footer} actionButton={actionButton} styles={styles} />
+        </div>
+    );
+}
+
+function BodyHeader({ header, styles, }: BodyHeaderProps) {
+    const label = header?.label;
+
+    if ( !hasText(label) && header?.icon == null ) {
+        return null;
+    }
+
+    return (
+        <div className={styles.header}>
+            {hasText(label) && <span>{label}</span>}
+            {header?.icon != null && <Icon name={header.icon} size="sm" />}
+        </div>
+    );
+}
+
+function BodyFooter({ footer, actionButton, styles, }: BodyFooterProps) {
+    const primaryNote = footer?.primaryNote;
+    const secondaryNote = footer?.secondaryNote;
+    const hasPrimaryNote = hasText(primaryNote);
+    const hasSecondaryNote = hasText(secondaryNote);
+
+    if ( !hasPrimaryNote && !hasSecondaryNote && actionButton == null ) {
+        return null;
+    }
+
+    return (
+        <div className={styles.footer}>
+            {hasPrimaryNote && <span className={styles.footerPrimary}>{primaryNote}</span>}
+            {hasSecondaryNote && <span className={styles.footerSecondary}>{secondaryNote}</span>}
+            {actionButton != null && (
+                <span className={styles.actionButton}>
+                    <Button {...actionButton} size={actionButton.size ?? "sm"} />
+                </span>
+            )}
+        </div>
+    );
+}
+
+/** `media.alt` is deliberately exempt: an empty alt is meaningful. */
+function hasText(value: string | undefined): boolean {
+    return value != null && value.trim() !== "";
+}

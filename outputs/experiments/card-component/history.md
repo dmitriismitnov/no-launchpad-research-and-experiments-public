@@ -49,3 +49,8 @@
     execution log синхронизированы с фактическим доказательством.
   Итоговый прогон: `mise run check` — 164 unit / 34 browser, `check:deps` —
   зелёный. Эксперимент остаётся открыт.
+- 2026-09-30 — приватный structural refactor `Card`: после публичного
+  компонента выделены `Media`, `Body`, `BodyHeader`, `BodyFooter` и `hasText`.
+  `Media` использует ранний `if` для supplied media и default skeleton-return;
+  публичный API, slot recipe и DOM-контракт не изменены. `check` (164 unit,
+  34 browser) и `check:deps` — зелёные.
