@@ -16,7 +16,7 @@
 | Пустые опциональные области | Выполнено: пустой/пробельный `label`/`error` не рендерятся. |
 | Storybook и browser-проверки | Выполнено: 7 stories (Playground, Reference, Minimal, Invalid, Disabled, Light, Dark) с play-проверками; 7 browser-тестов зелёные. |
 | Проверки и зависимости | Выполнено: `mise run check` (186 unit / 41 browser) и `check:deps` — зелёные. |
-| Независимое ревью | Выполнено: 0 Critical, 1 Important (пробел в тесте мержа `className`), 6 Minor. Important закрыт с проверкой мутацией; 6 Minor отложены и записаны. |
+| Независимое ревью | Выполнено: 0 Critical, 1 Important (пробел в тесте мержа `className`), 5 Minor. Important закрыт с проверкой мутацией; 5 Minor отложены и записаны. |
 
 ## Что не делалось намеренно
 

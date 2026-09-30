@@ -84,14 +84,14 @@
 ## Независимое ревью
 
 Отдельный агент в чистом контексте, по диффу всей ветки (`a5444ed..`):
-**0 Critical, 1 Important, 6 Minor.**
+**0 Critical, 1 Important, 5 Minor.**
 
 - **Important закрыт:** тест `className` проверял только проброс, а не мерж с
   классом рецепта (план Self-Review ошибочно считал `Review Focus` 1–6
   покрытыми). Тест усилен проверкой `input__control`; провал зафиксирован
   мутацией `className={className}` (RED → откат → GREEN). Прогон ветки после
   правки: `mise run check` — 186 unit / 41 browser, зелёные.
-- **6 Minor отложены** (см. `Final: minor (deferred)` в журнале рабочей области):
+- **5 Minor отложены** (см. `Final: minor (deferred)` в журнале рабочей области):
   ownership `aria-invalid`/`aria-describedby`, отсутствие DOM-регрессии на
   invalid-рамку, дублирование литералов фокус-кольца, дублирование `hasText`,
   отсутствие проверки отсутствия `<p>` в «error without invalid».
