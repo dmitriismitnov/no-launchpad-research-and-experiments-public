@@ -73,10 +73,20 @@ describe("card recipe", () => {
 
     test("uses CSS-valid axis values, not PEN's snake_case names", () => {
         // PEN writes `space_between`; that is invalid CSS and is silently
-        // dropped by the browser, so the icon would not reach the far edge.
+        // dropped by the browser, so the header icon would not reach the far
+        // edge.
         expect(cardRecipe.base?.["header"]).toMatchObject({ justifyContent: "space-between", });
-        expect(cardRecipe.base?.["footer"]).toMatchObject({ justifyContent: "space-between", });
         expect(JSON.stringify(cardRecipe)).not.toMatch(/space_(between|around)/);
+    });
+
+    test("anchors the note pair at opposite edges and the action at the end", () => {
+        // The primary note's automatic end margin pins it to the start; the
+        // trailing group packs to the end. Without this, a lone secondary note
+        // would sit at the start and a notes-plus-action footer would leave a
+        // gap between the notes and the action.
+        expect(cardRecipe.base?.["footer"]).toMatchObject({ justifyContent: "flex-end", });
+        expect(cardRecipe.base?.["footerPrimary"]).toMatchObject({ marginInlineEnd: "auto", });
+        expect(cardRecipe.base?.["actionButton"]).not.toHaveProperty("marginInlineStart");
     });
 
     test("paints text and icons from explicit slots, never the root", () => {

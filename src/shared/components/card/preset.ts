@@ -114,9 +114,16 @@ export const cardRecipe = defineSlotRecipe({
         },
 
         // A top divider only: the card's own border already draws the sides.
+        //
+        // The trailing group packs to the end (`flex-end`), while the primary
+        // note's automatic end margin takes the remaining space and pins it to
+        // the start. That keeps the note pair at opposite edges when only notes
+        // are present, keeps a lone secondary note at the trailing edge, and
+        // keeps the secondary note adjacent to the action button when both are
+        // present — without an extra wrapper element.
         footer: {
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             alignItems: "center",
             gap: "x4",
             borderTopWidth: "thin",
@@ -130,6 +137,7 @@ export const cardRecipe = defineSlotRecipe({
             fontSize: "xs",
             fontWeight: "medium",
             color: "semantic.common.50.text",
+            marginInlineEnd: "auto",
         },
 
         footerSecondary: {
@@ -139,12 +147,8 @@ export const cardRecipe = defineSlotRecipe({
             color: "semantic.common.600.background",
         },
 
-        // Pushed to the trailing edge so an action-only footer still anchors
-        // the button right, and a notes-plus-action footer keeps the button
-        // detached from the note pair.
         actionButton: {
             flexShrink: "0",
-            marginInlineStart: "auto",
         },
     },
 });

@@ -136,6 +136,60 @@ export const ActionButton: Story = {
     },
 };
 
+export const FooterAlignments: Story = {
+    args: { title: "Footer alignments", },
+    render: () => (
+        <ThemeShell theme="light">
+            <div className={stack}>
+                <div className={frame} data-case="notes">
+                    <Card title="Notes" footer={{ primaryNote: "0…400 бар", secondaryNote: "4…20 мА", }} />
+                </div>
+                <div className={frame} data-case="secondary">
+                    <Card title="Secondary only" footer={{ secondaryNote: "4…20 мА", }} />
+                </div>
+                <div className={frame} data-case="notes-action">
+                    <Card
+                        title="Notes and action"
+                        footer={{ primaryNote: "0…400 бар", secondaryNote: "4…20 мА", }}
+                        actionButton={{ children: "Details", }}
+                    />
+                </div>
+            </div>
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const rect = (root: Element, selector: string): DOMRect =>
+            ( root.querySelector(selector) as Element ).getBoundingClientRect();
+        const caseOf = (name: string): Element => canvasElement.querySelector(`[data-case="${name}"]`) as Element;
+
+        const near = (a: number, b: number): boolean => Math.abs(a - b) < 2;
+
+        // Notes only: primary anchored start, secondary anchored end.
+        const notes = caseOf("notes");
+        const notesFooter = rect(notes, ".card__footer");
+        await expect(rect(notes, ".card__footerPrimary").left).toBeLessThan(
+            rect(notes, ".card__footerSecondary").left,
+        );
+        await expect(near(rect(notes, ".card__footerSecondary").right, notesFooter.right)).toBe(true);
+
+        // Secondary only: it stays at the trailing edge.
+        const secondary = caseOf("secondary");
+        await expect(
+            near(rect(secondary, ".card__footerSecondary").right, rect(secondary, ".card__footer").right),
+        ).toBe(true);
+
+        // Notes plus action: the note group and the action share the trailing edge.
+        const withAction = caseOf("notes-action");
+        const actionFooter = rect(withAction, ".card__footer");
+        const action = rect(withAction, ".card__actionButton");
+        const trailingNote = rect(withAction, ".card__footerSecondary");
+        await expect(near(action.right, actionFooter.right)).toBe(true);
+        await expect(trailingNote.right).toBeLessThanOrEqual(action.left);
+        await expect(action.left - trailingNote.right).toBeLessThan(20);
+        await expect(rect(withAction, ".card__footerPrimary").left).toBeLessThan(trailingNote.left);
+    },
+};
+
 export const Light: Story = {
     args: { ...catalog, actionButton: { children: "Details", }, },
     render: renderIn("light"),
