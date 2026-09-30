@@ -21,6 +21,11 @@ export const Input = ({
     id,
     ...props
 }: InputProps) => {
+    const {
+        size: _size,
+        children: _children,
+        ...inputProps
+    } = props as ComponentProps<"input">;
     const generatedId = useId();
     const controlId = id ?? generatedId;
     const errorId = `${controlId}-error`;
@@ -35,7 +40,7 @@ export const Input = ({
                 </label>
             )}
             <input
-                {...props}
+                {...inputProps}
                 id={controlId}
                 className={cx(styles.control, className)}
                 aria-invalid={invalid || undefined}

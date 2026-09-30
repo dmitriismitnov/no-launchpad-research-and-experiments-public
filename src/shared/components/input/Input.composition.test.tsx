@@ -1,7 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
-import { Input, } from "./input";
+import { Input, type InputProps, } from "./input";
 
 describe("Input composition", () => {
     test("links a label to the control and forwards native attributes", () => {
@@ -79,5 +79,16 @@ describe("Input composition", () => {
         const withSize = <Input size="sm" />;
 
         expect(withSize).toBeDefined();
+    });
+
+    test("strips size and children from untyped callers", () => {
+        const untypedProps = {
+            size: "sm",
+            children: "injected",
+        } as unknown as InputProps;
+        const markup = renderToStaticMarkup(<Input {...untypedProps} />);
+
+        expect(markup).not.toContain('size="sm"');
+        expect(markup).not.toContain("injected");
     });
 });
