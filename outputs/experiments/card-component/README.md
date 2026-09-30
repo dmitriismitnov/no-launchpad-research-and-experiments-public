@@ -140,6 +140,8 @@
 
 - `plan.md` — утверждённый план реализации
 - `notes/design-spec.md` — детальная спецификация дизайна Card v1
+- `notes/execution-log.md` — журнал исполнения: решения, проверки, границы
+  проверенного, открытые вопросы (материал для ревью)
 - `history.md` — хронология эксперимента
 - `../../shared/pen-design-system-integration/design/design_raw_1.pen` —
   референс `Card / Catalog`
