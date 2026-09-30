@@ -4,7 +4,18 @@ Operating journal of all work products. `wiki/log.md` tracks wiki changes only.
 
 ## Latest experiment
 
-[[experiments/card-component/README]] — **completed** (2026-09-30). Ветка
+[[experiments/input-component/README]] — **completed** (2026-09-30). Ветка
+`experiment/input-component` от `main`, не влита. Первый поведенческий
+form-контрол `Input`: нативный `<input>` с опциональным лейблом и состоянием
+`invalid`/`error` (a11y: `aria-invalid`, `aria-describedby`, `htmlFor`/`id`),
+focus-кольцо и `disabled` по образцу `Button`, слот-рецепт `root/label/control/
+error`. Реализован по плану в четырёх задачах без создания навыков; `mise run
+check` (189 unit / 41 browser) и `check:deps` зелёные; независимое ревью закрыло
+1 Important, 5 Minor отложены. Пользователь закрыл эксперимент по прямой команде;
+все выводы предыдущего цикла подтвердились. Детали —
+[[experiments/input-component/notes/results]].
+
+Предыдущий — [[experiments/card-component/README]] — **completed** (2026-09-30). Ветка
 `experiment/card-component` от `main`, не влита. Первый составной компонент
 `Card`: статический `<article>` без `onClick`, универсальный API (медиа, заголовок,
 описание, маркер/иконка, две заметки футера, `actionButton` как `ButtonProps`),
@@ -34,6 +45,7 @@ Operating journal of all work products. `wiki/log.md` tracks wiki changes only.
 
 | Experiment | Subject | Status | Outcome |
 | --- | --- | --- | --- |
+| [[experiments/input-component/README]] | Первый поведенческий компонент `Input`: form-контрол с focus/disabled/invalid и a11y | completed (2026-09-30) | Реализован по плану в четырёх задачах на ветке `experiment/input-component` без создания навыков. Нативный `<input>` + `label`/`invalid`/`error` (`aria-invalid`, `aria-describedby`, `htmlFor`/`id`, `useId`), слот-рецепт `root/label/control/error`, единственный вариант `invalid`, focus-кольцо и `disabled` как у `Button`. PEN-референс `Input / Text` спроецирован на foundation-токены (снэпы 46→50px, 14→12px, 7→6px; mono-лейбл аппроксимирован `body`). Проверки merged tree: `check` (189 unit, 41 browser), `check:deps`. Независимое ревью: 0 Critical, 1 Important (мерж `className`) закрыт, 5 Minor отложены. Все критерии и follow-up закрыты; правила/скрипты/скиллы backlog — [[experiments/input-component/notes/results]]. Ветка не влита. PR не создавался. |
 | [[experiments/card-component/README]] | Первый составной компонент `Card`: универсальный API, медиа со заглушкой, действие в футере, проверка модели компонента | completed (2026-09-30) | Реализован по плану в четырёх задачах на ветке `experiment/card-component`, затем локально влит в `main`. Публичная анатомия `root/media/body/header/title/description/footer/footerPrimary/footerSecondary/actionButton`; данные каталога остаются в Storybook-композиции, а не в API. Два исполнения отличались от плана и перенесены в спецификацию: заглушка встроена inline через `?raw` (иначе `<img>` блокирует `currentColor`), и футер собран `flex-end` + auto-margin вместо `space-between`. Визуальная проверка нашла невалидное PEN/CSS значение `space_between`; follow-up review закрыло media sizing, пользовательский `dangerouslySetInnerHTML`, `actionButton.size: undefined`, browser-stories и документацию. Playground получил story-only controls для вложенных props. Пользователь признал результат и закрыл эксперимент; rules/models/Storybook backlog — [[experiments/card-component/notes/results]]. Проверки merged tree: `check` (166 unit, 34 browser), `check:deps`. PR не создавался. |
 | [[experiments/card-media-skeleton/README]] | Проверка генерации SVG-картинки агентом: самодостаточная заглушка медиа-слота `Card` | completed (2026-09-30) | Вывод пользователя: эксперимент случайный — цель была узкой, проверить, может ли DeepSeek сгенерировать SVG-картинку; ответ — да, может. Ассет `card-media.skeleton.svg`: кадр 16:9, монохром через `currentColor` + `fill-opacity`/`stroke-opacity` (`0.1` поверхность, `0.3` глиф), без анимации, `style`, `id`, фильтров и градиентов. Подтверждение ограничено одним ассетом и одним визуальным осмотром рендера (light/dark/tone, сжатие до 320px), плюс `xmllint`. Рамка вопроса про контракт изображений оказалась шире замысла и не решена: не проверены не-16:9 контейнер, `?raw` + inline и поведение внутри реального `Card`. Детали — [[experiments/card-media-skeleton/history]] |
 | [[experiments/typography-asset-foundation/README]] | Typography asset foundation: Inter WOFF2 pipeline, skill, atomic foundation tokens, Button label composition | completed (2026-09-30) | Гипотеза подтверждена: шрифт живёт как asset-модуль с детерминированным pipeline `variable TTF → WOFF2 + manifest + generated CSS` и навыком `build-web-font`; foundation отдаёт атомарные шкалы (family/size/weight/line-height/tracking), а `Button.label` собирает из них типографику сам. `root` больше не владеет типографикой. WOFF2 сжимает raw TTF на ~60 %; повторная сборка побайтово идентична; в production output нет `.ttf`/`.otf`; кириллица рендерится. Subsetting, preload, textStyles и обновление шрифта — сознательно вне рамок. Ревью 2026-09-30: реализация признана хорошей, отложенное — [[shared/notes/backlog]]. Выводы: [[experiments/typography-asset-foundation/notes/results]], [[experiments/typography-asset-foundation/history]] |

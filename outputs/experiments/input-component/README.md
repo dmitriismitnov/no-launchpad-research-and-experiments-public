@@ -1,6 +1,6 @@
 # Эксперимент: Input Component
 
-**Статус:** open (2026-09-30).
+**Статус:** closed (2026-09-30).
 
 Ветка: `experiment/input-component` от `main`.
 
@@ -125,13 +125,15 @@ focus/disabled/invalid-состояниями и a11y), не создавая н
 - Пресет зарегистрирован в явной точке сбора `src/shared/styles/index.ts`;
   регрессионный тест `src/shared/styles/presets.test.ts` дополнен `input`;
   barrel зарегистрирован в `knip.jsonc` как entry-точка.
-- Проверки: `mise run check` (186 unit / 41 browser) и `mise run check:deps` —
+- Проверки: `mise run check` (189 unit / 41 browser) и `mise run check:deps` —
   зелёные. Визуальная проверка (headless Chromium) подтвердила геометрию,
   токены, фокус-кольцо, invalid/disabled и light/dark.
 - Закрыт разрыв плана: два входа `Review Focus`, обещанные Self-Review, но не
   покрытые перечнем тестов Task 2, добавлены composition-регрессиями.
-- Эксперимент **не закрыт**; ветка не влита. Итоги — в
-  [`notes/results.md`](notes/results.md).
+- Эксперимент **закрыт по прямой команде пользователя** (2026-09-30). Вывод
+  пользователя и направление следующего цикла — в
+  [`notes/results.md`](notes/results.md). Ветка `experiment/input-component` на
+  момент закрытия не влита; вливание — отдельная команда.
 
 ## Ссылки
 
