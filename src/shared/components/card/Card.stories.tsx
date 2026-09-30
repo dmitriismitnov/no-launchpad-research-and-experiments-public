@@ -102,7 +102,10 @@ const catalog: CardProps = {
 const meta = {
     title: "Components/Card",
     component: Card,
-    parameters: { layout: "fullscreen", },
+    parameters: {
+        layout: "fullscreen",
+        controls: { sort: "none", },
+    },
     argTypes: {
         title: { control: { type: "text", }, table: { category: "Content", }, },
         description: { control: { type: "text", }, table: { category: "Content", }, },
