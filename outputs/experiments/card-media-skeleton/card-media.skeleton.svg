@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" fill="none">
+    <!-- 16:9 media placeholder for Card. Monochrome: every tone comes from currentColor + fill/stroke-opacity. -->
+    <rect width="1600" height="900" fill="currentColor" fill-opacity="0.1"/>
+    <g stroke="currentColor" stroke-opacity="0.3" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="600" y="250" width="400" height="400" rx="40"/>
+        <path d="M960 620 835 430 700 620"/>
+    </g>
+    <circle cx="715" cy="370" r="42" fill="currentColor" fill-opacity="0.3"/>
+</svg>
