@@ -105,6 +105,7 @@ const meta = {
     parameters: {
         layout: "fullscreen",
         controls: { sort: "none", },
+        docs: { codePanel: true, },
     },
     argTypes: {
         title: { control: { type: "text", }, table: { category: "Content", }, },
