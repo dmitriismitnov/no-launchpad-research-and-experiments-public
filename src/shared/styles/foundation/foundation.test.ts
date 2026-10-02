@@ -20,7 +20,10 @@ import { fonts, fontSizes, fontWeights, letterSpacings, lineHeights, } from "./t
 type Token = { value: string; };
 type PaletteTokens = Record<string, Record<string, Token>>;
 type ThemePair = { value: { _light: string; _dark: string; }; };
-type SemanticContexts = Record<string, Record<string, Record<string, ThemePair>>>;
+type SemanticContexts = Record<
+    string,
+    Record<string, Record<string, ThemePair | Record<string, ThemePair>>>
+>;
 
 const paletteTokens = ( staticPalette as unknown as { palette: PaletteTokens; } ).palette;
 const semanticContexts = ( semanticColors as unknown as { semantic: SemanticContexts; } ).semantic;
@@ -53,8 +56,6 @@ const refHex = (reference: string): string => {
 // Every entry needs a reason; empty means none.
 const CONTRAST_EXCEPTIONS: Record<string, string> = {};
 
-const contrastThreshold = (projection: string): number => projection === "text" ? 4.5 : 3;
-
 describe("foundation", () => {
     test("spacing scale is regular: xN = N * step", () => {
         for ( const [ key, token, ] of Object.entries(spacing) ) {
@@ -75,7 +76,7 @@ describe("foundation", () => {
     });
 
     test("palette has the declared families, each with the full step set", () => {
-        expect(Object.keys(paletteTokens)).toEqual([ ...PALETTE_FAMILIES, ]);
+        expect(Object.keys(paletteTokens)).toEqual([ ...PALETTE_FAMILIES, "base", ]);
 
         for ( const family of PALETTE_FAMILIES ) {
             const steps = paletteTokens[family]!;
@@ -103,10 +104,22 @@ describe("foundation", () => {
 
             for ( const step of PALETTE_STEPS ) {
                 const projections = steps[`${step}`]!;
-                expect(Object.keys(projections)).toEqual([ "background", "text", "icon", "border", "divider", ]);
+                expect(Object.keys(projections)).toEqual([ ...SEMANTIC_PROJECTIONS, ]);
 
-                for ( const projection of SEMANTIC_PROJECTIONS ) {
-                    const pair = projections[projection]!;
+                for ( const projection of [ "background", "text", "icon", "divider", ] as const ) {
+                    const pair = projections[projection] as ThemePair;
+                    expect(Object.keys(pair.value)).toEqual([ "_light", "_dark", ]);
+
+                    for ( const theme of themes ) {
+                        expect(refHex(pair.value[theme])).toMatch(/^#[0-9A-F]{6}$/);
+                    }
+                }
+
+                const border = projections["border"] as Record<string, ThemePair>;
+                expect(Object.keys(border)).toEqual([ "subtle", "strong", ]);
+
+                for ( const kind of [ "subtle", "strong", ] as const ) {
+                    const pair = border[kind]!;
                     expect(Object.keys(pair.value)).toEqual([ "_light", "_dark", ]);
 
                     for ( const theme of themes ) {
@@ -125,14 +138,23 @@ describe("foundation", () => {
             for ( const step of PALETTE_STEPS ) {
                 for ( const theme of themes ) {
                     const projections = semanticContexts[group]![`${step}`]!;
-                    const background = refHex(projections["background"]!.value[theme]);
+                    const background = refHex(( projections["background"] as ThemePair ).value[theme]);
 
-                    for ( const projection of [ "text", "icon", "border", ] as const ) {
-                        const foreground = refHex(projections[projection]!.value[theme]);
-                        const ratio = contrastRatio(foreground, background);
+                    const checked: [ string, ThemePair, number, ][] = [
+                        [ "text", projections["text"] as ThemePair, 4.5, ],
+                        [ "icon", projections["icon"] as ThemePair, 3, ],
+                        [
+                            "border.strong",
+                            ( projections["border"] as Record<string, ThemePair> )["strong"]!,
+                            3,
+                        ],
+                    ];
+
+                    for ( const [ projection, pair, threshold, ] of checked ) {
+                        const ratio = contrastRatio(refHex(pair.value[theme]), background);
                         const key = `${group}.${step}.${projection}.${theme}`;
 
-                        if ( ratio + 0.001 < contrastThreshold(projection) ) {
+                        if ( ratio + 0.001 < threshold ) {
                             seenFailures.add(key);
 
                             if ( CONTRAST_EXCEPTIONS[key] === undefined ) {
@@ -152,20 +174,27 @@ describe("foundation", () => {
         }
     });
 
-    test("divider is always quieter than border on the same background", () => {
+    test("divider is quieter than border.subtle, which is quieter than border.strong", () => {
         const failures: string[] = [];
 
         for ( const group of SEMANTIC_GROUPS ) {
             for ( const step of PALETTE_STEPS ) {
                 for ( const theme of themes ) {
                     const projections = semanticContexts[group]![`${step}`]!;
-                    const background = refHex(projections["background"]!.value[theme]);
-                    const border = contrastRatio(refHex(projections["border"]!.value[theme]), background);
-                    const divider = contrastRatio(refHex(projections["divider"]!.value[theme]), background);
+                    const background = refHex(( projections["background"] as ThemePair ).value[theme]);
+                    const border = projections["border"] as Record<string, ThemePair>;
+                    const divider = contrastRatio(
+                        refHex(( projections["divider"] as ThemePair ).value[theme]),
+                        background,
+                    );
+                    const subtle = contrastRatio(refHex(border["subtle"]!.value[theme]), background);
+                    const strong = contrastRatio(refHex(border["strong"]!.value[theme]), background);
 
-                    if ( divider >= border ) {
+                    if ( !( divider < subtle && subtle < strong ) ) {
                         failures.push(
-                            `${group}.${step}.${theme} -> divider ${divider.toFixed(2)} >= border ${border.toFixed(2)}`,
+                            `${group}.${step}.${theme} -> divider ${divider.toFixed(2)}, subtle ${
+                                subtle.toFixed(2)
+                            }, strong ${strong.toFixed(2)}`,
                         );
                     }
                 }

@@ -16,7 +16,7 @@ import {
 
 type Theme = "light" | "dark";
 type ThemePair = { value: { _light: string; _dark: string; }; };
-type SemanticContexts = Record<string, Record<string, Record<string, ThemePair>>>;
+type SemanticContexts = Record<string, Record<string, Record<string, ThemePair | Record<string, ThemePair>>>>;
 
 const semanticContexts = ( semanticColors as unknown as { semantic: SemanticContexts; } ).semantic;
 
@@ -138,11 +138,11 @@ const CanonicalRow = (
 ) => {
     const projections = semanticContexts[group]![`${step}`]!;
     const key = themeKey(theme);
-    const background = refHex(projections["background"]!.value[key]);
-    const text = refHex(projections["text"]!.value[key]);
-    const icon = refHex(projections["icon"]!.value[key]);
-    const border = refHex(projections["border"]!.value[key]);
-    const divider = refHex(projections["divider"]!.value[key]);
+    const background = refHex(( projections["background"] as ThemePair ).value[key]);
+    const text = refHex(( projections["text"] as ThemePair ).value[key]);
+    const icon = refHex(( projections["icon"] as ThemePair ).value[key]);
+    const border = refHex(( projections["border"] as Record<string, ThemePair> )["strong"]!.value[key]);
+    const divider = refHex(( projections["divider"] as ThemePair ).value[key]);
 
     return (
         <div className={semanticRow}>
@@ -176,8 +176,10 @@ const DiagnosticMatrix = ({ group, theme, }: { group: string; theme: Theme; }) =
             >
                 {PALETTE_STEPS.map((textStep) =>
                     PALETTE_STEPS.map((backgroundStep) => {
-                        const text = refHex(steps[`${textStep}`]!["text"]!.value[key]);
-                        const background = refHex(steps[`${backgroundStep}`]!["background"]!.value[key]);
+                        const text = refHex(( steps[`${textStep}`]!["text"] as ThemePair ).value[key]);
+                        const background = refHex(
+                            ( steps[`${backgroundStep}`]!["background"] as ThemePair ).value[key],
+                        );
                         const ratio = contrastRatio(text, background);
 
                         return (
@@ -208,8 +210,8 @@ const SemanticSection = ({ theme, }: { theme: Theme; }) => (
     <div className={block}>
         <h2 className={title}>Semantic contexts</h2>
         <span className={subtitle}>
-            Canonical same-step sets. Ratios: text, icon, border, divider vs background. Divider stays quieter than
-            border. Solid swatches for icon, border and divider.
+            Canonical same-step sets. Ratios: text, icon, border.strong, divider vs background. Divider stays quieter
+            than border.subtle, which is quieter than border.strong. Solid swatches for icon, border.strong and divider.
         </span>
         {SEMANTIC_GROUPS.map((group) => (
             <div key={group} className={semanticTable}>

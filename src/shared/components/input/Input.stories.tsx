@@ -130,11 +130,11 @@ const assertThemeControl = async (
 export const Light: Story = {
     args: reference,
     render: renderIn("light"),
-    play: async (context) => assertThemeControl(context, "rgb(255, 255, 255)"),
+    play: async (context) => assertThemeControl(context, "rgb(248, 250, 252)"),
 };
 
 export const Dark: Story = {
     args: reference,
     render: renderIn("dark"),
-    play: async (context) => assertThemeControl(context, "rgb(0, 0, 0)"),
+    play: async (context) => assertThemeControl(context, "rgb(2, 6, 23)"),
 };

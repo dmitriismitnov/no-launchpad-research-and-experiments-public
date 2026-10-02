@@ -20,3 +20,19 @@
   53 contrast-провала и 22 нарушения `divider < border`. Значит палитру и
   семантическую матрицу переносим одним атомарным изменением.
 - Изменение палитры откатано, дерево оставлено зелёным; перенос — следующий шаг.
+
+## 2026-10-02 — T0: палитра Pen + semantic-матрица перенесены
+
+- Написан генератор `tools/port-foundation.ts`: читает `ex_2.pen` (обычный JSON)
+  и генерирует `palette.ts` (+ `base` white/black) и `semantic.ts` с nested
+  `border.subtle` / `border.strong`.
+- Палитра заменена на Pen-значения (Tailwind-подобные); `neutral.50=#F8FAFC`,
+  `neutral.950=#020617`, добавлены `base` white/black.
+- Semantic-проекции: `background, text, icon, border, divider`, где `border`
+  разбит на `subtle` и `strong`.
+- Тесты обновлены: матрица, контраст (`text ≥4.5`, `icon ≥3`, `border.strong ≥3`),
+  иерархия `divider < border.subtle < border.strong`. Все проходят.
+- Story `Colors` обновлена под nested border; хардкод-цвета в `Input`/`Card`
+  story-тестах обновлены под новую палитру.
+- Проверки: `mise run gen`, `mise run check` (189 unit / 41 browser),
+  `mise run check:deps` — зелёные.

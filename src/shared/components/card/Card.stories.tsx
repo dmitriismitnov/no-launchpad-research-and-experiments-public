@@ -339,9 +339,9 @@ export const Light: Story = {
             throw new Error("Light Card story must render its surface and text slots");
         }
 
-        await expect(getComputedStyle(article).backgroundColor).toBe("rgb(255, 255, 255)");
-        await expect(getComputedStyle(title).color).toBe("rgb(0, 0, 0)");
-        await expect(getComputedStyle(description).color).toBe("rgb(83, 89, 99)");
+        await expect(getComputedStyle(article).backgroundColor).toBe("rgb(248, 250, 252)");
+        await expect(getComputedStyle(title).color).toBe("rgb(15, 23, 42)");
+        await expect(getComputedStyle(description).color).toBe("rgb(71, 85, 105)");
     },
 };
 
@@ -357,8 +357,8 @@ export const Dark: Story = {
             throw new Error("Dark Card story must render its surface and text slots");
         }
 
-        await expect(getComputedStyle(article).backgroundColor).toBe("rgb(0, 0, 0)");
-        await expect(getComputedStyle(title).color).toBe("rgb(255, 255, 255)");
-        await expect(getComputedStyle(description).color).toBe("rgb(136, 143, 152)");
+        await expect(getComputedStyle(article).backgroundColor).toBe("rgb(2, 6, 23)");
+        await expect(getComputedStyle(title).color).toBe("rgb(248, 250, 252)");
+        await expect(getComputedStyle(description).color).toBe("rgb(148, 163, 184)");
     },
 };
