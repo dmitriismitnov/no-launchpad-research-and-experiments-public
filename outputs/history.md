@@ -4,6 +4,12 @@ Operating journal of all work products. `wiki/log.md` tracks wiki changes only.
 
 ## Latest experiment
 
+[[experiments/design-system-to-code/README]] — **active** (2026-10-02).
+Перенос дизайн-системы из Pen в код: выравнивание foundation (boundary-модель
+`border.subtle` + `border.strong`), компоненты, нужные лендингу, и сам экран
+лендинга (light/dark, desktop/tablet/mobile) как проверка. Поведение и dashboard
+вне рамок. Детали — [[experiments/design-system-to-code/README]].
+
 [[experiments/pencil-opencode-workflow/README]] — **completed** (2026-10-02).
 Эксперимент проверяет workflow, а не реализацию продукта: способен ли
 project-local OpenCode skill организовать Pencil MCP работу с существующей
