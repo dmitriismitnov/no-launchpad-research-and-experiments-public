@@ -46,12 +46,14 @@ export const ButtonIcon = ({
 };
 
 /**
- * ButtonIcon-owned pairing between a button size and the icon size it renders.
- * Not exported.
+ * ButtonIcon-owned pairing between a button size and the structural Icon size
+ * it renders. Not exported.
  *
  * Icon and ButtonIcon size names are independent; the pairing is set by the
- * button slot geometry, not by matching `sm` to `sm`. Both slots are currently
- * `x8`, so both sizes pair with Icon `sm`.
+ * button slot geometry, not by matching `sm` to `sm`. Both button sizes pass
+ * Icon `sm` as the structural input: the `sm` square keeps that `x8` (16px)
+ * glyph, while the `md` recipe overrides the paired slot to `x9` (18px), so the
+ * effective glyph grows without changing the Icon input.
  */
 const ICON_SIZE_BY_BUTTON_ICON_SIZE: Record<ButtonIconSize, IconSize> = {
     sm: "sm",

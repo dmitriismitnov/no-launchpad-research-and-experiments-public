@@ -94,6 +94,28 @@ const tabletUp = css({ display: { base: "none", md: "flex", }, alignItems: "cent
 const belowDesktop = css({ display: { base: "flex", lg: "none", }, alignItems: "center", });
 
 // ---------------------------------------------------------------------------
+// Mobile menu
+// ---------------------------------------------------------------------------
+
+// Pen `12 Landing — mobile` (`T4klu9`) opens with the expanded menu `M2D0g`
+// directly below the header: five full-width entries, then a full-width
+// primary action and a status badge. It is a static composition, not a
+// disclosure: the trigger stays decorative and the panel has no state.
+const mobileMenu = css({
+    display: { base: "grid", md: "none", },
+    justifyItems: "stretch",
+    gap: "x3",
+    padding: "x8",
+    backgroundColor: "semantic.surface.raised",
+});
+
+const mobileMenuSpacer = css({ height: "x3", });
+
+// Keep the status badge at its intrinsic width instead of stretching with the
+// menu column.
+const mobileMenuStatus = css({ justifySelf: "start", });
+
+// ---------------------------------------------------------------------------
 // Hero
 // ---------------------------------------------------------------------------
 
@@ -268,6 +290,10 @@ const featureGrid = {
     alignItems: "center",
     paddingBlock: { base: "x12", xl: "x16", },
 };
+
+// Pen `10 Landing — desktop` (`DsHK8`) keeps the feature section header
+// (`vaCHO`); the tablet and mobile frames drop it while keeping every feature.
+const featuresHeaderSlot = css({ display: { base: "none", xl: "block", }, });
 
 const feature = css({
     ...featureGrid,
@@ -520,6 +546,10 @@ const socialRow = css({ display: "flex", alignItems: "center", gap: "x6", });
 
 const headerLinks = [ "Product", "Components", "Tokens", "Pricing", ] as const;
 
+// Pen mobile menu order (`M2D0g`): Overview, Foundations, Components, States,
+// Pricing, then the primary action and the status badge.
+const mobileMenuLinks = [ "Overview", "Foundations", "Components", "States", "Pricing", ] as const;
+
 const valueItems = [
     {
         icon: "layout-grid",
@@ -677,6 +707,17 @@ const Header = () => (
             </>
         }
     />
+);
+
+const MobileMenu = () => (
+    <nav data-testid="landing-mobile-menu" aria-label="Mobile" className={mobileMenu}>
+        {mobileMenuLinks.map((label) => <NavItem key={label} label={label} href="#" />)}
+        <div aria-hidden="true" className={mobileMenuSpacer} />
+        <Button>Get the tokens</Button>
+        <span className={mobileMenuStatus}>
+            <Badge label="expanded mobile menu" />
+        </span>
+    </nav>
 );
 
 const ProductPreview = () => (
@@ -901,11 +942,13 @@ const FeatureSection = ({ feature: item, }: { feature: Feature; }) => (
 const Features = () => (
     <section data-testid="landing-features">
         <div className={container}>
-            <div className={sectionHead}>
-                <h2 className={sectionTitle}>Everything a design system needs, in one canvas</h2>
-                <p className={sectionLead}>
-                    Foundation, components and states — organised, themed and ready to compose.
-                </p>
+            <div data-testid="landing-features-header" className={featuresHeaderSlot}>
+                <div className={sectionHead}>
+                    <h2 className={sectionTitle}>Everything a design system needs, in one canvas</h2>
+                    <p className={sectionLead}>
+                        Foundation, components and states — organised, themed and ready to compose.
+                    </p>
+                </div>
             </div>
             {features.map((item) => <FeatureSection key={item.id} feature={item} />)}
         </div>
@@ -1039,6 +1082,7 @@ const Footer = () => (
 export const Landing = (): ReactNode => (
     <div className={shell}>
         <Header />
+        <MobileMenu />
         <main>
             <Hero />
             <ValueStrip />

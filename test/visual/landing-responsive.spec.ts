@@ -14,6 +14,10 @@ type Viewport = {
     copiesBesideVisual: boolean;
     sidebar: boolean;
     themes: Theme[];
+    /** Mobile frame `T4klu9` opens with the expanded menu under the header. */
+    mobileMenu: boolean;
+    /** Desktop frame `DsHK8` keeps the feature section header (`vaCHO`). */
+    featuresHeader: boolean;
 };
 
 // Pen frames: 10 Landing — desktop (DsHK8) 1440, 11 Landing — tablet (XiPDu)
@@ -30,6 +34,8 @@ const viewports: Viewport[] = [
         copiesBesideVisual: true,
         sidebar: true,
         themes: [ "light", "dark", ],
+        mobileMenu: false,
+        featuresHeader: true,
     },
     {
         name: "tablet",
@@ -42,6 +48,8 @@ const viewports: Viewport[] = [
         copiesBesideVisual: false,
         sidebar: true,
         themes: [ "light", "dark", ],
+        mobileMenu: false,
+        featuresHeader: false,
     },
     {
         name: "mobile",
@@ -54,17 +62,21 @@ const viewports: Viewport[] = [
         copiesBesideVisual: false,
         sidebar: false,
         themes: [ "light", "dark", ],
+        mobileMenu: true,
+        featuresHeader: false,
     },
 ];
 
-// Section order from the Pen frames. `header` and `footer` bracket the page;
-// the feature sections keep the desktop/tablet/mobile order.
-const sectionOrder = [
+// Visible Pen anatomy per frame. The desktop frame keeps the feature section
+// header (`vaCHO`); tablet and mobile drop it. The mobile frame inserts the
+// expanded menu directly below the header. The product preview stays nested in
+// the hero, so it is not part of the top-level anatomy list.
+const anatomyFor = (viewport: Viewport): string[] => [
     "landing-header",
+    ...( viewport.mobileMenu ? [ "landing-mobile-menu", ] : [] ),
     "landing-hero",
-    "landing-product-preview",
     "landing-value-strip",
-    "landing-features",
+    ...( viewport.featuresHeader ? [ "landing-features-header", ] : [] ),
     "landing-feature-tokens",
     "landing-feature-components",
     "landing-feature-states",
@@ -75,6 +87,11 @@ const sectionOrder = [
 ];
 
 const featureIds = [ "landing-feature-tokens", "landing-feature-components", "landing-feature-states", ] as const;
+
+// Pen mobile menu `M2D0g`, top to bottom.
+const menuLabels = [ "Overview", "Foundations", "Components", "States", "Pricing", ] as const;
+
+const expandedMenuStatus = "expanded mobile menu";
 
 const countTracks = (locator: Locator): Promise<number> =>
     locator.evaluate((element) =>
@@ -91,6 +108,14 @@ const rect = (locator: Locator): Promise<{ x: number; y: number; width: number; 
         return { x: box.x, y: box.y, width: box.width, height: box.height, };
     });
 
+const visibleTestIds = (locator: Locator): Promise<string[]> =>
+    locator.evaluateAll((nodes) =>
+        nodes
+            .filter((node) => node.getClientRects().length > 0)
+            .map((node) => node.getAttribute("data-testid"))
+            .filter((id): id is string => id !== null)
+    );
+
 const themedRoot = (page: Page, theme: Theme): Locator => page.locator(`section[data-theme="${theme}"]`);
 
 for ( const viewport of viewports ) {
@@ -100,20 +125,48 @@ for ( const viewport of viewports ) {
             await page.goto("/");
 
             const root = themedRoot(page, theme);
+            const anatomy = anatomyFor(viewport);
+            const anatomySet = new Set(anatomy);
 
-            // Every section from the Pen frame is present.
-            for ( const id of sectionOrder ) {
+            // Every section from the Pen frame is present and visible.
+            for ( const id of anatomy ) {
                 await expect(root.getByTestId(id)).toBeVisible();
             }
 
-            // The sections keep the Pen order, including the feature sections.
-            const sectionIdSet = new Set(sectionOrder);
-            const renderedOrder = ( await root.locator("[data-testid]").evaluateAll((nodes) =>
-                nodes.map((node) =>
-                    node.getAttribute("data-testid")
-                )
-            ) ).filter((id) => id !== null && sectionIdSet.has(id));
-            expect(renderedOrder).toEqual(sectionOrder);
+            // Only the visible Pen anatomy renders, and it keeps the Pen order.
+            const renderedOrder = ( await visibleTestIds(root.locator("[data-testid]")) )
+                .filter((id) => anatomySet.has(id));
+            expect(renderedOrder).toEqual(anatomy);
+
+            // The feature section header is a desktop-only Pen section.
+            expect(await root.getByTestId("landing-features-header").isVisible()).toBe(viewport.featuresHeader);
+
+            // The expanded menu is a mobile-only Pen section.
+            expect(await root.getByTestId("landing-mobile-menu").isVisible()).toBe(viewport.mobileMenu);
+
+            // The feature sections keep the Pen order at every viewport.
+            const featureOrder = ( await visibleTestIds(root.locator("[data-testid]")) )
+                .filter((id) => ( featureIds as readonly string[] ).includes(id));
+            expect(featureOrder).toEqual([ ...featureIds, ]);
+
+            if ( viewport.mobileMenu ) {
+                const menu = root.getByTestId("landing-mobile-menu");
+
+                // Pen order: Overview, Foundations, Components, States, Pricing.
+                await expect(menu.getByRole("link")).toHaveText([ ...menuLabels, ]);
+
+                // Pen's primary action spans the full menu column.
+                const cta = menu.getByRole("button", { name: "Get the tokens", });
+                await expect(cta).toBeVisible();
+
+                const itemBox = await rect(menu.getByRole("link").first());
+                const ctaBox = await rect(cta);
+
+                expect(Math.abs(ctaBox.width - itemBox.width)).toBeLessThanOrEqual(1);
+                expect(ctaBox.width).toBeGreaterThan(0);
+
+                await expect(menu.getByText(expandedMenuStatus)).toBeVisible();
+            }
 
             // Pen H1: 56 / 40 / 32.
             expect(await fontSize(root.getByTestId("landing-hero").getByRole("heading", { level: 1, }))).toBe(

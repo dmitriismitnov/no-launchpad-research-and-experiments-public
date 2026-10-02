@@ -30,13 +30,20 @@ describe("buttonIcon composition", () => {
         expect(markup).not.toContain(`role="img"`);
     });
 
-    test("pairs each button size with an explicit icon size", () => {
+    test("pairs both sizes with a structural Icon sm and overrides the effective md slot", () => {
         const small = renderToStaticMarkup(<ButtonIcon size="sm" icon="check" label="Save" />);
         const medium = renderToStaticMarkup(<ButtonIcon size="md" icon="check" label="Save" />);
 
-        // Both square sizes keep the x8 slot, so both pair with Icon sm.
+        // Structural input: both sizes render the same Icon recipe size.
         expect(small).toContain("icon--size_sm");
         expect(medium).toContain("icon--size_sm");
+
+        // Effective override: the buttonIcon recipe raises the md icon slot to
+        // x9 (18px) while sm keeps the base x8 (16px). The runtime geometry is
+        // asserted in the `Sizes` story.
+        expect(small).toContain("buttonIcon__icon--size_sm");
+        expect(medium).toContain("buttonIcon__icon--size_md");
+        expect(small).not.toContain("buttonIcon__icon--size_md");
     });
 
     test("passes native button attributes through", () => {
