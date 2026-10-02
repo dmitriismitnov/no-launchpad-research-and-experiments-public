@@ -4,34 +4,51 @@
 
 Statuses: `planned`, `active`, `blocked`, `verified`.
 
+## Verified
+
+- [x] Open durable experiment state and registry entry — `verified`
+  - `README.md`, `roadmap.md`, `todo.md`, `log.md`, `history.md`, `notes/design-brief.md`, `notes/benchmark-protocol.md`.
+- [x] Create project-local skill `pencil-design-experiment` — `verified`
+  - `.opencode/skills/pencil-design-experiment/` with references and templates.
+- [x] Code-system inventory — `verified`
+  - `notes/code-system-inventory.md`: 5 components, token ownership, theme, 17 icons, code↔Pen divergence.
+- [x] Pen baseline in an isolated document — `verified`
+  - `notes/pen-baseline.md`: 82 masters, 1720 refs, 0 `ctx.problems`.
+- [x] Compose Create Project entry / empty / filled / success — `verified`
+  - `artifacts/ex_2.pen`, frames `XKqHF`, `iKbNI`, `WqoYt`, `negSS`.
+- [x] Compose dark variant — `verified`
+  - frame `R1Yg8`.
+- [x] Structural/contrast audit — `verified`
+  - `notes/structural-audit.md`: layout without overlap; refs/tokens/theme pass.
+- [x] Visual review — `verified`
+  - `notes/visual-review.md`: not AI slop; still needs human confirmation.
+
 ## Active
 
-- [x] **Inventory source contracts and create isolated Pen copy** — `verified`
-  - Read code-side contracts (`src/shared/components/`, `src/shared/styles/foundation/`,
-    `src/shared/components/icon/`, `.agents/project.md`) and the design brief.
-  - Copy the source Pen document to `artifacts/create-project.pen` without mutation.
-  - Record component/token/icon inventory and the raw Pen baseline as evidence.
-  - Verifies against: `notes/code-system-inventory.md`, `notes/pen-baseline.md`.
+- [ ] Human review of renders (`artifacts/render/*.png`) and `HUMAN REVIEW` items — `active`
+- [ ] Write the retrospective and update the skill from logged evidence — `active`
+
+## Blocked
+
+- [ ] Explicit inline validation copy — `blocked`
+  - A `ref` cannot set the `Field` `invalid` variant, so error text stays hidden; empty state uses empty fields + dimmed primary action.
 
 ## Planned
 
-- [x] Confirm Gate A: isolated artifact exists, brief and acceptance criteria
-  approved, contracts and baseline recorded. — `verified`
-- [ ] Freeze the atomic Create Project composition plan.
-- [ ] Confirm Gate B for the first allowed experiment frame and target sizes.
-- [ ] Compose Projects entry with the Create Project trigger. `planned`
-- [ ] Compose the invalid form with all four fields and required validation. `planned`
-- [x] Compose the filled form (Name/Description/Owner/Due date) light + dark. `verified`
-- [x] Compose the empty/invalid form. `verified`
-- [x] Compose Projects entry with Create Project trigger. `verified`
-- [x] Compose success state with created project. `verified`
-- [ ] Tablet/mobile variants. `planned`
-- [ ] Explicit inline validation copy. `blocked` (ref cannot set Field invalid variant)
-- [ ] Compose the filled form with owner/due-date selection, primary submit and
-  secondary cancel.
-- [ ] Compose the success state with the created project in Projects.
-- [ ] Perform the mechanical structural/contrast/code-alignment audit (Gate C).
-- [ ] Perform the visual review against the quality rubric.
-- [ ] Execute the mandatory new-session handoff/compaction test.
-- [ ] Present Gate D and obtain the user visual decision.
-- [ ] Write the retrospective and update the skill from logged observations.
+- [ ] Tablet and mobile variants — `planned`
+- [ ] New-session handoff/compaction test with a real resume — `planned`
+
+## Closed
+
+- [x] Isolation-breach incident recorded and cleaned — `verified`
+  - See `notes/structural-audit.md` and `log.md` entry 14.
+
+## Plan mapping
+
+| Plan task | State |
+| --- | --- |
+| Task 1 — durable state | done |
+| Task 2 — project-local skill | done |
+| Task 3 — inventory + baseline | done |
+| Task 4 — compose + verify flow | partial (5 screens; handoff test and responsive open) |
+| Task 5 — human review + retrospective | active (awaiting user) |
