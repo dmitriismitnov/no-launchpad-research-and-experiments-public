@@ -18,7 +18,9 @@ import { contextMenuPreset, } from "../components/context-menu/preset";
 import { dataTablePreset, } from "../components/data-table/preset";
 import { dialogPreset, } from "../components/dialog/preset";
 import { dividerPreset, } from "../components/divider/preset";
+import { drawerPreset, } from "../components/drawer/preset";
 import { emptyStatePreset, } from "../components/empty-state/preset";
+import { floatingPanelPreset, } from "../components/floating-panel/preset";
 import { hoverCardPreset, } from "../components/hover-card/preset";
 import { iconPreset, } from "../components/icon/preset";
 import { inputPreset, } from "../components/input/preset";
@@ -33,6 +35,7 @@ import { progressRingPreset, } from "../components/progress-ring/preset";
 import { progressPreset, } from "../components/progress/preset";
 import { qrCodePreset, } from "../components/qr-code/preset";
 import { scrollAreaPreset, } from "../components/scroll-area/preset";
+import { sheetPreset, } from "../components/sheet/preset";
 import { sidebarItemPreset, } from "../components/sidebar-item/preset";
 import { skeletonPreset, } from "../components/skeleton/preset";
 import { spinnerPreset, } from "../components/spinner/preset";
@@ -46,6 +49,7 @@ import { timelinePreset, } from "../components/timeline/preset";
 import { toastPreset, } from "../components/toast/preset";
 import { tooltipPreset, } from "../components/tooltip/preset";
 import { topNavigationPreset, } from "../components/top-navigation/preset";
+import { tourPreset, } from "../components/tour/preset";
 import { treeItemPreset, } from "../components/tree-item/preset";
 import { foundationPreset, } from "./foundation";
 import { preflight, settingsPreset, } from "./settings";
@@ -68,7 +72,9 @@ export {
     dataTablePreset,
     dialogPreset,
     dividerPreset,
+    drawerPreset,
     emptyStatePreset,
+    floatingPanelPreset,
     foundationPreset,
     hoverCardPreset,
     iconPreset,
@@ -86,6 +92,7 @@ export {
     qrCodePreset,
     scrollAreaPreset,
     settingsPreset,
+    sheetPreset,
     sidebarItemPreset,
     skeletonPreset,
     spinnerPreset,
@@ -99,6 +106,7 @@ export {
     toastPreset,
     tooltipPreset,
     topNavigationPreset,
+    tourPreset,
     treeItemPreset,
 };
 
@@ -157,6 +165,10 @@ export const componentPresetSources: readonly Preset[] = [
     hoverCardPreset,
     dialogPreset,
     alertDialogPreset,
+    drawerPreset,
+    sheetPreset,
+    floatingPanelPreset,
+    tourPreset,
 ];
 
 export const collectComponentDictionaries = (

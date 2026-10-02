@@ -20,7 +20,9 @@ import { contextMenuRecipe, } from "../components/context-menu/preset";
 import { dataTableRecipe, } from "../components/data-table/preset";
 import { dialogRecipe, } from "../components/dialog/preset";
 import { dividerRecipe, } from "../components/divider/preset";
+import { drawerRecipe, } from "../components/drawer/preset";
 import { emptyStateRecipe, } from "../components/empty-state/preset";
+import { floatingPanelRecipe, } from "../components/floating-panel/preset";
 import { hoverCardRecipe, } from "../components/hover-card/preset";
 import { iconRecipe, } from "../components/icon/preset";
 import { inputRecipe, } from "../components/input/preset";
@@ -35,6 +37,7 @@ import { progressRingRecipe, } from "../components/progress-ring/preset";
 import { progressRecipe, } from "../components/progress/preset";
 import { qrCodeRecipe, } from "../components/qr-code/preset";
 import { scrollAreaRecipe, } from "../components/scroll-area/preset";
+import { sheetRecipe, } from "../components/sheet/preset";
 import { sidebarItemRecipe, } from "../components/sidebar-item/preset";
 import { skeletonRecipe, } from "../components/skeleton/preset";
 import { spinnerRecipe, } from "../components/spinner/preset";
@@ -48,6 +51,7 @@ import { timelineRecipe, } from "../components/timeline/preset";
 import { toastRecipe, } from "../components/toast/preset";
 import { tooltipRecipe, } from "../components/tooltip/preset";
 import { topNavigationRecipe, } from "../components/top-navigation/preset";
+import { tourRecipe, } from "../components/tour/preset";
 import { treeItemRecipe, } from "../components/tree-item/preset";
 import { foundationPreset, } from "./foundation";
 import { collectComponentDictionaries, componentPresetSources, presets, settingsPreset, } from "./index";
@@ -116,6 +120,10 @@ describe("preset composition", () => {
             "hoverCard",
             "dialog",
             "alertDialog",
+            "drawer",
+            "sheet",
+            "floatingPanel",
+            "tour",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
@@ -168,6 +176,10 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["hoverCard"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["dialog"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["alertDialog"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["drawer"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["sheet"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["floatingPanel"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["tour"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
@@ -217,6 +229,10 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["hoverCard"]).toEqual(hoverCardRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["dialog"]).toEqual(dialogRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["alertDialog"]).toEqual(alertDialogRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["drawer"]).toEqual(drawerRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["sheet"]).toEqual(sheetRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["floatingPanel"]).toEqual(floatingPanelRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["tour"]).toEqual(tourRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
@@ -289,8 +305,16 @@ describe("preset composition", () => {
             "hoverCard",
             "dialog",
             "alertDialog",
+            "drawer",
+            "sheet",
+            "floatingPanel",
+            "tour",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "tour",
+            "floatingPanel",
+            "sheet",
+            "drawer",
             "alertDialog",
             "dialog",
             "hoverCard",

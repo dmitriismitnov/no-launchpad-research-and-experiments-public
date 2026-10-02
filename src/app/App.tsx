@@ -14,7 +14,9 @@ import { ContextMenu, } from "@shared/components/context-menu";
 import { DataTable, } from "@shared/components/data-table";
 import { Dialog, } from "@shared/components/dialog";
 import { Divider, } from "@shared/components/divider";
+import { Drawer, } from "@shared/components/drawer";
 import { EmptyState, } from "@shared/components/empty-state";
+import { FloatingPanel, } from "@shared/components/floating-panel";
 import { HoverCard, } from "@shared/components/hover-card";
 import { Link, } from "@shared/components/link";
 import { List, } from "@shared/components/list";
@@ -27,6 +29,7 @@ import { Progress, } from "@shared/components/progress";
 import { ProgressRing, } from "@shared/components/progress-ring";
 import { QrCode, } from "@shared/components/qr-code";
 import { ScrollArea, } from "@shared/components/scroll-area";
+import { Sheet, } from "@shared/components/sheet";
 import { SidebarItem, } from "@shared/components/sidebar-item";
 import { Skeleton, } from "@shared/components/skeleton";
 import { Spinner, } from "@shared/components/spinner";
@@ -40,6 +43,7 @@ import { Timeline, } from "@shared/components/timeline";
 import { Toast, } from "@shared/components/toast";
 import { Tooltip, } from "@shared/components/tooltip";
 import { TopNavigation, } from "@shared/components/top-navigation";
+import { Tour, } from "@shared/components/tour";
 import { TreeItem, } from "@shared/components/tree-item";
 import { css, cx, } from "@shared/styled-system/css";
 
@@ -394,6 +398,38 @@ export const App = () => (
                 trigger="Delete component"
                 confirmLabel="Delete"
                 destructive
+            />
+            <Drawer
+                title="Filter components"
+                description="Narrow the list by status, owner or release."
+                side="right"
+                trigger="Open drawer"
+                actions={
+                    <>
+                        <Button tone="secondary">Cancel</Button>
+                        <Button>Apply</Button>
+                    </>
+                }
+            />
+            <Sheet
+                title="Share project"
+                description="Anyone with the link can view this project."
+                handle
+                side="bottom"
+                trigger="Open sheet"
+                actions={<Button>Copy link</Button>}
+            />
+            <FloatingPanel title="Canvas controls" collapsible trigger="Open panel">
+                <p className={scrollLineStyle}>Snap to grid and show rulers.</p>
+            </FloatingPanel>
+            <Tour
+                label="Product tour"
+                trigger="Start tour"
+                steps={[
+                    { title: "Welcome to No Launchpad", body: "This short tour covers the essentials.", },
+                    { title: "Compose from tokens", body: "Every component reads foundation variables.", },
+                    { title: "Publish with confidence", body: "The same tokens drive light and dark.", },
+                ]}
             />
         </div>
         <InterSpecimen />

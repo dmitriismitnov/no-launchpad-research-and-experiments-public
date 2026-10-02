@@ -87,6 +87,27 @@ export default defineConfig({
                     destructive: [ "true", ],
                 },
             ],
+            drawer: [
+                {
+                    side: [ "left", "right", ],
+                },
+            ],
+            sheet: [
+                {
+                    side: [ "top", "right", "bottom", "left", ],
+                },
+            ],
+            floatingPanel: [
+                {
+                    placement: [ "top-left", "top-right", "bottom-left", "bottom-right", ],
+                },
+            ],
+            tour: [
+                {
+                    placement: [ "top", "right", "bottom", "left", ],
+                    current: [ "true", ],
+                },
+            ],
         },
     },
     presets,
