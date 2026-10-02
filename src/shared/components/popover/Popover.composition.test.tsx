@@ -58,6 +58,38 @@ describe("popover composition", () => {
         expect(markup).toContain("popover__content");
     });
 
+    test("falls back to an accessible name when no title or label is given", () => {
+        const markup = renderToStaticMarkup(
+            <Popover trigger="Open" defaultOpen>
+                Body
+            </Popover>,
+        );
+
+        expect(markup).toContain(`role="dialog"`);
+        expect(markup).toContain(`aria-label="Popover"`);
+    });
+
+    test("prefers the explicit label over the fallback name", () => {
+        const markup = renderToStaticMarkup(
+            <Popover trigger="Open" label="Notifications" defaultOpen>
+                Body
+            </Popover>,
+        );
+
+        expect(markup).toContain(`aria-label="Notifications"`);
+    });
+
+    test("names the dialog from the title, not the label", () => {
+        const markup = renderToStaticMarkup(
+            <Popover trigger="Open" title="Notifications" label="Fallback" defaultOpen>
+                Body
+            </Popover>,
+        );
+
+        expect(markup).toContain(`aria-labelledby`);
+        expect(markup).not.toContain(`aria-label="Fallback"`);
+    });
+
     test("labels the trigger with its expanded state", () => {
         const markup = renderToStaticMarkup(
             <Popover trigger="Open" defaultOpen aria-label="Notifications">

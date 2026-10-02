@@ -136,3 +136,68 @@ export const Hover: Story = {
         await expect(canvas.getByText("Ada Rivera")).toBeTruthy();
     },
 };
+
+// Consumer pointer and focus handlers compose with the internal open/close
+// boundary instead of being overwritten.
+const HandlersProbe = () => {
+    const [ counts, setCounts, ] = useState({ enter: 0, leave: 0, focus: 0, blur: 0, });
+    const bump = (key: keyof typeof counts) => setCounts((previous) => ( { ...previous, [key]: previous[key] + 1, } ));
+
+    return (
+        <div className={shell}>
+            <HoverCard
+                name="Ada Rivera"
+                role="Design Systems Lead"
+                bio="Maintains the foundation layer and reviews component proposals."
+                onPointerEnter={() => bump("enter")}
+                onPointerLeave={() => bump("leave")}
+                onFocus={() => bump("focus")}
+                onBlur={() => bump("blur")}
+            >
+                @adarivera
+            </HoverCard>
+            <span data-testid="enter-count">{counts.enter}</span>
+            <span data-testid="leave-count">{counts.leave}</span>
+            <span data-testid="focus-count">{counts.focus}</span>
+            <span data-testid="blur-count">{counts.blur}</span>
+        </div>
+    );
+};
+
+export const ComposedHandlers: Story = {
+    render: () => <HandlersProbe />,
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByText("@adarivera");
+
+        await fireEvent.pointerOver(trigger);
+        await expect(canvas.getByTestId("enter-count")).toHaveTextContent("1");
+        await expect(canvas.getByRole("dialog")).toBeTruthy();
+
+        await fireEvent.pointerOut(trigger);
+        await expect(canvas.getByTestId("leave-count")).toHaveTextContent("1");
+        await expect(canvas.queryByRole("dialog")).toBeNull();
+
+        await fireEvent.focusIn(trigger);
+        await expect(canvas.getByTestId("focus-count")).toHaveTextContent("1");
+        await expect(canvas.getByRole("dialog")).toBeTruthy();
+
+        await fireEvent.focusOut(trigger);
+        await expect(canvas.getByTestId("blur-count")).toHaveTextContent("1");
+        await expect(canvas.queryByRole("dialog")).toBeNull();
+    },
+};
+
+// Escape hides the open preview.
+export const EscapeClose: Story = {
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByText("@adarivera");
+
+        await fireEvent.pointerOver(trigger);
+        await expect(canvas.getByRole("dialog")).toBeTruthy();
+
+        await fireEvent.keyDown(trigger, { key: "Escape", });
+        await expect(canvas.queryByRole("dialog")).toBeNull();
+    },
+};

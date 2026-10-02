@@ -55,6 +55,10 @@ export const HoverCard = ({
     children,
     className,
     onKeyDown,
+    onPointerEnter: onPointerEnterProp,
+    onPointerLeave: onPointerLeaveProp,
+    onFocus: onFocusProp,
+    onBlur: onBlurProp,
     ...props
 }: HoverCardProps) => {
     const [ uncontrolledOpen, setUncontrolledOpen, ] = useState(defaultOpen);
@@ -91,22 +95,46 @@ export const HoverCard = ({
         return () => document.removeEventListener("pointerdown", handlePointerDown);
     }, [ isOpen, requestOpenChange, ]);
 
-    const handlePointerEnter = () => requestOpenChange(true);
+    const handlePointerEnter = (event: ReactPointerEvent<HTMLSpanElement>) => {
+        onPointerEnterProp?.(event);
+
+        if ( !event.defaultPrevented ) {
+            requestOpenChange(true);
+        }
+    };
 
     const handlePointerLeave = (event: ReactPointerEvent<HTMLSpanElement>) => {
-        const next = event.relatedTarget as Node | null;
+        onPointerLeaveProp?.(event);
 
-        if ( next === null || !event.currentTarget.contains(next) ) {
+        if ( event.defaultPrevented ) {
+            return;
+        }
+
+        const next = event.relatedTarget;
+
+        if ( !( next instanceof Node ) || !event.currentTarget.contains(next) ) {
             requestOpenChange(false);
         }
     };
 
-    const handleFocus = () => requestOpenChange(true);
+    const handleFocus = (event: FocusEvent<HTMLSpanElement>) => {
+        onFocusProp?.(event);
+
+        if ( !event.defaultPrevented ) {
+            requestOpenChange(true);
+        }
+    };
 
     const handleBlur = (event: FocusEvent<HTMLSpanElement>) => {
-        const next = event.relatedTarget as Node | null;
+        onBlurProp?.(event);
 
-        if ( next === null || !event.currentTarget.contains(next) ) {
+        if ( event.defaultPrevented ) {
+            return;
+        }
+
+        const next = event.relatedTarget;
+
+        if ( !( next instanceof Node ) || !event.currentTarget.contains(next) ) {
             requestOpenChange(false);
         }
     };

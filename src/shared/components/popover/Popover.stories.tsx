@@ -3,6 +3,7 @@ import type { Meta, StoryObj, } from "@storybook/react-vite";
 import { expect, fireEvent, within, } from "storybook/test";
 
 import { Button, } from "@shared/components/button";
+import { ButtonIcon, } from "@shared/components/button-icon";
 
 import { Popover, } from "./popover";
 
@@ -102,6 +103,39 @@ export const PreventedTrigger: Story = {
         const canvas = within(canvasElement);
 
         await fireEvent.click(canvas.getByRole("button", { name: "Blocked", }));
+        await expect(canvas.queryByRole("dialog")).toBeNull();
+    },
+};
+
+// A public ButtonIcon is composed the same way: one interactive node, named by
+// its own label, that opens the surface.
+export const ComposedIconTrigger: Story = {
+    render: () => (
+        <Popover trigger={<ButtonIcon icon="settings" label="Settings" />} title="Settings">
+            <p>Content</p>
+        </Popover>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByRole("button", { name: "Settings", });
+
+        await expect(canvas.queryByRole("dialog")).toBeNull();
+        await fireEvent.click(trigger);
+        await expect(canvas.getByRole("dialog")).toBeTruthy();
+        await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
+    },
+};
+
+// Escape closes the open surface.
+export const EscapeClose: Story = {
+    args: { defaultOpen: true, },
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(canvas.getByRole("dialog")).toBeTruthy();
+        await fireEvent.keyDown(canvas.getByRole("button", { name: "Open popover", }), {
+            key: "Escape",
+        });
         await expect(canvas.queryByRole("dialog")).toBeNull();
     },
 };

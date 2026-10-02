@@ -140,7 +140,7 @@ export const Popover = ({
             {isOpen && (
                 <div
                     role="dialog"
-                    aria-label={title === undefined ? label : undefined}
+                    aria-label={title === undefined ? ( hasText(label) ? label : "Popover" ) : undefined}
                     aria-labelledby={title !== undefined ? titleId : undefined}
                     aria-describedby={description !== undefined ? descriptionId : undefined}
                     className={styles.surface}
@@ -157,3 +157,8 @@ export const Popover = ({
         </div>
     );
 };
+
+/** An empty or whitespace string counts as absent; the dialog always stays named. */
+function hasText(value: string | undefined): boolean {
+    return value != null && value.trim() !== "";
+}
