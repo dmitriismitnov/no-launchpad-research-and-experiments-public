@@ -1,3 +1,4 @@
+import { Badge, } from "@shared/components/badge";
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
 import { css, cx, } from "@shared/styled-system/css";
@@ -106,6 +107,13 @@ const InterSpecimen = () => (
 export const App = () => (
     <main className={css({ display: "grid", gap: "x8", padding: "x12", })}>
         <h1 className={css({ fontSize: "xl", fontWeight: "semibold", lineHeight: "tight", })}>No Launchpad</h1>
+        <div className={css({ display: "flex", gap: "x8", alignItems: "center", flexWrap: "wrap", })}>
+            <Badge label="Neutral" />
+            <Badge label="Healthy" tone="positive" />
+            <Badge label="Failed" tone="negative" />
+            <Badge label="New" tone="brand" />
+            <Badge label="No dot" withDot={false} />
+        </div>
         <InterSpecimen />
         <ThemePanel theme="light" />
         <ThemePanel theme="dark" />

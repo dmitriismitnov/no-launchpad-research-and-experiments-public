@@ -3,6 +3,7 @@ import { describe, expect, test, } from "bun:test";
 import { mergeConfigs, } from "@pandacss/config";
 import type { Config, } from "@pandacss/dev";
 
+import { badgeRecipe, } from "../components/badge/preset";
 import { buttonIconRecipe, } from "../components/button-icon/preset";
 import { buttonRecipe, } from "../components/button/preset";
 import { cardRecipe, } from "../components/card/preset";
@@ -37,6 +38,7 @@ describe("preset composition", () => {
             "buttonIcon",
             "card",
             "input",
+            "badge",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([ "icon", ]);
     });
@@ -46,6 +48,7 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["buttonIcon"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["card"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["input"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["badge"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
     });
 
@@ -54,6 +57,7 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["buttonIcon"]).toEqual(buttonIconRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["card"]).toEqual(cardRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["input"]).toEqual(inputRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["badge"]).toEqual(badgeRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
     });
 
@@ -73,8 +77,8 @@ describe("preset composition", () => {
         const forward = collectComponentDictionaries(componentPresetSources);
         const reversed = collectComponentDictionaries([ ...componentPresetSources, ].reverse());
 
-        expect(Object.keys(forward.slotRecipes)).toEqual([ "button", "buttonIcon", "card", "input", ]);
-        expect(Object.keys(reversed.slotRecipes)).toEqual([ "input", "card", "buttonIcon", "button", ]);
+        expect(Object.keys(forward.slotRecipes)).toEqual([ "button", "buttonIcon", "card", "input", "badge", ]);
+        expect(Object.keys(reversed.slotRecipes)).toEqual([ "badge", "input", "card", "buttonIcon", "button", ]);
         expect(Object.keys(reversed.recipes)).toEqual([ "icon", ]);
     });
 });

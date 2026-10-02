@@ -1,6 +1,7 @@
 import type { Preset, RecipeConfig, SlotRecipeConfig, } from "@pandacss/dev";
 import { definePreset, } from "@pandacss/dev";
 
+import { badgePreset, } from "../components/badge/preset";
 import { buttonIconPreset, } from "../components/button-icon/preset";
 import { buttonPreset, } from "../components/button/preset";
 import { cardPreset, } from "../components/card/preset";
@@ -10,6 +11,7 @@ import { foundationPreset, } from "./foundation";
 import { preflight, settingsPreset, } from "./settings";
 
 export {
+    badgePreset,
     buttonIconPreset,
     buttonPreset,
     cardPreset,
@@ -34,6 +36,7 @@ export const componentPresetSources: readonly Preset[] = [
     cardPreset,
     iconPreset,
     inputPreset,
+    badgePreset,
 ];
 
 export const collectComponentDictionaries = (
