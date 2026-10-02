@@ -30,8 +30,8 @@ substitute.
 
 | # | Action                                                      | Role                    | Model/variant              | Evidence / disposition                                   |
 | - | ----------------------------------------------------------- | ----------------------- | -------------------------- | -------------------------------------------------------- |
-| 1 | Created durable state (README, roadmap, todo, log, history) | implementation worker   | `deepseek/deepseek-flash#high` | Files present under `outputs/experiments/pencil-opencode-workflow/`; pending commit. |
-| 2 | Defined design brief and benchmark protocol (Gates A–D)     | implementation worker   | `deepseek/deepseek-flash#high` | `notes/design-brief.md`, `notes/benchmark-protocol.md`; pending commit. |
+| 1 | Created durable state (README, roadmap, todo, log, history) | implementation worker   | `deepseek/deepseek-flash#high` | Committed in `6d8f2ca5c120725c2dbeec70b139a5e233a706fa`. |
+| 2 | Defined design brief and benchmark protocol (Gates A–D)     | implementation worker   | `deepseek/deepseek-flash#high` | `notes/design-brief.md`, `notes/benchmark-protocol.md`; committed in `6d8f2ca5c120725c2dbeec70b139a5e233a706fa`. |
 | 3 | Registered experiment in `outputs/history.md`               | implementation worker   | `deepseek/deepseek-flash#high` | `active (2026-10-02)` entry linking to the experiment README. |
 
 No Pencil mutation has occurred. No isolated Pen copy exists yet. No review has

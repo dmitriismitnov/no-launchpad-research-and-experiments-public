@@ -15,7 +15,7 @@ system, without canvas clutter and without template "AI slop", if the workflow:
 - reads the code-side and Pen-side contracts first;
 - keeps every Pencil mutation inside one isolated experiment document;
 - records the plan, operations and evidence outside the conversation context;
-- delegates independent read-only reviews to narrow subagents;
+- runs independent read-only reviews in the orchestrator and verifies each finding against an artifact;
 - separates mechanical checks from human visual judgment;
 - stops at an explicit checkpoint before context is lost.
 
