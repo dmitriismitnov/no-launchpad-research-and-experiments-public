@@ -1,12 +1,17 @@
+import { Alert, } from "@shared/components/alert";
 import { Avatar, } from "@shared/components/avatar";
 import { Badge, } from "@shared/components/badge";
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
 import { Divider, } from "@shared/components/divider";
+import { EmptyState, } from "@shared/components/empty-state";
+import { Progress, } from "@shared/components/progress";
+import { ProgressRing, } from "@shared/components/progress-ring";
 import { Skeleton, } from "@shared/components/skeleton";
 import { Spinner, } from "@shared/components/spinner";
 import { StatusIndicator, } from "@shared/components/status-indicator";
 import { Tag, } from "@shared/components/tag";
+import { Toast, } from "@shared/components/toast";
 import { css, cx, } from "@shared/styled-system/css";
 
 const tones = [ "primary", "secondary", "ghost", ] as const;
@@ -127,6 +132,31 @@ export const App = () => (
             <Spinner label="Loading" />
             <Skeleton style={{ width: "8rem", height: "0.75rem", }} />
             <Divider orientation="vertical" style={{ height: "1.5rem", }} />
+        </div>
+        <div className={css({ display: "grid", gap: "x8", maxWidth: "32rem", })}>
+            <Alert
+                title="Saved"
+                description="Your changes are live."
+                tone="positive"
+                icon="check"
+            />
+            <Toast
+                title="Saved"
+                description="Your changes are live."
+                icon="check"
+                action={{ label: "Undo", onClick: () => {}, }}
+            />
+            <Progress value={60} label="Upload progress" />
+            <div className={css({ display: "flex", alignItems: "center", gap: "x8", })}>
+                <ProgressRing value={60} label="Upload progress" />
+                <ProgressRing value={25} size={64} thickness={6} label="Upload progress" />
+            </div>
+            <EmptyState
+                title="No tokens yet"
+                description="Create your first semantic token to get started."
+                icon="settings"
+                action={<Button size="sm">New token</Button>}
+            />
         </div>
         <InterSpecimen />
         <ThemePanel theme="light" />
