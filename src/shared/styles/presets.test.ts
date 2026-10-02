@@ -11,15 +11,20 @@ import { buttonRecipe, } from "../components/button/preset";
 import { cardRecipe, } from "../components/card/preset";
 import { clipboardRecipe, } from "../components/clipboard/preset";
 import { codeBlockRecipe, } from "../components/code-block/preset";
+import { dataTableRecipe, } from "../components/data-table/preset";
 import { dividerRecipe, } from "../components/divider/preset";
 import { emptyStateRecipe, } from "../components/empty-state/preset";
 import { iconRecipe, } from "../components/icon/preset";
 import { inputRecipe, } from "../components/input/preset";
 import { listRecipe, } from "../components/list/preset";
+import { mediaPlaceholderRecipe, } from "../components/media-placeholder/preset";
 import { progressRingRecipe, } from "../components/progress-ring/preset";
 import { progressRecipe, } from "../components/progress/preset";
+import { qrCodeRecipe, } from "../components/qr-code/preset";
+import { scrollAreaRecipe, } from "../components/scroll-area/preset";
 import { skeletonRecipe, } from "../components/skeleton/preset";
 import { spinnerRecipe, } from "../components/spinner/preset";
+import { splitterRecipe, } from "../components/splitter/preset";
 import { statisticRecipe, } from "../components/statistic/preset";
 import { statusIndicatorRecipe, } from "../components/status-indicator/preset";
 import { tagRecipe, } from "../components/tag/preset";
@@ -68,6 +73,11 @@ describe("preset composition", () => {
             "timeline",
             "codeBlock",
             "clipboard",
+            "dataTable",
+            "scrollArea",
+            "splitter",
+            "mediaPlaceholder",
+            "qrCode",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
@@ -96,6 +106,11 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["timeline"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["codeBlock"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["clipboard"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["dataTable"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["scrollArea"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["splitter"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["mediaPlaceholder"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["qrCode"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
@@ -121,6 +136,11 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["timeline"]).toEqual(timelineRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["codeBlock"]).toEqual(codeBlockRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["clipboard"]).toEqual(clipboardRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["dataTable"]).toEqual(dataTableRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["scrollArea"]).toEqual(scrollAreaRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["splitter"]).toEqual(splitterRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["mediaPlaceholder"]).toEqual(mediaPlaceholderRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["qrCode"]).toEqual(qrCodeRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
@@ -169,8 +189,18 @@ describe("preset composition", () => {
             "timeline",
             "codeBlock",
             "clipboard",
+            "dataTable",
+            "scrollArea",
+            "splitter",
+            "mediaPlaceholder",
+            "qrCode",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "qrCode",
+            "mediaPlaceholder",
+            "splitter",
+            "scrollArea",
+            "dataTable",
             "clipboard",
             "codeBlock",
             "timeline",

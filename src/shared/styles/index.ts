@@ -9,15 +9,20 @@ import { buttonPreset, } from "../components/button/preset";
 import { cardPreset, } from "../components/card/preset";
 import { clipboardPreset, } from "../components/clipboard/preset";
 import { codeBlockPreset, } from "../components/code-block/preset";
+import { dataTablePreset, } from "../components/data-table/preset";
 import { dividerPreset, } from "../components/divider/preset";
 import { emptyStatePreset, } from "../components/empty-state/preset";
 import { iconPreset, } from "../components/icon/preset";
 import { inputPreset, } from "../components/input/preset";
 import { listPreset, } from "../components/list/preset";
+import { mediaPlaceholderPreset, } from "../components/media-placeholder/preset";
 import { progressRingPreset, } from "../components/progress-ring/preset";
 import { progressPreset, } from "../components/progress/preset";
+import { qrCodePreset, } from "../components/qr-code/preset";
+import { scrollAreaPreset, } from "../components/scroll-area/preset";
 import { skeletonPreset, } from "../components/skeleton/preset";
 import { spinnerPreset, } from "../components/spinner/preset";
+import { splitterPreset, } from "../components/splitter/preset";
 import { statisticPreset, } from "../components/statistic/preset";
 import { statusIndicatorPreset, } from "../components/status-indicator/preset";
 import { tagPreset, } from "../components/tag/preset";
@@ -35,18 +40,23 @@ export {
     cardPreset,
     clipboardPreset,
     codeBlockPreset,
+    dataTablePreset,
     dividerPreset,
     emptyStatePreset,
     foundationPreset,
     iconPreset,
     inputPreset,
     listPreset,
+    mediaPlaceholderPreset,
     preflight,
     progressPreset,
     progressRingPreset,
+    qrCodePreset,
+    scrollAreaPreset,
     settingsPreset,
     skeletonPreset,
     spinnerPreset,
+    splitterPreset,
     statisticPreset,
     statusIndicatorPreset,
     tagPreset,
@@ -85,6 +95,11 @@ export const componentPresetSources: readonly Preset[] = [
     timelinePreset,
     codeBlockPreset,
     clipboardPreset,
+    dataTablePreset,
+    scrollAreaPreset,
+    splitterPreset,
+    mediaPlaceholderPreset,
+    qrCodePreset,
 ];
 
 export const collectComponentDictionaries = (

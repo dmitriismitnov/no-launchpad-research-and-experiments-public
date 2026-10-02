@@ -5,13 +5,18 @@ import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
 import { Clipboard, } from "@shared/components/clipboard";
 import { CodeBlock, } from "@shared/components/code-block";
+import { DataTable, } from "@shared/components/data-table";
 import { Divider, } from "@shared/components/divider";
 import { EmptyState, } from "@shared/components/empty-state";
 import { List, } from "@shared/components/list";
+import { MediaPlaceholder, } from "@shared/components/media-placeholder";
 import { Progress, } from "@shared/components/progress";
 import { ProgressRing, } from "@shared/components/progress-ring";
+import { QrCode, } from "@shared/components/qr-code";
+import { ScrollArea, } from "@shared/components/scroll-area";
 import { Skeleton, } from "@shared/components/skeleton";
 import { Spinner, } from "@shared/components/spinner";
+import { Splitter, } from "@shared/components/splitter";
 import { Statistic, } from "@shared/components/statistic";
 import { StatusIndicator, } from "@shared/components/status-indicator";
 import { Tag, } from "@shared/components/tag";
@@ -20,6 +25,35 @@ import { Toast, } from "@shared/components/toast";
 import { css, cx, } from "@shared/styled-system/css";
 
 const tones = [ "primary", "secondary", "ghost", ] as const;
+
+const tableColumns = [
+    { key: "component", header: "COMPONENT", emphasis: "primary", },
+    { key: "owner", header: "OWNER", width: 130, },
+    { key: "status", header: "STATUS", width: 110, },
+] as const;
+
+const tableRows = [
+    { id: "button", cells: { component: "Button", owner: "Ada Rivera", status: "Stable", }, },
+    { id: "select", cells: { component: "Select", owner: "Kai Nakamura", status: "Beta", }, },
+    { id: "data-table", cells: { component: "Data Table", owner: "Sam Okoro", status: "Draft", }, },
+] as const;
+
+const scrollLines = [
+    "Scrollable content line 1",
+    "Scrollable content line 2",
+    "Scrollable content line 3",
+    "Scrollable content line 4",
+    "Scrollable content line 5",
+    "Scrollable content line 6",
+] as const;
+
+const scrollLineStyle = css({
+    fontFamily: "body",
+    fontSize: "sm",
+    fontWeight: "regular",
+    lineHeight: "normal",
+    color: "semantic.common.700.background",
+});
 
 const section = css({
     padding: "x12",
@@ -191,6 +225,20 @@ export const App = () => (
                 onCopy={() => {}}
             />
             <Clipboard value="npm i @nolaunchpad/tokens" onCopy={() => {}} />
+        </div>
+        <div className={css({ display: "grid", gap: "x8", maxWidth: "48rem", })}>
+            <Splitter
+                start={<span>Editor</span>}
+                end={<span>Preview</span>}
+            />
+            <MediaPlaceholder label="16 : 9 media" />
+            <div className={css({ display: "flex", alignItems: "flex-start", gap: "x8", })}>
+                <QrCode label="QR code placeholder" />
+                <ScrollArea label="Release notes">
+                    {scrollLines.map((line) => <p key={line} className={scrollLineStyle}>{line}</p>)}
+                </ScrollArea>
+            </div>
+            <DataTable columns={tableColumns} rows={tableRows} aria-label="Components" />
         </div>
         <InterSpecimen />
         <ThemePanel theme="light" />
