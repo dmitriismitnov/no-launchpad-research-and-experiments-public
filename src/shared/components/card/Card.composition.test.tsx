@@ -188,6 +188,40 @@ describe("card composition", () => {
         expect(markup).toContain("card__root");
     });
 
+    test("plain variant drops the media surface", () => {
+        const markup = renderToStaticMarkup(
+            <Card
+                variant="plain"
+                title="Plain card"
+                media={{ src: "/ignored.jpg", alt: "Ignored", }}
+            />,
+        );
+
+        expect(markup).toContain("card__root--variant_plain");
+        expect(markup).toContain("card__body--variant_plain");
+        expect(markup).not.toContain("card__media");
+        expect(markup).not.toContain("<img");
+        expect(markup).not.toContain('viewBox="0 0 1600 900"');
+    });
+
+    test("compact variant drops the media surface and tightens its slots", () => {
+        const markup = renderToStaticMarkup(
+            <Card variant="compact" title="Compact card" description="Dense metadata only." />,
+        );
+
+        expect(markup).toContain("card__root--variant_compact");
+        expect(markup).toContain("card__title--variant_compact");
+        expect(markup).not.toContain("card__media");
+        expect(markup).toContain("Dense metadata only.");
+    });
+
+    test("default variant keeps the media skeleton and carries no variant class", () => {
+        const markup = renderToStaticMarkup(<Card title="Default card" />);
+
+        expect(markup).toContain("card__media");
+        expect(markup).not.toContain("card__root--variant_default");
+    });
+
     test("exports only the public card from the module", () => {
         expect(Object.keys(cardModule)).toEqual([ "Card", ]);
     });

@@ -114,6 +114,44 @@ export const cardRecipe = defineSlotRecipe({
             flexShrink: "0",
         },
     },
+
+    variants: {
+        /**
+         * Pen ships three Card masters. `default` is the media card, `plain`
+         * drops the media surface for a text-only body and `compact` is the
+         * dense metadata row. Both non-default variants omit the media slot in
+         * the component, so no `media` override is needed here.
+         *
+         * Pen `Card Plain` (`vTMbw`): 16px body padding, 10px body gap, `md`
+         * title, `sm` description, an undivided footer.
+         * Pen `Card Compact` (`XqPjN`): 16px body padding, 6px body gap, `sm`
+         * title and `xs` description, no footer.
+         */
+        variant: {
+            default: {},
+
+            plain: {
+                body: { gap: "x5", },
+                footer: {
+                    borderTopWidth: "none",
+                    paddingTop: "x0",
+                },
+            },
+
+            compact: {
+                body: { gap: "x3", },
+                title: { fontSize: "sm", },
+                description: {
+                    fontSize: "xs",
+                    color: "semantic.common.600.background",
+                },
+                footer: {
+                    borderTopWidth: "none",
+                    paddingTop: "x0",
+                },
+            },
+        },
+    },
 });
 
 export const cardPreset = definePreset({

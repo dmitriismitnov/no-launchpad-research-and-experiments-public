@@ -3,6 +3,7 @@ import { useState, } from "react";
 import { AccordionItem, } from "@shared/components/accordion-item";
 import { Alert, } from "@shared/components/alert";
 import { AlertDialog, } from "@shared/components/alert-dialog";
+import { AssetIconTile, } from "@shared/components/asset-icon-tile";
 import { Avatar, } from "@shared/components/avatar";
 import { Badge, } from "@shared/components/badge";
 import { Brand, } from "@shared/components/brand";
@@ -10,6 +11,7 @@ import { Breadcrumbs, } from "@shared/components/breadcrumbs";
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
 import { Calendar, } from "@shared/components/calendar";
+import { Card, } from "@shared/components/card";
 import { Carousel, } from "@shared/components/carousel";
 import { Checkbox, } from "@shared/components/checkbox";
 import { Clipboard, } from "@shared/components/clipboard";
@@ -59,6 +61,7 @@ import { Switch, } from "@shared/components/switch";
 import { Tab, TabList, } from "@shared/components/tab";
 import { Tag, } from "@shared/components/tag";
 import { Textarea, } from "@shared/components/textarea";
+import { ThemeSwitchPreview, } from "@shared/components/theme-switch-preview";
 import { Timeline, } from "@shared/components/timeline";
 import { Toast, } from "@shared/components/toast";
 import { Toggle, } from "@shared/components/toggle";
@@ -278,6 +281,9 @@ export const App = () => (
         </div>
         <div className={css({ display: "flex", gap: "x8", alignItems: "center", flexWrap: "wrap", })}>
             <Avatar name="Alice Ryder" presence="online" />
+            <AssetIconTile name="gauge" label="Gauge" />
+            <AssetIconTile name="sun" />
+            <AssetIconTile name="moon" />
             <Tag label="Design" onClose={() => {}} />
             <StatusIndicator label="Online" tone="positive" />
             <Spinner label="Loading" />
@@ -353,6 +359,17 @@ export const App = () => (
             <DataTable columns={tableColumns} rows={tableRows} aria-label="Components" />
         </div>
         <div className={css({ display: "grid", gap: "x8", maxWidth: "32rem", })}>
+            <Card
+                variant="plain"
+                title="Plain card"
+                description="Text-only body without the media surface."
+                footer={{ primaryNote: "Updated 2h ago", secondaryNote: "Open", }}
+            />
+            <Card
+                variant="compact"
+                title="Compact card"
+                description="Dense metadata only."
+            />
             <TabList>
                 <Tab label="Overview" active />
                 <Tab label="Tokens" />
@@ -501,6 +518,8 @@ export const App = () => (
                 <Checkbox label="Indeterminate" indeterminate />
                 <Radio label="Radio" name="app-radio" value="radio" defaultChecked />
                 <Switch label="Switch" defaultChecked />
+                <ThemeSwitchPreview />
+                <ThemeSwitchPreview defaultTheme="dark" />
             </div>
             <Slider label="OPACITY" defaultValue={57} showValue />
             <Select

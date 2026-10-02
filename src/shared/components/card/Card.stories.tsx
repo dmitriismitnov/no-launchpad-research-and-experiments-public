@@ -108,6 +108,11 @@ const meta = {
         docs: { codePanel: true, },
     },
     argTypes: {
+        variant: {
+            control: { type: "select", },
+            options: [ "default", "plain", "compact", ],
+            table: { category: "Content", },
+        },
         title: { control: { type: "text", }, table: { category: "Content", }, },
         description: { control: { type: "text", }, table: { category: "Content", }, },
         media: { control: false, },
@@ -175,6 +180,7 @@ type Story = StoryObj<PlaygroundArgs>;
 
 export const Playground: Story = {
     args: {
+        variant: "default",
         title: "Card title",
         description: "Supporting description that explains the card's subject.",
         useSuppliedMedia: false,
@@ -217,6 +223,42 @@ export const Minimal: Story = {
         for ( const slot of [ ".card__header", ".card__description", ".card__footer", ] ) {
             await expect(canvasElement.querySelector(slot)).toBeNull();
         }
+    },
+};
+
+export const Plain: Story = {
+    args: {
+        variant: "plain",
+        title: "Card title",
+        description: "Supporting description that explains the card.",
+        footer: { primaryNote: "Updated 2h ago", secondaryNote: "Open", },
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const article = canvasElement.querySelector("article") as Element;
+        const footer = canvasElement.querySelector(".card__footer") as Element;
+
+        await expect(canvasElement.querySelector(".card__media")).toBeNull();
+        await expect(canvasElement.querySelector(".card__title")).not.toBeNull();
+        await expect(article.className).toContain("card__root--variant_plain");
+        await expect(getComputedStyle(footer).borderTopWidth).toBe("0px");
+    },
+};
+
+export const Compact: Story = {
+    args: {
+        variant: "compact",
+        title: "Compact card",
+        description: "Dense metadata only.",
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const article = canvasElement.querySelector("article") as Element;
+        const title = canvasElement.querySelector(".card__title") as Element;
+
+        await expect(canvasElement.querySelector(".card__media")).toBeNull();
+        await expect(article.className).toContain("card__root--variant_compact");
+        await expect(getComputedStyle(title).fontSize).toBe("14px");
     },
 };
 

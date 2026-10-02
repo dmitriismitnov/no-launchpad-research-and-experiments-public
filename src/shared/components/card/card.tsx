@@ -22,7 +22,16 @@ export type CardFooter = {
     secondaryNote?: string;
 };
 
+/**
+ * Card masters from Pen. `default` keeps the 16:9 media surface; `plain` and
+ * `compact` are media-less bodies (plain for a light text card, compact for a
+ * dense metadata row).
+ */
+export type CardVariant = "default" | "plain" | "compact";
+
 export type CardProps = Omit<ComponentProps<"article">, "children" | "dangerouslySetInnerHTML"> & {
+    /** Visual master; `plain` / `compact` omit the media surface. */
+    variant?: CardVariant;
     title: string;
     description?: string;
     media?: CardMedia;
@@ -32,6 +41,7 @@ export type CardProps = Omit<ComponentProps<"article">, "children" | "dangerousl
 };
 
 export const Card = ({
+    variant = "default",
     title,
     description,
     media,
@@ -41,7 +51,8 @@ export const Card = ({
     className,
     ...props
 }: CardProps) => {
-    const styles = card();
+    // `default` is the base recipe, so it never carries a variant class.
+    const styles = card(variant === "default" ? {} : { variant, });
     const {
         children: _children,
         dangerouslySetInnerHTML: _dangerouslySetInnerHTML,
@@ -50,7 +61,7 @@ export const Card = ({
 
     return (
         <article {...articleProps} className={cx(styles.root, className)}>
-            <Media media={media} styles={styles} />
+            {variant === "default" && <Media media={media} styles={styles} />}
             <Body
                 title={title}
                 description={description}

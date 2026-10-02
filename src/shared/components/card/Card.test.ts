@@ -54,8 +54,24 @@ describe("card recipe", () => {
         ]);
     });
 
-    test("has no public variants", () => {
-        expect(Object.keys(cardRecipe.variants ?? {})).toEqual([]);
+    test("exposes only the variant axis", () => {
+        expect(Object.keys(cardRecipe.variants ?? {})).toEqual([ "variant", ]);
+        expect(Object.keys(cardRecipe.variants?.["variant"] ?? {})).toEqual([
+            "default",
+            "plain",
+            "compact",
+        ]);
+    });
+
+    test("plain and compact drop the footer divider and tighten the body", () => {
+        expect(cardRecipe.variants?.["variant"]?.["plain"]).toMatchObject({
+            body: { gap: "x5", },
+            footer: { borderTopWidth: "none", paddingTop: "x0", },
+        });
+        expect(cardRecipe.variants?.["variant"]?.["compact"]).toMatchObject({
+            body: { gap: "x3", },
+            title: { fontSize: "sm", },
+        });
     });
 
     test("uses no shorthand property names", () => {

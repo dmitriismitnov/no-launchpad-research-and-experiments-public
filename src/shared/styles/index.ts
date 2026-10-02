@@ -4,6 +4,7 @@ import { definePreset, } from "@pandacss/dev";
 import { accordionItemPreset, } from "../components/accordion-item/preset";
 import { alertDialogPreset, } from "../components/alert-dialog/preset";
 import { alertPreset, } from "../components/alert/preset";
+import { assetIconTilePreset, } from "../components/asset-icon-tile/preset";
 import { avatarPreset, } from "../components/avatar/preset";
 import { badgePreset, } from "../components/badge/preset";
 import { brandPreset, } from "../components/brand/preset";
@@ -63,6 +64,7 @@ import { switchPreset, } from "../components/switch/preset";
 import { tabPreset, } from "../components/tab/preset";
 import { tagPreset, } from "../components/tag/preset";
 import { textareaPreset, } from "../components/textarea/preset";
+import { themeSwitchPreviewPreset, } from "../components/theme-switch-preview/preset";
 import { timelinePreset, } from "../components/timeline/preset";
 import { toastPreset, } from "../components/toast/preset";
 import { toggleGroupPreset, } from "../components/toggle-group/preset";
@@ -78,6 +80,7 @@ export {
     accordionItemPreset,
     alertDialogPreset,
     alertPreset,
+    assetIconTilePreset,
     avatarPreset,
     badgePreset,
     brandPreset,
@@ -140,6 +143,7 @@ export {
     tabPreset,
     tagPreset,
     textareaPreset,
+    themeSwitchPreviewPreset,
     timelinePreset,
     toastPreset,
     toggleGroupPreset,
@@ -229,6 +233,8 @@ export const componentPresetSources: readonly Preset[] = [
     colorPickerPreset,
     ratingPreset,
     editablePreset,
+    assetIconTilePreset,
+    themeSwitchPreviewPreset,
 ];
 
 export const collectComponentDictionaries = (

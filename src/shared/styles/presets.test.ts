@@ -6,6 +6,7 @@ import type { Config, } from "@pandacss/dev";
 import { accordionItemRecipe, } from "../components/accordion-item/preset";
 import { alertDialogRecipe, } from "../components/alert-dialog/preset";
 import { alertRecipe, } from "../components/alert/preset";
+import { assetIconTileRecipe, } from "../components/asset-icon-tile/preset";
 import { avatarRecipe, } from "../components/avatar/preset";
 import { badgeRecipe, } from "../components/badge/preset";
 import { brandRecipe, } from "../components/brand/preset";
@@ -65,6 +66,7 @@ import { switchControlRecipe, } from "../components/switch/preset";
 import { tabRecipe, } from "../components/tab/preset";
 import { tagRecipe, } from "../components/tag/preset";
 import { textareaRecipe, } from "../components/textarea/preset";
+import { themeSwitchPreviewRecipe, } from "../components/theme-switch-preview/preset";
 import { timelineRecipe, } from "../components/timeline/preset";
 import { toastRecipe, } from "../components/toast/preset";
 import { toggleGroupRecipe, } from "../components/toggle-group/preset";
@@ -164,12 +166,14 @@ describe("preset composition", () => {
             "colorPicker",
             "rating",
             "editable",
+            "themeSwitchPreview",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
             "dividerRule",
             "skeleton",
             "spinner",
+            "assetIconTile",
         ]);
     });
 
@@ -240,10 +244,12 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["colorPicker"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["rating"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["editable"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["themeSwitchPreview"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["spinner"]).toBeDefined();
+        expect(mergedConfig.theme?.recipes?.["assetIconTile"]).toBeDefined();
     });
 
     test("carries the recipe content declared by each component", () => {
@@ -313,10 +319,12 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["colorPicker"]).toEqual(colorPickerRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["rating"]).toEqual(ratingRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["editable"]).toEqual(editableRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["themeSwitchPreview"]).toEqual(themeSwitchPreviewRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
         expect(mergedConfig.theme?.recipes?.["spinner"]).toEqual(spinnerRecipe);
+        expect(mergedConfig.theme?.recipes?.["assetIconTile"]).toEqual(assetIconTileRecipe);
     });
 
     test("carries component-owned keyframes", () => {
@@ -409,8 +417,10 @@ describe("preset composition", () => {
             "colorPicker",
             "rating",
             "editable",
+            "themeSwitchPreview",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "themeSwitchPreview",
             "editable",
             "rating",
             "colorPicker",
@@ -478,7 +488,19 @@ describe("preset composition", () => {
             "buttonIcon",
             "button",
         ]);
-        expect(Object.keys(forward.recipes)).toEqual([ "icon", "dividerRule", "skeleton", "spinner", ]);
-        expect(Object.keys(reversed.recipes)).toEqual([ "spinner", "skeleton", "dividerRule", "icon", ]);
+        expect(Object.keys(forward.recipes)).toEqual([
+            "icon",
+            "dividerRule",
+            "skeleton",
+            "spinner",
+            "assetIconTile",
+        ]);
+        expect(Object.keys(reversed.recipes)).toEqual([
+            "assetIconTile",
+            "spinner",
+            "skeleton",
+            "dividerRule",
+            "icon",
+        ]);
     });
 });

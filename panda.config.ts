@@ -31,6 +31,19 @@ export default defineConfig({
                     size: [ "sm", "md", ],
                 },
             ],
+            // Card variants are selected at runtime by the `variant` prop.
+            card: [
+                {
+                    variant: [ "plain", "compact", ],
+                },
+            ],
+            // The theme control resolves its active glyph at runtime.
+            themeSwitchPreview: [
+                {
+                    theme: [ "light", "dark", ],
+                    disabled: [ "true", ],
+                },
+            ],
             icon: [
                 {
                     size: [ "sm", "md", "lg", ],
