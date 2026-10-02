@@ -82,3 +82,7 @@
 - `App.tsx` рендерит лендинг в light и dark через `data-theme` (тема — контекст, не вариант).
 - Адаптивность: grid `auto-fit minmax(...)` и flex-wrap.
 - Проверки: `mise run gen`, `mise run check` (389 browser), `mise run check:deps`, `mise run build` — зелёные.
+
+- Визуальная проверка: Playwright-скриншоты `notes/landing-desktop.png` и
+  `notes/landing-mobile.png`; лендинг рендерится в light и dark из одних
+  компонентов, адаптивен на мобильной ширине.
