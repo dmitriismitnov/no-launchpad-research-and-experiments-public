@@ -186,6 +186,56 @@ export default defineConfig({
                     disabled: [ "true", ],
                 },
             ],
+            dateInput: [
+                {
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            calendar: [
+                {
+                    surface: [ "overlay", "embedded", ],
+                    selected: [ "true", ],
+                    today: [ "true", ],
+                    inRange: [ "true", ],
+                    outsideMonth: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            datePicker: [
+                {
+                    open: [ "true", ],
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            fileUpload: [
+                {
+                    dragging: [ "true", ],
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            colorPicker: [
+                {
+                    open: [ "true", ],
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                    selected: [ "true", ],
+                },
+            ],
+            rating: [
+                {
+                    filled: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            editable: [
+                {
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
         },
     },
     presets,

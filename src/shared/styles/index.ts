@@ -10,18 +10,24 @@ import { brandPreset, } from "../components/brand/preset";
 import { breadcrumbsPreset, } from "../components/breadcrumbs/preset";
 import { buttonIconPreset, } from "../components/button-icon/preset";
 import { buttonPreset, } from "../components/button/preset";
+import { calendarPreset, } from "../components/calendar/preset";
 import { cardPreset, } from "../components/card/preset";
 import { carouselPreset, } from "../components/carousel/preset";
 import { checkboxPreset, } from "../components/checkbox/preset";
 import { clipboardPreset, } from "../components/clipboard/preset";
 import { codeBlockPreset, } from "../components/code-block/preset";
+import { colorPickerPreset, } from "../components/color-picker/preset";
 import { contextMenuPreset, } from "../components/context-menu/preset";
 import { dataTablePreset, } from "../components/data-table/preset";
+import { dateInputPreset, } from "../components/date-input/preset";
+import { datePickerPreset, } from "../components/date-picker/preset";
 import { dialogPreset, } from "../components/dialog/preset";
 import { dividerPreset, } from "../components/divider/preset";
 import { drawerPreset, } from "../components/drawer/preset";
+import { editablePreset, } from "../components/editable/preset";
 import { emptyStatePreset, } from "../components/empty-state/preset";
 import { fieldPreset, } from "../components/field/preset";
+import { fileUploadPreset, } from "../components/file-upload/preset";
 import { floatingPanelPreset, } from "../components/floating-panel/preset";
 import { hoverCardPreset, } from "../components/hover-card/preset";
 import { iconPreset, } from "../components/icon/preset";
@@ -41,6 +47,7 @@ import { progressPreset, } from "../components/progress/preset";
 import { qrCodePreset, } from "../components/qr-code/preset";
 import { radioGroupPreset, } from "../components/radio-group/preset";
 import { radioPreset, } from "../components/radio/preset";
+import { ratingPreset, } from "../components/rating/preset";
 import { scrollAreaPreset, } from "../components/scroll-area/preset";
 import { selectPreset, } from "../components/select/preset";
 import { sheetPreset, } from "../components/sheet/preset";
@@ -77,18 +84,24 @@ export {
     breadcrumbsPreset,
     buttonIconPreset,
     buttonPreset,
+    calendarPreset,
     cardPreset,
     carouselPreset,
     checkboxPreset,
     clipboardPreset,
     codeBlockPreset,
+    colorPickerPreset,
     contextMenuPreset,
     dataTablePreset,
+    dateInputPreset,
+    datePickerPreset,
     dialogPreset,
     dividerPreset,
     drawerPreset,
+    editablePreset,
     emptyStatePreset,
     fieldPreset,
+    fileUploadPreset,
     floatingPanelPreset,
     foundationPreset,
     hoverCardPreset,
@@ -110,6 +123,7 @@ export {
     qrCodePreset,
     radioGroupPreset,
     radioPreset,
+    ratingPreset,
     scrollAreaPreset,
     selectPreset,
     settingsPreset,
@@ -208,6 +222,13 @@ export const componentPresetSources: readonly Preset[] = [
     multiSelectPreset,
     radioGroupPreset,
     pinInputPreset,
+    dateInputPreset,
+    calendarPreset,
+    datePickerPreset,
+    fileUploadPreset,
+    colorPickerPreset,
+    ratingPreset,
+    editablePreset,
 ];
 
 export const collectComponentDictionaries = (

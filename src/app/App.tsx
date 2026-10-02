@@ -1,3 +1,5 @@
+import { useState, } from "react";
+
 import { AccordionItem, } from "@shared/components/accordion-item";
 import { Alert, } from "@shared/components/alert";
 import { AlertDialog, } from "@shared/components/alert-dialog";
@@ -7,17 +9,23 @@ import { Brand, } from "@shared/components/brand";
 import { Breadcrumbs, } from "@shared/components/breadcrumbs";
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
+import { Calendar, } from "@shared/components/calendar";
 import { Carousel, } from "@shared/components/carousel";
 import { Checkbox, } from "@shared/components/checkbox";
 import { Clipboard, } from "@shared/components/clipboard";
 import { CodeBlock, } from "@shared/components/code-block";
+import { ColorPicker, } from "@shared/components/color-picker";
 import { ContextMenu, } from "@shared/components/context-menu";
 import { DataTable, } from "@shared/components/data-table";
+import { DateInput, } from "@shared/components/date-input";
+import { DatePicker, } from "@shared/components/date-picker";
 import { Dialog, } from "@shared/components/dialog";
 import { Divider, } from "@shared/components/divider";
 import { Drawer, } from "@shared/components/drawer";
+import { Editable, } from "@shared/components/editable";
 import { EmptyState, } from "@shared/components/empty-state";
 import { Field, } from "@shared/components/field";
+import { FileUpload, } from "@shared/components/file-upload";
 import { FloatingPanel, } from "@shared/components/floating-panel";
 import { HoverCard, } from "@shared/components/hover-card";
 import { Link, } from "@shared/components/link";
@@ -35,6 +43,7 @@ import { ProgressRing, } from "@shared/components/progress-ring";
 import { QrCode, } from "@shared/components/qr-code";
 import { Radio, } from "@shared/components/radio";
 import { RadioGroup, } from "@shared/components/radio-group";
+import { Rating, } from "@shared/components/rating";
 import { ScrollArea, } from "@shared/components/scroll-area";
 import { Select, } from "@shared/components/select";
 import { Sheet, } from "@shared/components/sheet";
@@ -209,6 +218,12 @@ const InterSpecimen = () => (
         <p className={specimenSize["xl"]}>xl · Launch / Запуск</p>
     </section>
 );
+
+const EditableDemo = () => {
+    const [ value, setValue, ] = useState("Workspace name");
+
+    return <Editable value={value} onSave={setValue} />;
+};
 
 export const App = () => (
     <main className={css({ display: "grid", gap: "x8", padding: "x12", })}>
@@ -525,6 +540,17 @@ export const App = () => (
             <Field label="Рабочая область" required hint="Строчные буквы, без пробелов.">
                 <input className={fieldControl} name="workspace" defaultValue="acme-design" />
             </Field>
+            <DateInput label="ДАТА" placeholder="ГГГГ-ММ-ДД" hint="Формат ISO 8601." />
+            <DatePicker defaultValue={new Date(2025, 2, 16)} today={new Date(2025, 2, 10)} />
+            <Calendar defaultValue={new Date(2025, 2, 16)} today={new Date(2025, 2, 10)} />
+            <FileUpload
+                accept="image/png,image/svg+xml"
+                multiple
+                hint="PNG или SVG, до 10 МБ."
+            />
+            <ColorPicker />
+            <Rating defaultValue={4} showValue />
+            <EditableDemo />
         </div>
         <InterSpecimen />
         <ThemePanel theme="light" />

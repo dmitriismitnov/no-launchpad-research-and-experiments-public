@@ -12,18 +12,24 @@ import { brandRecipe, } from "../components/brand/preset";
 import { breadcrumbsRecipe, } from "../components/breadcrumbs/preset";
 import { buttonIconRecipe, } from "../components/button-icon/preset";
 import { buttonRecipe, } from "../components/button/preset";
+import { calendarRecipe, } from "../components/calendar/preset";
 import { cardRecipe, } from "../components/card/preset";
 import { carouselRecipe, } from "../components/carousel/preset";
 import { checkboxRecipe, } from "../components/checkbox/preset";
 import { clipboardRecipe, } from "../components/clipboard/preset";
 import { codeBlockRecipe, } from "../components/code-block/preset";
+import { colorPickerRecipe, } from "../components/color-picker/preset";
 import { contextMenuRecipe, } from "../components/context-menu/preset";
 import { dataTableRecipe, } from "../components/data-table/preset";
+import { dateInputRecipe, } from "../components/date-input/preset";
+import { datePickerRecipe, } from "../components/date-picker/preset";
 import { dialogRecipe, } from "../components/dialog/preset";
 import { dividerRecipe, } from "../components/divider/preset";
 import { drawerRecipe, } from "../components/drawer/preset";
+import { editableRecipe, } from "../components/editable/preset";
 import { emptyStateRecipe, } from "../components/empty-state/preset";
 import { fieldRecipe, } from "../components/field/preset";
+import { fileUploadRecipe, } from "../components/file-upload/preset";
 import { floatingPanelRecipe, } from "../components/floating-panel/preset";
 import { hoverCardRecipe, } from "../components/hover-card/preset";
 import { iconRecipe, } from "../components/icon/preset";
@@ -43,6 +49,7 @@ import { progressRecipe, } from "../components/progress/preset";
 import { qrCodeRecipe, } from "../components/qr-code/preset";
 import { radioGroupRecipe, } from "../components/radio-group/preset";
 import { radioRecipe, } from "../components/radio/preset";
+import { ratingRecipe, } from "../components/rating/preset";
 import { scrollAreaRecipe, } from "../components/scroll-area/preset";
 import { selectRecipe, } from "../components/select/preset";
 import { sheetRecipe, } from "../components/sheet/preset";
@@ -150,6 +157,13 @@ describe("preset composition", () => {
             "multiSelect",
             "radioGroup",
             "pinInput",
+            "dateInput",
+            "calendar",
+            "datePicker",
+            "fileUpload",
+            "colorPicker",
+            "rating",
+            "editable",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
@@ -219,6 +233,13 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["multiSelect"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["radioGroup"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["pinInput"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["dateInput"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["calendar"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["datePicker"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["fileUpload"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["colorPicker"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["rating"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["editable"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
@@ -285,6 +306,13 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["multiSelect"]).toEqual(multiSelectRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["radioGroup"]).toEqual(radioGroupRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["pinInput"]).toEqual(pinInputRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["dateInput"]).toEqual(dateInputRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["calendar"]).toEqual(calendarRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["datePicker"]).toEqual(datePickerRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["fileUpload"]).toEqual(fileUploadRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["colorPicker"]).toEqual(colorPickerRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["rating"]).toEqual(ratingRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["editable"]).toEqual(editableRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
@@ -374,8 +402,22 @@ describe("preset composition", () => {
             "multiSelect",
             "radioGroup",
             "pinInput",
+            "dateInput",
+            "calendar",
+            "datePicker",
+            "fileUpload",
+            "colorPicker",
+            "rating",
+            "editable",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "editable",
+            "rating",
+            "colorPicker",
+            "fileUpload",
+            "datePicker",
+            "calendar",
+            "dateInput",
             "pinInput",
             "radioGroup",
             "multiSelect",
