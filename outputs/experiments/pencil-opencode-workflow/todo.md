@@ -35,8 +35,8 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 
 ## Planned
 
-- [ ] Persist the composed flow to disk — `blocked`
-  - MCP edits are in-memory only; a Save in the native Pen UI is required, then re-verify the file hash.
+- [x] Persist the composed flow to disk — `verified`
+  - `ex_2.pen` saved with the five frames (9 271 120 → 9 291 756 bytes).
 - [ ] Tablet and mobile variants — `planned`
 - [ ] New-session handoff/compaction test with a real resume — `planned`
 

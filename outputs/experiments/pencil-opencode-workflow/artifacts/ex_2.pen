@@ -1,5 +1,5 @@
 {
-  "version": "2.19",
+  "version": "2.20",
   "children": [
     {
       "type": "frame",
@@ -196679,6 +196679,767 @@
                   ]
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "QQOlY",
+      "x": 1920,
+      "y": 0,
+      "name": "Create Project — Form — Desktop Light",
+      "theme": {
+        "theme": "light"
+      },
+      "clip": true,
+      "width": 720,
+      "fill": "$semantic/common/50/background",
+      "layout": "vertical",
+      "gap": 28,
+      "padding": 48,
+      "children": [
+        {
+          "type": "frame",
+          "id": "dr4PM",
+          "name": "Header",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "S5jrB",
+              "name": "Title",
+              "fill": "$semantic/common/50/text",
+              "content": "Create project",
+              "fontFamily": "Inter",
+              "fontSize": 28,
+              "fontWeight": "semibold"
+            },
+            {
+              "type": "text",
+              "id": "Ea2T1",
+              "name": "Subtitle",
+              "fill": "$semantic/common/600/background",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Fill in the details to start a new project.",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "O2xwj",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Name",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Name"
+            },
+            "bIaC6/f8QzS": {
+              "content": "Website redesign"
+            },
+            "uOwyc": {
+              "content": "Shown across the workspace."
+            }
+          }
+        },
+        {
+          "id": "qmlOH",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Description",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Description"
+            },
+            "bIaC6/f8QzS": {
+              "content": "Marketing site revamp for the spring launch."
+            },
+            "uOwyc": {
+              "content": "A short summary of the goal."
+            }
+          }
+        },
+        {
+          "id": "c0ck77",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Owner",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Owner"
+            },
+            "bIaC6": {
+              "id": "K6NLW",
+              "type": "ref",
+              "ref": "tOLtR",
+              "name": "Control — Select",
+              "width": "fill_container",
+              "descendants": {
+                "UpHsn": {
+                  "content": "Select owner"
+                }
+              }
+            },
+            "uOwyc": {
+              "content": "Who is accountable for delivery."
+            }
+          }
+        },
+        {
+          "id": "ll5Ue",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Due date",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Due date"
+            },
+            "bIaC6": {
+              "id": "mpeCh",
+              "type": "ref",
+              "ref": "ivx6N",
+              "name": "Control — Date",
+              "width": "fill_container"
+            },
+            "uOwyc": {
+              "content": "Target completion date."
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "A9IK9",
+          "name": "Actions",
+          "width": "fill_container",
+          "gap": 12,
+          "justifyContent": "end",
+          "children": [
+            {
+              "id": "z2J367",
+              "type": "ref",
+              "ref": "IcuBw",
+              "name": "Button — Cancel",
+              "fill": "$semantic/common/50/background",
+              "descendants": {
+                "VpW5X": {
+                  "content": "Cancel",
+                  "fill": "$semantic/common/600/background"
+                }
+              }
+            },
+            {
+              "id": "d7cI6",
+              "type": "ref",
+              "ref": "IcuBw",
+              "name": "Button — Create",
+              "descendants": {
+                "VpW5X": {
+                  "content": "Create project"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "rWD94",
+      "x": 2760,
+      "y": 0,
+      "name": "Create Project — Form — Desktop Dark",
+      "theme": {
+        "theme": "dark"
+      },
+      "clip": true,
+      "width": 720,
+      "fill": "$semantic/common/50/background",
+      "layout": "vertical",
+      "gap": 28,
+      "padding": 48,
+      "children": [
+        {
+          "type": "frame",
+          "id": "Xvjsh",
+          "name": "Header",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "i5GwF",
+              "name": "Title",
+              "fill": "$semantic/common/50/text",
+              "content": "Create project",
+              "fontFamily": "Inter",
+              "fontSize": 28,
+              "fontWeight": "semibold"
+            },
+            {
+              "type": "text",
+              "id": "rQOI5",
+              "name": "Subtitle",
+              "fill": "$semantic/common/600/background",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Fill in the details to start a new project.",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "ex2vq",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Name",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Name"
+            },
+            "bIaC6/f8QzS": {
+              "content": "Website redesign"
+            },
+            "uOwyc": {
+              "content": "Shown across the workspace."
+            }
+          }
+        },
+        {
+          "id": "OURqm",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Description",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Description"
+            },
+            "bIaC6/f8QzS": {
+              "content": "Marketing site revamp for the spring launch."
+            },
+            "uOwyc": {
+              "content": "A short summary of the goal."
+            }
+          }
+        },
+        {
+          "id": "odqRB",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Owner",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Owner"
+            },
+            "bIaC6": {
+              "id": "IulQX",
+              "type": "ref",
+              "ref": "tOLtR",
+              "name": "Control — Select",
+              "width": "fill_container",
+              "descendants": {
+                "UpHsn": {
+                  "content": "Select owner"
+                }
+              }
+            },
+            "uOwyc": {
+              "content": "Who is accountable for delivery."
+            }
+          }
+        },
+        {
+          "id": "q69kz9",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Due date",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Due date"
+            },
+            "bIaC6": {
+              "id": "KNEB1",
+              "type": "ref",
+              "ref": "ivx6N",
+              "name": "Control — Date",
+              "width": "fill_container"
+            },
+            "uOwyc": {
+              "content": "Target completion date."
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "SsJ6H",
+          "name": "Actions",
+          "width": "fill_container",
+          "gap": 12,
+          "justifyContent": "end",
+          "children": [
+            {
+              "id": "SNtDO",
+              "type": "ref",
+              "ref": "IcuBw",
+              "name": "Button — Cancel",
+              "fill": "$semantic/common/50/background",
+              "descendants": {
+                "VpW5X": {
+                  "content": "Cancel",
+                  "fill": "$semantic/common/600/background"
+                }
+              }
+            },
+            {
+              "id": "ctT9L",
+              "type": "ref",
+              "ref": "IcuBw",
+              "name": "Button — Create",
+              "descendants": {
+                "VpW5X": {
+                  "content": "Create project"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "y9Her",
+      "x": 1920,
+      "y": 860,
+      "name": "Create Project — Form Invalid — Desktop Light",
+      "theme": {
+        "theme": "light"
+      },
+      "clip": true,
+      "width": 720,
+      "fill": "$semantic/common/50/background",
+      "layout": "vertical",
+      "gap": 28,
+      "padding": 48,
+      "children": [
+        {
+          "type": "frame",
+          "id": "tou6g",
+          "name": "Header",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "AMkeM",
+              "name": "Title",
+              "fill": "$semantic/common/50/text",
+              "content": "Create project",
+              "fontFamily": "Inter",
+              "fontSize": 28,
+              "fontWeight": "semibold"
+            },
+            {
+              "type": "text",
+              "id": "C0QljS",
+              "name": "Subtitle",
+              "fill": "$semantic/common/600/background",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Fill in the details to start a new project.",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "QFxHQ",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Name",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Name"
+            },
+            "bIaC6/f8QzS": {
+              "content": ""
+            },
+            "uOwyc": {
+              "content": "Shown across the workspace."
+            }
+          }
+        },
+        {
+          "id": "eiZBp",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Description",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Description"
+            },
+            "bIaC6/f8QzS": {
+              "content": ""
+            },
+            "uOwyc": {
+              "content": "A short summary of the goal."
+            }
+          }
+        },
+        {
+          "id": "c3i1N",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Owner",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Owner"
+            },
+            "bIaC6": {
+              "id": "A5O2h",
+              "type": "ref",
+              "ref": "tOLtR",
+              "name": "Control — Select",
+              "width": "fill_container",
+              "descendants": {
+                "UpHsn": {
+                  "content": "Select owner"
+                }
+              }
+            },
+            "uOwyc": {
+              "content": "Who is accountable for delivery."
+            }
+          }
+        },
+        {
+          "id": "BFcXN",
+          "type": "ref",
+          "ref": "pHfEy",
+          "name": "Field — Due date",
+          "width": "fill_container",
+          "descendants": {
+            "s2ybfQ": {
+              "content": "Due date"
+            },
+            "bIaC6": {
+              "id": "I2RK67",
+              "type": "ref",
+              "ref": "ivx6N",
+              "name": "Control — Date",
+              "width": "fill_container"
+            },
+            "uOwyc": {
+              "content": "Target completion date."
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "moE66",
+          "name": "Actions",
+          "width": "fill_container",
+          "gap": 12,
+          "justifyContent": "end",
+          "children": [
+            {
+              "id": "pte01",
+              "type": "ref",
+              "ref": "IcuBw",
+              "name": "Button — Cancel",
+              "fill": "$semantic/common/50/background",
+              "descendants": {
+                "VpW5X": {
+                  "content": "Cancel",
+                  "fill": "$semantic/common/600/background"
+                }
+              }
+            },
+            {
+              "id": "mYcSz",
+              "type": "ref",
+              "ref": "IcuBw",
+              "name": "Button — Create",
+              "opacity": 0.45,
+              "descendants": {
+                "VpW5X": {
+                  "content": "Create project"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "uGjnK",
+      "x": 1920,
+      "y": 1720,
+      "name": "Projects — Desktop Light",
+      "theme": {
+        "theme": "light"
+      },
+      "clip": true,
+      "width": 720,
+      "fill": "$semantic/common/50/background",
+      "layout": "vertical",
+      "gap": 28,
+      "padding": 48,
+      "children": [
+        {
+          "type": "frame",
+          "id": "ijiiu",
+          "name": "Header",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "KqZNf",
+              "name": "Title",
+              "fill": "$semantic/common/50/text",
+              "content": "Projects",
+              "fontFamily": "Inter",
+              "fontSize": 28,
+              "fontWeight": "semibold"
+            },
+            {
+              "type": "text",
+              "id": "c14Q3",
+              "name": "Subtitle",
+              "fill": "$semantic/common/600/background",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Track delivery across your team.",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "E2IcJ",
+          "name": "Actions",
+          "width": "fill_container",
+          "justifyContent": "end",
+          "children": [
+            {
+              "id": "JJ8Uc",
+              "type": "ref",
+              "ref": "IcuBw",
+              "name": "Button — Create project",
+              "descendants": {
+                "VpW5X": {
+                  "content": "Create project"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "hUk0v",
+          "name": "Cards",
+          "width": "fill_container",
+          "gap": 24,
+          "children": [
+            {
+              "id": "nEEy0",
+              "type": "ref",
+              "ref": "ziJHM",
+              "name": "Card — Design system",
+              "width": 336,
+              "descendants": {
+                "vOYL0": {
+                  "content": "Design system"
+                },
+                "GupHg": {
+                  "content": "Component library and documentation."
+                },
+                "OEdCr": {
+                  "content": "Nova · Due Jun 10"
+                }
+              }
+            },
+            {
+              "id": "i9EX8",
+              "type": "ref",
+              "ref": "ziJHM",
+              "name": "Card — Mobile app",
+              "width": 336,
+              "descendants": {
+                "vOYL0": {
+                  "content": "Mobile app"
+                },
+                "GupHg": {
+                  "content": "Companion app for field teams."
+                },
+                "OEdCr": {
+                  "content": "Nova · Due May 15"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "obzHk",
+      "x": 2760,
+      "y": 1720,
+      "name": "Create Project — Success — Desktop Light",
+      "theme": {
+        "theme": "light"
+      },
+      "clip": true,
+      "width": 720,
+      "fill": "$semantic/common/50/background",
+      "layout": "vertical",
+      "gap": 28,
+      "padding": 48,
+      "children": [
+        {
+          "type": "frame",
+          "id": "o6yPN",
+          "name": "Header",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "INidF",
+              "name": "Title",
+              "fill": "$semantic/common/50/text",
+              "content": "Projects",
+              "fontFamily": "Inter",
+              "fontSize": 28,
+              "fontWeight": "semibold"
+            },
+            {
+              "type": "text",
+              "id": "x4O18",
+              "name": "Subtitle",
+              "fill": "$semantic/common/600/background",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Track delivery across your team.",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "jsvIt",
+          "name": "Success banner",
+          "width": "fill_container",
+          "fill": "$semantic/positive/50/background",
+          "cornerRadius": 8,
+          "gap": 12,
+          "padding": 16,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "Z4B6F",
+              "name": "Banner text",
+              "fill": "$semantic/positive/50/text",
+              "content": "Project created. It now appears in your list.",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Ll1Ot",
+          "name": "Actions",
+          "width": "fill_container",
+          "justifyContent": "end",
+          "children": [
+            {
+              "id": "q1jLa",
+              "type": "ref",
+              "ref": "IcuBw",
+              "name": "Button — Create project",
+              "descendants": {
+                "VpW5X": {
+                  "content": "Create project"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "aDh0X",
+          "name": "Cards",
+          "width": "fill_container",
+          "gap": 24,
+          "children": [
+            {
+              "id": "l4l0mT",
+              "type": "ref",
+              "ref": "ziJHM",
+              "name": "Card — Design system",
+              "width": 336,
+              "descendants": {
+                "vOYL0": {
+                  "content": "Website redesign"
+                },
+                "GupHg": {
+                  "content": "Marketing site revamp for the spring launch."
+                },
+                "OEdCr": {
+                  "content": "Acme · Due Apr 30"
+                }
+              }
+            },
+            {
+              "id": "xnrw0",
+              "type": "ref",
+              "ref": "ziJHM",
+              "name": "Card — Mobile app",
+              "width": 336,
+              "descendants": {
+                "vOYL0": {
+                  "content": "Mobile app"
+                },
+                "GupHg": {
+                  "content": "Companion app for field teams."
+                },
+                "OEdCr": {
+                  "content": "Nova · Due May 15"
+                }
+              }
             }
           ]
         }

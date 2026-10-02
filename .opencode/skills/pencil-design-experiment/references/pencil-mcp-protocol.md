@@ -83,15 +83,13 @@ blank and be misreported as a layout failure.
   the active canvas editor with `get_app_state` before any mutation. MCP does not
   switch documents from `filePath`.
 
-## Persistence (critical, verified 2026-10-02)
+## Persistence and file ownership (verified 2026-10-02)
 
-Pencil MCP mutations are held **in memory** and are not written to the `.pen`
-file automatically. On 2026-10-02 the composed frames were lost on document
-reload: the on-disk file stayed byte-identical to the pristine source. A Save in
-the native Pen UI is required to persist work.
-
-After finishing a section, ask the user to save the document, then re-read the
-file hash and confirm it changed before treating the artifact as delivered.
+Pen writes MCP changes to the `.pen` file automatically: after a rebuild the
+file grew and its hash changed. Do **not** write to the open `.pen` from outside
+the app (for example `cp` a pristine copy over it) — the app may reload the disk
+version and discard in-memory work. Manage the file only through Pen, then check
+that its hash changed and commit it.
 
 ## Immediate verification
 
