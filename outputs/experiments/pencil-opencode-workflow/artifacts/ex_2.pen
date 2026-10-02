@@ -200373,13 +200373,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/950",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "dark"
           }
@@ -200390,13 +200390,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/100",
+          "value": "$palette/green/100",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "dark"
           }
@@ -200407,13 +200407,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "dark"
           }
@@ -200424,13 +200424,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "dark"
           }
@@ -200441,13 +200441,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/100",
+          "value": "$palette/green/100",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "dark"
           }
@@ -200458,13 +200458,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/800",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "dark"
           }
@@ -200475,13 +200475,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "dark"
           }
@@ -200492,13 +200492,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "dark"
           }
@@ -200509,13 +200509,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/800",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "dark"
           }
@@ -200526,13 +200526,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/300",
+          "value": "$palette/green/300",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -200543,13 +200543,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "dark"
           }
@@ -200560,13 +200560,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "dark"
           }
@@ -200577,13 +200577,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/300",
+          "value": "$palette/green/300",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -200594,13 +200594,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/400",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "dark"
           }
@@ -200611,13 +200611,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "dark"
           }
@@ -200628,13 +200628,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "dark"
           }
@@ -200645,13 +200645,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/400",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "dark"
           }
@@ -200662,13 +200662,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "dark"
           }
@@ -200679,13 +200679,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/950",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "dark"
           }
@@ -200696,13 +200696,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/800",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "dark"
           }
@@ -200713,13 +200713,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "dark"
           }
@@ -200730,13 +200730,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/400",
           "theme": {
             "theme": "dark"
           }
@@ -200747,13 +200747,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/neutral/950",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/neutral/950",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "dark"
           }
@@ -200764,13 +200764,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/950",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/950",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "dark"
           }
@@ -200781,13 +200781,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/400",
           "theme": {
             "theme": "dark"
           }
@@ -200798,13 +200798,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/300",
+          "value": "$palette/green/300",
           "theme": {
             "theme": "dark"
           }
@@ -200815,13 +200815,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/950",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "dark"
           }
@@ -200832,13 +200832,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/800",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "dark"
           }
@@ -200849,13 +200849,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/300",
+          "value": "$palette/green/300",
           "theme": {
             "theme": "dark"
           }
@@ -200866,13 +200866,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/800",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "dark"
           }
@@ -200883,13 +200883,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "dark"
           }
@@ -200900,13 +200900,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -200917,13 +200917,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/800",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "dark"
           }
@@ -200934,13 +200934,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/100",
+          "value": "$palette/green/100",
           "theme": {
             "theme": "dark"
           }
@@ -200951,13 +200951,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "dark"
           }
@@ -200968,13 +200968,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -200985,13 +200985,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/100",
+          "value": "$palette/green/100",
           "theme": {
             "theme": "dark"
           }
@@ -201002,13 +201002,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/950",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "dark"
           }
@@ -201019,13 +201019,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "dark"
           }
@@ -201036,13 +201036,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -201053,13 +201053,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/950",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "dark"
           }
@@ -201070,13 +201070,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/950",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "dark"
           }
@@ -201087,13 +201087,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "dark"
           }
@@ -201104,13 +201104,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/200",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -202710,13 +202710,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/50",
+          "value": "$palette/green/50",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/950",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "dark"
           }
@@ -202812,13 +202812,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/400",
           "theme": {
             "theme": "dark"
           }
@@ -202880,13 +202880,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "dark"
           }
@@ -202897,13 +202897,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -202914,13 +202914,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "dark"
           }
@@ -202931,13 +202931,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/800",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/800",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "dark"
           }
@@ -204546,13 +204546,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -204563,13 +204563,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "dark"
           }
@@ -204580,13 +204580,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "dark"
           }
@@ -204597,13 +204597,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "dark"
           }
@@ -204614,13 +204614,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "dark"
           }
@@ -204631,13 +204631,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "dark"
           }
@@ -204648,13 +204648,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "dark"
           }
@@ -204665,13 +204665,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/300",
+          "value": "$palette/green/300",
           "theme": {
             "theme": "dark"
           }
@@ -204682,13 +204682,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/300",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "dark"
           }
@@ -204699,13 +204699,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/800",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/100",
           "theme": {
             "theme": "dark"
           }
@@ -204716,13 +204716,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/900",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -204733,13 +204733,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/100",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/100",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "dark"
           }
@@ -204750,13 +204750,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/300",
+          "value": "$palette/green/900",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -204767,13 +204767,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/200",
+          "value": "$palette/green/100",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/800",
+          "value": "$palette/green/800",
           "theme": {
             "theme": "dark"
           }
@@ -204784,13 +204784,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/950",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "dark"
           }
@@ -204801,13 +204801,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/300",
+          "value": "$palette/green/300",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/700",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -204818,13 +204818,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "dark"
           }
@@ -204835,13 +204835,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "dark"
           }
@@ -204852,13 +204852,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "dark"
           }
@@ -204869,13 +204869,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "dark"
           }
@@ -204886,13 +204886,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/600",
+          "value": "$palette/green/700",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/400",
+          "value": "$palette/green/500",
           "theme": {
             "theme": "dark"
           }
@@ -204903,13 +204903,13 @@
       "type": "color",
       "value": [
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "light"
           }
         },
         {
-          "value": "$palette/blue/500",
+          "value": "$palette/green/600",
           "theme": {
             "theme": "dark"
           }

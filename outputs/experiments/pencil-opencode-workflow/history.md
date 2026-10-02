@@ -68,3 +68,9 @@
 - В `ex_2.pen` бренд переведён на green через semantic-токены; компоненты не менялись.
 - `semantic/brand/*` получили раскладку `semantic/positive`; переведены action/focus/link/surface.
 - Pen contrast audit: 0 провалов; `palette/blue` больше не используется; `mise run check` зелёный.
+
+
+## 2026-10-02 — реорганизация canvas
+
+- Top-level фреймы перегруппированы в три читаемых региона: `Design System` (Foundation, assets, 02/03, компоненты 04–09), `Finished designs` (Landing 10–12, Dashboard 13–15), `Create Project flow` (5 экранов).
+- Добавлены section-заголовки; дизайны отнесены правее с большим зазором от дизайн-системы; пересечений нет, компоненты не менялись.

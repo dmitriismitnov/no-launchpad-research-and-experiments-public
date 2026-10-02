@@ -77,3 +77,5 @@ plan file was modified.
 
 | 19 | Brand swap blue → green via tokens | implementation | `deepseek/deepseek-flash` | semantic/brand = positive green mapping; action/focus/link/surface → green; palette/green untouched; components unchanged. |
 | 20 | Verified brand-swap contrast | audit | `deepseek/deepseek-flash` | 0 failures (brand+positive, text/icon/borderStrong, light/dark); no `palette/blue` refs; `mise run check` green. |
+
+| 21 | Regrouped canvas: system vs designs | implementation | `deepseek/deepseek-flash` | Design System / Finished designs / Create Project sections; headers added; no overlaps; components untouched. |
