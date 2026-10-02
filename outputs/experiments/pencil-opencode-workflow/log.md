@@ -72,3 +72,5 @@ plan file was modified.
 | 15 | User opened ex_2.pen; confirmed active via get_app_state | orchestration | `deepseek/deepseek-flash` | Correct isolation; source untouched. |
 | 16 | Composed 5 screens in ex_2.pen from existing refs | implementation | `deepseek/deepseek-flash` | WqoYt/R1Yg8/iKbNI/XKqHF/negSS; Field/Button/Select/Date Input/Card; tokens + light/dark. |
 | 17 | Exported renders and audited | audit | `deepseek/deepseek-flash` | `artifacts/render/*.png`; no overlap; validation copy + responsive deferred. |
+
+| 18 | Verified artifact persistence | audit | `deepseek/deepseek-flash` | disk/in-commit `ex_2.pen` hash == pristine source; added frames absent. MCP edits are in-memory only; require explicit Save in Pen UI. |

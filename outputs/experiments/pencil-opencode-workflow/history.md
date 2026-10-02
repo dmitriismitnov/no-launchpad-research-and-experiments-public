@@ -59,3 +59,5 @@
 - Собраны 5 экранов из existing refs: form light (`WqoYt`), form dark (`R1Yg8`), empty/invalid (`iKbNI`), Projects entry (`XKqHF`), success (`negSS`).
 - Экспортированы рендеры в `artifacts/render/`.
 - Аудит: layout без overlap, токены/тема/refs — PASS; отложены validation copy и tablet/mobile.
+
+- **Проверка артефакта:** `ex_2.pen` на диске == исходная дизайн-система (без экранов). MCP-изменения не сохраняются автоматически; экраны жили в памяти и утеряны при перезагрузке. Остались только рендеры. Вывод: нужно явное сохранение в Pen UI и проверка хэша.
