@@ -100,3 +100,14 @@
 - Обновлены `knip.jsonc` (entry `.storybook/*.{ts,tsx}`) и `Font.test.ts`.
 - Проверено визуально: `notes/avatar-light.png`, `notes/avatar-dark.png`.
 - Проверки: `mise run check`, `mise run check:deps` — зелёные.
+
+## 2026-10-02 — fix: сломанная иконка sun
+
+- Причина: `sun.svg` использовал `circle`/`rect` + `transform`, а билдер шрифта
+  (`svgicons2svgfont`) переносит в глиф только `path`-геометрию — светлая
+  иконка темы получалась пустой.
+- По скиллу `build-icon-font`: raw-источник нормализован (flatten в один
+  fill-based `<path>`), импортирован `mise run icons:build -- --from assets/icons`,
+  пересобраны font/manifest. Ключ `sun` и codepoint сохранены.
+- Проверено визуально: `notes/icon-inventory.png`.
+- Проверки: `mise run icons:check`, `mise run check` — зелёные.
