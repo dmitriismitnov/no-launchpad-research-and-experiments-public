@@ -15,6 +15,15 @@ export const foundationPreset = definePreset({
     name: "@no-launchpad/foundation",
     conditions: { extend: themeConditions, },
     theme: {
+        // Pen composes desktop / tablet / mobile frames explicitly, so the
+        // system exposes min-width breakpoints for responsive layout.
+        breakpoints: {
+            sm: "640px",
+            md: "768px",
+            lg: "1024px",
+            xl: "1280px",
+            "2xl": "1536px",
+        },
         // Only the primitive palette families are exposed as runtime
         // `colorPalette` values; semantic colors are consumed through explicit
         // tokens.

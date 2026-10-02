@@ -1,6 +1,14 @@
 import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
-/** Fixed Card anatomy; semantic tokens own theme projection. */
+/**
+ * Fixed Card anatomy; semantic tokens own theme projection.
+ *
+ * Pen `Card` (ziJHM): a raised surface with a subtle boundary and a 16px
+ * radius, a flush 140px sunken media surface and a 16px body with a 10px gap.
+ * `Card Plain` (vTMbw) drops the media and keeps the same body. `Card Compact`
+ * (XqPjN) drops the media and tightens the body to a 6px gap with `sm`/`xs`
+ * type and a `tertiary` description. No variant carries a footer divider.
+ */
 export const cardRecipe = defineSlotRecipe({
     className: "card",
     slots: [
@@ -20,24 +28,25 @@ export const cardRecipe = defineSlotRecipe({
         root: {
             display: "flex",
             flexDirection: "column",
-            gap: "x4",
-            padding: "x4",
+            gap: "x0",
+            padding: "x0",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
-            borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
-            boxShadow: "0 8px 22px {colors.semantic.shadow.500}",
+            borderColor: "semantic.border.subtle",
+            borderRadius: "lg",
+            backgroundColor: "semantic.surface.raised",
+            // Pen's Card master is clipped, so the flush media follows the
+            // rounded corner instead of carrying its own radius.
+            overflow: "hidden",
         },
 
         media: {
             flexShrink: "0",
             width: "100%",
-            aspectRatio: "16 / 9",
+            height: "140px",
             overflow: "hidden",
-            borderRadius: "sm",
-            backgroundColor: "semantic.common.200.background",
-            color: "semantic.common.500.background",
+            backgroundColor: "semantic.surface.sunken",
+            color: "semantic.text.tertiary",
             "& > img": {
                 display: "block",
                 width: "100%",
@@ -54,33 +63,33 @@ export const cardRecipe = defineSlotRecipe({
         body: {
             display: "flex",
             flexDirection: "column",
-            gap: "x6",
-            padding: "x6",
+            gap: "x5",
+            padding: "x8",
         },
 
         header: {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            gap: "x4",
-            color: "semantic.common.600.background",
+            gap: "x6",
+            color: "semantic.text.tertiary",
         },
 
         title: {
             fontFamily: "body",
-            fontSize: "lg",
+            fontSize: "md",
             fontWeight: "semibold",
             lineHeight: "tight",
             letterSpacing: "tight",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         },
 
         description: {
             fontFamily: "body",
             fontSize: "sm",
             fontWeight: "regular",
-            lineHeight: "relaxed",
-            color: "semantic.common.600.background",
+            lineHeight: "normal",
+            color: "semantic.text.secondary",
         },
 
         // The primary note's auto margin separates it from the trailing group.
@@ -88,26 +97,22 @@ export const cardRecipe = defineSlotRecipe({
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
-            gap: "x4",
-            borderTopWidth: "thin",
-            borderTopStyle: "solid",
-            borderTopColor: "semantic.common.200.divider",
-            paddingTop: "x6",
+            gap: "x5",
         },
 
         footerPrimary: {
             fontFamily: "body",
             fontSize: "xs",
-            fontWeight: "medium",
-            color: "semantic.common.50.text",
+            fontWeight: "regular",
+            color: "semantic.text.tertiary",
             marginInlineEnd: "auto",
         },
 
         footerSecondary: {
             fontFamily: "body",
-            fontSize: "xs",
-            fontWeight: "regular",
-            color: "semantic.common.600.background",
+            fontSize: "sm",
+            fontWeight: "medium",
+            color: "semantic.text.link",
         },
 
         actionButton: {
@@ -116,26 +121,11 @@ export const cardRecipe = defineSlotRecipe({
     },
 
     variants: {
-        /**
-         * Pen ships three Card masters. `default` is the media card, `plain`
-         * drops the media surface for a text-only body and `compact` is the
-         * dense metadata row. Both non-default variants omit the media slot in
-         * the component, so no `media` override is needed here.
-         *
-         * Pen `Card Plain` (`vTMbw`): 16px body padding, 10px body gap, `md`
-         * title, `sm` description, an undivided footer.
-         * Pen `Card Compact` (`XqPjN`): 16px body padding, 6px body gap, `sm`
-         * title and `xs` description, no footer.
-         */
         variant: {
             default: {},
 
             plain: {
                 body: { gap: "x5", },
-                footer: {
-                    borderTopWidth: "none",
-                    paddingTop: "x0",
-                },
             },
 
             compact: {
@@ -143,11 +133,7 @@ export const cardRecipe = defineSlotRecipe({
                 title: { fontSize: "sm", },
                 description: {
                     fontSize: "xs",
-                    color: "semantic.common.600.background",
-                },
-                footer: {
-                    borderTopWidth: "none",
-                    paddingTop: "x0",
+                    color: "semantic.text.tertiary",
                 },
             },
         },

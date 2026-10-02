@@ -898,6 +898,76 @@ export const semanticColors = defineSemanticTokens.colors({
                 divider: { value: { _light: "{colors.palette.red.950}", _dark: "{colors.palette.red.50}", }, },
             },
         },
+        // Named role tokens from the Pen foundation. They sit beside the numeric
+        // context matrix: the matrix answers "what is step N on this context",
+        // these answer "what surface/action/text/border role is this". Pen is
+        // the source of truth; see `outputs/experiments/pencil-opencode-workflow`.
+        surface: {
+            base: { value: { _light: "{colors.palette.neutral.50}", _dark: "{colors.palette.neutral.950}", }, },
+            raised: { value: { _light: "{colors.palette.base.white}", _dark: "{colors.palette.neutral.900}", }, },
+            sunken: { value: { _light: "{colors.palette.neutral.100}", _dark: "{colors.palette.neutral.950}", }, },
+            overlay: { value: { _light: "{colors.palette.base.white}", _dark: "{colors.palette.neutral.800}", }, },
+            hover: { value: { _light: "{colors.palette.neutral.100}", _dark: "{colors.palette.neutral.800}", }, },
+            selected: { value: { _light: "{colors.palette.green.50}", _dark: "{colors.palette.green.950}", }, },
+        },
+        text: {
+            primary: { value: { _light: "{colors.palette.neutral.900}", _dark: "{colors.palette.neutral.50}", }, },
+            secondary: { value: { _light: "{colors.palette.neutral.700}", _dark: "{colors.palette.neutral.300}", }, },
+            tertiary: { value: { _light: "{colors.palette.neutral.600}", _dark: "{colors.palette.neutral.400}", }, },
+            disabled: { value: { _light: "{colors.palette.neutral.400}", _dark: "{colors.palette.neutral.600}", }, },
+            inverse: { value: { _light: "{colors.palette.base.white}", _dark: "{colors.palette.neutral.950}", }, },
+            link: { value: { _light: "{colors.palette.green.700}", _dark: "{colors.palette.green.400}", }, },
+        },
+        border: {
+            default: { value: { _light: "{colors.palette.neutral.300}", _dark: "{colors.palette.neutral.700}", }, },
+            subtle: { value: { _light: "{colors.palette.neutral.200}", _dark: "{colors.palette.neutral.800}", }, },
+            strong: { value: { _light: "{colors.palette.neutral.500}", _dark: "{colors.palette.neutral.400}", }, },
+        },
+        focus: {
+            ring: { value: { _light: "{colors.palette.green.600}", _dark: "{colors.palette.green.500}", }, },
+        },
+        action: {
+            primary: {
+                background: { value: { _light: "{colors.palette.green.700}", _dark: "{colors.palette.green.700}", }, },
+                hover: { value: { _light: "{colors.palette.green.800}", _dark: "{colors.palette.green.800}", }, },
+                active: { value: { _light: "{colors.palette.green.900}", _dark: "{colors.palette.green.900}", }, },
+                foreground: {
+                    value: { _light: "{colors.palette.base.white}", _dark: "{colors.palette.base.white}", },
+                },
+            },
+            secondary: {
+                background: {
+                    value: { _light: "{colors.palette.base.white}", _dark: "{colors.palette.neutral.800}", },
+                },
+                hover: { value: { _light: "{colors.palette.neutral.100}", _dark: "{colors.palette.neutral.700}", }, },
+                border: { value: { _light: "{colors.palette.neutral.500}", _dark: "{colors.palette.neutral.400}", }, },
+                foreground: {
+                    value: { _light: "{colors.palette.neutral.800}", _dark: "{colors.palette.neutral.100}", },
+                },
+            },
+            ghost: {
+                hover: { value: { _light: "{colors.palette.neutral.100}", _dark: "{colors.palette.neutral.800}", }, },
+                foreground: {
+                    value: { _light: "{colors.palette.neutral.700}", _dark: "{colors.palette.neutral.200}", },
+                },
+            },
+            danger: {
+                background: { value: { _light: "{colors.palette.red.600}", _dark: "{colors.palette.red.600}", }, },
+                hover: { value: { _light: "{colors.palette.red.700}", _dark: "{colors.palette.red.700}", }, },
+                foreground: {
+                    value: { _light: "{colors.palette.base.white}", _dark: "{colors.palette.base.white}", },
+                },
+                border: { value: { _light: "{colors.palette.red.300}", _dark: "{colors.palette.red.500}", }, },
+            },
+            disabled: {
+                background: {
+                    value: { _light: "{colors.palette.neutral.100}", _dark: "{colors.palette.neutral.800}", },
+                },
+                foreground: {
+                    value: { _light: "{colors.palette.neutral.400}", _dark: "{colors.palette.neutral.500}", },
+                },
+            },
+        },
         shadow: {
             100: { value: { _light: "#0F172A0D", _dark: "#00000040", }, },
             200: { value: { _light: "#0F172A14", _dark: "#00000052", }, },

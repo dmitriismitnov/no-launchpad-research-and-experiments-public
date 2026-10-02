@@ -187,21 +187,25 @@ export const WithIcons: Story = {
     },
 };
 
-// Distinct sentinels make the role binding observable: the resolved values of
-// `text` and `icon` are identical today, so comparing rendered colours alone
-// would not catch an icon that reads the text role.
-const TEXT_PROBE = "rgb(17, 34, 51)";
-const ICON_PROBE = "rgb(68, 85, 102)";
+// A sentinel proves the slot colour resolves from the tone's semantic
+// foreground rather than an inherited literal.
+const FOREGROUND_PROBE = "rgb(17, 34, 51)";
 
-const roleOverrides = (tone: typeof tones[number]): CSSProperties => {
-    // `primary` sits on a dark fill and reads step 950; the surface tones read 50.
-    const step = tone === "primary" ? "950" : "50";
+const foregroundVariable = (tone: typeof tones[number]): string => {
+    if ( tone === "primary" ) {
+        return "--colors-semantic-action-primary-foreground";
+    }
 
-    return {
-        [`--colors-semantic-common-${step}-text`]: TEXT_PROBE,
-        [`--colors-semantic-common-${step}-icon`]: ICON_PROBE,
-    };
+    if ( tone === "secondary" ) {
+        return "--colors-semantic-action-secondary-foreground";
+    }
+
+    return "--colors-semantic-text-secondary";
 };
+
+const roleOverrides = (tone: typeof tones[number]): CSSProperties => ( {
+    [foregroundVariable(tone)]: FOREGROUND_PROBE,
+} );
 
 const SlotRoleProbe = ({ theme, }: { theme: "light" | "dark"; }) => (
     <ThemeShell theme={theme}>
@@ -225,11 +229,11 @@ const assertSlotRoles = async ({ canvasElement, }: { canvasElement: HTMLElement;
         const label = button.querySelector(".button__label") as Element;
         const icons = Array.from(button.querySelectorAll(".icon"));
 
-        // The label reads the text role, the glyphs read the icon role.
-        await expect(getComputedStyle(label).color).toBe(TEXT_PROBE);
+        // Pen paints the label and both glyphs from one tone foreground.
+        await expect(getComputedStyle(label).color).toBe(FOREGROUND_PROBE);
         await expect(icons.length).toBe(2);
         for ( const icon of icons ) {
-            await expect(getComputedStyle(icon).color).toBe(ICON_PROBE);
+            await expect(getComputedStyle(icon).color).toBe(FOREGROUND_PROBE);
         }
     }
 };

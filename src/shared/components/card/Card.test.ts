@@ -63,15 +63,30 @@ describe("card recipe", () => {
         ]);
     });
 
-    test("plain and compact drop the footer divider and tighten the body", () => {
+    test("plain and compact drop the media and tighten the body", () => {
         expect(cardRecipe.variants?.["variant"]?.["plain"]).toMatchObject({
             body: { gap: "x5", },
-            footer: { borderTopWidth: "none", paddingTop: "x0", },
         });
         expect(cardRecipe.variants?.["variant"]?.["compact"]).toMatchObject({
             body: { gap: "x3", },
             title: { fontSize: "sm", },
+            description: { fontSize: "xs", color: "semantic.text.tertiary", },
         });
+    });
+
+    test("matches the PEN Card geometry", () => {
+        // Pen `Card` (ziJHM): raised surface, subtle boundary, 16px radius,
+        // flush media, 16px body padding and 10px body gap.
+        expect(cardRecipe.base?.["root"]).toMatchObject({
+            gap: "x0",
+            padding: "x0",
+            borderRadius: "lg",
+            borderColor: "semantic.border.subtle",
+            backgroundColor: "semantic.surface.raised",
+            overflow: "hidden",
+        });
+        expect(cardRecipe.base?.["root"]).not.toHaveProperty("boxShadow");
+        expect(cardRecipe.base?.["body"]).toMatchObject({ gap: "x5", padding: "x8", });
     });
 
     test("uses no shorthand property names", () => {
@@ -116,20 +131,25 @@ describe("card recipe", () => {
 
         expect(cardRecipe.base?.["title"]).toMatchObject({
             fontFamily: "body",
-            fontSize: "lg",
+            fontSize: "md",
             fontWeight: "semibold",
             lineHeight: "tight",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         });
     });
 
-    test("keeps the media slot at 16:9 and clipped", () => {
+    test("matches the PEN media surface", () => {
+        // Pen media is a flush 140px sunken surface, clipped by the Card root.
         expect(cardRecipe.base?.["media"]).toMatchObject({
             flexShrink: "0",
-            aspectRatio: "16 / 9",
+            width: "100%",
+            height: "140px",
             overflow: "hidden",
-            borderRadius: "sm",
+            backgroundColor: "semantic.surface.sunken",
+            color: "semantic.text.tertiary",
         });
+        expect(cardRecipe.base?.["media"]).not.toHaveProperty("aspectRatio");
+        expect(cardRecipe.base?.["media"]).not.toHaveProperty("borderRadius");
     });
 
     test("keeps muted card text readable on both semantic surfaces", () => {
@@ -137,17 +157,14 @@ describe("card recipe", () => {
         expect(contrastRatio("#888F98", "#000000")).toBeGreaterThanOrEqual(4.5);
     });
 
-    test("gives the footer a top divider only, with no side or bottom border", () => {
+    test("gives the footer no divider in any variant", () => {
         const footer = cardRecipe.base?.["footer"] ?? {};
 
-        expect(footer).toMatchObject({
-            borderTopWidth: "thin",
-            borderTopStyle: "solid",
-            borderTopColor: "semantic.common.200.divider",
-        });
-
-        for ( const property of [ "borderBottomWidth", "borderLeftWidth", "borderRightWidth", ] ) {
-            expect(footer).not.toHaveProperty(property);
-        }
+        // Pen's Card footer is an undivided metadata row.
+        expect(footer).toMatchObject({ gap: "x5", });
+        expect(footer).not.toHaveProperty("borderTopWidth");
+        expect(footer).not.toHaveProperty("borderTopStyle");
+        expect(footer).not.toHaveProperty("borderTopColor");
+        expect(footer).not.toHaveProperty("paddingTop");
     });
 });

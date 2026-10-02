@@ -15,6 +15,7 @@ import {
 } from "./colors";
 import { sizes, spacing, } from "./layout";
 import { SCALE_STEP_REM, } from "./layout/scale";
+import { foundationPreset, } from "./preset";
 import { radii, } from "./shape";
 import { fonts, fontSizes, fontWeights, letterSpacings, lineHeights, } from "./typography";
 
@@ -75,6 +76,7 @@ describe("foundation", () => {
         expect(radii).toEqual({
             sm: { value: "0.375rem", },
             md: { value: "0.625rem", },
+            lg: { value: "1rem", },
             full: { value: "9999px", },
         });
     });
@@ -82,6 +84,45 @@ describe("foundation", () => {
     test("colors declares the theme axis", () => {
         expect(Object.keys(themeConditions)).toEqual([ "light", "dark", ]);
         expect(themeConditions.dark).toContain("[data-theme");
+    });
+
+    test("declares the Pen responsive breakpoints", () => {
+        expect(foundationPreset.theme?.breakpoints).toEqual({
+            sm: "640px",
+            md: "768px",
+            lg: "1024px",
+            xl: "1280px",
+            "2xl": "1536px",
+        });
+    });
+
+    test("named role tokens resolve the Pen values in both themes", () => {
+        const valueAt = (path: string, theme: "_light" | "_dark"): string => {
+            let cursor: unknown = semanticContexts;
+
+            for ( const key of path.split(".") ) {
+                cursor = ( cursor as Record<string, unknown> )[key];
+            }
+
+            return ( cursor as ThemePair ).value[theme];
+        };
+
+        expect(valueAt("surface.raised", "_light")).toBe("{colors.palette.base.white}");
+        expect(valueAt("surface.raised", "_dark")).toBe("{colors.palette.neutral.900}");
+        expect(valueAt("text.primary", "_light")).toBe("{colors.palette.neutral.900}");
+        expect(valueAt("text.primary", "_dark")).toBe("{colors.palette.neutral.50}");
+        expect(valueAt("text.link", "_light")).toBe("{colors.palette.green.700}");
+        expect(valueAt("text.link", "_dark")).toBe("{colors.palette.green.400}");
+        expect(valueAt("border.subtle", "_light")).toBe("{colors.palette.neutral.200}");
+        expect(valueAt("border.subtle", "_dark")).toBe("{colors.palette.neutral.800}");
+        expect(valueAt("focus.ring", "_light")).toBe("{colors.palette.green.600}");
+        expect(valueAt("focus.ring", "_dark")).toBe("{colors.palette.green.500}");
+        expect(valueAt("action.primary.background", "_light")).toBe("{colors.palette.green.700}");
+        expect(valueAt("action.primary.background", "_dark")).toBe("{colors.palette.green.700}");
+        expect(valueAt("action.secondary.background", "_light")).toBe("{colors.palette.base.white}");
+        expect(valueAt("action.secondary.background", "_dark")).toBe("{colors.palette.neutral.800}");
+        expect(valueAt("action.disabled.foreground", "_light")).toBe("{colors.palette.neutral.400}");
+        expect(valueAt("action.disabled.foreground", "_dark")).toBe("{colors.palette.neutral.500}");
     });
 
     test("palette has the declared families, each with the full step set", () => {
@@ -105,7 +146,16 @@ describe("foundation", () => {
     });
 
     test("semantic context groups expose the full matrix", () => {
-        expect(Object.keys(semanticContexts)).toEqual([ ...SEMANTIC_GROUPS, "shadow", ]);
+        // The numeric context matrix plus the named Pen role tokens.
+        expect(Object.keys(semanticContexts)).toEqual([
+            ...SEMANTIC_GROUPS,
+            "surface",
+            "text",
+            "border",
+            "focus",
+            "action",
+            "shadow",
+        ]);
 
         for ( const group of SEMANTIC_GROUPS ) {
             const steps = semanticContexts[group]!;

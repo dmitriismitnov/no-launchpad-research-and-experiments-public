@@ -8,5 +8,6 @@ import { defineTokens, } from "@pandacss/dev";
 export const radii = defineTokens.radii({
     sm: { value: "0.375rem", },
     md: { value: "0.625rem", },
+    lg: { value: "1rem", },
     full: { value: "9999px", },
 });

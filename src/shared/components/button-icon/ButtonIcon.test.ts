@@ -69,54 +69,62 @@ describe("buttonIcon recipe", () => {
         expect(buttonIconRecipe.defaultVariants).toEqual({ tone: "primary", size: "md", });
     });
 
-    test("matches the Button primary state contract", () => {
-        const root = buttonIconRecipe.variants?.["tone"]?.["primary"]?.["root"];
+    test("matches the Button action contract", () => {
+        const primary = buttonIconRecipe.variants?.["tone"]?.["primary"]?.["root"];
 
-        expect(root).toMatchObject({
+        expect(primary).toMatchObject({
             borderWidth: "none",
             borderStyle: "none",
-            backgroundColor: { base: "semantic.common.50.text", },
-            boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
-            opacity: {
-                base: 1,
-                _enabled: { _hover: 0.85, _active: 0.7, },
-                _disabled: 0.45,
+            backgroundColor: {
+                base: "semantic.action.primary.background",
+                _enabled: {
+                    _hover: "semantic.action.primary.hover",
+                    _active: "semantic.action.primary.active",
+                },
+                _disabled: "semantic.action.disabled.background",
             },
         });
+        expect(primary).not.toHaveProperty("boxShadow");
+        expect(primary).not.toHaveProperty("opacity");
     });
 
-    test("secondary follows the surface-feedback policy", () => {
+    test("secondary is a raised surface with a functional boundary", () => {
         const root = buttonIconRecipe.variants?.["tone"]?.["secondary"]?.["root"];
 
         expect(root).toMatchObject({
             backgroundColor: {
-                base: "transparent",
+                base: "semantic.action.secondary.background",
                 _enabled: {
-                    _hover: "semantic.common.100.background",
-                    _active: "semantic.common.200.background",
+                    _hover: "semantic.action.secondary.hover",
+                    _active: "semantic.action.secondary.hover",
                 },
+                _disabled: "semantic.action.disabled.background",
             },
-            borderColor: "semantic.common.700.background",
-            boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
-            opacity: { base: 1, _disabled: 0.45, },
+            borderWidth: "thin",
+            borderStyle: "solid",
+            borderColor: "semantic.action.secondary.border",
         });
+        expect(root).not.toHaveProperty("boxShadow");
+        expect(root).not.toHaveProperty("opacity");
     });
 
-    test("ghost uses the divider border and surface-feedback policy", () => {
+    test("ghost is transparent with a hover surface and no boundary", () => {
         const root = buttonIconRecipe.variants?.["tone"]?.["ghost"]?.["root"];
 
         expect(root).toMatchObject({
+            borderWidth: "none",
+            borderStyle: "none",
             backgroundColor: {
-                base: "semantic.common.50.background",
+                base: "transparent",
                 _enabled: {
-                    _hover: "semantic.common.100.background",
-                    _active: "semantic.common.200.background",
+                    _hover: "semantic.action.ghost.hover",
+                    _active: "semantic.surface.selected",
                 },
+                _disabled: "semantic.action.disabled.background",
             },
-            borderColor: "semantic.common.200.divider",
-            boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
-            opacity: { base: 1, _disabled: 0.45, },
         });
+        expect(root).not.toHaveProperty("boxShadow");
+        expect(root).not.toHaveProperty("opacity");
     });
 
     test("declares no foreground colour on the base root", () => {
@@ -124,22 +132,30 @@ describe("buttonIcon recipe", () => {
     });
 
     // The button has no visible text, so the only foreground is the glyph. It
-    // reads the `icon` role; the recipe must never fall back to the `text` role.
+    // reads the same action foreground Pen paints the Button with.
     const iconColours = {
-        primary: "semantic.common.950.icon",
-        secondary: "semantic.common.50.icon",
-        ghost: "semantic.common.50.icon",
+        primary: "semantic.action.primary.foreground",
+        secondary: "semantic.action.secondary.foreground",
+        ghost: "semantic.text.secondary",
     } as const;
 
-    test("paints the glyph from the icon role and never the text role", () => {
+    test("paints the glyph from the tone foreground", () => {
         for ( const [ tone, expected, ] of Object.entries(iconColours) ) {
             const variant = buttonIconRecipe.variants?.["tone"]?.[tone];
             const colour = ( variant?.["icon"] as { color?: { base?: string; }; } ).color?.base;
 
             expect(variant?.["root"]).not.toHaveProperty("color");
             expect(colour).toBe(expected);
-            expect(colour).toMatch(/\.icon$/);
-            expect(colour).not.toMatch(/\.text$/);
+        }
+    });
+
+    test("paints a disabled foreground from the shared disabled role", () => {
+        for ( const tone of Object.keys(iconColours) ) {
+            const variant = buttonIconRecipe.variants?.["tone"]?.[tone];
+
+            expect(variant?.["icon"]).toMatchObject({
+                color: { _disabled: "semantic.action.disabled.foreground", },
+            });
         }
     });
 
@@ -150,7 +166,7 @@ describe("buttonIcon recipe", () => {
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
             cursor: { base: "pointer", _disabled: "not-allowed", },
         });
     });
@@ -168,11 +184,13 @@ describe("buttonIcon recipe", () => {
     });
 
     test("declares a square geometry per size", () => {
+        // Pen `Icon Button` (L72UAx) is 40px; the documented 32px `Sm` is 32px.
         const sm = buttonIconRecipe.variants?.["size"]?.["sm"]?.["root"];
         const md = buttonIconRecipe.variants?.["size"]?.["md"]?.["root"];
 
         expect(sm).toMatchObject({ width: "x16", height: "x16", });
-        expect(md).toMatchObject({ width: "x25", height: "x25", });
+        expect(md).toMatchObject({ width: "x20", height: "x20", });
+        expect(buttonIconRecipe.base?.["root"]).toMatchObject({ borderRadius: "md", });
     });
 
     // `tone` (colour) and `size` (geometry) are independent, so no intersection

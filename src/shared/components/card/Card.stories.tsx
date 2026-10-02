@@ -28,6 +28,8 @@ const stack = css({
 
 const frame = css({ width: "320px", });
 
+const compactFrame = css({ width: "280px", });
+
 const ThemeShell = ({ theme, children, }: { theme: "light" | "dark"; children: ReactNode; }) => (
     <div data-theme={theme}>
         <div className={shell}>{children}</div>
@@ -251,7 +253,15 @@ export const Compact: Story = {
         title: "Compact card",
         description: "Dense metadata only.",
     },
-    render: renderIn("light"),
+    render: (args: CardProps) => (
+        <ThemeShell theme="light">
+            <div className={stack}>
+                <div className={compactFrame}>
+                    <Card {...args} />
+                </div>
+            </div>
+        </ThemeShell>
+    ),
     play: async ({ canvasElement, }) => {
         const article = canvasElement.querySelector("article") as Element;
         const title = canvasElement.querySelector(".card__title") as Element;
@@ -259,6 +269,8 @@ export const Compact: Story = {
         await expect(canvasElement.querySelector(".card__media")).toBeNull();
         await expect(article.className).toContain("card__root--variant_compact");
         await expect(getComputedStyle(title).fontSize).toBe("14px");
+        // Pen `Card Compact` (XqPjN) source geometry is 280px.
+        await expect(Math.round(article.getBoundingClientRect().width)).toBe(280);
     },
 };
 
@@ -381,9 +393,9 @@ export const Light: Story = {
             throw new Error("Light Card story must render its surface and text slots");
         }
 
-        await expect(getComputedStyle(article).backgroundColor).toBe("rgb(248, 250, 252)");
+        await expect(getComputedStyle(article).backgroundColor).toBe("rgb(255, 255, 255)");
         await expect(getComputedStyle(title).color).toBe("rgb(15, 23, 42)");
-        await expect(getComputedStyle(description).color).toBe("rgb(71, 85, 105)");
+        await expect(getComputedStyle(description).color).toBe("rgb(51, 65, 85)");
     },
 };
 
@@ -399,8 +411,8 @@ export const Dark: Story = {
             throw new Error("Dark Card story must render its surface and text slots");
         }
 
-        await expect(getComputedStyle(article).backgroundColor).toBe("rgb(2, 6, 23)");
+        await expect(getComputedStyle(article).backgroundColor).toBe("rgb(15, 23, 42)");
         await expect(getComputedStyle(title).color).toBe("rgb(248, 250, 252)");
-        await expect(getComputedStyle(description).color).toBe("rgb(148, 163, 184)");
+        await expect(getComputedStyle(description).color).toBe("rgb(203, 213, 225)");
     },
 };

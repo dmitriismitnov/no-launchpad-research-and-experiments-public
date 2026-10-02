@@ -1,6 +1,7 @@
 import { Badge, } from "@shared/components/badge";
 import { Brand, } from "@shared/components/brand";
 import { Button, } from "@shared/components/button";
+import { ButtonIcon, } from "@shared/components/button-icon";
 import { Card, } from "@shared/components/card";
 import { Divider, } from "@shared/components/divider";
 import { Link, } from "@shared/components/link";
@@ -19,14 +20,16 @@ const shell = css({
     fontFamily: "body",
 });
 
+// Pen frames: 1440 frame / 1312 content (64px gutters), 768 / 704 (32px),
+// 390 / 350 (20px). Content max width is the shared 1312px column.
 const container = css({
     width: "100%",
-    maxWidth: "1120px",
+    maxWidth: "1312px",
     marginInline: "auto",
-    paddingInline: "x12",
+    paddingInline: { base: "x10", md: "x16", xl: "x32", },
 });
 
-const section = css({ paddingBlock: "x20", });
+const section = css({ paddingBlock: { base: "x20", md: "x25", xl: "x32", }, });
 
 const eyebrow = css({
     fontSize: "xs",
@@ -36,18 +39,28 @@ const eyebrow = css({
     color: "semantic.brand.700.background",
 });
 
-const hero = css({ display: "grid", gap: "x8", paddingBlock: "x32", });
+const hero = css({ display: "grid", gap: "x8", paddingBlock: { base: "x20", md: "x25", xl: "x40", }, });
 
+// Pen hero H1: 56 / 40 / 32 across desktop / tablet / mobile.
 const heroTitle = css({
-    fontSize: "4xl",
+    fontSize: { base: "2xl", md: "3xl", xl: "4xl", },
     fontWeight: "semibold",
     lineHeight: "tight",
     letterSpacing: "tight",
     maxWidth: "18ch",
 });
 
+// Pen hero sub: 20px desktop, 16px below.
 const lead = css({
-    fontSize: "lg",
+    fontSize: { base: "md", xl: "lg", },
+    lineHeight: "relaxed",
+    color: "semantic.common.600.background",
+    maxWidth: "60ch",
+});
+
+// Pen section copy: 16px desktop/tablet, 14px mobile.
+const sectionLead = css({
+    fontSize: { base: "sm", md: "md", },
     lineHeight: "relaxed",
     color: "semantic.common.600.background",
     maxWidth: "60ch",
@@ -55,23 +68,41 @@ const lead = css({
 
 const row = css({ display: "flex", alignItems: "center", gap: "x8", flexWrap: "wrap", });
 
+// Pen reflows the header: desktop keeps the full action row, tablet keeps the
+// primary action, mobile keeps only the brand and a menu trigger.
+const headerNav = css({ display: { base: "none", md: "flex", }, alignItems: "center", gap: "x2", });
+const headerDesktopOnly = css({ display: { base: "none", lg: "inline-flex", }, alignItems: "center", });
+const headerTabletUp = css({ display: { base: "none", md: "inline-flex", }, alignItems: "center", });
+const headerMobileOnly = css({ display: { base: "inline-flex", md: "none", }, alignItems: "center", });
+
+// Pen value strip is 4-up desktop, 2-up tablet, 1-up mobile; this landing
+// carries three statistics, so the tracks follow the same breakpoints.
 const statsRow = css({
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-    gap: "x16",
+    gridTemplateColumns: {
+        base: "minmax(0, 1fr)",
+        md: "repeat(2, minmax(0, 1fr))",
+        xl: "repeat(3, minmax(0, 1fr))",
+    },
+    gap: { base: "x10", md: "x12", xl: "x16", },
     paddingBlock: "x12",
 });
 
+// Pen tablet stacks the feature section; desktop lays the cards out in one row.
 const features = css({
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+    gridTemplateColumns: {
+        base: "minmax(0, 1fr)",
+        lg: "repeat(3, minmax(0, 1fr))",
+    },
     gap: "x12",
 });
 
 const sectionHead = css({ display: "grid", gap: "x6", marginBottom: "x16", });
 
+// Pen section H2: 40 / 32 / 24 across desktop / tablet / mobile.
 const sectionTitle = css({
-    fontSize: "3xl",
+    fontSize: { base: "xl", md: "2xl", xl: "3xl", },
     fontWeight: "semibold",
     lineHeight: "tight",
     letterSpacing: "tight",
@@ -80,10 +111,15 @@ const sectionTitle = css({
 
 const muted = css({ color: "semantic.common.600.background", });
 
+// Pen workflow: 4-up desktop, 2x2 tablet, 1-up mobile.
 const steps = css({
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    gap: "x12",
+    gridTemplateColumns: {
+        base: "minmax(0, 1fr)",
+        md: "repeat(2, minmax(0, 1fr))",
+        xl: "repeat(4, minmax(0, 1fr))",
+    },
+    gap: { base: "x8", md: "x12", },
 });
 
 const step = css({ display: "grid", gap: "x4", });
@@ -101,23 +137,28 @@ const stepIndex = css({
     color: "semantic.brand.700.background",
 });
 
+// Pen `CTA panel`: raised surface, strong boundary, 16px radius, [56, 64]
+// padding, 20px gap. Tablet is [44, 32], mobile [32, 20].
 const cta = css({
     display: "grid",
-    gap: "x8",
+    gap: "x10",
     justifyItems: "start",
-    padding: "x20",
-    borderRadius: "md",
+    paddingBlock: { base: "x16", md: "x22", xl: "x25", },
+    paddingInline: { base: "x10", md: "x16", xl: "x32", },
+    borderRadius: "lg",
     borderWidth: "thin",
     borderStyle: "solid",
-    borderColor: "semantic.common.200.border.subtle",
-    backgroundColor: "semantic.common.100.background",
+    borderColor: "semantic.border.strong",
+    backgroundColor: "semantic.surface.raised",
 });
 
 const footer = css({ marginTop: "auto", paddingBlock: "x16", });
 
+// Pen footer: 4 columns desktop, 3 tablet, 1 mobile; this landing groups the
+// product/resources/legal columns, so 3 desktop and 1 mobile.
 const footerGrid = css({
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+    gridTemplateColumns: { base: "minmax(0, 1fr)", md: "repeat(3, minmax(0, 1fr))", },
     gap: "x12",
 });
 
@@ -175,18 +216,31 @@ export const Landing = () => (
     <div className={shell}>
         <TopNavigation
             brand={<Brand />}
-            nav={navLinks.map((label) => <NavItem key={label} label={label} href="#" />)}
+            nav={
+                <div className={headerNav}>
+                    {navLinks.map((label) => <NavItem key={label} label={label} href="#" />)}
+                </div>
+            }
             actions={
                 <>
-                    <ThemeSwitchPreview />
-                    <Link href="#">Sign in</Link>
-                    <Button>Get started</Button>
+                    <span className={headerDesktopOnly}>
+                        <ThemeSwitchPreview />
+                    </span>
+                    <span className={headerDesktopOnly}>
+                        <Link href="#">Sign in</Link>
+                    </span>
+                    <span className={headerTabletUp}>
+                        <Button>Get started</Button>
+                    </span>
+                    <span className={headerMobileOnly}>
+                        <ButtonIcon icon="menu" label="Open navigation" tone="ghost" />
+                    </span>
                 </>
             }
         />
 
         <div className={container}>
-            <section className={hero}>
+            <section className={hero} data-testid="landing-hero">
                 <span className={eyebrow}>Component-scoped design system</span>
                 <h1 className={heroTitle}>One foundation. Every screen, both themes.</h1>
                 <p className={lead}>
@@ -199,7 +253,7 @@ export const Landing = () => (
                 </div>
             </section>
 
-            <div className={statsRow}>
+            <div className={statsRow} data-testid="landing-stats">
                 <Statistic label="Components" value="64" delta="+6 this release" trend="up" />
                 <Statistic label="Tokens" value="480" delta="+48 this release" trend="up" />
                 <Statistic label="Themes" value="2" delta="0 this release" />
@@ -213,12 +267,12 @@ export const Landing = () => (
                 <div className={sectionHead}>
                     <span className={eyebrow}>Foundation</span>
                     <h2 className={sectionTitle}>Everything a design system needs, in one canvas</h2>
-                    <p className={lead}>
+                    <p className={sectionLead}>
                         Foundation, components and states — organised, themed and ready to compose.
                     </p>
                 </div>
 
-                <div className={features}>
+                <div className={features} data-testid="landing-features">
                     {featureData.map((feature) => (
                         <Card
                             key={feature.title}
@@ -238,7 +292,7 @@ export const Landing = () => (
                     <span className={eyebrow}>Workflow</span>
                     <h2 className={sectionTitle}>From foundation to product screens</h2>
                 </div>
-                <div className={steps}>
+                <div className={steps} data-testid="landing-steps">
                     {workflowSteps.map((item, index) => (
                         <div key={item.title} className={step}>
                             <span className={stepIndex}>{index + 1}</span>
@@ -257,7 +311,7 @@ export const Landing = () => (
                 <div className={sectionHead}>
                     <span className={eyebrow}>Themes</span>
                     <h2 className={sectionTitle}>Light and dark from the same components</h2>
-                    <p className={lead}>
+                    <p className={sectionLead}>
                         Switch the theme context and every token re-resolves. No forked components, no dark-mode
                         cleanup.
                     </p>
@@ -282,7 +336,7 @@ export const Landing = () => (
                     <Brand />
                 </div>
                 <div className={css({ marginTop: "x12", })}>
-                    <div className={footerGrid}>
+                    <div className={footerGrid} data-testid="landing-footer-grid">
                         <div>
                             <span className={footerHeading}>Product</span>
                             <div className={footerList}>

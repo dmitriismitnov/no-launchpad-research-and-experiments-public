@@ -80,93 +80,117 @@ describe("button recipe", () => {
         expect(buttonRecipe.defaultVariants).toEqual({ tone: "primary", size: "md", });
     });
 
-    test("matches the PEN primary state contract", () => {
+    test("matches the PEN control geometry", () => {
+        // Pen `Button` (IcuBw): 40px control, 8px gap, 10px radius, [10, 16]
+        // padding. Pen `Sm` is 32px with [6, 12] padding.
+        expect(buttonRecipe.base?.["root"]).toMatchObject({
+            height: "x20",
+            gap: "x4",
+            borderRadius: "md",
+            paddingBlock: "x5",
+            paddingInline: "x8",
+        });
+        expect(buttonRecipe.variants?.["size"]?.["md"]?.["root"]).toMatchObject({
+            paddingInline: "x8",
+        });
+        expect(buttonRecipe.variants?.["size"]?.["sm"]?.["root"]).toMatchObject({
+            height: "x16",
+            paddingBlock: "x3",
+            paddingInline: "x6",
+        });
+    });
+
+    test("matches the PEN primary action contract", () => {
         const root = buttonRecipe.variants?.["tone"]?.["primary"]?.["root"];
 
         expect(root).toMatchObject({
             borderWidth: "none",
             borderStyle: "none",
-            backgroundColor: { base: "semantic.common.50.text", },
-            boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
-            opacity: {
-                base: 1,
-                _enabled: { _hover: 0.85, _active: 0.7, },
-                _disabled: 0.45,
+            backgroundColor: {
+                base: "semantic.action.primary.background",
+                _enabled: {
+                    _hover: "semantic.action.primary.hover",
+                    _active: "semantic.action.primary.active",
+                },
+                _disabled: "semantic.action.disabled.background",
             },
         });
+        // Pen paints primary feedback with colour, never a shadow or opacity.
+        expect(root).not.toHaveProperty("boxShadow");
+        expect(root).not.toHaveProperty("opacity");
     });
 
-    test("secondary follows the surface-feedback policy", () => {
+    test("secondary is a raised surface with a functional boundary", () => {
         const root = buttonRecipe.variants?.["tone"]?.["secondary"]?.["root"];
 
         expect(root).toMatchObject({
             backgroundColor: {
-                base: "transparent",
+                base: "semantic.action.secondary.background",
                 _enabled: {
-                    _hover: "semantic.common.100.background",
-                    _active: "semantic.common.200.background",
+                    _hover: "semantic.action.secondary.hover",
+                    _active: "semantic.action.secondary.hover",
                 },
+                _disabled: "semantic.action.disabled.background",
             },
-            borderColor: "semantic.common.700.background",
-            boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
-            opacity: { base: 1, _disabled: 0.45, },
+            borderWidth: "thin",
+            borderStyle: "solid",
+            borderColor: "semantic.action.secondary.border",
         });
+        expect(root).not.toHaveProperty("boxShadow");
+        expect(root).not.toHaveProperty("opacity");
     });
 
-    test("ghost uses the divider border and surface-feedback policy", () => {
+    test("ghost is transparent with a hover surface and no boundary", () => {
         const root = buttonRecipe.variants?.["tone"]?.["ghost"]?.["root"];
 
         expect(root).toMatchObject({
+            borderWidth: "none",
+            borderStyle: "none",
             backgroundColor: {
-                base: "semantic.common.50.background",
+                base: "transparent",
                 _enabled: {
-                    _hover: "semantic.common.100.background",
-                    _active: "semantic.common.200.background",
+                    _hover: "semantic.action.ghost.hover",
+                    _active: "semantic.surface.selected",
                 },
+                _disabled: "semantic.action.disabled.background",
             },
-            borderColor: "semantic.common.200.divider",
-            boxShadow: "0 2px 8px {colors.semantic.shadow.700}",
-            opacity: { base: 1, _disabled: 0.45, },
         });
+        expect(root).not.toHaveProperty("boxShadow");
+        expect(root).not.toHaveProperty("opacity");
     });
 
     test("declares no foreground colour on the base root", () => {
         expect(buttonRecipe.base?.["root"]).not.toHaveProperty("color");
     });
 
-    // Text and icons own separate semantic roles: the label paints from the
-    // `text` projection, the icon slots from the `icon` projection. Neither
-    // reads `root`, so the two can change independently of each other.
+    // Pen paints the label and both icon slots from one action foreground per
+    // tone; the ghost default reads the shared `text.secondary` role.
     const slotColours = {
-        primary: { label: "semantic.common.950.text", icon: "semantic.common.950.icon", },
-        secondary: { label: "semantic.common.50.text", icon: "semantic.common.50.icon", },
-        ghost: { label: "semantic.common.50.text", icon: "semantic.common.50.icon", },
+        primary: "semantic.action.primary.foreground",
+        secondary: "semantic.action.secondary.foreground",
+        ghost: "semantic.text.secondary",
     } as const;
 
-    test("paints the label from the text role and the icons from the icon role", () => {
+    test("paints both the label and the icons from the tone foreground", () => {
         for ( const [ tone, expected, ] of Object.entries(slotColours) ) {
             const variant = buttonRecipe.variants?.["tone"]?.[tone];
 
             expect(variant?.["root"]).not.toHaveProperty("color");
-            expect(variant?.["label"]).toMatchObject({ color: { base: expected.label, }, });
-            expect(variant?.["prefixIcon"]).toMatchObject({ color: { base: expected.icon, }, });
-            expect(variant?.["suffixIcon"]).toMatchObject({ color: { base: expected.icon, }, });
+            for ( const slot of [ "label", "prefixIcon", "suffixIcon", ] as const ) {
+                expect(variant?.[slot]).toMatchObject({ color: { base: expected, }, });
+            }
         }
     });
 
-    test("never assigns the text role to an icon or the icon role to the label", () => {
-        const readColour = (slot: unknown): string => {
-            const colour = ( slot as { color?: { base?: string; }; } | undefined )?.color;
-
-            return String(colour?.base);
-        };
-
+    test("paints disabled foregrounds from the shared disabled role", () => {
         for ( const tone of Object.keys(slotColours) ) {
             const variant = buttonRecipe.variants?.["tone"]?.[tone];
 
-            expect(readColour(variant?.["label"])).toMatch(/\.text$/);
-            expect(readColour(variant?.["prefixIcon"])).toMatch(/\.icon$/);
-            expect(readColour(variant?.["suffixIcon"])).toMatch(/\.icon$/);
+            for ( const slot of [ "label", "prefixIcon", "suffixIcon", ] as const ) {
+                expect(variant?.[slot]).toMatchObject({
+                    color: { _disabled: "semantic.action.disabled.foreground", },
+                });
+            }
         }
     });
 
@@ -177,7 +201,7 @@ describe("button recipe", () => {
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
             cursor: { base: "pointer", _disabled: "not-allowed", },
         });
     });
