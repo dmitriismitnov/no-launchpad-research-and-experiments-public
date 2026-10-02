@@ -36,3 +36,19 @@
   story-тестах обновлены под новую палитру.
 - Проверки: `mise run gen`, `mise run check` (189 unit / 41 browser),
   `mise run check:deps` — зелёные.
+
+## 2026-10-02 — T2: первый компонент (Badge)
+
+- Определён набор компонентов, который реально использует Pen-лендинг
+  (`10 Landing — desktop`): Brand, Nav Item, Button, Badge, Text Input,
+  Icon Button, Tab, Table Row, Code Block, Icon, Progress, Theme Switch Preview.
+  Из них в коде уже есть Button/Input/ButtonIcon/Icon.
+- Перенесён `Badge` по правилам репозитория: `preset.ts` (слоты root/dot/label,
+  tone neutral|positive|negative|brand), компонент, `index.ts`, composition-тест,
+  story; зарегистрирован в `styles/index.ts`, `presets.test.ts`, `knip.jsonc`,
+  использован в `App.tsx`.
+- Badge из Pen: dot 6px (`common.600`), label 12/500 (`common.50.text`), pill.
+- Проверки: `mise run gen`, `mise run check` (189 unit / 46 browser),
+  `mise run check:deps` — зелёные. Коммиты: `05779b4`, `c9078a1`.
+- Осталось: Nav Item, Brand, Tab, Table Row, Code Block, Progress,
+  Theme Switch Preview; затем лендинг.
