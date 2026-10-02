@@ -4,6 +4,15 @@ Operating journal of all work products. `wiki/log.md` tracks wiki changes only.
 
 ## Latest experiment
 
+[[experiments/pen-design-system-development/README]] — **completed** (2026-10-02).
+Pen/OpenCode experiment подтвердил component-first documentation, semantic rank
+contracts, resolved-instance component-role audit, Assets — Icons inventory и
+18 responsive dashboard compositions. Canonical Foundation contracts проходят
+132/132 contexts; финальная independent scan не выявила enabled contrast
+failures. Критичный follow-up: сравнить эффективность и надёжность управления
+Pen через OpenCode/MCP с нативным Pen UI и проверить filesystem-backed
+component contracts. Детали — [[experiments/pen-design-system-development/notes/final-results]].
+
 [[experiments/input-component/README]] — **completed** (2026-09-30). Ветка
 `experiment/input-component` от `main`, не влита. Первый поведенческий
 form-контрол `Input`: нативный `<input>` с опциональным лейблом и состоянием
@@ -45,6 +54,7 @@ check` (189 unit / 41 browser) и `check:deps` зелёные; независи�
 
 | Experiment | Subject | Status | Outcome |
 | --- | --- | --- | --- |
+| [[experiments/pen-design-system-development/README]] | Pen/OpenCode: component-first design system, contrast audit, asset inventory и product compositions | completed (2026-10-02) | 66 component frames, canonical 132/132 contrast contracts, component-role audit по resolved fills без enabled failures, 17-icon inventory и 18 dashboard screens. Вне scope: code implementation, effects/motion и Pen/OpenCode parity; выводы — [[experiments/pen-design-system-development/notes/final-results]]. |
 | [[experiments/input-component/README]] | Первый поведенческий компонент `Input`: form-контрол с focus/disabled/invalid и a11y | completed (2026-09-30) | Реализован по плану в четырёх задачах на ветке `experiment/input-component` без создания навыков. Нативный `<input>` + `label`/`invalid`/`error` (`aria-invalid`, `aria-describedby`, `htmlFor`/`id`, `useId`), слот-рецепт `root/label/control/error`, единственный вариант `invalid`, focus-кольцо и `disabled` как у `Button`. PEN-референс `Input / Text` спроецирован на foundation-токены (снэпы 46→50px, 14→12px, 7→6px; mono-лейбл аппроксимирован `body`). Проверки merged tree: `check` (189 unit, 41 browser), `check:deps`. Независимое ревью: 0 Critical, 1 Important (мерж `className`) закрыт, 5 Minor отложены. Все критерии и follow-up закрыты; правила/скрипты/скиллы backlog — [[experiments/input-component/notes/results]]. Ветка не влита. PR не создавался. |
 | [[experiments/card-component/README]] | Первый составной компонент `Card`: универсальный API, медиа со заглушкой, действие в футере, проверка модели компонента | completed (2026-09-30) | Реализован по плану в четырёх задачах на ветке `experiment/card-component`, затем локально влит в `main`. Публичная анатомия `root/media/body/header/title/description/footer/footerPrimary/footerSecondary/actionButton`; данные каталога остаются в Storybook-композиции, а не в API. Два исполнения отличались от плана и перенесены в спецификацию: заглушка встроена inline через `?raw` (иначе `<img>` блокирует `currentColor`), и футер собран `flex-end` + auto-margin вместо `space-between`. Визуальная проверка нашла невалидное PEN/CSS значение `space_between`; follow-up review закрыло media sizing, пользовательский `dangerouslySetInnerHTML`, `actionButton.size: undefined`, browser-stories и документацию. Playground получил story-only controls для вложенных props. Пользователь признал результат и закрыл эксперимент; rules/models/Storybook backlog — [[experiments/card-component/notes/results]]. Проверки merged tree: `check` (166 unit, 34 browser), `check:deps`. PR не создавался. |
 | [[experiments/card-media-skeleton/README]] | Проверка генерации SVG-картинки агентом: самодостаточная заглушка медиа-слота `Card` | completed (2026-09-30) | Вывод пользователя: эксперимент случайный — цель была узкой, проверить, может ли DeepSeek сгенерировать SVG-картинку; ответ — да, может. Ассет `card-media.skeleton.svg`: кадр 16:9, монохром через `currentColor` + `fill-opacity`/`stroke-opacity` (`0.1` поверхность, `0.3` глиф), без анимации, `style`, `id`, фильтров и градиентов. Подтверждение ограничено одним ассетом и одним визуальным осмотром рендера (light/dark/tone, сжатие до 320px), плюс `xmllint`. Рамка вопроса про контракт изображений оказалась шире замысла и не решена: не проверены не-16:9 контейнер, `?raw` + inline и поведение внутри реального `Card`. Детали — [[experiments/card-media-skeleton/history]] |
