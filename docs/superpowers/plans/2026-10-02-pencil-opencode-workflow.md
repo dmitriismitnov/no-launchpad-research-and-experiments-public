@@ -18,7 +18,7 @@
 - Master, token, global canvas or any source-of-truth modification requires explicit user approval.
 - Keep document roots clean; all new screen frames use `clip: true`.
 - Before a Pencil mutation, load Pencil’s skill plus relevant schema, execute and design-system references.
-- Reviewer subagents are read-only, narrowly prompted, cannot launch children, and have model/variant logged.
+- Scoped implementation workers use `deepseek/deepseek-flash`; the current `openai/gpt-5.6-terra` primary agent performs planning, orchestration, evidence verification and all reviews. Log exact model/variant for every worker operation.
 - Before a major phase, large result, subagent fan-out or Pencil mutation, update/check `roadmap.md`, `todo.md`, `log.md`; if the next atomic action cannot be safely completed, autonomously request compaction or emit a clean-session handoff and stop the run. Do not ask the user to choose a mode.
 - Run `mise run check` before each commit. Do not run `check:deps`: dependencies and exports do not change.
 - Do not close the experiment, merge or push without explicit user direction.
@@ -66,7 +66,7 @@ Write the hypothesis, Create Project scope, source/target boundaries, success an
 
 - [ ] **Step 3: Create brief and protocol**
 
-`design-brief.md` defines name, description, owner and due-date fields; required validation; cancel; submit; and success in Projects. `benchmark-protocol.md` defines Gates A–D, evidence for each gate, three read-only reviewer roles and human visual review.
+`design-brief.md` defines name, description, owner and due-date fields; required validation; cancel; submit; and success in Projects. `benchmark-protocol.md` defines Gates A–D, evidence for each gate, the fixed DeepSeek-worker/GPT-orchestrator model contract and final human visual review.
 
 - [ ] **Step 4: Verify state files**
 
@@ -122,7 +122,7 @@ Embed this rule verbatim:
 If the next action is a new phase, a large inspection, a subagent fan-out, or a Pencil mutation and the current context cannot safely complete it, update roadmap/todo/log and choose autonomously: request manual compaction and continue after it completes when the durable state is sufficient, or emit a clean-session handoff and stop the run when a fresh context is safer. Do not ask the user to choose.
 ```
 
-Allow only code-system audit, Pencil structural audit and visual review. Each requires narrow inputs, read-only access, model reference, evidence and orchestrator disposition.
+Use `deepseek/deepseek-flash` only for scoped implementation work. The `openai/gpt-5.6-terra` orchestrator conducts code-system, Pencil structural and visual reviews itself, verifies evidence and records dispositions; workers do not review their own changes.
 
 - [ ] **Step 3: Write references and templates**
 
@@ -160,13 +160,13 @@ git commit -m "feat: add Pencil design experiment skill"
 
 **Interfaces:** Consumes Tasks 1–2. Produces writable target and verified component/token/icon/Pen baseline for Task 4.
 
-- [ ] **Step 1: Run code-system audit subagent**
+- [ ] **Step 1: Run the GPT code-system audit**
 
-Give a read-only subagent only `src/shared/components/`, `src/shared/styles/foundation/`, `src/shared/components/icon/`, `.agents/project.md` and the design brief. Require a table of available components, public variants/states, token ownership, theme mechanism, icon keys and source paths. It must not design or edit.
+The GPT-5.6 Terra orchestrator reads only `src/shared/components/`, `src/shared/styles/foundation/`, `src/shared/components/icon/`, `.agents/project.md` and the design brief. It writes a table of available components, public variants/states, token ownership, theme mechanism, icon keys and source paths; it does not design or edit Pen.
 
 - [ ] **Step 2: Verify and log audit evidence**
 
-Orchestrator checks every component and icon assertion against repository files. Record accepted/rejected findings in `code-system-inventory.md`; log model/variant, role, input paths, evidence and disposition in `log.md`.
+The orchestrator checks every component and icon assertion against repository files. Record accepted/rejected findings in `code-system-inventory.md`; log `openai/gpt-5.6-terra`, role, input paths, evidence and disposition in `log.md`.
 
 - [ ] **Step 3: Copy and inspect baseline without mutation**
 
@@ -177,9 +177,9 @@ cp /Users/es/Shared/vm/no-vm-shared/design_system/ex_1/design_system_ex_1.pen \
 
 With Pencil MCP, print root frame names, reusable-master/ref counts, theme contexts and `ctx.problems` for the copy. Write raw facts and timestamp to `pen-baseline.md`; do not mutate the copy in this task.
 
-- [ ] **Step 4: Structural reviewer and independent confirmation**
+- [ ] **Step 4: GPT structural review and independent confirmation**
 
-Launch the structural reviewer against copied file and baseline report. Require root structure, refs, variables, resolved-fill capability and clipping facts. Rerun every reported Pencil query before logging accepted/rejected findings.
+The GPT-5.6 Terra orchestrator reviews copied file and baseline report for root structure, refs, variables, resolved-fill capability and clipping facts. It reruns every Pencil query before logging accepted/rejected findings.
 
 - [ ] **Step 5: Update state, verify and commit**
 
@@ -219,9 +219,9 @@ For each section, use `placeholder: true` during its construction; remove it whe
 
 Create `structural-audit.md` with root frames, masters/refs, themes, clipping, nearest actual resolved text/icon/boundary pairs and contracts. Mark `PASS`, `FAIL`, `INFO` or `HUMAN REVIEW`; disabled specimens never count as enabled PASS. Correct confirmed failures only within local experiment frames and rerun their query.
 
-- [ ] **Step 4: Perform independent visual review**
+- [ ] **Step 4: Perform GPT visual review**
 
-Give the visual reviewer focused screenshots and `quality-rubric.md`. Require findings on scan order, hierarchy, primary/secondary action, container purpose, density, restrained effects and system coherence. Validate each claim against screenshots; non-mechanical concerns remain `HUMAN REVIEW`.
+The GPT-5.6 Terra orchestrator reviews focused screenshots against `quality-rubric.md`: scan order, hierarchy, primary/secondary action, container purpose, density, restrained effects and system coherence. It validates each claim against screenshots; non-mechanical concerns remain `HUMAN REVIEW`.
 
 - [ ] **Step 5: Execute mandatory new-session handoff test**
 

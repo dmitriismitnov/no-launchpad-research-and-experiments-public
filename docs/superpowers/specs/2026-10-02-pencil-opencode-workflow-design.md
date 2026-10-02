@@ -186,10 +186,11 @@ subagent statement как proof без проверки факта в Pen/code/s
 | Visual reviewer           | read-only subagent | hierarchy, readability, composition, anti-slop rubric          |
 | Human reviewer            | user               | final visual and scope decision                                |
 
-Конкретные модели не закрепляются в skill. Orchestrator выбирает доступную
-модель для каждой роли и фиксирует `provider/model#variant`, reason и limits в
-`log.md`. Review subagents не получают edit permissions и не запускают другие
-subagents.
+Модельный contract фиксирован для этого эксперимента: implementation workers
+используют `deepseek/deepseek-flash` (DeepSeek V4.1 Flash), а текущий primary
+agent `openai/gpt-5.6-terra` выполняет planning, orchestration, evidence
+verification и все reviews. В `log.md` фиксируются exact model/variant и роль.
+Workers не проводят review и не запускают других subagents.
 
 ## 9. Quality gates
 
