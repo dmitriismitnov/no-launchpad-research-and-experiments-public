@@ -10,8 +10,10 @@ import { breadcrumbsPreset, } from "../components/breadcrumbs/preset";
 import { buttonIconPreset, } from "../components/button-icon/preset";
 import { buttonPreset, } from "../components/button/preset";
 import { cardPreset, } from "../components/card/preset";
+import { carouselPreset, } from "../components/carousel/preset";
 import { clipboardPreset, } from "../components/clipboard/preset";
 import { codeBlockPreset, } from "../components/code-block/preset";
+import { contextMenuPreset, } from "../components/context-menu/preset";
 import { dataTablePreset, } from "../components/data-table/preset";
 import { dividerPreset, } from "../components/divider/preset";
 import { emptyStatePreset, } from "../components/empty-state/preset";
@@ -39,6 +41,7 @@ import { tagPreset, } from "../components/tag/preset";
 import { timelinePreset, } from "../components/timeline/preset";
 import { toastPreset, } from "../components/toast/preset";
 import { topNavigationPreset, } from "../components/top-navigation/preset";
+import { treeItemPreset, } from "../components/tree-item/preset";
 import { foundationPreset, } from "./foundation";
 import { preflight, settingsPreset, } from "./settings";
 
@@ -52,8 +55,10 @@ export {
     buttonIconPreset,
     buttonPreset,
     cardPreset,
+    carouselPreset,
     clipboardPreset,
     codeBlockPreset,
+    contextMenuPreset,
     dataTablePreset,
     dividerPreset,
     emptyStatePreset,
@@ -84,6 +89,7 @@ export {
     timelinePreset,
     toastPreset,
     topNavigationPreset,
+    treeItemPreset,
 };
 
 /**
@@ -133,6 +139,9 @@ export const componentPresetSources: readonly Preset[] = [
     menuPreset,
     stepPreset,
     paginationPreset,
+    treeItemPreset,
+    carouselPreset,
+    contextMenuPreset,
 ];
 
 export const collectComponentDictionaries = (

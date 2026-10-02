@@ -6,8 +6,10 @@ import { Brand, } from "@shared/components/brand";
 import { Breadcrumbs, } from "@shared/components/breadcrumbs";
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
+import { Carousel, } from "@shared/components/carousel";
 import { Clipboard, } from "@shared/components/clipboard";
 import { CodeBlock, } from "@shared/components/code-block";
+import { ContextMenu, } from "@shared/components/context-menu";
 import { DataTable, } from "@shared/components/data-table";
 import { Divider, } from "@shared/components/divider";
 import { EmptyState, } from "@shared/components/empty-state";
@@ -33,6 +35,7 @@ import { Tag, } from "@shared/components/tag";
 import { Timeline, } from "@shared/components/timeline";
 import { Toast, } from "@shared/components/toast";
 import { TopNavigation, } from "@shared/components/top-navigation";
+import { TreeItem, } from "@shared/components/tree-item";
 import { css, cx, } from "@shared/styled-system/css";
 
 const tones = [ "primary", "secondary", "ghost", ] as const;
@@ -319,6 +322,36 @@ export const App = () => (
                 <MenuItem label="Delete" tone="danger" />
             </Menu>
             <Pagination page={2} totalPages={8} />
+        </div>
+        <div className={css({ display: "grid", gap: "x8", maxWidth: "32rem", })}>
+            <div role="tree" className={css({ display: "flex", flexDirection: "column", })}>
+                <TreeItem label="Foundation" icon="folder" defaultExpanded>
+                    <TreeItem label="Primitive tokens" icon="palette" />
+                    <TreeItem label="Semantic tokens" icon="palette" selected />
+                    <TreeItem label="Components" icon="folder">
+                        <TreeItem label="Button" icon="layout-grid" />
+                        <TreeItem label="Select" icon="layout-grid" disabled />
+                    </TreeItem>
+                </TreeItem>
+            </div>
+            <Carousel
+                slides={[
+                    { label: "Overview", icon: "image", },
+                    { label: "Tokens", icon: "image", },
+                    { label: "Components", icon: "image", },
+                ]}
+            />
+            <ContextMenu
+                label="Actions"
+                defaultOpen
+                x={24}
+                y={24}
+                trigger="Right-click area"
+            >
+                <MenuItem label="Rename" shortcut="⌘R" />
+                <MenuItem label="Duplicate" icon="copy" checked />
+                <MenuItem label="Delete" tone="danger" />
+            </ContextMenu>
         </div>
         <InterSpecimen />
         <ThemePanel theme="light" />

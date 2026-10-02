@@ -12,8 +12,10 @@ import { breadcrumbsRecipe, } from "../components/breadcrumbs/preset";
 import { buttonIconRecipe, } from "../components/button-icon/preset";
 import { buttonRecipe, } from "../components/button/preset";
 import { cardRecipe, } from "../components/card/preset";
+import { carouselRecipe, } from "../components/carousel/preset";
 import { clipboardRecipe, } from "../components/clipboard/preset";
 import { codeBlockRecipe, } from "../components/code-block/preset";
+import { contextMenuRecipe, } from "../components/context-menu/preset";
 import { dataTableRecipe, } from "../components/data-table/preset";
 import { dividerRecipe, } from "../components/divider/preset";
 import { emptyStateRecipe, } from "../components/empty-state/preset";
@@ -41,6 +43,7 @@ import { tagRecipe, } from "../components/tag/preset";
 import { timelineRecipe, } from "../components/timeline/preset";
 import { toastRecipe, } from "../components/toast/preset";
 import { topNavigationRecipe, } from "../components/top-navigation/preset";
+import { treeItemRecipe, } from "../components/tree-item/preset";
 import { foundationPreset, } from "./foundation";
 import { collectComponentDictionaries, componentPresetSources, presets, settingsPreset, } from "./index";
 
@@ -100,6 +103,9 @@ describe("preset composition", () => {
             "menu",
             "step",
             "pagination",
+            "treeItem",
+            "carousel",
+            "contextMenu",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
@@ -144,6 +150,9 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["menu"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["step"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["pagination"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["treeItem"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["carousel"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["contextMenu"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
@@ -185,6 +194,9 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["menu"]).toEqual(menuRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["step"]).toEqual(stepRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["pagination"]).toEqual(paginationRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["treeItem"]).toEqual(treeItemRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["carousel"]).toEqual(carouselRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["contextMenu"]).toEqual(contextMenuRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
@@ -249,8 +261,14 @@ describe("preset composition", () => {
             "menu",
             "step",
             "pagination",
+            "treeItem",
+            "carousel",
+            "contextMenu",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "contextMenu",
+            "carousel",
+            "treeItem",
             "pagination",
             "step",
             "menu",

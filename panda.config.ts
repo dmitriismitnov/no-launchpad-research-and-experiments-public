@@ -45,6 +45,21 @@ export default defineConfig({
                     disabled: [ "true", ],
                 },
             ],
+            // Expanded/selected/disabled and current/disabled are passed as
+            // runtime variables, which the static extractor cannot resolve.
+            treeItem: [
+                {
+                    expanded: [ "true", ],
+                    selected: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            carousel: [
+                {
+                    current: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
         },
     },
     presets,
