@@ -151,6 +151,21 @@ const lead = css({
 
 const actionRow = css({ display: "flex", alignItems: "center", gap: "x5", flexWrap: "wrap", });
 
+// Pen mobile hero actions (`P6A8Xm`): the two controls become a full-width
+// stack with the 12px Pen gap and 48px controls. From `md` the pre-existing
+// horizontal intrinsic 40px row is kept, as freezes the parity plan.
+const heroActions = css({
+    display: "flex",
+    flexDirection: { base: "column", md: "row", },
+    alignItems: { base: "stretch", md: "center", },
+    gap: { base: "x6", md: "x5", },
+});
+
+const heroActionButton = css({
+    width: { base: "100%", md: "auto", },
+    height: { base: "x24", md: "x20", },
+});
+
 const trustRow = css({ display: "flex", alignItems: "center", gap: "x5", flexWrap: "wrap", });
 
 const trustLabel = css({ fontSize: "xs", color: "semantic.text.tertiary", });
@@ -330,7 +345,17 @@ const featureBody = css({
     maxWidth: "52ch",
 });
 
-const bulletList = css({ display: "grid", gap: "x3", margin: "x0", padding: "x0", listStyle: "none", });
+// Pen keeps the bullet list (`LjRvF`) and the secondary action (`Df1Dk`) on
+// desktop (`M2zLU`) only; tablet (`vzXfY`) and mobile (`pRsS2`) drop both.
+const bulletList = css({
+    display: { base: "none", xl: "grid", },
+    gap: "x3",
+    margin: "x0",
+    padding: "x0",
+    listStyle: "none",
+});
+
+const featureAction = css({ display: { base: "none", xl: "block", }, });
 
 const bullet = css({ display: "flex", alignItems: "flex-start", gap: "x3", fontSize: "sm", });
 
@@ -783,9 +808,9 @@ const Hero = () => (
                         No Launchpad keeps primitive and semantic tokens, reusable components and a full state catalogue
                         in one place — so your team ships consistent product UI without rebuilding it every sprint.
                     </p>
-                    <div className={actionRow}>
-                        <Button>Get the tokens</Button>
-                        <Button tone="secondary">Explore components</Button>
+                    <div className={heroActions}>
+                        <Button className={heroActionButton}>Get the tokens</Button>
+                        <Button className={heroActionButton} tone="secondary">Explore components</Button>
                     </div>
                     <div className={trustRow}>
                         <span className={trustLabel}>Built on</span>
@@ -929,7 +954,7 @@ const FeatureSection = ({ feature: item, }: { feature: Feature; }) => (
                     </li>
                 ))}
             </ul>
-            <div>
+            <div className={featureAction}>
                 <Button tone="secondary" suffixIcon={item.actionIcon}>{item.action}</Button>
             </div>
         </div>

@@ -1,10 +1,12 @@
 import type { Locator, Page, } from "@playwright/test";
 import { expect, test, } from "@playwright/test";
 
+import { type LandingViewportName, PEN_EVIDENCE, } from "./landing-pen-evidence";
+
 type Theme = "light" | "dark";
 
 type Viewport = {
-    name: string;
+    name: LandingViewportName;
     width: number;
     height: number;
     h1: number;
@@ -127,6 +129,8 @@ for ( const viewport of viewports ) {
             const root = themedRoot(page, theme);
             const anatomy = anatomyFor(viewport);
             const anatomySet = new Set(anatomy);
+            const penFeatures = PEN_EVIDENCE.featureAnatomy[viewport.name];
+            const penHeroActions = PEN_EVIDENCE.heroActions[viewport.name];
 
             // Every section from the Pen frame is present and visible.
             for ( const id of anatomy ) {
@@ -173,6 +177,38 @@ for ( const viewport of viewports ) {
                 viewport.h1,
             );
 
+            // Pen hero actions. On mobile (`P6A8Xm`, `gPvdL` / `Up935`) the code
+            // must stack two 350x48 buttons with the 12px Pen gap; from `md`
+            // (`bambL` / `L1Xf4m`) the existing intrinsic horizontal layout
+            // stays, as the parity plan freezes it.
+            const hero = root.getByTestId("landing-hero");
+            const primaryAction = hero.getByRole("button", { name: penHeroActions.buttons[0].label, });
+            const secondaryAction = hero.getByRole("button", { name: penHeroActions.buttons[1].label, });
+
+            await expect(primaryAction).toBeVisible();
+            await expect(secondaryAction).toBeVisible();
+
+            const primaryActionBox = await rect(primaryAction);
+            const secondaryActionBox = await rect(secondaryAction);
+
+            if ( penHeroActions.layout === "vertical" ) {
+                expect(Math.round(primaryActionBox.width)).toBe(penHeroActions.buttons[0].width);
+                expect(Math.round(primaryActionBox.height)).toBe(penHeroActions.buttons[0].height);
+                expect(Math.round(secondaryActionBox.width)).toBe(penHeroActions.buttons[1].width);
+                expect(Math.round(secondaryActionBox.height)).toBe(penHeroActions.buttons[1].height);
+                expect(Math.round(secondaryActionBox.x)).toBe(Math.round(primaryActionBox.x));
+
+                const stackOffset = penHeroActions.buttons[1].y - penHeroActions.buttons[0].y;
+
+                expect(Math.round(secondaryActionBox.y - primaryActionBox.y)).toBe(stackOffset);
+                expect(Math.round(secondaryActionBox.y - primaryActionBox.y - primaryActionBox.height)).toBe(
+                    penHeroActions.gap,
+                );
+            } else {
+                expect(Math.abs(secondaryActionBox.y - primaryActionBox.y)).toBeLessThan(1);
+                expect(secondaryActionBox.x).toBeGreaterThan(primaryActionBox.x + primaryActionBox.width);
+            }
+
             // Pen responsive tracks.
             expect(await countTracks(root.getByTestId("landing-value-strip"))).toBe(viewport.valueStripTracks);
             expect(await countTracks(root.getByTestId("landing-workflow-steps"))).toBe(viewport.workflowTracks);
@@ -186,6 +222,13 @@ for ( const viewport of viewports ) {
 
                 await expect(copy).toBeVisible();
                 await expect(visual).toBeVisible();
+
+                // Pen keeps the bullet list (`LjRvF`) and the secondary action
+                // (`Df1Dk`) on desktop (`M2zLU`) only; tablet (`vzXfY`) and
+                // mobile (`pRsS2`) drop both while keeping Tag / H2 / P / Visual.
+                // The copy slot holds exactly one list and one action button.
+                expect(await copy.locator("ul").isVisible()).toBe(penFeatures.retainsBullets);
+                expect(await copy.getByRole("button").isVisible()).toBe(penFeatures.retainsAction);
 
                 const copyBox = await rect(copy);
                 const visualBox = await rect(visual);
