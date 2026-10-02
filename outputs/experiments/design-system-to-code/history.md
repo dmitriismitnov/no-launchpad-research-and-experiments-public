@@ -52,3 +52,23 @@
   `mise run check:deps` — зелёные. Коммиты: `05779b4`, `c9078a1`.
 - Осталось: Nav Item, Brand, Tab, Table Row, Code Block, Progress,
   Theme Switch Preview; затем лендинг.
+
+## 2026-10-02 — T2 выполнен: перенесены все компоненты Pen
+
+- Перенесены все masters Pen в код (React + PandaCSS), батчами через
+  foreground-субагентов с независимой проверкой оркестратором.
+- Итог: 72 каталога компонентов в `src/shared/components/`.
+- Покрытие 82 masters: 72 компонента + под-части, представленные внутри
+  родителей: `Icon Button` → `button-icon`, `Text Input` → `input`;
+  `Option`/`Select Popup` → Select, `Calendar Day` → Calendar,
+  `Color Popup` → Color Picker, `Menu Item` → Menu, `List Item` → List,
+  `Timeline Item` → Timeline, `Table Row` → Data Table;
+  `Card Plain`/`Card Compact` → варианты `Card`.
+- Каждый компонент: preset + компонент + index + composition-тест + story,
+  зарегистрирован в `styles/index.ts`, `presets.test.ts`, `knip.jsonc`,
+  использован в `App.tsx`.
+- Иконки расширены пайплайном `icons:build` (38 glyphs).
+- Проверки: `mise run gen`, `mise run check` (635 unit / 389 browser),
+  `mise run check:deps`, `mise run build` — зелёные.
+- Отчёты по батчам: `notes/batch1..13-report.md`.
+- Осталось (T3): экран лендинга из токенов и компонентов.
