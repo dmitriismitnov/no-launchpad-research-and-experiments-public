@@ -4,6 +4,16 @@ Operating journal of all work products. `wiki/log.md` tracks wiki changes only.
 
 ## Latest experiment
 
+[[experiments/pencil-opencode-workflow/README]] — **active** (2026-10-02).
+Эксперимент проверяет workflow, а не реализацию продукта: способен ли
+project-local OpenCode skill организовать Pencil MCP работу с существующей
+дизайн-системой, изолированным writable-артефактом, проверками, subagent
+reviews, persistent state и управляемым восстановлением после остановки
+сессии. Design scenario — новый flow «Создание проекта» в существующем
+dashboard. Исходный Pen-документ и `src/` read-only; единственный writable
+Pen — `artifacts/create-project.pen` (ещё не создан). Pencil mutation пока не
+происходила. Детали — [[experiments/pencil-opencode-workflow/README]].
+
 [[experiments/pen-design-system-development/README]] — **completed** (2026-10-02).
 Pen/OpenCode experiment подтвердил component-first documentation, semantic rank
 contracts, resolved-instance component-role audit, Assets — Icons inventory и
@@ -54,6 +64,7 @@ check` (189 unit / 41 browser) и `check:deps` зелёные; независи�
 
 | Experiment | Subject | Status | Outcome |
 | --- | --- | --- | --- |
+| [[experiments/pencil-opencode-workflow/README]] | Pencil/OpenCode workflow: project-local skill, изолированный writable Pen benchmark, Gates A–D, persistent state и handoff | active (2026-10-02) | Durability state открыт: README, roadmap, todo, log, history, design brief и benchmark protocol. Исходный Pen и `src/` read-only; единственный writable Pen `artifacts/create-project.pen` ещё не создан, Pencil mutation не происходила. Итог будет записан после human review. |
 | [[experiments/pen-design-system-development/README]] | Pen/OpenCode: component-first design system, contrast audit, asset inventory и product compositions | completed (2026-10-02) | 66 component frames, canonical 132/132 contrast contracts, component-role audit по resolved fills без enabled failures, 17-icon inventory и 18 dashboard screens. Вне scope: code implementation, effects/motion и Pen/OpenCode parity; выводы — [[experiments/pen-design-system-development/notes/final-results]]. |
 | [[experiments/input-component/README]] | Первый поведенческий компонент `Input`: form-контрол с focus/disabled/invalid и a11y | completed (2026-09-30) | Реализован по плану в четырёх задачах на ветке `experiment/input-component` без создания навыков. Нативный `<input>` + `label`/`invalid`/`error` (`aria-invalid`, `aria-describedby`, `htmlFor`/`id`, `useId`), слот-рецепт `root/label/control/error`, единственный вариант `invalid`, focus-кольцо и `disabled` как у `Button`. PEN-референс `Input / Text` спроецирован на foundation-токены (снэпы 46→50px, 14→12px, 7→6px; mono-лейбл аппроксимирован `body`). Проверки merged tree: `check` (189 unit, 41 browser), `check:deps`. Независимое ревью: 0 Critical, 1 Important (мерж `className`) закрыт, 5 Minor отложены. Все критерии и follow-up закрыты; правила/скрипты/скиллы backlog — [[experiments/input-component/notes/results]]. Ветка не влита. PR не создавался. |
 | [[experiments/card-component/README]] | Первый составной компонент `Card`: универсальный API, медиа со заглушкой, действие в футере, проверка модели компонента | completed (2026-09-30) | Реализован по плану в четырёх задачах на ветке `experiment/card-component`, затем локально влит в `main`. Публичная анатомия `root/media/body/header/title/description/footer/footerPrimary/footerSecondary/actionButton`; данные каталога остаются в Storybook-композиции, а не в API. Два исполнения отличались от плана и перенесены в спецификацию: заглушка встроена inline через `?raw` (иначе `<img>` блокирует `currentColor`), и футер собран `flex-end` + auto-margin вместо `space-between`. Визуальная проверка нашла невалидное PEN/CSS значение `space_between`; follow-up review закрыло media sizing, пользовательский `dangerouslySetInnerHTML`, `actionButton.size: undefined`, browser-stories и документацию. Playground получил story-only controls для вложенных props. Пользователь признал результат и закрыл эксперимент; rules/models/Storybook backlog — [[experiments/card-component/notes/results]]. Проверки merged tree: `check` (166 unit, 34 browser), `check:deps`. PR не создавался. |
