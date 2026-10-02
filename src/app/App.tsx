@@ -1,6 +1,12 @@
+import { Avatar, } from "@shared/components/avatar";
 import { Badge, } from "@shared/components/badge";
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
+import { Divider, } from "@shared/components/divider";
+import { Skeleton, } from "@shared/components/skeleton";
+import { Spinner, } from "@shared/components/spinner";
+import { StatusIndicator, } from "@shared/components/status-indicator";
+import { Tag, } from "@shared/components/tag";
 import { css, cx, } from "@shared/styled-system/css";
 
 const tones = [ "primary", "secondary", "ghost", ] as const;
@@ -113,6 +119,14 @@ export const App = () => (
             <Badge label="Failed" tone="negative" />
             <Badge label="New" tone="brand" />
             <Badge label="No dot" withDot={false} />
+        </div>
+        <div className={css({ display: "flex", gap: "x8", alignItems: "center", flexWrap: "wrap", })}>
+            <Avatar name="Alice Ryder" presence="online" />
+            <Tag label="Design" onClose={() => {}} />
+            <StatusIndicator label="Online" tone="positive" />
+            <Spinner label="Loading" />
+            <Skeleton style={{ width: "8rem", height: "0.75rem", }} />
+            <Divider orientation="vertical" style={{ height: "1.5rem", }} />
         </div>
         <InterSpecimen />
         <ThemePanel theme="light" />

@@ -3,12 +3,18 @@ import { describe, expect, test, } from "bun:test";
 import { mergeConfigs, } from "@pandacss/config";
 import type { Config, } from "@pandacss/dev";
 
+import { avatarRecipe, } from "../components/avatar/preset";
 import { badgeRecipe, } from "../components/badge/preset";
 import { buttonIconRecipe, } from "../components/button-icon/preset";
 import { buttonRecipe, } from "../components/button/preset";
 import { cardRecipe, } from "../components/card/preset";
+import { dividerRecipe, } from "../components/divider/preset";
 import { iconRecipe, } from "../components/icon/preset";
 import { inputRecipe, } from "../components/input/preset";
+import { skeletonRecipe, } from "../components/skeleton/preset";
+import { spinnerRecipe, } from "../components/spinner/preset";
+import { statusIndicatorRecipe, } from "../components/status-indicator/preset";
+import { tagRecipe, } from "../components/tag/preset";
 import { foundationPreset, } from "./foundation";
 import { collectComponentDictionaries, componentPresetSources, presets, settingsPreset, } from "./index";
 
@@ -39,8 +45,16 @@ describe("preset composition", () => {
             "card",
             "input",
             "badge",
+            "avatar",
+            "statusIndicator",
+            "tag",
         ]);
-        expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([ "icon", ]);
+        expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
+            "icon",
+            "dividerRule",
+            "skeleton",
+            "spinner",
+        ]);
     });
 
     test("keeps every component recipe after the loader merge", () => {
@@ -49,7 +63,13 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["card"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["input"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["badge"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["avatar"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["statusIndicator"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["tag"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
+        expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
+        expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
+        expect(mergedConfig.theme?.recipes?.["spinner"]).toBeDefined();
     });
 
     test("carries the recipe content declared by each component", () => {
@@ -58,7 +78,20 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["card"]).toEqual(cardRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["input"]).toEqual(inputRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["badge"]).toEqual(badgeRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["avatar"]).toEqual(avatarRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["statusIndicator"]).toEqual(statusIndicatorRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["tag"]).toEqual(tagRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
+        expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
+        expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
+        expect(mergedConfig.theme?.recipes?.["spinner"]).toEqual(spinnerRecipe);
+    });
+
+    test("carries component-owned keyframes", () => {
+        expect(mergedConfig.theme?.keyframes?.["spin"]).toEqual({
+            from: { transform: "rotate(0deg)", },
+            to: { transform: "rotate(360deg)", },
+        });
     });
 
     test("preserves foundation tokens and system conditions", () => {
@@ -77,8 +110,27 @@ describe("preset composition", () => {
         const forward = collectComponentDictionaries(componentPresetSources);
         const reversed = collectComponentDictionaries([ ...componentPresetSources, ].reverse());
 
-        expect(Object.keys(forward.slotRecipes)).toEqual([ "button", "buttonIcon", "card", "input", "badge", ]);
-        expect(Object.keys(reversed.slotRecipes)).toEqual([ "badge", "input", "card", "buttonIcon", "button", ]);
-        expect(Object.keys(reversed.recipes)).toEqual([ "icon", ]);
+        expect(Object.keys(forward.slotRecipes)).toEqual([
+            "button",
+            "buttonIcon",
+            "card",
+            "input",
+            "badge",
+            "avatar",
+            "statusIndicator",
+            "tag",
+        ]);
+        expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "tag",
+            "statusIndicator",
+            "avatar",
+            "badge",
+            "input",
+            "card",
+            "buttonIcon",
+            "button",
+        ]);
+        expect(Object.keys(forward.recipes)).toEqual([ "icon", "dividerRule", "skeleton", "spinner", ]);
+        expect(Object.keys(reversed.recipes)).toEqual([ "spinner", "skeleton", "dividerRule", "icon", ]);
     });
 });

@@ -6,6 +6,7 @@ export const ICON_CODEPOINTS = {
     "check": 0xE002,
     "flask-conical": 0xE003,
     "gauge": 0xE004,
+    "loader": 0xE012,
     "mail": 0xE005,
     "map-pin": 0xE006,
     "menu": 0xE007,

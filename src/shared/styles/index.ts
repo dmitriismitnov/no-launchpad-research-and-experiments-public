@@ -1,25 +1,37 @@
-import type { Preset, RecipeConfig, SlotRecipeConfig, } from "@pandacss/dev";
+import type { CssKeyframes, Preset, RecipeConfig, SlotRecipeConfig, } from "@pandacss/dev";
 import { definePreset, } from "@pandacss/dev";
 
+import { avatarPreset, } from "../components/avatar/preset";
 import { badgePreset, } from "../components/badge/preset";
 import { buttonIconPreset, } from "../components/button-icon/preset";
 import { buttonPreset, } from "../components/button/preset";
 import { cardPreset, } from "../components/card/preset";
+import { dividerPreset, } from "../components/divider/preset";
 import { iconPreset, } from "../components/icon/preset";
 import { inputPreset, } from "../components/input/preset";
+import { skeletonPreset, } from "../components/skeleton/preset";
+import { spinnerPreset, } from "../components/spinner/preset";
+import { statusIndicatorPreset, } from "../components/status-indicator/preset";
+import { tagPreset, } from "../components/tag/preset";
 import { foundationPreset, } from "./foundation";
 import { preflight, settingsPreset, } from "./settings";
 
 export {
+    avatarPreset,
     badgePreset,
     buttonIconPreset,
     buttonPreset,
     cardPreset,
+    dividerPreset,
     foundationPreset,
     iconPreset,
     inputPreset,
     preflight,
     settingsPreset,
+    skeletonPreset,
+    spinnerPreset,
+    statusIndicatorPreset,
+    tagPreset,
 };
 
 /**
@@ -27,8 +39,8 @@ export {
  * across presets, so two presets that both declare `theme.slotRecipes` would
  * overwrite each other's section instead of merging it. The collection point
  * therefore gathers the component dictionaries into one technical preset: a
- * shallow, two-key collection. No deep merge, no component overrides and no
- * hidden inheritance.
+ * shallow collection. No deep merge, no component overrides and no hidden
+ * inheritance.
  */
 export const componentPresetSources: readonly Preset[] = [
     buttonPreset,
@@ -37,13 +49,24 @@ export const componentPresetSources: readonly Preset[] = [
     iconPreset,
     inputPreset,
     badgePreset,
+    dividerPreset,
+    skeletonPreset,
+    spinnerPreset,
+    avatarPreset,
+    statusIndicatorPreset,
+    tagPreset,
 ];
 
 export const collectComponentDictionaries = (
     sources: readonly Preset[],
-): { recipes: Record<string, RecipeConfig>; slotRecipes: Record<string, SlotRecipeConfig>; } => {
+): {
+    recipes: Record<string, RecipeConfig>;
+    slotRecipes: Record<string, SlotRecipeConfig>;
+    keyframes: CssKeyframes;
+} => {
     const recipes: Record<string, RecipeConfig> = {};
     const slotRecipes: Record<string, SlotRecipeConfig> = {};
+    const keyframes: CssKeyframes = {};
 
     for ( const source of sources ) {
         if ( source.theme?.recipes ) {
@@ -53,9 +76,13 @@ export const collectComponentDictionaries = (
         if ( source.theme?.slotRecipes ) {
             Object.assign(slotRecipes, source.theme.slotRecipes);
         }
+
+        if ( source.theme?.keyframes ) {
+            Object.assign(keyframes, source.theme.keyframes);
+        }
     }
 
-    return { recipes, slotRecipes, };
+    return { recipes, slotRecipes, keyframes, };
 };
 
 export const componentsPreset = definePreset({
