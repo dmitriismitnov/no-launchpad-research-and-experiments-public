@@ -1,6 +1,6 @@
 # Results — Pencil × OpenCode workflow
 
-**Status:** partial success (2026-10-02). **Model:** `deepseek/deepseek-flash` (single model, all roles).
+**Status:** success with deferred items (2026-10-02). **Model:** `deepseek/deepseek-flash` (single model, all roles).
 
 ## Hypothesis
 
@@ -58,3 +58,18 @@ own UI — is answered **not yet**, with concrete, reproducible reasons.
    limitations first.
 3. Separate micro-experiment: how to express component variants from MCP, and
    whether opening/saving in the UI clears the render/layout cache staleness.
+
+
+## Second pass in ex_2.pen
+
+После инцидента изоляции пользователь создал и открыл `artifacts/ex_2.pen`. Через `get_app_state` подтверждено, что активный редактор — именно `ex_2.pen`; в него загружена копия дизайн-системы (82 masters). MCP не умеет переключать документы: активный документ задаёт пользователь.
+
+В `ex_2.pen` собраны пять экранов только из existing refs:
+
+- `WqoYt` — форма Create Project, desktop light;
+- `R1Yg8` — та же форма, desktop dark;
+- `iKbNI` — пустая/невалидная форма;
+- `XKqHF` — entry Projects;
+- `negSS` — success Projects с баннером и созданным проектом.
+
+Рендеры — в `artifacts/render/`. Layout без overlap, тема light/dark из одних токенов, исходник не изменялся. Отложено: явные validation-сообщения (нужен Field invalid variant, недоступный через ref) и tablet/mobile.

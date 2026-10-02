@@ -72,6 +72,16 @@ blank and be misreported as a layout failure.
 - Prefer one whole-document `Get` scan per call and reuse the collected ids in
   the same call: multiple whole-document scans, and `FindEmptySpace` on a large
   document, triggered `InternalError: interrupted`.
+- The `Field` master's Hint text is `uOwyc`; `ss2MJ` is Error. Error copy stays
+  hidden unless the Field carries its `invalid` variant, which a `ref` cannot
+  set; for an empty state rely on empty controls plus a dimmed primary action,
+  or ask before inventing a substitute.
+- A frame's corner radius property is `cornerRadius`, not `borderRadius`.
+- Set a nested control value after creation via the path
+  `instanceId/bIaC6/f8QzS`; creation-time `descendants` does not reach it.
+- Isolation procedure: the user opens the target document in Pen, then confirm
+  the active canvas editor with `get_app_state` before any mutation. MCP does not
+  switch documents from `filePath`.
 
 ## Immediate verification
 

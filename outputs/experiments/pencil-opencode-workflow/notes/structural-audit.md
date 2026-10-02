@@ -1,49 +1,44 @@
-# Structural & contrast audit — Create Project benchmark
+# Structural & contrast audit — Create Project benchmark (ex_2)
 
-**Status:** partial (2026-10-02). **Role/model:** single-model operator — `deepseek/deepseek-flash`.
-**Artifact:** `artifacts/create-project.pen`. **Scope audited:** local frame `x9le7`
-(`Create Project — Form — Desktop Light`).
+**Status:** pass with minor deferrals (2026-10-02). **Model:** `deepseek/deepseek-flash`.
+**Artifact:** `artifacts/ex_2.pen` (active editor, confirmed via `get_app_state`).
+**Audited frames:** `WqoYt`, `R1Yg8`, `iKbNI`, `XKqHF`, `negSS`.
 
 ## Method
 
-- Pencil MCP read-only queries (`Get` visitor, `GetVariables`) plus `TakeScreenshot`.
-- Pen target is the isolated copy; source `design_system_ex_1.pen` untouched.
-- Contrast uses the nearest actual resolved fill (`resolveVariables: true`).
+Read-only Pencil MCP queries plus forced-render screenshots/exports. Contrast uses
+nearest actual resolved fills (`resolveVariables: true`).
 
 ## PASS
 
 | Check | Evidence |
 | --- | --- |
+| Correct isolation | `get_app_state` active editor = `artifacts/ex_2.pen`; the read-only source `design_system_ex_1.pen` was never the active editor for this pass. |
+| Existing refs used | `Field`, `Button`, `Select`, `Date Input`, `Card` instances only; no new masters/tokens/icons. |
+| Semantic tokens | Title `common/50/text`→`#0F172A`; subtitle `common/600/background`→`#475569`; success banner `positive/50/background` + `positive/50/text`. |
+| Theme | Light and dark frames render from the same tokens (`WqoYt` light, `R1Yg8` dark); no light/dark master copies. |
+| Layout integrity | Bounds are sequential with no overlap in all five frames (form: header 48, fields 135/247/359/471, actions 583; projects: header 48, actions 135, cards 203; success: header 48, banner 135, actions 212, cards 280). |
+| Contrast (sampled) | `#0F172A`/`#F8FAFC` ≈ 17:1; `#475569`/`#F8FAFC` ≈ 7:1; buttons use master tokens. |
+| Root cleanliness | No leaf nodes under `document`; five isolated experiment frames only. |
 
-| No master/token/icon/source change | 82 masters preserved; only a local root frame + refs inserted. |
-| Existing refs used | `Field`, `Button` (×2), `Select`, `Date Input` instances; no local substitutes. |
-| Semantic tokens used | Title `$semantic/common/50/text` → `#0F172A`; subtitle `$semantic/common/600/background` → `#475569`; controls use master tokens. |
-| Theme context | Frame carries `theme:{theme:'light'}`; variables resolve per theme. |
-| Text contrast (sampled) | Title `#0F172A` on `#F8FAFC` ≈ 17:1; subtitle `#475569` on `#F8FAFC` ≈ 7:1. |
-| Root cleanliness | No leaf nodes added directly under `document`. |
-
-## FAIL
+## FAIL / deferred
 
 | Check | Evidence |
 | --- | --- |
-| **Isolation mechanism failed** | `tools.pencil.execute` applied mutations to the **active editor** document (`design_system_ex_1.pen`), not to the passed relative path to the copy. The composed frame `x9le7` was found inside the source document via an absolute-path query. Experimental nodes were deleted afterwards and the on-disk source hash re-verified unchanged (`c9695a1d…`), but the read-only boundary was breached in-app. A relative `filePath` is not isolation; the copy must be explicitly opened and confirmed active via `get_app_state` before any mutation. |
-| Layout overlap | `Fields` at y=143 h=300 (ends 443), but `Actions` at y=371 → 72 px overlap; due-date row and Cancel/Create render on one line. Reproduced after repeated property touches. |
-| Brief coverage | Missing Description field, empty/invalid state, distinct filled vs empty states, Projects entry point, success state, dark theme, tablet/mobile. |
-| Hint content | `Field` hint still renders the master default `Lowercase, no spaces.`; instance-level hint `Update` had no visible effect. |
+| Explicit validation messages | Error text (`ss2MJ`) stays hidden without the Field `invalid` variant, which a `ref` cannot set. The empty state is conveyed by empty fields + a dimmed primary action, not by red error copy. |
+| Responsive | Tablet and mobile variants are not built yet. |
 
 ## INFO
 
 | Finding | Evidence / disposition |
 | --- | --- |
-| Render/layout cache | New nested content does not render in `TakeScreenshot`/`Export` until the frame is touched (`Update` prop). Without the touch the frame looks blank. |
-| Ref variant override unsupported | `Insert(..., {type:'ref', tone:'secondary'})` → `unexpected property "tone"`. Secondary styling was done by overriding fill/label tokens instead. |
-| `Date Picker` master embeds a calendar | Using it inline produced a 356 px popup; switched to the `Date Input` master. |
-| `Textarea`-based field broke layout | A `Field` instance whose control was replaced by `Textarea` left a large empty block; reverted. |
-| Frame border props | `borderWidth`/`borderStyle`/`borderColor` are not valid frame properties in the `.pen` schema. |
+| Render cache | Nested content needed a frame "touch" before appearing in screenshots/exports. |
+| Field hint id | Hint is `uOwyc`, not `ss2MJ` (which is Error); overriding error text does not reveal it. |
+| Frame radius | `cornerRadius` is the valid frame property; `borderRadius` is rejected. |
+| Ref variant | `ref` rejects `tone`; secondary styling is done by overriding fill/label tokens. |
+| Nested ref value | Setting a control value works via path `instance/bIaC6/f8QzS` after creation, not via creation-time `descendants`. |
 
 ## Verdict
 
-Mechanical foundation (isolation, refs, tokens, theme) passes. The composed
-section does **not** pass layout integrity (overlap) and is incomplete against
-the brief. This is a partial-failure result, recorded honestly rather than
-promoted to PASS. Remaining items are `HUMAN REVIEW`.
+Isolation, reuse, tokens, theme and layout integrity **pass** for the five frames.
+Validation copy and responsive variants are deferred, recorded honestly.

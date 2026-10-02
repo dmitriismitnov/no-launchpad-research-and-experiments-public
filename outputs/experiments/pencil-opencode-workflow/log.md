@@ -68,3 +68,7 @@ plan file was modified.
 | 13 | Model change to single-model operation | planning | `deepseek/deepseek-flash` | GPT limits exhausted; independent review replaced by evidence self-audit + human review. |
 
 | 14 | CRITICAL: isolation breach detected and cleaned | audit | `deepseek/deepseek-flash` | `x9le7` (and earlier test nodes) were found inside the active source document `design_system_ex_1.pen`, not the repo copy. All deleted; on-disk source hash unchanged `c9695a1d…`. Relative `filePath` did not isolate; MCP used the active editor. |
+
+| 15 | User opened ex_2.pen; confirmed active via get_app_state | orchestration | `deepseek/deepseek-flash` | Correct isolation; source untouched. |
+| 16 | Composed 5 screens in ex_2.pen from existing refs | implementation | `deepseek/deepseek-flash` | WqoYt/R1Yg8/iKbNI/XKqHF/negSS; Field/Button/Select/Date Input/Card; tokens + light/dark. |
+| 17 | Exported renders and audited | audit | `deepseek/deepseek-flash` | `artifacts/render/*.png`; no overlap; validation copy + responsive deferred. |

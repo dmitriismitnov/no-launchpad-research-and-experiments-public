@@ -1,37 +1,41 @@
-# Visual review — Create Project benchmark
+# Visual review — Create Project benchmark (ex_2)
 
-**Status:** HUMAN REVIEW (2026-10-02). **Role/model:** single-model operator — `deepseek/deepseek-flash`.
-**Evidence:** focused screenshot of `x9le7` captured after a forced re-render.
+**Status:** HUMAN REVIEW (2026-10-02). **Model:** `deepseek/deepseek-flash`.
+**Evidence:** exports in `artifacts/render/`.
+
+## Screens
+
+- `projects-entry-desktop-light.png` — Projects list with a clear **Create project** primary action and two project cards.
+- `form-filled-desktop-light.png` / `form-filled-desktop-dark.png` — Create Project form: title, helper, four labelled fields, hints, secondary Cancel and primary Create.
+- `form-empty-invalid-desktop-light.png` — same form empty with the primary action dimmed.
+- `success-desktop-light.png` — Projects with a success banner and the created project present.
 
 ## What reads correctly
 
-- Clear hierarchy: `Create project` title → helper subtitle → field labels → controls → actions.
-- Consistent field rhythm and a calm, restrained surface; no gradients, no decorative cards.
-- Primary `Create project` and secondary `Cancel` are now visually distinct.
-- The result reads as the established dashboard language rather than an AI template.
+- Coherent before → after story: entry list, empty form, filled form, success list.
+- Clear hierarchy and consistent field rhythm; restrained surfaces, no gradients or decorative cards.
+- Primary vs secondary action is distinct; light and dark share one token system.
+- Reads as the established dashboard language, not an AI template.
 
 ## What does not
 
-- The actions row overlaps the due-date control — a real layout defect, not an aesthetic preference.
-- The Description field is absent, so the form does not yet match the brief.
-- Field hints still show the master default `Lowercase, no spaces.`, which is wrong for Owner and Due date.
-- Only one state (partially filled, light, desktop) exists; invalid, empty, success and dark/mobile are missing.
+- The empty state lacks explicit inline validation text (only empty fields + dimmed action).
+- Tablet and mobile are not represented.
+- Cards use the media placeholder; a real product would supply imagery.
 
 ## Anti-slop rubric
 
 | Question | Answer |
 | --- | --- |
 | Readable hierarchy / scan order | Yes |
-| Primary vs secondary action distinct | Yes |
-| Every container functional | Yes |
-| Intentional composition vs generic grid | Yes, for the visible section |
-| Restrained effects/decoration | Yes |
+| Primary vs secondary distinct | Yes |
+| Containers functional | Yes |
+| Intentional composition | Yes |
+| Restrained effects | Yes |
 | Coherent with dashboard language | Yes |
 
 ## Verdict
 
-The visible section is **not** AI slop, but the composition is incomplete and has
-a layout overlap. Because the agent cannot fully certify the visual result and
-the flow is unfinished, this stays `HUMAN REVIEW` for the user. The user should
-open `artifacts/create-project.pen` in the native Pen UI to confirm the rendered
-result independently.
+Not AI slop; a credible, system-consistent flow. Remaining items are `HUMAN REVIEW`
+for the user: confirm the renders, decide on explicit validation copy, and whether
+tablet/mobile are required for this experiment.

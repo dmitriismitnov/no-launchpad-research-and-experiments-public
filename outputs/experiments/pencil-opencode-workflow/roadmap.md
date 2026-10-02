@@ -2,9 +2,10 @@
 
 **Status:** active (2026-10-02).
 
-Current checkpoint position: **Design and verification — partial**.
-One form section (`x9le7`) composed from existing refs; render-cache workaround found;
-structural audit found a layout overlap; the flow is incomplete. Results recorded.
+Current checkpoint position: **Human review and retrospective — active**.
+First pass hit an isolation breach; second pass in `ex_2.pen` produced five coherent
+screens with clean layout. Renders exported. Awaiting user review; validation copy
+and tablet/mobile deferred.
 
 ## Phases
 
@@ -12,7 +13,7 @@ structural audit found a layout overlap; the flow is incomplete. Results recorde
 | -------------------------------- | ------ | ------------------------------------------------------------------------------------- |
 | Bootstrap                        | done   | Open durable state and registry entry; define brief and benchmark protocol.           |
 | Brief and plan                   | done   | Inventory code/Pen contracts, confirm Gate A and freeze the atomic plan.              |
-| Design and verification          | partial | Baseline done. First form section composed and audited; flow incomplete (layout overlap, missing states/themes). |
+| Design and verification          | done    | Five ex_2 screens composed from existing refs (form light/dark, empty, entry, success); layout audited. |
 | Human review and retrospective   | active | Present evidence to the user; results recorded; awaiting native-UI confirmation.     |
 
 ## Phase detail

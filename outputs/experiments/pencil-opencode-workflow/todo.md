@@ -21,7 +21,12 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 - [ ] Confirm Gate B for the first allowed experiment frame and target sizes.
 - [ ] Compose Projects entry with the Create Project trigger. `planned`
 - [ ] Compose the invalid form with all four fields and required validation. `planned`
-- [~] Compose the filled form — partial: frame `x9le7` has Name/Owner/Due date, missing Description, layout overlap. `blocked`
+- [x] Compose the filled form (Name/Description/Owner/Due date) light + dark. `verified`
+- [x] Compose the empty/invalid form. `verified`
+- [x] Compose Projects entry with Create Project trigger. `verified`
+- [x] Compose success state with created project. `verified`
+- [ ] Tablet/mobile variants. `planned`
+- [ ] Explicit inline validation copy. `blocked` (ref cannot set Field invalid variant)
 - [ ] Compose the filled form with owner/due-date selection, primary submit and
   secondary cancel.
 - [ ] Compose the success state with the created project in Projects.
