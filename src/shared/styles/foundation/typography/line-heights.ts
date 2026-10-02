@@ -7,6 +7,7 @@ import { defineTokens, } from "@pandacss/dev";
  */
 export const lineHeights = defineTokens.lineHeights({
     tight: { value: 1.2, },
+    snug: { value: 1.4, },
     normal: { value: 1.5, },
     relaxed: { value: 1.75, },
 });

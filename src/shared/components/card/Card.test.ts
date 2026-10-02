@@ -89,6 +89,14 @@ describe("card recipe", () => {
         expect(cardRecipe.base?.["body"]).toMatchObject({ gap: "x5", padding: "x8", });
     });
 
+    test("sets the description on the shared 1.4 line height", () => {
+        // Pen `Card` description is `sm` at line-height 1.4 (19.6px).
+        expect(cardRecipe.base?.["description"]).toMatchObject({
+            fontSize: "sm",
+            lineHeight: "snug",
+        });
+    });
+
     test("uses no shorthand property names", () => {
         const keys = [
             ...collectKeys(cardRecipe.base),

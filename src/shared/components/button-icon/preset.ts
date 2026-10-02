@@ -110,10 +110,27 @@ export const buttonIconRecipe = defineSlotRecipe({
         },
 
         // The square matches the height of the same-sized Button, so the two
-        // controls line up. The icon slot stays `x8` in both sizes.
+        // controls line up. Pen's documented `Icon Button` (`L72UAx`) is a 40px
+        // square with an 18px glyph; the 32px `Sm` keeps a 16px glyph. The
+        // ButtonIcon owns its glyph geometry, so the medium slot scales the
+        // paired `Icon` up to the 18px box.
         size: {
             sm: { root: { width: "x16", height: "x16", }, },
-            md: { root: { width: "x20", height: "x20", }, },
+            md: {
+                root: { width: "x20", height: "x20", },
+                icon: {
+                    width: "x9",
+                    height: "x9",
+                    // `recipes.slots` loses to the Icon recipe's own unlayered
+                    // `recipes` rules, so the paired glyph only reaches the 18px
+                    // box when this override is important.
+                    "& .icon": {
+                        fontSize: "{sizes.x9}!",
+                        width: "x9!",
+                        height: "x9!",
+                    },
+                },
+            },
         },
     },
 

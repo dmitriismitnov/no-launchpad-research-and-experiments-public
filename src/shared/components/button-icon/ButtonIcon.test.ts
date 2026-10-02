@@ -177,10 +177,13 @@ describe("buttonIcon recipe", () => {
         expect(root).toMatchObject({ paddingInline: "x0", paddingBlock: "x0", });
     });
 
-    test("keeps the icon slot at x8 in both sizes", () => {
+    test("keeps the sm glyph at x8 and sizes the md glyph at x9", () => {
         expect(buttonIconRecipe.base?.["icon"]).toMatchObject({ width: "x8", height: "x8", });
         expect(buttonIconRecipe.variants?.["size"]?.["sm"]?.["icon"]).toBeUndefined();
-        expect(buttonIconRecipe.variants?.["size"]?.["md"]?.["icon"]).toBeUndefined();
+        expect(buttonIconRecipe.variants?.["size"]?.["md"]?.["icon"]).toMatchObject({
+            width: "x9",
+            height: "x9",
+        });
     });
 
     test("declares a square geometry per size", () => {

@@ -143,11 +143,27 @@ export const Sizes: Story = {
     render: () => (
         <ThemeShell theme="light">
             <div className={row}>
-                <ButtonIcon size="sm" icon="menu" label="Menu" />
-                <ButtonIcon size="md" icon="menu" label="Menu" />
+                <ButtonIcon size="sm" icon="menu" label="Small menu" />
+                <ButtonIcon size="md" icon="menu" label="Medium menu" />
             </div>
         </ThemeShell>
     ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const small = canvas.getByRole("button", { name: "Small menu", });
+        const medium = canvas.getByRole("button", { name: "Medium menu", });
+        const smallGlyph = small.querySelector(".buttonIcon__icon") as Element;
+        const mediumGlyph = medium.querySelector(".buttonIcon__icon") as Element;
+        const mediumIcon = medium.querySelector(".buttonIcon__icon .icon") as Element;
+
+        // Pen `Icon Button` (L72UAx) is 40px with an 18px glyph; the documented
+        // 32px `Sm` keeps a 16px glyph.
+        await expect(Math.round(small.getBoundingClientRect().width)).toBe(32);
+        await expect(Math.round(medium.getBoundingClientRect().width)).toBe(40);
+        await expect(Math.round(smallGlyph.getBoundingClientRect().width)).toBe(16);
+        await expect(Math.round(mediumGlyph.getBoundingClientRect().width)).toBe(18);
+        await expect(Math.round(mediumIcon.getBoundingClientRect().width)).toBe(18);
+    },
 };
 
 export const Icons: Story = {

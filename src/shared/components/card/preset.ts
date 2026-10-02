@@ -88,7 +88,7 @@ export const cardRecipe = defineSlotRecipe({
             fontFamily: "body",
             fontSize: "sm",
             fontWeight: "regular",
-            lineHeight: "normal",
+            lineHeight: "snug",
             color: "semantic.text.secondary",
         },
 

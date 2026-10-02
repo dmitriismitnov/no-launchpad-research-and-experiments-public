@@ -72,6 +72,11 @@ describe("foundation", () => {
         expect(Object.keys(spacing)).toEqual(Object.keys(sizes));
     });
 
+    test("exposes the x9 step as 18px in both spacing and sizes", () => {
+        expect(spacing["x9"]).toEqual({ value: "1.125rem", });
+        expect(sizes["x9"]).toEqual({ value: "1.125rem", });
+    });
+
     test("radii exposes the size scale plus a full token", () => {
         expect(radii).toEqual({
             sm: { value: "0.375rem", },
@@ -294,6 +299,7 @@ describe("typography foundation", () => {
     test("exposes the atomic line-height scale", () => {
         expect(lineHeights).toEqual({
             tight: { value: 1.2, },
+            snug: { value: 1.4, },
             normal: { value: 1.5, },
             relaxed: { value: 1.75, },
         });

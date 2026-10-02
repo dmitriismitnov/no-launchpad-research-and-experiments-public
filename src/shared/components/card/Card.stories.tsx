@@ -396,6 +396,8 @@ export const Light: Story = {
         await expect(getComputedStyle(article).backgroundColor).toBe("rgb(255, 255, 255)");
         await expect(getComputedStyle(title).color).toBe("rgb(15, 23, 42)");
         await expect(getComputedStyle(description).color).toBe("rgb(51, 65, 85)");
+        // Pen Card description is `sm` (14px) on a 1.4 line height.
+        await expect(getComputedStyle(description).lineHeight).toBe("19.6px");
     },
 };
 
@@ -414,5 +416,7 @@ export const Dark: Story = {
         await expect(getComputedStyle(article).backgroundColor).toBe("rgb(15, 23, 42)");
         await expect(getComputedStyle(title).color).toBe("rgb(248, 250, 252)");
         await expect(getComputedStyle(description).color).toBe("rgb(203, 213, 225)");
+        // Pen Card description is `sm` (14px) on a 1.4 line height.
+        await expect(getComputedStyle(description).lineHeight).toBe("19.6px");
     },
 };
