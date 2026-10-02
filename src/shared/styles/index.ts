@@ -7,16 +7,21 @@ import { badgePreset, } from "../components/badge/preset";
 import { buttonIconPreset, } from "../components/button-icon/preset";
 import { buttonPreset, } from "../components/button/preset";
 import { cardPreset, } from "../components/card/preset";
+import { clipboardPreset, } from "../components/clipboard/preset";
+import { codeBlockPreset, } from "../components/code-block/preset";
 import { dividerPreset, } from "../components/divider/preset";
 import { emptyStatePreset, } from "../components/empty-state/preset";
 import { iconPreset, } from "../components/icon/preset";
 import { inputPreset, } from "../components/input/preset";
+import { listPreset, } from "../components/list/preset";
 import { progressRingPreset, } from "../components/progress-ring/preset";
 import { progressPreset, } from "../components/progress/preset";
 import { skeletonPreset, } from "../components/skeleton/preset";
 import { spinnerPreset, } from "../components/spinner/preset";
+import { statisticPreset, } from "../components/statistic/preset";
 import { statusIndicatorPreset, } from "../components/status-indicator/preset";
 import { tagPreset, } from "../components/tag/preset";
+import { timelinePreset, } from "../components/timeline/preset";
 import { toastPreset, } from "../components/toast/preset";
 import { foundationPreset, } from "./foundation";
 import { preflight, settingsPreset, } from "./settings";
@@ -28,19 +33,24 @@ export {
     buttonIconPreset,
     buttonPreset,
     cardPreset,
+    clipboardPreset,
+    codeBlockPreset,
     dividerPreset,
     emptyStatePreset,
     foundationPreset,
     iconPreset,
     inputPreset,
+    listPreset,
     preflight,
     progressPreset,
     progressRingPreset,
     settingsPreset,
     skeletonPreset,
     spinnerPreset,
+    statisticPreset,
     statusIndicatorPreset,
     tagPreset,
+    timelinePreset,
     toastPreset,
 };
 
@@ -70,6 +80,11 @@ export const componentPresetSources: readonly Preset[] = [
     progressPreset,
     progressRingPreset,
     emptyStatePreset,
+    statisticPreset,
+    listPreset,
+    timelinePreset,
+    codeBlockPreset,
+    clipboardPreset,
 ];
 
 export const collectComponentDictionaries = (

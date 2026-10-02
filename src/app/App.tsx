@@ -3,14 +3,19 @@ import { Avatar, } from "@shared/components/avatar";
 import { Badge, } from "@shared/components/badge";
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
+import { Clipboard, } from "@shared/components/clipboard";
+import { CodeBlock, } from "@shared/components/code-block";
 import { Divider, } from "@shared/components/divider";
 import { EmptyState, } from "@shared/components/empty-state";
+import { List, } from "@shared/components/list";
 import { Progress, } from "@shared/components/progress";
 import { ProgressRing, } from "@shared/components/progress-ring";
 import { Skeleton, } from "@shared/components/skeleton";
 import { Spinner, } from "@shared/components/spinner";
+import { Statistic, } from "@shared/components/statistic";
 import { StatusIndicator, } from "@shared/components/status-indicator";
 import { Tag, } from "@shared/components/tag";
+import { Timeline, } from "@shared/components/timeline";
 import { Toast, } from "@shared/components/toast";
 import { css, cx, } from "@shared/styled-system/css";
 
@@ -157,6 +162,35 @@ export const App = () => (
                 icon="settings"
                 action={<Button size="sm">New token</Button>}
             />
+        </div>
+        <div className={css({ display: "grid", gap: "x8", maxWidth: "32rem", })}>
+            <Statistic
+                label="Active users"
+                value="48.2K"
+                delta="+12.4% vs last week"
+                trend="up"
+                deltaIcon="trending-up"
+            />
+            <List
+                items={[
+                    { title: "primitive-tokens.json", meta: "12 KB · 2h ago", trailing: "JSON", icon: "file", },
+                    { title: "semantic-tokens.json", meta: "48 KB · 2h ago", trailing: "JSON", icon: "file", },
+                    { title: "Button.tsx", meta: "Edited by Ada", trailing: "TSX", icon: "file", },
+                ]}
+            />
+            <Timeline
+                items={[
+                    { title: "Foundation published", meta: "Mar 2", },
+                    { title: "Components in review", meta: "In progress", },
+                    { title: "Contrast audit", meta: "Failed", },
+                ]}
+            />
+            <CodeBlock
+                code={'import { tokens } from "@nolaunchpad/core";\n\nconst button = tokens.semantic.brand[600];'}
+                filename="tokens.ts"
+                onCopy={() => {}}
+            />
+            <Clipboard value="npm i @nolaunchpad/tokens" onCopy={() => {}} />
         </div>
         <InterSpecimen />
         <ThemePanel theme="light" />

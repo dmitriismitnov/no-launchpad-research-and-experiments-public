@@ -4,6 +4,8 @@
 export const ICON_CODEPOINTS = {
     "arrow-right": 0xE001,
     "check": 0xE002,
+    "copy": 0xE013,
+    "file": 0xE014,
     "flask-conical": 0xE003,
     "gauge": 0xE004,
     "loader": 0xE012,
@@ -16,6 +18,7 @@ export const ICON_CODEPOINTS = {
     "sliders-horizontal": 0xE00B,
     "test-tube": 0xE00C,
     "thermometer": 0xE00D,
+    "trending-up": 0xE015,
     "truck": 0xE00E,
     "waves": 0xE00F,
     "wrench": 0xE010,

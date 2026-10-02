@@ -9,16 +9,21 @@ import { badgeRecipe, } from "../components/badge/preset";
 import { buttonIconRecipe, } from "../components/button-icon/preset";
 import { buttonRecipe, } from "../components/button/preset";
 import { cardRecipe, } from "../components/card/preset";
+import { clipboardRecipe, } from "../components/clipboard/preset";
+import { codeBlockRecipe, } from "../components/code-block/preset";
 import { dividerRecipe, } from "../components/divider/preset";
 import { emptyStateRecipe, } from "../components/empty-state/preset";
 import { iconRecipe, } from "../components/icon/preset";
 import { inputRecipe, } from "../components/input/preset";
+import { listRecipe, } from "../components/list/preset";
 import { progressRingRecipe, } from "../components/progress-ring/preset";
 import { progressRecipe, } from "../components/progress/preset";
 import { skeletonRecipe, } from "../components/skeleton/preset";
 import { spinnerRecipe, } from "../components/spinner/preset";
+import { statisticRecipe, } from "../components/statistic/preset";
 import { statusIndicatorRecipe, } from "../components/status-indicator/preset";
 import { tagRecipe, } from "../components/tag/preset";
+import { timelineRecipe, } from "../components/timeline/preset";
 import { toastRecipe, } from "../components/toast/preset";
 import { foundationPreset, } from "./foundation";
 import { collectComponentDictionaries, componentPresetSources, presets, settingsPreset, } from "./index";
@@ -58,6 +63,11 @@ describe("preset composition", () => {
             "progress",
             "progressRing",
             "emptyState",
+            "statistic",
+            "list",
+            "timeline",
+            "codeBlock",
+            "clipboard",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
@@ -81,6 +91,11 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["progress"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["progressRing"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["emptyState"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["statistic"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["list"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["timeline"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["codeBlock"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["clipboard"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
@@ -101,6 +116,11 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["progress"]).toEqual(progressRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["progressRing"]).toEqual(progressRingRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["emptyState"]).toEqual(emptyStateRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["statistic"]).toEqual(statisticRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["list"]).toEqual(listRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["timeline"]).toEqual(timelineRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["codeBlock"]).toEqual(codeBlockRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["clipboard"]).toEqual(clipboardRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
@@ -144,8 +164,18 @@ describe("preset composition", () => {
             "progress",
             "progressRing",
             "emptyState",
+            "statistic",
+            "list",
+            "timeline",
+            "codeBlock",
+            "clipboard",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "clipboard",
+            "codeBlock",
+            "timeline",
+            "list",
+            "statistic",
             "emptyState",
             "progressRing",
             "progress",
