@@ -74,3 +74,6 @@ plan file was modified.
 | 17 | Exported renders and audited | audit | `deepseek/deepseek-flash` | `artifacts/render/*.png`; no overlap; validation copy + responsive deferred. |
 
 | 18 | Verified artifact persistence (corrected) | audit | `deepseek/deepseek-flash` | Rebuild persisted: `ex_2.pen` grew 9 271 120 → 9 291 756 bytes, hash `c523c37f…`. Pen autosaves. The earlier loss was caused by externally overwriting the open file. |
+
+| 19 | Brand swap blue → green via tokens | implementation | `deepseek/deepseek-flash` | semantic/brand = positive green mapping; action/focus/link/surface → green; palette/green untouched; components unchanged. |
+| 20 | Verified brand-swap contrast | audit | `deepseek/deepseek-flash` | 0 failures (brand+positive, text/icon/borderStrong, light/dark); no `palette/blue` refs; `mise run check` green. |

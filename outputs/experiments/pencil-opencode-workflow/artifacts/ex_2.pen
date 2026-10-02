@@ -196687,7 +196687,7 @@
     {
       "type": "frame",
       "id": "QQOlY",
-      "x": 1920,
+      "x": 7088,
       "y": 0,
       "name": "Create Project — Form — Desktop Light",
       "theme": {
@@ -196856,7 +196856,7 @@
     {
       "type": "frame",
       "id": "rWD94",
-      "x": 2760,
+      "x": 7888,
       "y": 0,
       "name": "Create Project — Form — Desktop Dark",
       "theme": {
@@ -197025,8 +197025,8 @@
     {
       "type": "frame",
       "id": "y9Her",
-      "x": 1920,
-      "y": 860,
+      "x": 7088,
+      "y": 800,
       "name": "Create Project — Form Invalid — Desktop Light",
       "theme": {
         "theme": "light"
@@ -197195,8 +197195,8 @@
     {
       "type": "frame",
       "id": "uGjnK",
-      "x": 1920,
-      "y": 1720,
+      "x": 7888,
+      "y": 800,
       "name": "Projects — Desktop Light",
       "theme": {
         "theme": "light"
@@ -197310,8 +197310,8 @@
     {
       "type": "frame",
       "id": "obzHk",
-      "x": 2760,
-      "y": 1720,
+      "x": 7088,
+      "y": 1600,
       "name": "Create Project — Success — Desktop Light",
       "theme": {
         "theme": "light"
