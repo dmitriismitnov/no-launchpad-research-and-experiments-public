@@ -156,6 +156,36 @@ export default defineConfig({
                     disabled: [ "true", ],
                 },
             ],
+            field: [
+                {
+                    disabled: [ "true", ],
+                },
+            ],
+            select: [
+                {
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            multiSelect: [
+                {
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                    selected: [ "true", ],
+                },
+            ],
+            radioGroup: [
+                {
+                    orientation: [ "vertical", "horizontal", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            pinInput: [
+                {
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
         },
     },
     presets,

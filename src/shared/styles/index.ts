@@ -21,6 +21,7 @@ import { dialogPreset, } from "../components/dialog/preset";
 import { dividerPreset, } from "../components/divider/preset";
 import { drawerPreset, } from "../components/drawer/preset";
 import { emptyStatePreset, } from "../components/empty-state/preset";
+import { fieldPreset, } from "../components/field/preset";
 import { floatingPanelPreset, } from "../components/floating-panel/preset";
 import { hoverCardPreset, } from "../components/hover-card/preset";
 import { iconPreset, } from "../components/icon/preset";
@@ -29,15 +30,19 @@ import { linkPreset, } from "../components/link/preset";
 import { listPreset, } from "../components/list/preset";
 import { mediaPlaceholderPreset, } from "../components/media-placeholder/preset";
 import { menuPreset, } from "../components/menu/preset";
+import { multiSelectPreset, } from "../components/multi-select/preset";
 import { navItemPreset, } from "../components/nav-item/preset";
 import { numberInputPreset, } from "../components/number-input/preset";
 import { paginationPreset, } from "../components/pagination/preset";
+import { pinInputPreset, } from "../components/pin-input/preset";
 import { popoverPreset, } from "../components/popover/preset";
 import { progressRingPreset, } from "../components/progress-ring/preset";
 import { progressPreset, } from "../components/progress/preset";
 import { qrCodePreset, } from "../components/qr-code/preset";
+import { radioGroupPreset, } from "../components/radio-group/preset";
 import { radioPreset, } from "../components/radio/preset";
 import { scrollAreaPreset, } from "../components/scroll-area/preset";
+import { selectPreset, } from "../components/select/preset";
 import { sheetPreset, } from "../components/sheet/preset";
 import { sidebarItemPreset, } from "../components/sidebar-item/preset";
 import { skeletonPreset, } from "../components/skeleton/preset";
@@ -83,6 +88,7 @@ export {
     dividerPreset,
     drawerPreset,
     emptyStatePreset,
+    fieldPreset,
     floatingPanelPreset,
     foundationPreset,
     hoverCardPreset,
@@ -92,16 +98,20 @@ export {
     listPreset,
     mediaPlaceholderPreset,
     menuPreset,
+    multiSelectPreset,
     navItemPreset,
     numberInputPreset,
     paginationPreset,
+    pinInputPreset,
     popoverPreset,
     preflight,
     progressPreset,
     progressRingPreset,
     qrCodePreset,
+    radioGroupPreset,
     radioPreset,
     scrollAreaPreset,
+    selectPreset,
     settingsPreset,
     sheetPreset,
     sidebarItemPreset,
@@ -193,6 +203,11 @@ export const componentPresetSources: readonly Preset[] = [
     radioPreset,
     switchPreset,
     sliderPreset,
+    fieldPreset,
+    selectPreset,
+    multiSelectPreset,
+    radioGroupPreset,
+    pinInputPreset,
 ];
 
 export const collectComponentDictionaries = (

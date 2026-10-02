@@ -17,21 +17,26 @@ import { Dialog, } from "@shared/components/dialog";
 import { Divider, } from "@shared/components/divider";
 import { Drawer, } from "@shared/components/drawer";
 import { EmptyState, } from "@shared/components/empty-state";
+import { Field, } from "@shared/components/field";
 import { FloatingPanel, } from "@shared/components/floating-panel";
 import { HoverCard, } from "@shared/components/hover-card";
 import { Link, } from "@shared/components/link";
 import { List, } from "@shared/components/list";
 import { MediaPlaceholder, } from "@shared/components/media-placeholder";
 import { Menu, MenuDivider, MenuItem, } from "@shared/components/menu";
+import { MultiSelect, } from "@shared/components/multi-select";
 import { NavItem, } from "@shared/components/nav-item";
 import { NumberInput, } from "@shared/components/number-input";
 import { Pagination, } from "@shared/components/pagination";
+import { PinInput, } from "@shared/components/pin-input";
 import { Popover, } from "@shared/components/popover";
 import { Progress, } from "@shared/components/progress";
 import { ProgressRing, } from "@shared/components/progress-ring";
 import { QrCode, } from "@shared/components/qr-code";
 import { Radio, } from "@shared/components/radio";
+import { RadioGroup, } from "@shared/components/radio-group";
 import { ScrollArea, } from "@shared/components/scroll-area";
+import { Select, } from "@shared/components/select";
 import { Sheet, } from "@shared/components/sheet";
 import { SidebarItem, } from "@shared/components/sidebar-item";
 import { Skeleton, } from "@shared/components/skeleton";
@@ -84,6 +89,26 @@ const scrollLineStyle = css({
     fontWeight: "regular",
     lineHeight: "normal",
     color: "semantic.common.700.background",
+});
+
+const fieldControl = css({
+    width: "100%",
+    height: "x20",
+    paddingInline: "x6",
+    borderRadius: "sm",
+    borderWidth: "thin",
+    borderStyle: "solid",
+    borderColor: "semantic.common.50.border.strong",
+    backgroundColor: "semantic.common.50.background",
+    color: "semantic.common.50.text",
+    fontFamily: "body",
+    fontSize: "sm",
+    fontWeight: "regular",
+    lineHeight: "normal",
+    outlineStyle: { _focusVisible: "solid", },
+    outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+    outlineOffset: { _focusVisible: "0", },
+    outlineColor: { _focusVisible: "semantic.brand.500.background", },
 });
 
 const section = css({
@@ -463,6 +488,43 @@ export const App = () => (
                 <Switch label="Switch" defaultChecked />
             </div>
             <Slider label="OPACITY" defaultValue={57} showValue />
+            <Select
+                label="КОМАНДА"
+                placeholder="Выберите команду"
+                defaultValue="team"
+                options={[
+                    { value: "starter", label: "Starter", },
+                    { value: "team", label: "Team", },
+                    { value: "enterprise", label: "Enterprise", },
+                ]}
+            />
+            <MultiSelect
+                label="ТЕГИ"
+                placeholder="Выберите теги"
+                maxVisible={2}
+                defaultValue={[ "foundation", "semantic", "components", ]}
+                options={[
+                    { value: "foundation", label: "foundation", },
+                    { value: "semantic", label: "semantic", },
+                    { value: "components", label: "components", },
+                    { value: "patterns", label: "patterns", },
+                ]}
+            />
+            <RadioGroup
+                label="ПЛАН"
+                name="app-plan"
+                defaultValue="team"
+                hint="Смените в любой момент."
+                options={[
+                    { value: "starter", label: "Starter", },
+                    { value: "team", label: "Team", },
+                    { value: "enterprise", label: "Enterprise", },
+                ]}
+            />
+            <PinInput label="КОД" length={4} defaultValue="482" name="app-code" />
+            <Field label="Рабочая область" required hint="Строчные буквы, без пробелов.">
+                <input className={fieldControl} name="workspace" defaultValue="acme-design" />
+            </Field>
         </div>
         <InterSpecimen />
         <ThemePanel theme="light" />

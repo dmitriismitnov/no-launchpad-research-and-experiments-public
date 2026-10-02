@@ -23,6 +23,7 @@ import { dialogRecipe, } from "../components/dialog/preset";
 import { dividerRecipe, } from "../components/divider/preset";
 import { drawerRecipe, } from "../components/drawer/preset";
 import { emptyStateRecipe, } from "../components/empty-state/preset";
+import { fieldRecipe, } from "../components/field/preset";
 import { floatingPanelRecipe, } from "../components/floating-panel/preset";
 import { hoverCardRecipe, } from "../components/hover-card/preset";
 import { iconRecipe, } from "../components/icon/preset";
@@ -31,15 +32,19 @@ import { linkRecipe, } from "../components/link/preset";
 import { listRecipe, } from "../components/list/preset";
 import { mediaPlaceholderRecipe, } from "../components/media-placeholder/preset";
 import { menuRecipe, } from "../components/menu/preset";
+import { multiSelectRecipe, } from "../components/multi-select/preset";
 import { navItemRecipe, } from "../components/nav-item/preset";
 import { numberInputRecipe, } from "../components/number-input/preset";
 import { paginationRecipe, } from "../components/pagination/preset";
+import { pinInputRecipe, } from "../components/pin-input/preset";
 import { popoverRecipe, } from "../components/popover/preset";
 import { progressRingRecipe, } from "../components/progress-ring/preset";
 import { progressRecipe, } from "../components/progress/preset";
 import { qrCodeRecipe, } from "../components/qr-code/preset";
+import { radioGroupRecipe, } from "../components/radio-group/preset";
 import { radioRecipe, } from "../components/radio/preset";
 import { scrollAreaRecipe, } from "../components/scroll-area/preset";
+import { selectRecipe, } from "../components/select/preset";
 import { sheetRecipe, } from "../components/sheet/preset";
 import { sidebarItemRecipe, } from "../components/sidebar-item/preset";
 import { skeletonRecipe, } from "../components/skeleton/preset";
@@ -140,6 +145,11 @@ describe("preset composition", () => {
             "radio",
             "switchControl",
             "slider",
+            "field",
+            "select",
+            "multiSelect",
+            "radioGroup",
+            "pinInput",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
@@ -204,6 +214,11 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["radio"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["switchControl"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["slider"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["field"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["select"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["multiSelect"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["radioGroup"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["pinInput"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
@@ -265,6 +280,11 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["radio"]).toEqual(radioRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["switchControl"]).toEqual(switchControlRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["slider"]).toEqual(sliderRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["field"]).toEqual(fieldRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["select"]).toEqual(selectRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["multiSelect"]).toEqual(multiSelectRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["radioGroup"]).toEqual(radioGroupRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["pinInput"]).toEqual(pinInputRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
@@ -349,8 +369,18 @@ describe("preset composition", () => {
             "radio",
             "switchControl",
             "slider",
+            "field",
+            "select",
+            "multiSelect",
+            "radioGroup",
+            "pinInput",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "pinInput",
+            "radioGroup",
+            "multiSelect",
+            "select",
+            "field",
             "slider",
             "switchControl",
             "radio",
