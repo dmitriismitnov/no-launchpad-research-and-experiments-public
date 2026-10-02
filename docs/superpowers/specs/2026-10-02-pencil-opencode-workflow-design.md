@@ -186,11 +186,13 @@ subagent statement как proof без проверки факта в Pen/code/s
 | Visual reviewer           | read-only subagent | hierarchy, readability, composition, anti-slop rubric          |
 | Human reviewer            | user               | final visual and scope decision                                |
 
-Модельный contract фиксирован для этого эксперимента: implementation workers
-используют `deepseek/deepseek-flash` (DeepSeek V4.1 Flash), а текущий primary
-agent `openai/gpt-5.6-terra` выполняет planning, orchestration, evidence
-verification и все reviews. В `log.md` фиксируются exact model/variant и роль.
-Workers не проводят review и не запускают других subagents.
+Модельный contract изменён 2026-10-02: у GPT исчерпаны лимиты, поэтому
+**все роли выполняет текущая модель `deepseek/deepseek-flash` (DeepSeek V4.1
+Flash)** — implementation, planning, orchestration, evidence verification и
+reviews. Это осознанная деградация независимости: кросс-модельное review
+невозможно, поэтому его заменяют rubric-based evidence self-audit, повторная
+проверка артефакта и обязательный человеческий visual review. В `log.md`
+фиксируются exact model/variant, роль и это ограничение.
 
 ## 9. Quality gates
 

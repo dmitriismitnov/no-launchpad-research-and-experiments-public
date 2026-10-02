@@ -53,7 +53,8 @@ no isolated Pen copy and no Pencil mutation exist yet.
 | # | Date       | Decision                                                                                       | Owner        |
 | - | ---------- | ---------------------------------------------------------------------------------------------- | ------------ |
 | 1 | 2026-10-02 | Only `artifacts/create-project.pen` is writable; source Pen and `src/` stay read-only.         | orchestrator |
-| 2 | 2026-10-02 | Implementation workers use `deepseek/deepseek-flash`; reviews stay with the GPT orchestrator.  | orchestrator |
+| 2 | 2026-10-02 | Initially workers `deepseek/deepseek-flash`, reviews GPT-5.6 Terra. | orchestrator |
+| 4 | 2026-10-02 | GPT limits exhausted: `deepseek/deepseek-flash` performs every role; independent review replaced by rubric-based evidence self-audit plus mandatory human visual review. | orchestrator |
 | 3 | 2026-10-02 | Compaction is lossy and is never the source of truth; durable state is authoritative.          | orchestrator |
 
 ## Gates

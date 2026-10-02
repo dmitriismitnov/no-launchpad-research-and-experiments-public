@@ -10,14 +10,18 @@ conversation context and compaction are not.
 
 | Role                              | Model/variant                    | Mode              | Responsibility                                                     |
 | --------------------------------- | -------------------------------- | ----------------- | ------------------------------------------------------------------ |
-| Orchestrator                      | `openai/gpt-5.6-terra`           | primary           | Planning, orchestration, evidence verification and all reviews.    |
-| Implementation worker             | `deepseek/deepseek-flash#high`   | scoped            | Only the scoped implementation work assigned by the orchestrator.  |
+| Single operator (all roles)       | `deepseek/deepseek-flash`        | current           | Implementation, planning, orchestration, audit and review.         |
 | Human reviewer                    | user                             | human             | Final visual and scope decision.                                   |
 
-Implementation workers do not perform reviews and do not start other
-subagents. Every worker operation logs its exact model/variant and role in
-`log.md`. The orchestrator verifies each subagent claim against an artifact
-before accepting it.
+**2026-10-02 model change:** GPT limits are exhausted, so `openai/gpt-5.6-terra`
+is no longer available and `deepseek/deepseek-flash` performs every role.
+Independent cross-model review is replaced by rubric-based evidence self-audit:
+each finding must cite a raw artifact that is re-queried before acceptance, and
+non-mechanical concerns stay `HUMAN REVIEW` for the user.
+
+Every operation logs its exact model/variant and role in `log.md`. The single
+operator re-queries each claim against a raw artifact before accepting it;
+there is no separate reviewing model in this experiment.
 
 ## Gates and evidence
 

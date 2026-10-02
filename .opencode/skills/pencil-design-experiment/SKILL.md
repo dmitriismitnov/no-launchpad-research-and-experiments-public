@@ -63,13 +63,13 @@ and `templates/log.md`; copy them when a new experiment is opened.
 
 ## Delegation and context contract
 
-Workers use `deepseek/deepseek-flash#high` only for scoped implementation work
-assigned by the orchestrator. The `openai/gpt-5.6-terra` orchestrator conducts
-the code-system, Pencil structural and visual reviews itself, verifies each
-piece of evidence against a Pen/code/screenshot artifact, and records the
-disposition. Workers do not review their own changes and do not start other
-subagents. Record the exact model/variant and role for every worker operation in
-`log.md`.
+As of 2026-10-02 the single current model `deepseek/deepseek-flash` performs
+every role — implementation, planning, orchestration, audit and review — because
+GPT limits are exhausted. Independent cross-model review is therefore not
+available; replace it with a rubric-based evidence self-audit where every finding
+cites a raw Pen/code/screenshot artifact that is re-queried before acceptance.
+Record this limitation and the exact model/variant for every operation in
+`log.md`. Non-mechanical concerns remain `HUMAN REVIEW` for the user.
 
 Before a new phase, a large inspection, a subagent fan-out or a Pencil mutation:
 
