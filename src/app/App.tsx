@@ -1,3 +1,4 @@
+import { AccordionItem, } from "@shared/components/accordion-item";
 import { Alert, } from "@shared/components/alert";
 import { Avatar, } from "@shared/components/avatar";
 import { Badge, } from "@shared/components/badge";
@@ -13,7 +14,9 @@ import { EmptyState, } from "@shared/components/empty-state";
 import { Link, } from "@shared/components/link";
 import { List, } from "@shared/components/list";
 import { MediaPlaceholder, } from "@shared/components/media-placeholder";
+import { Menu, MenuDivider, MenuItem, } from "@shared/components/menu";
 import { NavItem, } from "@shared/components/nav-item";
+import { Pagination, } from "@shared/components/pagination";
 import { Progress, } from "@shared/components/progress";
 import { ProgressRing, } from "@shared/components/progress-ring";
 import { QrCode, } from "@shared/components/qr-code";
@@ -24,6 +27,8 @@ import { Spinner, } from "@shared/components/spinner";
 import { Splitter, } from "@shared/components/splitter";
 import { Statistic, } from "@shared/components/statistic";
 import { StatusIndicator, } from "@shared/components/status-indicator";
+import { Step, } from "@shared/components/step";
+import { Tab, TabList, } from "@shared/components/tab";
 import { Tag, } from "@shared/components/tag";
 import { Timeline, } from "@shared/components/timeline";
 import { Toast, } from "@shared/components/toast";
@@ -286,6 +291,34 @@ export const App = () => (
                 </ScrollArea>
             </div>
             <DataTable columns={tableColumns} rows={tableRows} aria-label="Components" />
+        </div>
+        <div className={css({ display: "grid", gap: "x8", maxWidth: "32rem", })}>
+            <TabList>
+                <Tab label="Overview" active />
+                <Tab label="Tokens" />
+                <Tab label="Archived" disabled />
+            </TabList>
+            <AccordionItem title="What are primitive tokens?" defaultOpen>
+                Immutable raw values owned by the foundation layer.
+            </AccordionItem>
+            <AccordionItem title="How do themes work?">
+                Themes map the same semantic roles to light and dark values.
+            </AccordionItem>
+            <div className={css({ display: "flex", alignItems: "center", gap: "x8", flexWrap: "wrap", })}>
+                <Step number={1} label="Foundation" state="completed" />
+                <Step number={2} label="Components" state="current" />
+                <Step number={3} label="States" state="upcoming" />
+            </div>
+        </div>
+        <div className={css({ display: "flex", alignItems: "flex-start", gap: "x8", flexWrap: "wrap", })}>
+            <Menu label="Actions">
+                <MenuItem label="Rename" shortcut="⌘R" />
+                <MenuItem label="Duplicate" icon="copy" checked />
+                <MenuItem label="Export" icon="file" submenu />
+                <MenuDivider />
+                <MenuItem label="Delete" tone="danger" />
+            </Menu>
+            <Pagination page={2} totalPages={8} />
         </div>
         <InterSpecimen />
         <ThemePanel theme="light" />

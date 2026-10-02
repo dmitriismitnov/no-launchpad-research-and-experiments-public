@@ -36,6 +36,15 @@ export default defineConfig({
                     size: [ "sm", "md", "lg", ],
                 },
             ],
+            // `menu` is also an HTML element name, so the extractor does not
+            // resolve the runtime `menu({ tone, checked, disabled })` call.
+            menu: [
+                {
+                    tone: [ "neutral", "danger", ],
+                    checked: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
         },
     },
     presets,

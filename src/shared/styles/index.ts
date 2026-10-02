@@ -1,6 +1,7 @@
 import type { CssKeyframes, Preset, RecipeConfig, SlotRecipeConfig, } from "@pandacss/dev";
 import { definePreset, } from "@pandacss/dev";
 
+import { accordionItemPreset, } from "../components/accordion-item/preset";
 import { alertPreset, } from "../components/alert/preset";
 import { avatarPreset, } from "../components/avatar/preset";
 import { badgePreset, } from "../components/badge/preset";
@@ -19,7 +20,9 @@ import { inputPreset, } from "../components/input/preset";
 import { linkPreset, } from "../components/link/preset";
 import { listPreset, } from "../components/list/preset";
 import { mediaPlaceholderPreset, } from "../components/media-placeholder/preset";
+import { menuPreset, } from "../components/menu/preset";
 import { navItemPreset, } from "../components/nav-item/preset";
+import { paginationPreset, } from "../components/pagination/preset";
 import { progressRingPreset, } from "../components/progress-ring/preset";
 import { progressPreset, } from "../components/progress/preset";
 import { qrCodePreset, } from "../components/qr-code/preset";
@@ -30,6 +33,8 @@ import { spinnerPreset, } from "../components/spinner/preset";
 import { splitterPreset, } from "../components/splitter/preset";
 import { statisticPreset, } from "../components/statistic/preset";
 import { statusIndicatorPreset, } from "../components/status-indicator/preset";
+import { stepPreset, } from "../components/step/preset";
+import { tabPreset, } from "../components/tab/preset";
 import { tagPreset, } from "../components/tag/preset";
 import { timelinePreset, } from "../components/timeline/preset";
 import { toastPreset, } from "../components/toast/preset";
@@ -38,6 +43,7 @@ import { foundationPreset, } from "./foundation";
 import { preflight, settingsPreset, } from "./settings";
 
 export {
+    accordionItemPreset,
     alertPreset,
     avatarPreset,
     badgePreset,
@@ -57,7 +63,9 @@ export {
     linkPreset,
     listPreset,
     mediaPlaceholderPreset,
+    menuPreset,
     navItemPreset,
+    paginationPreset,
     preflight,
     progressPreset,
     progressRingPreset,
@@ -70,6 +78,8 @@ export {
     splitterPreset,
     statisticPreset,
     statusIndicatorPreset,
+    stepPreset,
+    tabPreset,
     tagPreset,
     timelinePreset,
     toastPreset,
@@ -118,6 +128,11 @@ export const componentPresetSources: readonly Preset[] = [
     breadcrumbsPreset,
     sidebarItemPreset,
     topNavigationPreset,
+    tabPreset,
+    accordionItemPreset,
+    menuPreset,
+    stepPreset,
+    paginationPreset,
 ];
 
 export const collectComponentDictionaries = (

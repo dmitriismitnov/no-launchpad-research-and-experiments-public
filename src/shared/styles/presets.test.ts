@@ -3,6 +3,7 @@ import { describe, expect, test, } from "bun:test";
 import { mergeConfigs, } from "@pandacss/config";
 import type { Config, } from "@pandacss/dev";
 
+import { accordionItemRecipe, } from "../components/accordion-item/preset";
 import { alertRecipe, } from "../components/alert/preset";
 import { avatarRecipe, } from "../components/avatar/preset";
 import { badgeRecipe, } from "../components/badge/preset";
@@ -21,7 +22,9 @@ import { inputRecipe, } from "../components/input/preset";
 import { linkRecipe, } from "../components/link/preset";
 import { listRecipe, } from "../components/list/preset";
 import { mediaPlaceholderRecipe, } from "../components/media-placeholder/preset";
+import { menuRecipe, } from "../components/menu/preset";
 import { navItemRecipe, } from "../components/nav-item/preset";
+import { paginationRecipe, } from "../components/pagination/preset";
 import { progressRingRecipe, } from "../components/progress-ring/preset";
 import { progressRecipe, } from "../components/progress/preset";
 import { qrCodeRecipe, } from "../components/qr-code/preset";
@@ -32,6 +35,8 @@ import { spinnerRecipe, } from "../components/spinner/preset";
 import { splitterRecipe, } from "../components/splitter/preset";
 import { statisticRecipe, } from "../components/statistic/preset";
 import { statusIndicatorRecipe, } from "../components/status-indicator/preset";
+import { stepRecipe, } from "../components/step/preset";
+import { tabRecipe, } from "../components/tab/preset";
 import { tagRecipe, } from "../components/tag/preset";
 import { timelineRecipe, } from "../components/timeline/preset";
 import { toastRecipe, } from "../components/toast/preset";
@@ -90,6 +95,11 @@ describe("preset composition", () => {
             "breadcrumbs",
             "sidebarItem",
             "topNavigation",
+            "tab",
+            "accordionItem",
+            "menu",
+            "step",
+            "pagination",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
@@ -129,6 +139,11 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["breadcrumbs"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["sidebarItem"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["topNavigation"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["tab"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["accordionItem"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["menu"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["step"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["pagination"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
@@ -165,6 +180,11 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["breadcrumbs"]).toEqual(breadcrumbsRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["sidebarItem"]).toEqual(sidebarItemRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["topNavigation"]).toEqual(topNavigationRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["tab"]).toEqual(tabRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["accordionItem"]).toEqual(accordionItemRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["menu"]).toEqual(menuRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["step"]).toEqual(stepRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["pagination"]).toEqual(paginationRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
@@ -224,8 +244,18 @@ describe("preset composition", () => {
             "breadcrumbs",
             "sidebarItem",
             "topNavigation",
+            "tab",
+            "accordionItem",
+            "menu",
+            "step",
+            "pagination",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "pagination",
+            "step",
+            "menu",
+            "accordionItem",
+            "tab",
             "topNavigation",
             "sidebarItem",
             "breadcrumbs",

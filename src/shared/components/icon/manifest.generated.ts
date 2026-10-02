@@ -4,6 +4,8 @@
 export const ICON_CODEPOINTS = {
     "arrow-right": 0xE001,
     "check": 0xE002,
+    "chevron-down": 0xE01A,
+    "chevron-left": 0xE01B,
     "chevron-right": 0xE017,
     "copy": 0xE013,
     "external-link": 0xE018,
