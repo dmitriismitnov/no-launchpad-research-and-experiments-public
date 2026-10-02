@@ -26,13 +26,14 @@ This ledger records the Batch A rows: `q5xZR3` Theme Switch Preview, `pt3X0` Ass
 
 | Fact | Pen | Code | Status |
 | --- | --- | --- | --- |
-| Nature | A preview block, not a controller; `YQ6kU` renders two instances (`theme: light` / `theme: dark`) | Was a `Switch` controller with controlled/uncontrolled theme + `onThemeChange` (a global preference controller, forbidden by the spec) | FAIL → PASS |
-| Anatomy | `q5xZR3` 420w, vertical, `gap 20 / 14`, fill `surface/raised`, radius `lg`, stroke `border/subtle`; Head (moon + "Theme preview" `text/primary` md semibold + `theme` badge), Buttons, Input, Badges, Card, Tabs | Port is a two-panel comparison; the showcase anatomy is composed in the story from shared owner components | PASS |
-| Theme axis | `data-theme` only (`theme` node property in Pen) | `data-theme="light"` / `data-theme="dark"` on both panels; recipe has no theme variant | PASS |
-| Both themes | Same instances in light and dark | Story `TwoThemes`; computed surface `surface/raised` = `rgb(255,255,255)` / `rgb(15,23,42)` | PASS |
-| Evidence | — | `theme-switch-preview.png`, `theme-switch-preview-surfaces.png` | PASS |
+| Nature | A preview block, not a controller; `YQ6kU` renders two instances of the same master (`theme: light` / `theme: dark`) | Was a `Switch` controller with controlled/uncontrolled theme + `onThemeChange`; corrected (cycle 2) to a passive single fixed master with no controller API | FAIL → PASS |
+| Anatomy | `q5xZR3` single 420×383 block, vertical, `gap 14`, padding 20, fill `surface/raised`, radius `lg`, stroke `border/subtle`; fixed Head (moon + "Theme preview" md semibold + `theme` badge), Buttons (Primary/Secondary), Input (`team@acme.dev`), Badges (Selected/Passing/Draft), Card (`Card title`), Tabs (Preview/Code) | Single fixed master; the anatomy is owned by the component (`root`/`head`/`title`/`actions`/`badges` slots) and composed from the existing public owner components only | PASS (cycle 2) |
+| API | No component API for the theme (`theme` is the context node property, not a prop) | No `theme` / `defaultTheme` / `onThemeChange` / `ThemeSwitchValue`; cycle 2 also removed `children` / `label` / `lightLabel` / `darkLabel`. Deliberate breaking API, documented below | PASS (cycle 2) |
+| Theme axis | `data-theme` only (`theme` node property in Pen) | The component sets **no** `data-theme`; the two explicit contexts are composed only in the Storybook `TwoThemes` story | PASS (cycle 2) |
+| Both themes | Same master in light and dark | Story `TwoThemes` mounts two instances; computed `surface/raised` = `rgb(255,255,255)` / `rgb(15,23,42)` | PASS (cycle 2) |
+| Evidence | — | `theme-switch-preview.png`, `theme-switch-preview-surfaces.png` are the cycle-1 captures of the superseded two-panel port; not regenerated in cycle 2 (see caveat) | INFO (cycle-1 captures) |
 
-Code paths: `theme-switch-preview.tsx`, `preset.ts`, `index.ts`, `ThemeSwitchPreview.stories.tsx`, `ThemeSwitchPreview.composition.test.tsx`. Public API change (`children` required; removed `theme`/`defaultTheme`/`onThemeChange`/`ThemeSwitchValue`) is the documented Pen requirement: `q5xZR3` is a preview, not a theme controller.
+Code paths: `theme-switch-preview.tsx`, `preset.ts`, `index.ts`, `ThemeSwitchPreview.stories.tsx`, `ThemeSwitchPreview.composition.test.tsx`. Public API (cycle 2): the component owns a single fixed Pen master and takes only native `div` attributes; `children`, `label`, `lightLabel`, `darkLabel`, `theme`, `defaultTheme`, `onThemeChange` and `ThemeSwitchValue` are all removed. This is the documented Pen requirement — `q5xZR3` is a fixed preview master, not a theme controller — and `YQ6kU`'s two-theme composition lives only in the Storybook `TwoThemes` story. The cycle-1 captures predate this correction.
 
 ### `pt3X0` Asset Icon Tile — owner `src/shared/components/asset-icon-tile/`
 
@@ -161,3 +162,78 @@ resolve to 1.4). Batch E must re-run the Landing captures as final regression.
 - **`INFO` — Pen Assets icon inventory:** the usage map documents 17 keys from an earlier code snapshot; the current manifest has 38. No Pen requirement to remove existing keys.
 
 No unresolved `FAIL` or `BLOCKED` remains for Batch A.
+
+---
+
+## Cycle 1/2 correction ledger
+
+**Cycle timestamp (UTC):** `2026-10-02T23:30:08Z`\
+**Pen authority (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` (`q5xZR3`, `YQ6kU`, `YpWB5`); snapshot reversal authority `3c8f9a1^`.\
+**Process:** each correction is tests-first — the focused test is written and observed RED (nonzero exit) before the code change, then observed GREEN (exit 0) after. All production changes are minimal and confined to the correction scope.
+
+### Correction 1 — `q5xZR3` is a single fixed 420×383 passive master
+
+**Pen authority.** `q5xZR3` re-queried: frame `layout: vertical`, `gap 14`, `padding 20`, `width 420`, rendered bounds `420×383`, fill `#FFFFFF` (`surface/raised`), stroke `#E2E8F0` (`border/subtle`), `strokeWidth 1`, `cornerRadius 16` (`lg`); children Head (`gap 10`; moon + "Theme preview" 16/600 + `theme` badge), Buttons (`gap 10`; Primary/Secondary), Input (`team@acme.dev`), Badges (`gap 8`; Selected/Passing/Draft), Card (`Card title`), Tabs (`gap 20`; Preview/Code). `YQ6kU` places two refs of `q5xZR3` with `theme: light` and `theme: dark`; it is a comparison row, not a component API.
+
+| Field | Value |
+| --- | --- |
+| UTC | `2026-10-02T23:30:08Z` |
+| RED command | `bun test src/shared/components/theme-switch-preview/ThemeSwitchPreview.composition.test.tsx src/shared/styles/foundation/foundation.test.ts` |
+| RED exit | `1` |
+| RED output (verbatim excerpt) | `error: expect(received).toMatchObject(expected)` … `+ "flexWrap": "wrap", + "gap": "x12",` … `(fail) theme switch preview composition > projects the fixed 420x383 Pen master frame` … `(fail) theme switch preview composition > renders the fixed Pen anatomy with the Pen copy once` … `(fail) theme switch preview composition > is a single passive block: no theme context or controller` … `20 pass / 4 fail` … `EXIT_CODE=1` |
+| Files (minimal) | `src/shared/components/theme-switch-preview/theme-switch-preview.tsx`, `preset.ts`, `ThemeSwitchPreview.stories.tsx`, `ThemeSwitchPreview.composition.test.tsx` |
+| Change | The component becomes one fixed `420×383` block (`root` slot: vertical, `gap x7`, `padding x10`, `borderRadius lg`, `borderColor semantic.border.subtle`, `backgroundColor semantic.surface.raised`) that owns the Pen Head/Buttons/Input/Badges/Card/Tabs anatomy built only from existing public components (`Icon`, `Badge`, `Button`, `Input`, `Card`, `Tab`/`TabList`); no `children`, no caption panels, no `data-theme`, no controller. `index.ts` unchanged and retains no controller export. Stories reduced to `Playground` (single) and `TwoThemes`, which composes the two light/dark instances. |
+| GREEN command | `bun test src/shared/components/theme-switch-preview/ThemeSwitchPreview.composition.test.tsx src/shared/styles/foundation/foundation.test.ts` |
+| GREEN exit | `0` |
+| GREEN output (verbatim excerpt) | `(pass) theme switch preview composition > projects the fixed 420x383 Pen master frame` … `(pass) theme switch preview composition > is a single passive block: no theme context or controller` … `24 pass / 0 fail` … `EXIT_CODE=0` |
+
+Deliberate breaking API: `theme`, `defaultTheme`, `onThemeChange`, `ThemeSwitchValue`, `children`, `label`, `lightLabel` and `darkLabel` are removed. `ThemeSwitchPreviewProps` is now `Omit<ComponentProps<"div">, "children">`.
+
+### Correction 2 — Foundation keeps Pen `normal: 1.4` and documents `snug: 1.4`
+
+**Pen authority.** `YpWB5` `Foundation — Typography`: `line-height/tight 1.15 · normal 1.4 · relaxed 1.6`. `normal` keeps its Pen value; `snug` is retained as a legacy alias for the pre-migration name of the same `1.4` step.
+
+| Field | Value |
+| --- | --- |
+| UTC | `2026-10-02T23:30:08Z` |
+| RED command | `bun test src/shared/components/theme-switch-preview/ThemeSwitchPreview.composition.test.tsx src/shared/styles/foundation/foundation.test.ts` |
+| RED exit | `1` |
+| RED output (verbatim excerpt) | `- "snug": { "value": 1.4, }` … `(fail) typography foundation > exposes the Pen line-height scale with the legacy snug alias [9.38ms]` … `20 pass / 4 fail` … `EXIT_CODE=1` |
+| Files (minimal) | `src/shared/styles/foundation/typography/line-heights.ts`, `src/shared/styles/foundation/foundation.test.ts` |
+| Change | Added `snug: { value: 1.4, }` with a JSDoc note; `normal` stays `1.4`. `Card`'s `normal` usage is **not** reverted (Card was out of this correction's scope). |
+| GREEN command | same focused command |
+| GREEN exit | `0` |
+| GREEN output (verbatim excerpt) | `(pass) typography foundation > exposes the Pen line-height scale with the legacy snug alias` … `24 pass / 0 fail` … `EXIT_CODE=0` |
+
+### Correction 3 — Landing `snug` revert and seven snapshot reversals
+
+**Source authority.** `3c8f9a1` changed only `src/app/Landing.tsx` `codeSurface.lineHeight` from `"snug"` to `"normal"` and refreshed seven `test/visual` baselines. Correction: restore the Landing hunk and the seven binaries to `3c8f9a1^`, and do not run a snapshot update.
+
+| Field | Value |
+| --- | --- |
+| UTC | `2026-10-02T23:30:08Z` |
+| RED command | `bun test /private/var/folders/nc/rn4yx8j16ll1gn5nqmfnc1wh0000gn/T/opencode/batch-a-landing-snug.test.ts` (temporary, uncommitted) |
+| RED exit | `1` |
+| RED output (verbatim excerpt) | `Expected to contain: "lineHeight: \\"snug\\""` … `Received: "const codeSurface = {\n    borderRadius: \"md\",\n    backgroundColor: \"semantic.surface.sunken\",\n    padding: \"x6\",\n    fontSize: \"xs\",\n    lineHeight: \"normal\",\n ..."` … `(fail) Landing code surface keeps the legacy snug alias [3.05ms]` … `0 pass / 1 fail` … `EXIT_CODE=1` |
+| Files (minimal) | `src/app/Landing.tsx` (`codeSurface.lineHeight: "normal"` → `"snug"`); seven `test/visual` snapshot binaries restored with `git checkout 3c8f9a1^ -- <paths>` (`landing-desktop-{dark,light}`, `landing-mobile-{dark,light}`, `landing-tablet-{dark,light}`, `landing-chromium-darwin.png`) |
+| GREEN command | `bun test /private/var/folders/nc/rn4yx8j16ll1gn5nqmfnc1wh0000gn/T/opencode/batch-a-landing-snug.test.ts` |
+| GREEN exit | `0` |
+| GREEN output (verbatim excerpt) | `(pass) Landing code surface keeps the legacy snug alias [4.13ms]` … `1 pass / 0 fail` … `EXIT_CODE=0` |
+
+The temporary test file was deleted after the GREEN run; no snapshot update (`mise run test:visual:update`) was run.
+
+### Verification commands (cycle 2)
+
+| Command | Exit | Output (verbatim excerpt) |
+| --- | --- | --- |
+| `mise run gen` | `0` | `Successfully extracted css from 424 file(s)`; codegen emitted `css`, `tokens`, `patterns`, `recipes`, `jsx` |
+| `mise run check` | `0` | lint + types + format + `icons:check` + `fonts:check`; unit `654 pass / 0 fail` (`88` files); browser/storybook `73 passed (73)` files, `392 passed (392)` tests |
+| `mise run check:deps` | `0` | Knip, no findings |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-Dp9jx_uS.css 210.79 kB` |
+
+### Cycle 2 caveats
+
+- The `theme-switch-preview.png` / `theme-switch-preview-surfaces.png` captures predate the single-master port; they still show the superseded two-panel layout. Regenerating them was outside the correction's command set, so they are recorded as `INFO (cycle-1 captures)`. The corrected component's geometry and content are instead proven by the focused composition test and the `TwoThemes` story.
+- The component's `height: 383px` reproduces Pen's rendered master height (`q5xZR3` uses `fit_content`, measured at 383). If the approximated internal components ever grow past that, content would overflow rather than expand; no Pen `clip` is set.
+- The seven restored `test/visual` baselines reflect `3c8f9a1^`. Because the Pen line-height scale still moves Landing's `tight`/`relaxed` consumers, `mise run test:visual` is expected to be re-captured by Batch E as the final Landing regression; no snapshot update was performed here.
+- Deliberate breaking API for `ThemeSwitchPreview` is documented above (removed controller, `children` and caption props).

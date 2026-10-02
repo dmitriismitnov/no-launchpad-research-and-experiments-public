@@ -264,7 +264,7 @@ const codeSurface = {
     backgroundColor: "semantic.surface.sunken",
     padding: "x6",
     fontSize: "xs",
-    lineHeight: "normal",
+    lineHeight: "snug",
     color: "semantic.text.secondary",
     overflow: "hidden",
 };

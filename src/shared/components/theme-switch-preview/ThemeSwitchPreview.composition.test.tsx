@@ -1,54 +1,73 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { themeSwitchPreviewRecipe, } from "./preset";
 import { ThemeSwitchPreview, } from "./theme-switch-preview";
 
 describe("theme switch preview composition", () => {
-    test("renders the same content in explicit light and dark contexts", () => {
-        // Pen `Foundation — Theme comparison` (`YpWB5` / `YQ6kU`) places two
-        // instances of `q5xZR3`, one with `theme: light` and one with
-        // `theme: dark`; the same instances render in both themes.
-        const markup = renderToStaticMarkup(
-            <ThemeSwitchPreview>
-                <span data-probe="content">Preview</span>
-            </ThemeSwitchPreview>,
-        );
+    test("projects the fixed 420x383 Pen master frame", () => {
+        // Pen `Theme Switch Preview` master (`q5xZR3`): a 420x383 vertical
+        // block, `surface/raised` fill, `lg` radius, `border/subtle` stroke,
+        // 20px padding and a 14px root gap.
+        expect(themeSwitchPreviewRecipe.base?.["root"]).toMatchObject({
+            display: "flex",
+            flexDirection: "column",
+            gap: "x7",
+            width: "420px",
+            height: "383px",
+            padding: "x10",
+            borderRadius: "lg",
+            borderWidth: "thin",
+            borderStyle: "solid",
+            borderColor: "semantic.border.subtle",
+            backgroundColor: "semantic.surface.raised",
+            color: "semantic.text.primary",
+        });
+    });
+
+    test("renders the fixed Pen anatomy with the Pen copy once", () => {
+        // `q5xZR3` Head (moon + "Theme preview" + `theme` badge), Buttons,
+        // Input, Badges, Card and Tabs, composed from the existing public
+        // components only.
+        const markup = renderToStaticMarkup(<ThemeSwitchPreview />);
 
         expect(markup).toContain("themeSwitchPreview__root");
-        expect(markup).toContain('data-theme="light"');
-        expect(markup).toContain('data-theme="dark"');
-        expect(markup.match(/data-probe="content"/g)?.length).toBe(2);
-        expect(markup.match(/>Preview</g)?.length).toBe(2);
+        expect(markup).toContain("icon--size_sm");
+        expect(markup).toContain("Theme preview");
+        expect(markup).toContain(">theme<");
+        expect(markup).toContain(">Primary<");
+        expect(markup).toContain(">Secondary<");
+        expect(markup).toContain('value="team@acme.dev"');
+        expect(markup).toContain(">Selected<");
+        expect(markup).toContain(">Passing<");
+        expect(markup).toContain(">Draft<");
+        expect(markup).toContain("Card title");
+        expect(markup).toContain(">Preview<");
+        expect(markup).toContain(">Code<");
     });
 
-    test("is a passive comparison, not a theme-setting control", () => {
-        const markup = renderToStaticMarkup(<ThemeSwitchPreview>Body</ThemeSwitchPreview>);
+    test("is a single passive block: no theme context or controller", () => {
+        const markup = renderToStaticMarkup(<ThemeSwitchPreview />);
 
+        expect(markup.match(/themeSwitchPreview__root/g)?.length).toBe(1);
+        expect(markup).not.toContain("data-theme");
         expect(markup).not.toContain('role="switch"');
-        expect(markup).not.toContain("<input");
-    });
-
-    test("names the comparison and exposes visible captions", () => {
-        const markup = renderToStaticMarkup(
-            <ThemeSwitchPreview label="Theme comparison">Body</ThemeSwitchPreview>,
-        );
-
-        expect(markup).toContain('role="group"');
-        expect(markup).toContain('aria-label="Theme comparison"');
-        expect(markup).toContain("Light");
-        expect(markup).toContain("Dark");
+        expect(markup).not.toContain("aria-checked");
     });
 
     test("accepts native div attributes", () => {
-        const markup = renderToStaticMarkup(<ThemeSwitchPreview data-testid="theme">Body</ThemeSwitchPreview>);
+        const markup = renderToStaticMarkup(
+            <ThemeSwitchPreview data-testid="preview" id="theme-preview" />,
+        );
 
-        expect(markup).toContain('data-testid="theme"');
+        expect(markup).toContain('data-testid="preview"');
+        expect(markup).toContain('id="theme-preview"');
     });
 
-    test("requires the compared content at the type level", () => {
-        // @ts-expect-error the preview compares content; children are required
-        const missing = <ThemeSwitchPreview />;
+    test("owns its content: children are not part of the API", () => {
+        // @ts-expect-error the fixed master owns its content; children are not public
+        const withChildren = <ThemeSwitchPreview>Body</ThemeSwitchPreview>;
 
-        expect(missing).toBeDefined();
+        expect(withChildren).toBeDefined();
     });
 });

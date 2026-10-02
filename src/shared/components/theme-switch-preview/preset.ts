@@ -1,49 +1,29 @@
 import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
- * Theme Switch Preview visual projection. Slots: root / panel / caption /
- * surface.
+ * Theme Switch Preview visual projection. Slots: root / head / title /
+ * actions / badges.
  *
- * Pen's `Theme Switch Preview` master (`q5xZR3`) is a preview block resolved
- * through theme context: `surface/raised` fill, `lg` radius, `border/subtle`
- * stroke and 20px padding. `Foundation — Theme comparison` (`YQ6kU`) renders
- * two instances, one `theme: light` and one `theme: dark`. The recipe therefore
- * projects a two-panel comparison: `root` lays the panels out, `panel` stacks a
- * visible caption over a themed surface, and `surface` paints the Pen block.
- * The theme itself is the `data-theme` attribute set by the component, never a
- * recipe variant or a component-local theme fork.
+ * Pen's `Theme Switch Preview` master (`q5xZR3`) is one fixed 420x383 passive
+ * preview block, not a theme controller: vertical, 20px padding, 14px root gap,
+ * `surface/raised` fill, `lg` radius and a `border/subtle` stroke. Its Head
+ * (moon + "Theme preview" + `theme` badge), Buttons, Input, Badges, Card and
+ * Tabs anatomy is owned by the component. The theme is never a recipe variant
+ * or a component-local fork: `Foundation — Theme comparison` (`YQ6kU`) renders
+ * two instances of the master, one `theme: light` and one `theme: dark`, so the
+ * two-theme composition lives in the Storybook `TwoThemes` story.
  */
 export const themeSwitchPreviewRecipe = defineSlotRecipe({
     className: "themeSwitchPreview",
-    slots: [ "root", "panel", "caption", "surface", ],
+    slots: [ "root", "head", "title", "actions", "badges", ],
 
     base: {
         root: {
             display: "flex",
-            flexWrap: "wrap",
-            gap: "x12",
-        },
-
-        panel: {
-            display: "flex",
             flexDirection: "column",
-            flex: "1",
-            minWidth: "0",
-            gap: "x4",
-        },
-
-        caption: {
-            fontFamily: "body",
-            fontSize: "sm",
-            fontWeight: "semibold",
-            color: "semantic.text.secondary",
-        },
-
-        surface: {
-            display: "flex",
-            flexDirection: "column",
-            flex: "1",
-            gap: "x8",
+            gap: "x7",
+            width: "420px",
+            height: "383px",
             padding: "x10",
             borderRadius: "lg",
             borderWidth: "thin",
@@ -51,6 +31,33 @@ export const themeSwitchPreviewRecipe = defineSlotRecipe({
             borderColor: "semantic.border.subtle",
             backgroundColor: "semantic.surface.raised",
             color: "semantic.text.primary",
+        },
+
+        head: {
+            display: "flex",
+            alignItems: "center",
+            gap: "x5",
+        },
+
+        title: {
+            flex: "1",
+            fontFamily: "body",
+            fontSize: "md",
+            fontWeight: "semibold",
+            lineHeight: "tight",
+            color: "semantic.text.primary",
+        },
+
+        actions: {
+            display: "flex",
+            alignItems: "center",
+            gap: "x5",
+        },
+
+        badges: {
+            display: "flex",
+            alignItems: "center",
+            gap: "x4",
         },
     },
 });

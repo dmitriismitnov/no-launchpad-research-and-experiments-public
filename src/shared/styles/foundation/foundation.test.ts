@@ -305,11 +305,15 @@ describe("typography foundation", () => {
         });
     });
 
-    test("exposes the Pen line-height scale", () => {
+    test("exposes the Pen line-height scale with the legacy snug alias", () => {
         // Pen `Foundation — Typography` (01 Foundation, `YpWB5`):
         // line-height/tight 1.15 · normal 1.4 · relaxed 1.6.
+        // `snug` is a retained legacy alias for the pre-migration name of the
+        // Pen `normal` step (1.4): it resolves identically and is kept so
+        // existing consumers (Landing) keep working without a visual change.
         expect(lineHeights).toEqual({
             tight: { value: 1.15, },
+            snug: { value: 1.4, },
             normal: { value: 1.4, },
             relaxed: { value: 1.6, },
         });
