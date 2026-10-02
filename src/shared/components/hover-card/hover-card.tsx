@@ -1,5 +1,5 @@
-import type { ComponentProps, KeyboardEvent, ReactNode, } from "react";
-import { useId, useState, } from "react";
+import type { ComponentProps, FocusEvent, KeyboardEvent, PointerEvent as ReactPointerEvent, ReactNode, } from "react";
+import { useCallback, useEffect, useId, useRef, useState, } from "react";
 
 import { cx, } from "@shared/styled-system/css";
 import { hoverCard, } from "@shared/styled-system/recipes";
@@ -32,10 +32,13 @@ export type HoverCardProps = Omit<ComponentProps<"span">, "children"> & {
 };
 
 /**
- * Rich preview shown on hover or focus of its trigger. Open state is uncontrolled
- * by default, or controlled with `open` / `onOpenChange`; `Escape` hides it. The
- * surface renders in place (no portal), never traps focus and is described by its
- * trigger. A consumer that needs an open delay, collision handling or a
+ * Rich preview shown on hover or focus of its trigger. The trigger and the
+ * surface form one root interaction boundary: entering or focusing anywhere
+ * inside opens it, and leaving or blurring closes it only when focus moves
+ * outside the root. Open state is uncontrolled by default, or controlled with
+ * `open` / `onOpenChange`; `Escape` and an outside pointer press hide it. The
+ * surface renders in place (no portal), never traps focus and is announced as a
+ * labelled dialog. A consumer that needs an open delay, collision handling or a
  * different parts composition owns that behaviour.
  */
 export const HoverCard = ({
@@ -57,16 +60,55 @@ export const HoverCard = ({
     const [ uncontrolledOpen, setUncontrolledOpen, ] = useState(defaultOpen);
     const isControlled = open !== undefined;
     const isOpen = isControlled ? open : uncontrolledOpen;
+    const rootRef = useRef<HTMLSpanElement>(null);
     const surfaceId = useId();
     const styles = hoverCard({ placement, });
     const initialsText = initials ?? deriveInitials(name);
 
-    const requestOpenChange = (next: boolean) => {
+    const requestOpenChange = useCallback((next: boolean) => {
         if ( !isControlled ) {
             setUncontrolledOpen(next);
         }
 
         onOpenChange?.(next);
+    }, [ isControlled, onOpenChange, ]);
+
+    // Outside presses close the surface; the listener exists only while open and
+    // depends on the stable `requestOpenChange` callback.
+    useEffect(() => {
+        if ( !isOpen ) {
+            return;
+        }
+
+        const handlePointerDown = (event: PointerEvent) => {
+            if ( rootRef.current !== null && !rootRef.current.contains(event.target as Node) ) {
+                requestOpenChange(false);
+            }
+        };
+
+        document.addEventListener("pointerdown", handlePointerDown);
+
+        return () => document.removeEventListener("pointerdown", handlePointerDown);
+    }, [ isOpen, requestOpenChange, ]);
+
+    const handlePointerEnter = () => requestOpenChange(true);
+
+    const handlePointerLeave = (event: ReactPointerEvent<HTMLSpanElement>) => {
+        const next = event.relatedTarget as Node | null;
+
+        if ( next === null || !event.currentTarget.contains(next) ) {
+            requestOpenChange(false);
+        }
+    };
+
+    const handleFocus = () => requestOpenChange(true);
+
+    const handleBlur = (event: FocusEvent<HTMLSpanElement>) => {
+        const next = event.relatedTarget as Node | null;
+
+        if ( next === null || !event.currentTarget.contains(next) ) {
+            requestOpenChange(false);
+        }
     };
 
     const handleKeyDown = (event: KeyboardEvent<HTMLSpanElement>) => {
@@ -78,23 +120,29 @@ export const HoverCard = ({
     };
 
     return (
-        <span {...props} className={cx(styles.root, className)}>
+        <span
+            {...props}
+            ref={rootRef}
+            className={cx(styles.root, className)}
+            onPointerEnter={handlePointerEnter}
+            onPointerLeave={handlePointerLeave}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+        >
             <span
                 className={styles.trigger}
                 tabIndex={0}
-                aria-describedby={isOpen ? surfaceId : undefined}
-                onMouseEnter={() => requestOpenChange(true)}
-                onMouseLeave={() => requestOpenChange(false)}
-                onFocus={() => requestOpenChange(true)}
-                onBlur={() => requestOpenChange(false)}
-                onKeyDown={handleKeyDown}
+                aria-haspopup="dialog"
+                aria-expanded={isOpen}
+                aria-controls={isOpen ? surfaceId : undefined}
             >
                 {children}
             </span>
             {isOpen && (
                 <span
                     id={surfaceId}
-                    role="tooltip"
+                    role="dialog"
                     aria-label={label ?? name}
                     className={styles.surface}
                 >

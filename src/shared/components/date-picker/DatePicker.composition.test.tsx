@@ -66,4 +66,17 @@ describe("DatePicker composition", () => {
         expect(markup).toContain("my-picker");
         expect(markup).toContain("datePicker__root");
     });
+
+    test("renders the trigger as the field button itself, not a wrapped span", () => {
+        const markup = renderToStaticMarkup(<DatePicker defaultValue={march} />);
+
+        expect(markup).toMatch(/<button[^>]*datePicker__field/);
+        expect(markup).not.toContain("popover__trigger");
+    });
+
+    test("forwards disabled to the trigger button", () => {
+        const markup = renderToStaticMarkup(<DatePicker disabled defaultValue={march} />);
+
+        expect(markup).toMatch(/<button[^>]*disabled/);
+    });
 });

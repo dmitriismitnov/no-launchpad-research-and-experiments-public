@@ -61,3 +61,47 @@ export const Toggle: Story = {
         await expect(canvas.queryByRole("dialog")).toBeNull();
     },
 };
+
+// A public Button is cloned in place: it stays the single interactive node and
+// opens the surface. A pointer press on a sibling outside closes it.
+export const ComposedTrigger: Story = {
+    render: () => (
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "1rem", }}>
+            <Popover
+                trigger={<Button>Composed</Button>}
+                title="Notifications"
+                description="Choose what you want to hear about."
+            >
+                <p>Content</p>
+            </Popover>
+            <button type="button">Outside</button>
+        </div>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByRole("button", { name: "Composed", });
+
+        await expect(canvas.queryByRole("dialog")).toBeNull();
+        await fireEvent.click(trigger);
+        await expect(canvas.getByRole("dialog")).toBeTruthy();
+
+        await fireEvent.pointerDown(canvas.getByRole("button", { name: "Outside", }));
+        await expect(canvas.queryByRole("dialog")).toBeNull();
+    },
+};
+
+// A composed trigger keeps its own click behaviour; preventing the default
+// stops the Popover from toggling.
+export const PreventedTrigger: Story = {
+    render: () => (
+        <Popover trigger={<Button onClick={(event) => event.preventDefault()}>Blocked</Button>}>
+            Body
+        </Popover>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await fireEvent.click(canvas.getByRole("button", { name: "Blocked", }));
+        await expect(canvas.queryByRole("dialog")).toBeNull();
+    },
+};

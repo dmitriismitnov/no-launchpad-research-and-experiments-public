@@ -65,4 +65,17 @@ describe("ColorPicker composition", () => {
         expect(markup).toContain("my-color");
         expect(markup).toContain("colorPicker__root");
     });
+
+    test("renders the trigger as the field button itself, not a wrapped span", () => {
+        const markup = renderToStaticMarkup(<ColorPicker defaultValue="#2563EB" />);
+
+        expect(markup).toMatch(/<button[^>]*colorPicker__field/);
+        expect(markup).not.toContain("popover__trigger");
+    });
+
+    test("forwards disabled to the trigger button", () => {
+        const markup = renderToStaticMarkup(<ColorPicker disabled />);
+
+        expect(markup).toMatch(/<button[^>]*disabled/);
+    });
 });

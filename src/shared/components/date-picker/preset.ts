@@ -57,6 +57,17 @@ export const datePickerRecipe = defineSlotRecipe({
             backgroundColor: "semantic.common.50.background",
             boxShadow: "0 1px 2px {colors.semantic.shadow.200}",
             cursor: { base: "pointer", _disabled: "not-allowed", },
+            // The trigger is now the native button itself; own the resets and
+            // focus ring the shared Popover wrapper used to provide.
+            paddingBlock: "x0",
+            fontFamily: "inherit",
+            fontSize: "inherit",
+            color: "inherit",
+            textAlign: "left",
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "0", },
+            outlineColor: { _focusVisible: "semantic.brand.500.background", },
         },
 
         icon: {

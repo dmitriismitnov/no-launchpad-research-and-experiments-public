@@ -117,7 +117,7 @@ export const ColorPicker = ({
                 open={isOpen}
                 onOpenChange={requestOpenChange}
                 trigger={
-                    <span className={styles.field}>
+                    <button type="button" className={styles.field} disabled={disabled}>
                         <span
                             className={styles.swatch}
                             style={{ backgroundColor: current, }}
@@ -125,7 +125,7 @@ export const ColorPicker = ({
                         />
                         <span className={styles.value}>{current}</span>
                         <Icon name="chevron-down" size="sm" className={styles.chevron} />
-                    </span>
+                    </button>
                 }
             >
                 <div className={styles.palette} role="listbox" aria-label="Color palette">

@@ -121,14 +121,14 @@ export const DatePicker = ({
                 open={isOpen}
                 onOpenChange={requestOpenChange}
                 trigger={
-                    <span className={styles.field}>
+                    <button type="button" className={styles.field} disabled={disabled}>
                         <Icon name="calendar" size="sm" className={styles.icon} />
                         <span className={styles.value}>
                             {selectedDate === null || selectedDate === undefined
                                 ? placeholder
                                 : formatIso(selectedDate)}
                         </span>
-                    </span>
+                    </button>
                 }
             >
                 <Calendar

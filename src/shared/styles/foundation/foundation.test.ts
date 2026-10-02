@@ -15,6 +15,7 @@ import {
 } from "./colors";
 import { sizes, spacing, } from "./layout";
 import { SCALE_STEP_REM, } from "./layout/scale";
+import { radii, } from "./shape";
 import { fonts, fontSizes, fontWeights, letterSpacings, lineHeights, } from "./typography";
 
 type Token = { value: string; };
@@ -68,6 +69,14 @@ describe("foundation", () => {
 
     test("spacing and sizes share the same scale", () => {
         expect(Object.keys(spacing)).toEqual(Object.keys(sizes));
+    });
+
+    test("radii exposes the size scale plus a full token", () => {
+        expect(radii).toEqual({
+            sm: { value: "0.375rem", },
+            md: { value: "0.625rem", },
+            full: { value: "9999px", },
+        });
     });
 
     test("colors declares the theme axis", () => {

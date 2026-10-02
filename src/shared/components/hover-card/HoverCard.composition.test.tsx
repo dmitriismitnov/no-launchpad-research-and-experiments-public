@@ -26,7 +26,31 @@ describe("hover card composition", () => {
         expect(markup).toContain("hoverCard__bio");
         expect(markup).toContain("Ada Rivera");
         expect(markup).toContain("Design Systems Lead");
-        expect(markup).toContain(`role="tooltip"`);
+        expect(markup).toContain(`role="dialog"`);
+    });
+
+    test("names the surface from label, falling back to name", () => {
+        const byName = renderToStaticMarkup(
+            <HoverCard name="Ada Rivera" defaultOpen>Ada</HoverCard>,
+        );
+        const byLabel = renderToStaticMarkup(
+            <HoverCard name="Ada Rivera" label="Profile preview" defaultOpen>Ada</HoverCard>,
+        );
+
+        expect(byName).toContain(`aria-label="Ada Rivera"`);
+        expect(byLabel).toContain(`aria-label="Profile preview"`);
+    });
+
+    test("binds the trigger to the dialog surface", () => {
+        const open = renderToStaticMarkup(
+            <HoverCard name="Ada Rivera" defaultOpen>Ada</HoverCard>,
+        );
+        const closed = renderToStaticMarkup(<HoverCard name="Ada Rivera">Ada</HoverCard>);
+
+        expect(open).toContain(`aria-haspopup="dialog"`);
+        expect(open).toMatch(/aria-controls="[^"]+"/);
+        expect(open).toContain(`aria-expanded="true"`);
+        expect(closed).toContain(`aria-expanded="false"`);
     });
 
     test("derives initials from the name", () => {

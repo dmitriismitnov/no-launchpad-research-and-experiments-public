@@ -141,17 +141,20 @@ export const hoverCardRecipe = defineSlotRecipe({
 
     variants: {
         placement: {
+            // The trigger and surface share one pointer boundary, so they sit
+            // flush: any physical gap would be outside the root and close the
+            // card while the pointer crosses it.
             top: {
-                surface: { bottom: "calc(100% + 0.5rem)", left: "50%", transform: "translateX(-50%)", },
+                surface: { bottom: "100%", left: "50%", transform: "translateX(-50%)", },
             },
             bottom: {
-                surface: { top: "calc(100% + 0.5rem)", left: "50%", transform: "translateX(-50%)", },
+                surface: { top: "100%", left: "50%", transform: "translateX(-50%)", },
             },
             left: {
-                surface: { right: "calc(100% + 0.5rem)", top: "0", },
+                surface: { right: "100%", top: "0", },
             },
             right: {
-                surface: { left: "calc(100% + 0.5rem)", top: "0", },
+                surface: { left: "100%", top: "0", },
             },
         },
     },

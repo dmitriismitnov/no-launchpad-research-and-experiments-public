@@ -1,6 +1,8 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { Button, } from "@shared/components/button";
+
 import { Popover, } from "./popover";
 
 describe("popover composition", () => {
@@ -81,5 +83,39 @@ describe("popover composition", () => {
         const markup = renderToStaticMarkup(<Popover trigger="Open" data-testid="p">Body</Popover>);
 
         expect(markup).toContain(`data-testid="p"`);
+    });
+
+    test("clones a public Button as the direct trigger without nesting", () => {
+        const markup = renderToStaticMarkup(
+            <Popover trigger={<Button>Open</Button>} defaultOpen>
+                Body
+            </Popover>,
+        );
+
+        expect(markup.match(/<button/g)?.length).toBe(1);
+        expect(markup).toContain("button__root");
+        expect(markup).toContain(`aria-haspopup="dialog"`);
+        expect(markup).toContain(`aria-expanded="true"`);
+    });
+
+    test("clones an anchor as the direct trigger without adding a button", () => {
+        const markup = renderToStaticMarkup(
+            <Popover trigger={<a href="/docs">Docs</a>} defaultOpen>
+                Body
+            </Popover>,
+        );
+
+        expect(markup).not.toContain("<button");
+        expect(markup).toContain(`<a href="/docs"`);
+        expect(markup).toContain(`aria-haspopup="dialog"`);
+        expect(markup).toContain(`aria-expanded="true"`);
+    });
+
+    test("does not inject the visual trigger class into a composed trigger", () => {
+        const markup = renderToStaticMarkup(
+            <Popover trigger={<Button>Open</Button>}>Body</Popover>,
+        );
+
+        expect(markup).not.toContain("popover__trigger");
     });
 });

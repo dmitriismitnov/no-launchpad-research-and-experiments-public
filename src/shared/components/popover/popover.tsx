@@ -1,14 +1,26 @@
-import type { ComponentProps, KeyboardEvent, ReactNode, } from "react";
-import { useEffect, useId, useRef, useState, } from "react";
+import type { ComponentProps, KeyboardEvent, MouseEvent, ReactElement, ReactNode, } from "react";
+import { cloneElement, useCallback, useEffect, useId, useRef, useState, } from "react";
 
 import { cx, } from "@shared/styled-system/css";
 import { popover, } from "@shared/styled-system/recipes";
 
 export type PopoverPlacement = "top" | "right" | "bottom" | "left";
 
+/** Behaviour and ARIA the Popover projects onto a composed trigger element. */
+type TriggerElementProps = {
+    onClick?: (event: MouseEvent<HTMLElement>) => void;
+    "aria-haspopup"?: "dialog";
+    "aria-expanded"?: boolean;
+};
+
 export type PopoverProps = Omit<ComponentProps<"div">, "children"> & {
-    /** The control that opens the surface. */
-    trigger: ReactNode;
+    /**
+     * The control that opens the surface. Pass one trigger element — a public
+     * `Button`, `ButtonIcon` or `<a>` — and the Popover clones it in place with
+     * the open behaviour and ARIA instead of wrapping it. A string is a
+     * shorthand that renders a Popover-owned `<button type="button">`.
+     */
+    trigger: ReactElement | string;
     /** Controlled open state; pass with `onOpenChange` to own it. */
     open?: boolean;
     /** Initial open state when uncontrolled. */
@@ -56,14 +68,16 @@ export const Popover = ({
     const descriptionId = useId();
     const styles = popover({ placement, });
 
-    const requestOpenChange = (next: boolean) => {
+    const requestOpenChange = useCallback((next: boolean) => {
         if ( !isControlled ) {
             setUncontrolledOpen(next);
         }
 
         onOpenChange?.(next);
-    };
+    }, [ isControlled, onOpenChange, ]);
 
+    // Outside presses close the surface; the listener exists only while open and
+    // depends on the stable `requestOpenChange` callback.
     useEffect(() => {
         if ( !isOpen ) {
             return;
@@ -78,7 +92,7 @@ export const Popover = ({
         document.addEventListener("pointerdown", handlePointerDown);
 
         return () => document.removeEventListener("pointerdown", handlePointerDown);
-    });
+    }, [ isOpen, requestOpenChange, ]);
 
     const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
         onKeyDown?.(event);
@@ -88,17 +102,41 @@ export const Popover = ({
         }
     };
 
-    return (
-        <div {...props} ref={rootRef} className={cx(styles.root, className)} onKeyDown={handleKeyDown}>
+    const toggleOpen = (event: MouseEvent<HTMLElement>) => {
+        if ( event.defaultPrevented ) {
+            return;
+        }
+
+        requestOpenChange(!isOpen);
+    };
+
+    // A string keeps the backward-compatible shorthand and is always rendered as
+    // a Popover-owned button. An element is cloned in place, so a public Button
+    // or anchor stays the single interactive node and keeps its own classes.
+    const triggerNode = typeof trigger === "string"
+        ? (
             <button
                 type="button"
                 className={styles.trigger}
                 aria-haspopup="dialog"
                 aria-expanded={isOpen}
-                onClick={() => requestOpenChange(!isOpen)}
+                onClick={toggleOpen}
             >
                 {trigger}
             </button>
+        )
+        : cloneElement(trigger as ReactElement<TriggerElementProps>, {
+            onClick: (event: MouseEvent<HTMLElement>) => {
+                ( trigger as ReactElement<TriggerElementProps> ).props.onClick?.(event);
+                toggleOpen(event);
+            },
+            "aria-haspopup": "dialog",
+            "aria-expanded": isOpen,
+        });
+
+    return (
+        <div {...props} ref={rootRef} className={cx(styles.root, className)} onKeyDown={handleKeyDown}>
+            {triggerNode}
             {isOpen && (
                 <div
                     role="dialog"
