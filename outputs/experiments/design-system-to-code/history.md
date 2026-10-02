@@ -72,3 +72,13 @@
   `mise run check:deps`, `mise run build` — зелёные.
 - Отчёты по батчам: `notes/batch1..13-report.md`.
 - Осталось (T3): экран лендинга из токенов и компонентов.
+
+## 2026-10-02 — T3 выполнен: экран лендинга
+
+- Перенесена типографическая шкала Pen (`2xl/3xl/4xl`) в foundation, тест обновлён.
+- `src/app/Landing.tsx` собран из перенесённых токенов и компонентов:
+  Header (`TopNavigation` + `Brand` + `NavItem` + `ThemeSwitchPreview` + `Link` + `Button`),
+  Hero + `Statistic`-полоса, Features (`Card`), Workflow, Themes/CTA, Footer (`Divider` + `Link`).
+- `App.tsx` рендерит лендинг в light и dark через `data-theme` (тема — контекст, не вариант).
+- Адаптивность: grid `auto-fit minmax(...)` и flex-wrap.
+- Проверки: `mise run gen`, `mise run check` (389 browser), `mise run check:deps`, `mise run build` — зелёные.
