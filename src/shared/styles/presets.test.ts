@@ -14,6 +14,7 @@ import { buttonIconRecipe, } from "../components/button-icon/preset";
 import { buttonRecipe, } from "../components/button/preset";
 import { cardRecipe, } from "../components/card/preset";
 import { carouselRecipe, } from "../components/carousel/preset";
+import { checkboxRecipe, } from "../components/checkbox/preset";
 import { clipboardRecipe, } from "../components/clipboard/preset";
 import { codeBlockRecipe, } from "../components/code-block/preset";
 import { contextMenuRecipe, } from "../components/context-menu/preset";
@@ -31,24 +32,31 @@ import { listRecipe, } from "../components/list/preset";
 import { mediaPlaceholderRecipe, } from "../components/media-placeholder/preset";
 import { menuRecipe, } from "../components/menu/preset";
 import { navItemRecipe, } from "../components/nav-item/preset";
+import { numberInputRecipe, } from "../components/number-input/preset";
 import { paginationRecipe, } from "../components/pagination/preset";
 import { popoverRecipe, } from "../components/popover/preset";
 import { progressRingRecipe, } from "../components/progress-ring/preset";
 import { progressRecipe, } from "../components/progress/preset";
 import { qrCodeRecipe, } from "../components/qr-code/preset";
+import { radioRecipe, } from "../components/radio/preset";
 import { scrollAreaRecipe, } from "../components/scroll-area/preset";
 import { sheetRecipe, } from "../components/sheet/preset";
 import { sidebarItemRecipe, } from "../components/sidebar-item/preset";
 import { skeletonRecipe, } from "../components/skeleton/preset";
+import { sliderRecipe, } from "../components/slider/preset";
 import { spinnerRecipe, } from "../components/spinner/preset";
 import { splitterRecipe, } from "../components/splitter/preset";
 import { statisticRecipe, } from "../components/statistic/preset";
 import { statusIndicatorRecipe, } from "../components/status-indicator/preset";
 import { stepRecipe, } from "../components/step/preset";
+import { switchControlRecipe, } from "../components/switch/preset";
 import { tabRecipe, } from "../components/tab/preset";
 import { tagRecipe, } from "../components/tag/preset";
+import { textareaRecipe, } from "../components/textarea/preset";
 import { timelineRecipe, } from "../components/timeline/preset";
 import { toastRecipe, } from "../components/toast/preset";
+import { toggleGroupRecipe, } from "../components/toggle-group/preset";
+import { toggleRecipe, } from "../components/toggle/preset";
 import { tooltipRecipe, } from "../components/tooltip/preset";
 import { topNavigationRecipe, } from "../components/top-navigation/preset";
 import { tourRecipe, } from "../components/tour/preset";
@@ -124,6 +132,14 @@ describe("preset composition", () => {
             "sheet",
             "floatingPanel",
             "tour",
+            "toggle",
+            "toggleGroup",
+            "textarea",
+            "numberInput",
+            "checkbox",
+            "radio",
+            "switchControl",
+            "slider",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
@@ -180,6 +196,14 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["sheet"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["floatingPanel"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["tour"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["toggle"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["toggleGroup"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["textarea"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["numberInput"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["checkbox"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["radio"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["switchControl"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["slider"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
@@ -233,6 +257,14 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["sheet"]).toEqual(sheetRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["floatingPanel"]).toEqual(floatingPanelRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["tour"]).toEqual(tourRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["toggle"]).toEqual(toggleRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["toggleGroup"]).toEqual(toggleGroupRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["textarea"]).toEqual(textareaRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["numberInput"]).toEqual(numberInputRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["checkbox"]).toEqual(checkboxRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["radio"]).toEqual(radioRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["switchControl"]).toEqual(switchControlRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["slider"]).toEqual(sliderRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
@@ -309,8 +341,24 @@ describe("preset composition", () => {
             "sheet",
             "floatingPanel",
             "tour",
+            "toggle",
+            "toggleGroup",
+            "textarea",
+            "numberInput",
+            "checkbox",
+            "radio",
+            "switchControl",
+            "slider",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "slider",
+            "switchControl",
+            "radio",
+            "checkbox",
+            "numberInput",
+            "textarea",
+            "toggleGroup",
+            "toggle",
             "tour",
             "floatingPanel",
             "sheet",

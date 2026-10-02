@@ -12,6 +12,7 @@ import { buttonIconPreset, } from "../components/button-icon/preset";
 import { buttonPreset, } from "../components/button/preset";
 import { cardPreset, } from "../components/card/preset";
 import { carouselPreset, } from "../components/carousel/preset";
+import { checkboxPreset, } from "../components/checkbox/preset";
 import { clipboardPreset, } from "../components/clipboard/preset";
 import { codeBlockPreset, } from "../components/code-block/preset";
 import { contextMenuPreset, } from "../components/context-menu/preset";
@@ -29,24 +30,31 @@ import { listPreset, } from "../components/list/preset";
 import { mediaPlaceholderPreset, } from "../components/media-placeholder/preset";
 import { menuPreset, } from "../components/menu/preset";
 import { navItemPreset, } from "../components/nav-item/preset";
+import { numberInputPreset, } from "../components/number-input/preset";
 import { paginationPreset, } from "../components/pagination/preset";
 import { popoverPreset, } from "../components/popover/preset";
 import { progressRingPreset, } from "../components/progress-ring/preset";
 import { progressPreset, } from "../components/progress/preset";
 import { qrCodePreset, } from "../components/qr-code/preset";
+import { radioPreset, } from "../components/radio/preset";
 import { scrollAreaPreset, } from "../components/scroll-area/preset";
 import { sheetPreset, } from "../components/sheet/preset";
 import { sidebarItemPreset, } from "../components/sidebar-item/preset";
 import { skeletonPreset, } from "../components/skeleton/preset";
+import { sliderPreset, } from "../components/slider/preset";
 import { spinnerPreset, } from "../components/spinner/preset";
 import { splitterPreset, } from "../components/splitter/preset";
 import { statisticPreset, } from "../components/statistic/preset";
 import { statusIndicatorPreset, } from "../components/status-indicator/preset";
 import { stepPreset, } from "../components/step/preset";
+import { switchPreset, } from "../components/switch/preset";
 import { tabPreset, } from "../components/tab/preset";
 import { tagPreset, } from "../components/tag/preset";
+import { textareaPreset, } from "../components/textarea/preset";
 import { timelinePreset, } from "../components/timeline/preset";
 import { toastPreset, } from "../components/toast/preset";
+import { toggleGroupPreset, } from "../components/toggle-group/preset";
+import { togglePreset, } from "../components/toggle/preset";
 import { tooltipPreset, } from "../components/tooltip/preset";
 import { topNavigationPreset, } from "../components/top-navigation/preset";
 import { tourPreset, } from "../components/tour/preset";
@@ -66,6 +74,7 @@ export {
     buttonPreset,
     cardPreset,
     carouselPreset,
+    checkboxPreset,
     clipboardPreset,
     codeBlockPreset,
     contextMenuPreset,
@@ -84,26 +93,33 @@ export {
     mediaPlaceholderPreset,
     menuPreset,
     navItemPreset,
+    numberInputPreset,
     paginationPreset,
     popoverPreset,
     preflight,
     progressPreset,
     progressRingPreset,
     qrCodePreset,
+    radioPreset,
     scrollAreaPreset,
     settingsPreset,
     sheetPreset,
     sidebarItemPreset,
     skeletonPreset,
+    sliderPreset,
     spinnerPreset,
     splitterPreset,
     statisticPreset,
     statusIndicatorPreset,
     stepPreset,
+    switchPreset,
     tabPreset,
     tagPreset,
+    textareaPreset,
     timelinePreset,
     toastPreset,
+    toggleGroupPreset,
+    togglePreset,
     tooltipPreset,
     topNavigationPreset,
     tourPreset,
@@ -169,6 +185,14 @@ export const componentPresetSources: readonly Preset[] = [
     sheetPreset,
     floatingPanelPreset,
     tourPreset,
+    togglePreset,
+    toggleGroupPreset,
+    textareaPreset,
+    numberInputPreset,
+    checkboxPreset,
+    radioPreset,
+    switchPreset,
+    sliderPreset,
 ];
 
 export const collectComponentDictionaries = (

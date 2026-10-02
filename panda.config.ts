@@ -108,6 +108,54 @@ export default defineConfig({
                     current: [ "true", ],
                 },
             ],
+            // Boolean state and runtime selection are passed as variables.
+            toggle: [
+                {
+                    pressed: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            toggleGroup: [
+                {
+                    pressed: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            textarea: [
+                {
+                    invalid: [ "true", ],
+                },
+            ],
+            numberInput: [
+                {
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            checkbox: [
+                {
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            radio: [
+                {
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            switchControl: [
+                {
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
+            slider: [
+                {
+                    invalid: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
         },
     },
     presets,

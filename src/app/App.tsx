@@ -8,6 +8,7 @@ import { Breadcrumbs, } from "@shared/components/breadcrumbs";
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
 import { Carousel, } from "@shared/components/carousel";
+import { Checkbox, } from "@shared/components/checkbox";
 import { Clipboard, } from "@shared/components/clipboard";
 import { CodeBlock, } from "@shared/components/code-block";
 import { ContextMenu, } from "@shared/components/context-menu";
@@ -23,24 +24,31 @@ import { List, } from "@shared/components/list";
 import { MediaPlaceholder, } from "@shared/components/media-placeholder";
 import { Menu, MenuDivider, MenuItem, } from "@shared/components/menu";
 import { NavItem, } from "@shared/components/nav-item";
+import { NumberInput, } from "@shared/components/number-input";
 import { Pagination, } from "@shared/components/pagination";
 import { Popover, } from "@shared/components/popover";
 import { Progress, } from "@shared/components/progress";
 import { ProgressRing, } from "@shared/components/progress-ring";
 import { QrCode, } from "@shared/components/qr-code";
+import { Radio, } from "@shared/components/radio";
 import { ScrollArea, } from "@shared/components/scroll-area";
 import { Sheet, } from "@shared/components/sheet";
 import { SidebarItem, } from "@shared/components/sidebar-item";
 import { Skeleton, } from "@shared/components/skeleton";
+import { Slider, } from "@shared/components/slider";
 import { Spinner, } from "@shared/components/spinner";
 import { Splitter, } from "@shared/components/splitter";
 import { Statistic, } from "@shared/components/statistic";
 import { StatusIndicator, } from "@shared/components/status-indicator";
 import { Step, } from "@shared/components/step";
+import { Switch, } from "@shared/components/switch";
 import { Tab, TabList, } from "@shared/components/tab";
 import { Tag, } from "@shared/components/tag";
+import { Textarea, } from "@shared/components/textarea";
 import { Timeline, } from "@shared/components/timeline";
 import { Toast, } from "@shared/components/toast";
+import { Toggle, } from "@shared/components/toggle";
+import { ToggleGroup, } from "@shared/components/toggle-group";
 import { Tooltip, } from "@shared/components/tooltip";
 import { TopNavigation, } from "@shared/components/top-navigation";
 import { Tour, } from "@shared/components/tour";
@@ -431,6 +439,30 @@ export const App = () => (
                     { title: "Publish with confidence", body: "The same tokens drive light and dark.", },
                 ]}
             />
+        </div>
+        <div className={css({ display: "grid", gap: "x8", maxWidth: "32rem", })}>
+            <div className={css({ display: "flex", alignItems: "center", gap: "x8", flexWrap: "wrap", })}>
+                <Toggle label="Bold" icon="check" defaultPressed />
+                <Toggle label="Disabled" disabled />
+                <ToggleGroup
+                    options={[
+                        { value: "grid", label: "Grid", },
+                        { value: "list", label: "List", },
+                        { value: "board", label: "Board", },
+                    ]}
+                    defaultValue={[ "list", ]}
+                    aria-label="View"
+                />
+            </div>
+            <Textarea label="ОПИСАНИЕ" placeholder="Write a short description" maxLength={200} />
+            <NumberInput label="КОЛИЧЕСТВО" defaultValue={8} unit="px" />
+            <div className={css({ display: "flex", flexDirection: "column", gap: "x6", })}>
+                <Checkbox label="Checkbox" defaultChecked />
+                <Checkbox label="Indeterminate" indeterminate />
+                <Radio label="Radio" name="app-radio" value="radio" defaultChecked />
+                <Switch label="Switch" defaultChecked />
+            </div>
+            <Slider label="OPACITY" defaultValue={57} showValue />
         </div>
         <InterSpecimen />
         <ThemePanel theme="light" />
