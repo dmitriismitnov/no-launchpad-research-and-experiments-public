@@ -19,7 +19,7 @@
 - Keep document roots clean; all new screen frames use `clip: true`.
 - Before a Pencil mutation, load Pencil’s skill plus relevant schema, execute and design-system references.
 - Reviewer subagents are read-only, narrowly prompted, cannot launch children, and have model/variant logged.
-- Before a major phase, large result, subagent fan-out or Pencil mutation, update/check `roadmap.md`, `todo.md`, `log.md`; if the next atomic action cannot be safely completed, hand off and await Compact/new session.
+- Before a major phase, large result, subagent fan-out or Pencil mutation, update/check `roadmap.md`, `todo.md`, `log.md`; if the next atomic action cannot be safely completed, autonomously request compaction or emit a clean-session handoff and stop the run. Do not ask the user to choose a mode.
 - Run `mise run check` before each commit. Do not run `check:deps`: dependencies and exports do not change.
 - Do not close the experiment, merge or push without explicit user direction.
 
@@ -119,21 +119,21 @@ Require reading current `roadmap.md`, `todo.md`, `log.md`, experiment README, re
 Embed this rule verbatim:
 
 ```text
-If the next action is a new phase, a large inspection, a subagent fan-out, or a Pencil mutation and the current context cannot safely complete it, update roadmap/todo/log, emit the handoff, and wait for the user to choose Compact or new session.
+If the next action is a new phase, a large inspection, a subagent fan-out, or a Pencil mutation and the current context cannot safely complete it, update roadmap/todo/log and choose autonomously: request manual compaction and continue after it completes when the durable state is sufficient, or emit a clean-session handoff and stop the run when a fresh context is safer. Do not ask the user to choose.
 ```
 
 Allow only code-system audit, Pencil structural audit and visual review. Each requires narrow inputs, read-only access, model reference, evidence and orchestrator disposition.
 
 - [ ] **Step 3: Write references and templates**
 
-`design-system-contract.md` names source paths, ownership and no-source-edit rules. `quality-rubric.md` defines `PASS`, `FAIL`, `INFO`, `HUMAN REVIEW`, nearest actual resolved fill logic and anti-slop questions. `pencil-mcp-protocol.md` requires read-before-mutate, `placeholder: true` while new root content is unfinished, `clip: true` for screens, immediate `ctx.problems` and screenshot checks, and direct updates instead of delete/recreate. `handoff-protocol.md` contains headings: `Objective`, `Completed`, `Active`, `Blockers`, `Evidence`, `Exact next action`, `Files`, `User decision required`.
+`design-system-contract.md` names source paths, ownership and no-source-edit rules. `quality-rubric.md` defines `PASS`, `FAIL`, `INFO`, `HUMAN REVIEW`, nearest actual resolved fill logic and anti-slop questions. `pencil-mcp-protocol.md` requires read-before-mutate, `placeholder: true` while new root content is unfinished, `clip: true` for screens, immediate `ctx.problems` and screenshot checks, and direct updates instead of delete/recreate. `handoff-protocol.md` contains headings: `Objective`, `Completed`, `Active`, `Blockers`, `Evidence`, `Exact next action`, `Files`, `Continuation mode`.
 
 - [ ] **Step 4: Run static skill-contract checks**
 
 ```sh
 test -f .opencode/skills/pencil-design-experiment/SKILL.md
 grep -q '^name: Pencil Design Experiment$' .opencode/skills/pencil-design-experiment/SKILL.md
-for heading in Objective Completed Active Blockers Evidence "Exact next action" Files "User decision required"; do
+for heading in Objective Completed Active Blockers Evidence "Exact next action" Files "Continuation mode"; do
   grep -q "$heading" .opencode/skills/pencil-design-experiment/references/handoff-protocol.md
 done
 grep -q 'nearest actual resolved fill' .opencode/skills/pencil-design-experiment/references/quality-rubric.md
@@ -225,7 +225,7 @@ Give the visual reviewer focused screenshots and `quality-rubric.md`. Require fi
 
 - [ ] **Step 5: Execute mandatory new-session handoff test**
 
-At a safe phase boundary, update `roadmap.md`, `todo.md`, `log.md` and emit the exact handoff template. Stop the session and ask the user to open a new one. The new session loads the skill, reads those files and completes the exact next action without re-running the full investigation. Record restoration quality and gaps.
+At a safe phase boundary, update `roadmap.md`, `todo.md`, `log.md` and choose autonomously. If durable state plus retained context is sufficient, request manual compaction at the safe point, log its completion and continue. Otherwise emit the exact handoff template, end the current run without asking the user, and resume in the next available orchestrator session from the recorded exact action. Record restoration quality and gaps.
 
 - [ ] **Step 6: Verify and commit**
 

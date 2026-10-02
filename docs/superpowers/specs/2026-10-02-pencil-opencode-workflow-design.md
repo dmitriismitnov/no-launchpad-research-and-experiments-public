@@ -250,12 +250,13 @@ When it cannot:
 1. finish only the current safe atomic operation;
 2. update `roadmap.md`, `todo.md` and `log.md` with evidence;
 3. do not start a new subagent or Pencil mutation;
-4. emit a handoff containing objective, completed work, active task, blockers,
-   exact next action, files and required user decision;
-5. wait for the user to select **Compact** or **new session**.
+4. choose autonomously between manual compaction and a clean-session handoff;
+5. for compaction, request it at the safe point, log the request/result and continue after completion;
+6. for a clean session, emit a handoff containing objective, completed work, active task, blockers, exact next action and files, then end the current run without asking the user to select a mode.
 
 The same protocol is used proactively at phase boundaries; it must not wait for
-a context-limit failure.
+a context-limit failure. The user receives no compaction-mode question; only a
+final benchmark review requires human input.
 
 ## 12. Success and failure criteria
 
