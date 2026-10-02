@@ -1,11 +1,8 @@
 # Roadmap: Pencil × OpenCode workflow
 
-**Status:** active (2026-10-02).
+**Status:** completed (2026-10-02).
 
-Current checkpoint position: **Human review and retrospective — active**.
-First pass hit an isolation breach; second pass in `ex_2.pen` produced five coherent
-screens with clean layout. Renders exported. Awaiting user review; validation copy
-and tablet/mobile deferred.
+Current checkpoint position: **completed**. Pencil-workflow фаза закрыта по решению пользователя; выводы зафиксированы, следующий этап — перенос дизайн-системы в код.
 
 ## Phases
 
@@ -14,7 +11,7 @@ and tablet/mobile deferred.
 | Bootstrap                        | done   | Open durable state and registry entry; define brief and benchmark protocol.           |
 | Brief and plan                   | done   | Inventory code/Pen contracts, confirm Gate A and freeze the atomic plan.              |
 | Design and verification          | done    | Five ex_2 screens composed from existing refs (form light/dark, empty, entry, success); layout audited. |
-| Human review and retrospective   | active | Present evidence to the user; results recorded; awaiting native-UI confirmation.     |
+| Human review and retrospective   | done   | Evidence presented; phase closed by the user; port to code is the next experiment.   |
 
 ## Phase detail
 

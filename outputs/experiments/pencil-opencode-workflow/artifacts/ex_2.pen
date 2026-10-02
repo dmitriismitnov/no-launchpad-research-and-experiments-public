@@ -142675,7 +142675,7 @@
     {
       "type": "frame",
       "id": "DsHK8",
-      "x": 3640,
+      "x": 4800,
       "y": 0,
       "name": "10 Landing — desktop",
       "theme": {
@@ -146631,7 +146631,7 @@
     {
       "type": "frame",
       "id": "XiPDu",
-      "x": 3640,
+      "x": 4800,
       "y": 4456,
       "name": "11 Landing — tablet",
       "theme": {
@@ -149444,7 +149444,7 @@
     {
       "type": "frame",
       "id": "T4klu9",
-      "x": 3640,
+      "x": 4800,
       "y": 9036,
       "name": "12 Landing — mobile",
       "theme": {
@@ -182122,7 +182122,7 @@
     {
       "type": "frame",
       "id": "xZBwn",
-      "x": 5320,
+      "x": 6600,
       "y": 0,
       "name": "13 Dashboard — Login",
       "layout": "vertical",
@@ -183322,7 +183322,7 @@
     {
       "type": "frame",
       "id": "O4xhKH",
-      "x": 5320,
+      "x": 6600,
       "y": 4562,
       "name": "14 Dashboard — Projects",
       "layout": "vertical",
@@ -190629,7 +190629,7 @@
     {
       "type": "frame",
       "id": "LGhc3",
-      "x": 5320,
+      "x": 6600,
       "y": 12112,
       "name": "15 Dashboard — Project detail",
       "clip": true,
@@ -196687,7 +196687,7 @@
     {
       "type": "frame",
       "id": "QQOlY",
-      "x": 7088,
+      "x": 8600,
       "y": 0,
       "name": "Create Project — Form — Desktop Light",
       "theme": {
@@ -196856,7 +196856,7 @@
     {
       "type": "frame",
       "id": "rWD94",
-      "x": 7888,
+      "x": 9400,
       "y": 0,
       "name": "Create Project — Form — Desktop Dark",
       "theme": {
@@ -197025,7 +197025,7 @@
     {
       "type": "frame",
       "id": "y9Her",
-      "x": 7088,
+      "x": 8600,
       "y": 800,
       "name": "Create Project — Form Invalid — Desktop Light",
       "theme": {
@@ -197195,7 +197195,7 @@
     {
       "type": "frame",
       "id": "uGjnK",
-      "x": 7888,
+      "x": 9400,
       "y": 800,
       "name": "Projects — Desktop Light",
       "theme": {
@@ -197310,7 +197310,7 @@
     {
       "type": "frame",
       "id": "obzHk",
-      "x": 7088,
+      "x": 8600,
       "y": 1600,
       "name": "Create Project — Success — Desktop Light",
       "theme": {
@@ -197442,6 +197442,111 @@
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "hOgRY",
+      "x": 0,
+      "y": -360,
+      "name": "Section — Design System",
+      "width": 640,
+      "fill": "$semantic/common/100/background",
+      "cornerRadius": 12,
+      "layout": "vertical",
+      "gap": 6,
+      "padding": 20,
+      "children": [
+        {
+          "type": "text",
+          "id": "ZIo6W",
+          "name": "Title",
+          "fill": "$semantic/common/50/text",
+          "content": "Design System",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "semibold"
+        },
+        {
+          "type": "text",
+          "id": "Amv8A",
+          "name": "Subtitle",
+          "fill": "$semantic/common/600/background",
+          "content": "Foundation, assets and component documentation",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "CpyQs",
+      "x": 4800,
+      "y": -360,
+      "name": "Section — Finished designs",
+      "width": 640,
+      "fill": "$semantic/common/100/background",
+      "cornerRadius": 12,
+      "layout": "vertical",
+      "gap": 6,
+      "padding": 20,
+      "children": [
+        {
+          "type": "text",
+          "id": "EONZN",
+          "name": "Title",
+          "fill": "$semantic/common/50/text",
+          "content": "Finished designs",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "semibold"
+        },
+        {
+          "type": "text",
+          "id": "xeK68",
+          "name": "Subtitle",
+          "fill": "$semantic/common/600/background",
+          "content": "Landing, dashboard and Create Project screens",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "t658SD",
+      "x": 8600,
+      "y": -360,
+      "name": "Section — Create Project flow",
+      "width": 640,
+      "fill": "$semantic/common/100/background",
+      "cornerRadius": 12,
+      "layout": "vertical",
+      "gap": 6,
+      "padding": 20,
+      "children": [
+        {
+          "type": "text",
+          "id": "YzRBm",
+          "name": "Title",
+          "fill": "$semantic/common/50/text",
+          "content": "Create Project flow",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "semibold"
+        },
+        {
+          "type": "text",
+          "id": "dvaCw",
+          "name": "Subtitle",
+          "fill": "$semantic/common/600/background",
+          "content": "Create, validate and confirm a new project",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
         }
       ]
     }

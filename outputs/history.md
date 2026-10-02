@@ -4,15 +4,20 @@ Operating journal of all work products. `wiki/log.md` tracks wiki changes only.
 
 ## Latest experiment
 
-[[experiments/pencil-opencode-workflow/README]] — **active** (2026-10-02).
+[[experiments/pencil-opencode-workflow/README]] — **completed** (2026-10-02).
 Эксперимент проверяет workflow, а не реализацию продукта: способен ли
 project-local OpenCode skill организовать Pencil MCP работу с существующей
 дизайн-системой, изолированным writable-артефактом, проверками, independent
 reviews оркестратора, persistent state и управляемым восстановлением после остановки
-сессии. Design scenario — новый flow «Создание проекта» в существующем
-dashboard. Исходный Pen-документ и `src/` read-only; единственный writable
-Pen — `artifacts/create-project.pen` (ещё не создан). Pencil mutation пока не
-происходила. Детали — [[experiments/pencil-opencode-workflow/README]].
+сессии. Итог: связка пригодна для inspect, baseline, токен-работы, композиции и
+аудита, но полная автономность не подтверждена. Критичные ограничения:
+управление документом только через активный редактор, изоляция не
+автоматическая, персистентность хрупкая (внешняя перезапись открытого файла
+теряет правки), render-cache требует «тронуть» фрейм, `ref` не принимает
+варианты. Смена бренда blue→green выполнена на уровне токенов (0 контрастных
+провалов, компоненты не менялись). Пять экранов Create Project собраны и
+сохранены в `artifacts/ex_2.pen`. Следующий этап — перенос дизайн-системы в код.
+Детали — [[experiments/pencil-opencode-workflow/README]].
 
 [[experiments/pen-design-system-development/README]] — **completed** (2026-10-02).
 Pen/OpenCode experiment подтвердил component-first documentation, semantic rank

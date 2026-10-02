@@ -1,6 +1,6 @@
 # Experiment: Pencil × OpenCode workflow
 
-**Status:** active (2026-10-02).
+**Status:** completed (2026-10-02).
 
 **Spec:** [`docs/superpowers/specs/2026-10-02-pencil-opencode-workflow-design.md`](../../../docs/superpowers/specs/2026-10-02-pencil-opencode-workflow-design.md)
 
