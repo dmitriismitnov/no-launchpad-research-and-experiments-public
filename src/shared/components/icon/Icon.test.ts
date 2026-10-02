@@ -49,7 +49,7 @@ const fontFace = readFileSync(new URL("./icon.css", import.meta.url), "utf8");
 describe("icon recipe", () => {
     test("declares public variants only", () => {
         expect(Object.keys(iconRecipe.variants ?? {})).toEqual([ "size", ]);
-        expect(Object.keys(iconRecipe.variants?.["size"] ?? {})).toEqual([ "sm", "md", "lg", ]);
+        expect(Object.keys(iconRecipe.variants?.["size"] ?? {})).toEqual([ "sm", "md", "lg", "xl", ]);
     });
 
     test("declares default variants", () => {
@@ -65,10 +65,12 @@ describe("icon recipe", () => {
     });
 
     test("sizes map onto the shared xN scale", () => {
+        // Pen `Icon size scale` (`YpWB5`): icon/sm 16 · md 20 · lg 24 · xl 32.
         expect(iconRecipe.variants?.["size"]).toEqual({
             sm: { fontSize: "{sizes.x8}", width: "x8", height: "x8", },
             md: { fontSize: "{sizes.x10}", width: "x10", height: "x10", },
             lg: { fontSize: "{sizes.x12}", width: "x12", height: "x12", },
+            xl: { fontSize: "{sizes.x16}", width: "x16", height: "x16", },
         });
     });
 

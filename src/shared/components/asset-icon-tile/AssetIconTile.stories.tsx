@@ -13,8 +13,8 @@ const iconNames = Object.keys(ICON_CODEPOINTS) as IconName[];
 
 const shell = css({
     padding: "x12",
-    backgroundColor: "semantic.common.100.background",
-    color: "semantic.common.100.text",
+    backgroundColor: "semantic.surface.base",
+    color: "semantic.text.primary",
 });
 
 const grid = css({
@@ -95,6 +95,6 @@ export const LightAndDark: Story = {
         const dark = canvasElement.querySelector('[data-case="dark"] .assetIconTile') as Element;
 
         await expect(getComputedStyle(light).backgroundColor).toBe("rgb(241, 245, 249)");
-        await expect(getComputedStyle(dark).backgroundColor).toBe("rgb(15, 23, 42)");
+        await expect(getComputedStyle(dark).backgroundColor).toBe("rgb(2, 6, 23)");
     },
 };

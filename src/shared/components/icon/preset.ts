@@ -33,6 +33,7 @@ export const iconRecipe = defineRecipe({
             sm: { fontSize: "{sizes.x8}", width: "x8", height: "x8", },
             md: { fontSize: "{sizes.x10}", width: "x10", height: "x10", },
             lg: { fontSize: "{sizes.x12}", width: "x12", height: "x12", },
+            xl: { fontSize: "{sizes.x16}", width: "x16", height: "x16", },
         },
     },
     defaultVariants: { size: "md", },

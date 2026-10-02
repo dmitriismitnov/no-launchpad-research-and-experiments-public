@@ -77,6 +77,15 @@ describe("foundation", () => {
         expect(sizes["x9"]).toEqual({ value: "1.125rem", });
     });
 
+    test("exposes the Pen x32 and x40 steps in both spacing and sizes", () => {
+        // Pen `Foundation — Spacing & sizing` (`YpWB5`): space/x32 64,
+        // space/x40 80, and the matching size steps.
+        expect(spacing["x32"]).toEqual({ value: "4rem", });
+        expect(sizes["x32"]).toEqual({ value: "4rem", });
+        expect(spacing["x40"]).toEqual({ value: "5rem", });
+        expect(sizes["x40"]).toEqual({ value: "5rem", });
+    });
+
     test("radii exposes the size scale plus a full token", () => {
         expect(radii).toEqual({
             sm: { value: "0.375rem", },
@@ -296,12 +305,13 @@ describe("typography foundation", () => {
         });
     });
 
-    test("exposes the atomic line-height scale", () => {
+    test("exposes the Pen line-height scale", () => {
+        // Pen `Foundation — Typography` (01 Foundation, `YpWB5`):
+        // line-height/tight 1.15 · normal 1.4 · relaxed 1.6.
         expect(lineHeights).toEqual({
-            tight: { value: 1.2, },
-            snug: { value: 1.4, },
-            normal: { value: 1.5, },
-            relaxed: { value: 1.75, },
+            tight: { value: 1.15, },
+            normal: { value: 1.4, },
+            relaxed: { value: 1.6, },
         });
     });
 

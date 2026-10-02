@@ -90,10 +90,11 @@ describe("card recipe", () => {
     });
 
     test("sets the description on the shared 1.4 line height", () => {
-        // Pen `Card` description is `sm` at line-height 1.4 (19.6px).
+        // Pen `Card` description is `sm` at line-height 1.4 (19.6px), which is
+        // the Foundation `normal` ratio after the Pen line-height scale fix.
         expect(cardRecipe.base?.["description"]).toMatchObject({
             fontSize: "sm",
-            lineHeight: "snug",
+            lineHeight: "normal",
         });
     });
 

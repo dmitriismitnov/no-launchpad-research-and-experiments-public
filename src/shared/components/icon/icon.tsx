@@ -6,7 +6,7 @@ import { icon, } from "@shared/styled-system/recipes";
 import "./icon.css";
 import { ICON_CODEPOINTS, type IconName, } from "./manifest.generated";
 
-export type IconSize = "sm" | "md" | "lg";
+export type IconSize = "sm" | "md" | "lg" | "xl";
 
 export type IconProps = Omit<HTMLAttributes<HTMLSpanElement>, "children"> & {
     /** Icon key: the name of a source SVG file. */

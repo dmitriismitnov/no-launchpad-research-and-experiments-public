@@ -4,66 +4,51 @@ import { renderToStaticMarkup, } from "react-dom/server";
 import { ThemeSwitchPreview, } from "./theme-switch-preview";
 
 describe("theme switch preview composition", () => {
-    test("renders sun, the shared switch and moon", () => {
-        const markup = renderToStaticMarkup(<ThemeSwitchPreview />);
-
-        expect(markup).toContain("themeSwitchPreview__root");
-        expect(markup).toContain("themeSwitchPreview__sun");
-        expect(markup).toContain("themeSwitchPreview__moon");
-        expect(markup).toContain('role="switch"');
-        expect(markup).toContain('aria-label="Dark theme"');
-        expect(markup).toContain("switch__track");
-        expect(markup).toContain("icon--size_sm");
-    });
-
-    test("defaults to light with the switch off", () => {
-        const markup = renderToStaticMarkup(<ThemeSwitchPreview />);
-
-        expect(markup).toContain('aria-checked="false"');
-        expect(markup).toContain("themeSwitchPreview__root--theme_light");
-    });
-
-    test("supports an uncontrolled dark default", () => {
-        const markup = renderToStaticMarkup(<ThemeSwitchPreview defaultTheme="dark" />);
-
-        expect(markup).toContain('aria-checked="true"');
-        expect(markup).toContain("themeSwitchPreview__root--theme_dark");
-    });
-
-    test("supports a controlled theme", () => {
+    test("renders the same content in explicit light and dark contexts", () => {
+        // Pen `Foundation — Theme comparison` (`YpWB5` / `YQ6kU`) places two
+        // instances of `q5xZR3`, one with `theme: light` and one with
+        // `theme: dark`; the same instances render in both themes.
         const markup = renderToStaticMarkup(
-            <ThemeSwitchPreview theme="dark" onThemeChange={() => {}} />,
+            <ThemeSwitchPreview>
+                <span data-probe="content">Preview</span>
+            </ThemeSwitchPreview>,
         );
 
-        expect(markup).toContain('aria-checked="true"');
-        expect(markup).toContain("themeSwitchPreview__root--theme_dark");
+        expect(markup).toContain("themeSwitchPreview__root");
+        expect(markup).toContain('data-theme="light"');
+        expect(markup).toContain('data-theme="dark"');
+        expect(markup.match(/data-probe="content"/g)?.length).toBe(2);
+        expect(markup.match(/>Preview</g)?.length).toBe(2);
     });
 
-    test("uses a custom accessible name", () => {
-        const markup = renderToStaticMarkup(<ThemeSwitchPreview label="Night mode" />);
+    test("is a passive comparison, not a theme-setting control", () => {
+        const markup = renderToStaticMarkup(<ThemeSwitchPreview>Body</ThemeSwitchPreview>);
 
-        expect(markup).toContain('aria-label="Night mode"');
+        expect(markup).not.toContain('role="switch"');
+        expect(markup).not.toContain("<input");
     });
 
-    test("forwards the disabled state to the switch", () => {
-        const markup = renderToStaticMarkup(<ThemeSwitchPreview disabled />);
+    test("names the comparison and exposes visible captions", () => {
+        const markup = renderToStaticMarkup(
+            <ThemeSwitchPreview label="Theme comparison">Body</ThemeSwitchPreview>,
+        );
 
-        expect(markup).toContain("disabled");
-        expect(markup).toContain("themeSwitchPreview__root--disabled_true");
-        expect(markup).toContain("switch__control--disabled_true");
+        expect(markup).toContain('role="group"');
+        expect(markup).toContain('aria-label="Theme comparison"');
+        expect(markup).toContain("Light");
+        expect(markup).toContain("Dark");
     });
 
     test("accepts native div attributes", () => {
-        const markup = renderToStaticMarkup(<ThemeSwitchPreview data-testid="theme" id="theme-switch" />);
+        const markup = renderToStaticMarkup(<ThemeSwitchPreview data-testid="theme">Body</ThemeSwitchPreview>);
 
         expect(markup).toContain('data-testid="theme"');
-        expect(markup).toContain('id="theme-switch"');
     });
 
-    test("rejects children at the type level", () => {
-        // @ts-expect-error the control owns its structure; children are not public
-        const withChildren = <ThemeSwitchPreview>Light</ThemeSwitchPreview>;
+    test("requires the compared content at the type level", () => {
+        // @ts-expect-error the preview compares content; children are required
+        const missing = <ThemeSwitchPreview />;
 
-        expect(withChildren).toBeDefined();
+        expect(missing).toBeDefined();
     });
 });

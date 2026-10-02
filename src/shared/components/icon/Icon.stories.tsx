@@ -60,7 +60,7 @@ const meta = {
         },
         size: {
             control: { type: "select", },
-            options: [ "sm", "md", "lg", ],
+            options: [ "sm", "md", "lg", "xl", ],
         },
         label: {
             control: { type: "text", },
@@ -104,6 +104,7 @@ export const Sizes: Story = {
                 <Icon name={defaultIcon} size="sm" />
                 <Icon name={defaultIcon} size="md" />
                 <Icon name={defaultIcon} size="lg" />
+                <Icon name={defaultIcon} size="xl" />
             </div>
         </ThemeShell>
     ),

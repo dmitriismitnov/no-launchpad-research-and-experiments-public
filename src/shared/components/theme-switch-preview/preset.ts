@@ -1,61 +1,58 @@
 import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
- * Theme Switch Preview visual projection. Slots: root / sun / moon.
+ * Theme Switch Preview visual projection. Slots: root / panel / caption /
+ * surface.
  *
- * Pen's `Theme Switch Preview` master (`q5xZR3`) is a theme-comparison preview
- * whose head pairs a moon glyph with a `theme` badge. The port keeps the
- * control itself small: a raised pill with a sun glyph, the shared `Switch`,
- * and a moon glyph. The active glyph paints from the brand role and the
- * inactive one from `text/tertiary`; the `Switch` still owns the checked state.
- *
- * Approximations: Pen's preview block is a full showcase surface (buttons,
- * input, badges, card, tabs) documented as "one reusable preview block resolved
- * through theme context". That composition belongs to the landing, not to the
- * control, so the port exposes the reusable control and lets the consumer own
- * the previewed surface. Pen encodes no light/dark glyph colours, so active /
- * inactive use the shared brand and tertiary roles.
+ * Pen's `Theme Switch Preview` master (`q5xZR3`) is a preview block resolved
+ * through theme context: `surface/raised` fill, `lg` radius, `border/subtle`
+ * stroke and 20px padding. `Foundation — Theme comparison` (`YQ6kU`) renders
+ * two instances, one `theme: light` and one `theme: dark`. The recipe therefore
+ * projects a two-panel comparison: `root` lays the panels out, `panel` stacks a
+ * visible caption over a themed surface, and `surface` paints the Pen block.
+ * The theme itself is the `data-theme` attribute set by the component, never a
+ * recipe variant or a component-local theme fork.
  */
 export const themeSwitchPreviewRecipe = defineSlotRecipe({
     className: "themeSwitchPreview",
-    slots: [ "root", "sun", "moon", ],
+    slots: [ "root", "panel", "caption", "surface", ],
 
     base: {
         root: {
-            display: "inline-flex",
-            alignItems: "center",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "x12",
+        },
+
+        panel: {
+            display: "flex",
+            flexDirection: "column",
+            flex: "1",
+            minWidth: "0",
             gap: "x4",
-            paddingBlock: "x2",
-            paddingInline: "x4",
-            borderRadius: "full",
+        },
+
+        caption: {
+            fontFamily: "body",
+            fontSize: "sm",
+            fontWeight: "semibold",
+            color: "semantic.text.secondary",
+        },
+
+        surface: {
+            display: "flex",
+            flexDirection: "column",
+            flex: "1",
+            gap: "x8",
+            padding: "x10",
+            borderRadius: "lg",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.50.border.strong",
-            backgroundColor: "semantic.common.50.background",
-        },
-
-        sun: { flexShrink: "0", },
-        moon: { flexShrink: "0", },
-    },
-
-    variants: {
-        theme: {
-            light: {
-                sun: { color: "semantic.brand.700.background", },
-                moon: { color: "semantic.common.500.background", },
-            },
-            dark: {
-                sun: { color: "semantic.common.500.background", },
-                moon: { color: "semantic.brand.700.background", },
-            },
-        },
-
-        disabled: {
-            true: { root: { opacity: 0.45, }, },
+            borderColor: "semantic.border.subtle",
+            backgroundColor: "semantic.surface.raised",
+            color: "semantic.text.primary",
         },
     },
-
-    defaultVariants: { theme: "light", disabled: false, },
 });
 
 export const themeSwitchPreviewPreset = definePreset({

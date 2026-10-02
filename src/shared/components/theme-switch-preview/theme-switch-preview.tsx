@@ -1,60 +1,63 @@
-import type { ComponentProps, } from "react";
-import { useState, } from "react";
+import type { ComponentProps, ReactNode, } from "react";
 
-import { Icon, } from "@shared/components/icon";
-import { Switch, } from "@shared/components/switch";
 import { cx, } from "@shared/styled-system/css";
 import { themeSwitchPreview, } from "@shared/styled-system/recipes";
 
-export type ThemeSwitchValue = "light" | "dark";
-
 export type ThemeSwitchPreviewProps = Omit<ComponentProps<"div">, "children"> & {
-    /** Accessible name for the underlying switch. */
+    /** Content compared in both theme contexts; rendered identically twice. */
+    children: ReactNode;
+    /** Accessible name for the comparison group. */
     label?: string;
-    /** Controlled theme; pass with `onThemeChange`. */
-    theme?: ThemeSwitchValue;
-    /** Initial theme when the control is uncontrolled. */
-    defaultTheme?: ThemeSwitchValue;
-    /** Called with the next theme on every toggle. */
-    onThemeChange?: (theme: ThemeSwitchValue) => void;
-    disabled?: boolean;
+    /** Visible caption above the light panel. */
+    lightLabel?: string;
+    /** Visible caption above the dark panel. */
+    darkLabel?: string;
 };
 
 /**
- * Small theme control: sun glyph, the shared `Switch`, moon glyph. The consumer
- * owns the previewed surface; this component only reports the selected theme,
- * so the same instance works in light and dark contexts.
+ * Visual comparison of one composition across the two theme contexts.
+ *
+ * Pen's `Theme Switch Preview` master (`q5xZR3`) is a preview block, not a
+ * theme controller: `Foundation — Theme comparison` (`YQ6kU`) renders two
+ * instances of the same master, one under `theme: light` and one under
+ * `theme: dark`. The port keeps that contract — the consumer supplies the
+ * content, the component resolves it in explicit light and dark contexts and
+ * never owns or mutates a global theme preference.
  */
 export const ThemeSwitchPreview = ({
-    label = "Dark theme",
-    theme,
-    defaultTheme = "light",
-    onThemeChange,
-    disabled = false,
+    children,
+    label = "Theme switch preview",
+    lightLabel = "Light",
+    darkLabel = "Dark",
     className,
     ...props
 }: ThemeSwitchPreviewProps) => {
-    const [ uncontrolledTheme, setUncontrolledTheme, ] = useState<ThemeSwitchValue>(defaultTheme);
-    const isControlled = theme !== undefined;
-    const currentTheme = isControlled ? theme : uncontrolledTheme;
-    const isDark = currentTheme === "dark";
-    const styles = themeSwitchPreview({ theme: currentTheme, disabled, });
-
-    const handleChange: NonNullable<ComponentProps<"input">["onChange"]> = (event) => {
-        const next: ThemeSwitchValue = event.target.checked ? "dark" : "light";
-
-        if ( !isControlled ) {
-            setUncontrolledTheme(next);
-        }
-
-        onThemeChange?.(next);
-    };
+    const styles = themeSwitchPreview();
 
     return (
-        <div {...props} className={cx(styles.root, className)}>
-            <Icon className={styles.sun} name="sun" size="sm" />
-            <Switch aria-label={label} checked={isDark} disabled={disabled} onChange={handleChange} />
-            <Icon className={styles.moon} name="moon" size="sm" />
+        <div {...props} role="group" aria-label={label} className={cx(styles.root, className)}>
+            <Panel theme="light" caption={lightLabel} styles={styles}>
+                {children}
+            </Panel>
+            <Panel theme="dark" caption={darkLabel} styles={styles}>
+                {children}
+            </Panel>
         </div>
     );
 };
+
+type ThemeSwitchPreviewStyles = ReturnType<typeof themeSwitchPreview>;
+
+type PanelProps = {
+    theme: "light" | "dark";
+    caption: string;
+    styles: ThemeSwitchPreviewStyles;
+    children: ReactNode;
+};
+
+const Panel = ({ theme, caption, styles, children, }: PanelProps) => (
+    <div data-theme={theme} className={styles.panel}>
+        <span className={styles.caption}>{caption}</span>
+        <div className={styles.surface}>{children}</div>
+    </div>
+);
