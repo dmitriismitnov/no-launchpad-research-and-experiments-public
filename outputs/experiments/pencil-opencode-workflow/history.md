@@ -39,3 +39,15 @@
 - Подтверждено расхождение code/Pen: код использует `border` + `divider`, Pen-копия — `border/subtle` + `border/strong` + `divider`; benchmark следует Pen-токенам, код не меняется.
 - Baseline `notes/pen-baseline.md` перепроверен: 155 root frames, 82 masters, 1720 refs, 0 `ctx.problems`, copy hash неизменен.
 - Gate A выполнен. Source-of-truth изменения не требуются.
+
+
+## 2026-10-02 — Design/verification — первый проход
+
+- Собран локальный экран `Create Project — Form — Desktop Light` (frame `x9le7`) только из existing refs (`Field`, `Button`, `Select`, `Date Input`) и semantic tokens; исходный `.pen` не изменялся.
+- Найдена и записана в skill ключевая проблема: MCP не рендерит новый вложенный контент, пока фрейм не «тронут» (`Update` свойства). Без этого корректная форма выглядит пустой.
+- Найдены ограничения: ref не принимает `tone`/варианты; `Date Picker` тянет календарь; `Textarea`-field ломает layout; border-свойства фрейма невалидны; несколько whole-doc сканов и `FindEmptySpace` вызывают internal interrupt.
+- Структурный аудит: изоляция, refs, токены, тема — PASS; layout overlap `Actions`/`Fields` — FAIL; охват brief неполный.
+- Визуальный аудит: секция не AI-slop, но неполная и с overlap → `HUMAN REVIEW`.
+- Итог: частичный успех (см. `notes/results.md`). Нужна проверка в нативном Pen UI и продолжение в новой сессии.
+
+- **Критический инцидент изоляции:** Pencil MCP применял мутации к активному документу (`design_system_ex_1.pen`), игнорируя относительный путь к копии; экспериментальные узлы попали в источник. Узлы удалены, on-disk hash источника перепроверен и не изменён. Вывод: относительный `filePath` не изолирует; копию нужно явно открыть и подтвердить активной через `get_app_state`.

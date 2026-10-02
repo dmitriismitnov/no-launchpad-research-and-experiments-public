@@ -19,8 +19,9 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
   approved, contracts and baseline recorded. — `verified`
 - [ ] Freeze the atomic Create Project composition plan.
 - [ ] Confirm Gate B for the first allowed experiment frame and target sizes.
-- [ ] Compose Projects entry with the Create Project trigger.
-- [ ] Compose the invalid form with all four fields and required validation.
+- [ ] Compose Projects entry with the Create Project trigger. `planned`
+- [ ] Compose the invalid form with all four fields and required validation. `planned`
+- [~] Compose the filled form — partial: frame `x9le7` has Name/Owner/Due date, missing Description, layout overlap. `blocked`
 - [ ] Compose the filled form with owner/due-date selection, primary submit and
   secondary cancel.
 - [ ] Compose the success state with the created project in Projects.

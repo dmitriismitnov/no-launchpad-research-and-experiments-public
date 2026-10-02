@@ -61,3 +61,10 @@ plan file was modified.
 
 | 8 | Code-system audit (read-only) | orchestration/audit | `deepseek/deepseek-flash` | `notes/code-system-inventory.md`; five components, tokens, themes, 17 icon keys; divergence code `border` vs Pen `border/subtle+strong` recorded as INFO. |
 | 9 | Re-queried Pen copy variables and re-ran baseline structural facts | orchestration/audit | `deepseek/deepseek-flash` | 451 semantic variables, palette roots, themes light/dark; baseline 155 root frames / 82 masters / 1720 refs / 0 problems confirmed. |
+
+| 10 | Composed first Create Project form section from existing refs | implementation | `deepseek/deepseek-flash` | Frame `x9le7`; Field/Button/Select/Date Input refs; tokens only; source untouched. |
+| 11 | Discovered render-cache workaround | audit | `deepseek/deepseek-flash` | New nested content invisible until frame touched (`Update` prop); documented in skill; without it a correct frame looks blank. |
+| 12 | Structural + visual audit | audit | `deepseek/deepseek-flash` | `notes/structural-audit.md` (layout overlap FAIL), `notes/visual-review.md` (HUMAN REVIEW). |
+| 13 | Model change to single-model operation | planning | `deepseek/deepseek-flash` | GPT limits exhausted; independent review replaced by evidence self-audit + human review. |
+
+| 14 | CRITICAL: isolation breach detected and cleaned | audit | `deepseek/deepseek-flash` | `x9le7` (and earlier test nodes) were found inside the active source document `design_system_ex_1.pen`, not the repo copy. All deleted; on-disk source hash unchanged `c9695a1d…`. Relative `filePath` did not isolate; MCP used the active editor. |

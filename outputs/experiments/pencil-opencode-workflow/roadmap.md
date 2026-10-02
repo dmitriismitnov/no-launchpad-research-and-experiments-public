@@ -2,9 +2,9 @@
 
 **Status:** active (2026-10-02).
 
-Current checkpoint position: **Brief and plan — done; Design and verification — active**.
-Durable state, code-system inventory, isolated Pen copy and verified baseline exist.
-No Pencil mutation has been made yet.
+Current checkpoint position: **Design and verification — partial**.
+One form section (`x9le7`) composed from existing refs; render-cache workaround found;
+structural audit found a layout overlap; the flow is incomplete. Results recorded.
 
 ## Phases
 
@@ -12,8 +12,8 @@ No Pencil mutation has been made yet.
 | -------------------------------- | ------ | ------------------------------------------------------------------------------------- |
 | Bootstrap                        | done   | Open durable state and registry entry; define brief and benchmark protocol.           |
 | Brief and plan                   | done   | Inventory code/Pen contracts, confirm Gate A and freeze the atomic plan.              |
-| Design and verification          | active | Create the isolated Pen baseline, then compose and verify the Create Project flow.    |
-| Human review and retrospective   | planned | Present Gate D to the user; record results and update the skill from evidence.        |
+| Design and verification          | partial | Baseline done. First form section composed and audited; flow incomplete (layout overlap, missing states/themes). |
+| Human review and retrospective   | active | Present evidence to the user; results recorded; awaiting native-UI confirmation.     |
 
 ## Phase detail
 
