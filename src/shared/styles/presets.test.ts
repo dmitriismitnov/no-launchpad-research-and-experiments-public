@@ -4,6 +4,7 @@ import { mergeConfigs, } from "@pandacss/config";
 import type { Config, } from "@pandacss/dev";
 
 import { accordionItemRecipe, } from "../components/accordion-item/preset";
+import { alertDialogRecipe, } from "../components/alert-dialog/preset";
 import { alertRecipe, } from "../components/alert/preset";
 import { avatarRecipe, } from "../components/avatar/preset";
 import { badgeRecipe, } from "../components/badge/preset";
@@ -17,8 +18,10 @@ import { clipboardRecipe, } from "../components/clipboard/preset";
 import { codeBlockRecipe, } from "../components/code-block/preset";
 import { contextMenuRecipe, } from "../components/context-menu/preset";
 import { dataTableRecipe, } from "../components/data-table/preset";
+import { dialogRecipe, } from "../components/dialog/preset";
 import { dividerRecipe, } from "../components/divider/preset";
 import { emptyStateRecipe, } from "../components/empty-state/preset";
+import { hoverCardRecipe, } from "../components/hover-card/preset";
 import { iconRecipe, } from "../components/icon/preset";
 import { inputRecipe, } from "../components/input/preset";
 import { linkRecipe, } from "../components/link/preset";
@@ -27,6 +30,7 @@ import { mediaPlaceholderRecipe, } from "../components/media-placeholder/preset"
 import { menuRecipe, } from "../components/menu/preset";
 import { navItemRecipe, } from "../components/nav-item/preset";
 import { paginationRecipe, } from "../components/pagination/preset";
+import { popoverRecipe, } from "../components/popover/preset";
 import { progressRingRecipe, } from "../components/progress-ring/preset";
 import { progressRecipe, } from "../components/progress/preset";
 import { qrCodeRecipe, } from "../components/qr-code/preset";
@@ -42,6 +46,7 @@ import { tabRecipe, } from "../components/tab/preset";
 import { tagRecipe, } from "../components/tag/preset";
 import { timelineRecipe, } from "../components/timeline/preset";
 import { toastRecipe, } from "../components/toast/preset";
+import { tooltipRecipe, } from "../components/tooltip/preset";
 import { topNavigationRecipe, } from "../components/top-navigation/preset";
 import { treeItemRecipe, } from "../components/tree-item/preset";
 import { foundationPreset, } from "./foundation";
@@ -106,6 +111,11 @@ describe("preset composition", () => {
             "treeItem",
             "carousel",
             "contextMenu",
+            "tooltip",
+            "popover",
+            "hoverCard",
+            "dialog",
+            "alertDialog",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
@@ -153,6 +163,11 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["treeItem"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["carousel"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["contextMenu"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["tooltip"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["popover"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["hoverCard"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["dialog"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["alertDialog"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
@@ -197,6 +212,11 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["treeItem"]).toEqual(treeItemRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["carousel"]).toEqual(carouselRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["contextMenu"]).toEqual(contextMenuRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["tooltip"]).toEqual(tooltipRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["popover"]).toEqual(popoverRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["hoverCard"]).toEqual(hoverCardRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["dialog"]).toEqual(dialogRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["alertDialog"]).toEqual(alertDialogRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
@@ -264,8 +284,18 @@ describe("preset composition", () => {
             "treeItem",
             "carousel",
             "contextMenu",
+            "tooltip",
+            "popover",
+            "hoverCard",
+            "dialog",
+            "alertDialog",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "alertDialog",
+            "dialog",
+            "hoverCard",
+            "popover",
+            "tooltip",
             "contextMenu",
             "carousel",
             "treeItem",

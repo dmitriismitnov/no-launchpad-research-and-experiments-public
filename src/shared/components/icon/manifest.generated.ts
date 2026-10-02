@@ -27,6 +27,7 @@ export const ICON_CODEPOINTS = {
     "test-tube": 0xE00C,
     "thermometer": 0xE00D,
     "trending-up": 0xE015,
+    "triangle-alert": 0xE01E,
     "truck": 0xE00E,
     "waves": 0xE00F,
     "wrench": 0xE010,

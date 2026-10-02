@@ -2,6 +2,7 @@ import type { CssKeyframes, Preset, RecipeConfig, SlotRecipeConfig, } from "@pan
 import { definePreset, } from "@pandacss/dev";
 
 import { accordionItemPreset, } from "../components/accordion-item/preset";
+import { alertDialogPreset, } from "../components/alert-dialog/preset";
 import { alertPreset, } from "../components/alert/preset";
 import { avatarPreset, } from "../components/avatar/preset";
 import { badgePreset, } from "../components/badge/preset";
@@ -15,8 +16,10 @@ import { clipboardPreset, } from "../components/clipboard/preset";
 import { codeBlockPreset, } from "../components/code-block/preset";
 import { contextMenuPreset, } from "../components/context-menu/preset";
 import { dataTablePreset, } from "../components/data-table/preset";
+import { dialogPreset, } from "../components/dialog/preset";
 import { dividerPreset, } from "../components/divider/preset";
 import { emptyStatePreset, } from "../components/empty-state/preset";
+import { hoverCardPreset, } from "../components/hover-card/preset";
 import { iconPreset, } from "../components/icon/preset";
 import { inputPreset, } from "../components/input/preset";
 import { linkPreset, } from "../components/link/preset";
@@ -25,6 +28,7 @@ import { mediaPlaceholderPreset, } from "../components/media-placeholder/preset"
 import { menuPreset, } from "../components/menu/preset";
 import { navItemPreset, } from "../components/nav-item/preset";
 import { paginationPreset, } from "../components/pagination/preset";
+import { popoverPreset, } from "../components/popover/preset";
 import { progressRingPreset, } from "../components/progress-ring/preset";
 import { progressPreset, } from "../components/progress/preset";
 import { qrCodePreset, } from "../components/qr-code/preset";
@@ -40,6 +44,7 @@ import { tabPreset, } from "../components/tab/preset";
 import { tagPreset, } from "../components/tag/preset";
 import { timelinePreset, } from "../components/timeline/preset";
 import { toastPreset, } from "../components/toast/preset";
+import { tooltipPreset, } from "../components/tooltip/preset";
 import { topNavigationPreset, } from "../components/top-navigation/preset";
 import { treeItemPreset, } from "../components/tree-item/preset";
 import { foundationPreset, } from "./foundation";
@@ -47,6 +52,7 @@ import { preflight, settingsPreset, } from "./settings";
 
 export {
     accordionItemPreset,
+    alertDialogPreset,
     alertPreset,
     avatarPreset,
     badgePreset,
@@ -60,9 +66,11 @@ export {
     codeBlockPreset,
     contextMenuPreset,
     dataTablePreset,
+    dialogPreset,
     dividerPreset,
     emptyStatePreset,
     foundationPreset,
+    hoverCardPreset,
     iconPreset,
     inputPreset,
     linkPreset,
@@ -71,6 +79,7 @@ export {
     menuPreset,
     navItemPreset,
     paginationPreset,
+    popoverPreset,
     preflight,
     progressPreset,
     progressRingPreset,
@@ -88,6 +97,7 @@ export {
     tagPreset,
     timelinePreset,
     toastPreset,
+    tooltipPreset,
     topNavigationPreset,
     treeItemPreset,
 };
@@ -142,6 +152,11 @@ export const componentPresetSources: readonly Preset[] = [
     treeItemPreset,
     carouselPreset,
     contextMenuPreset,
+    tooltipPreset,
+    popoverPreset,
+    hoverCardPreset,
+    dialogPreset,
+    alertDialogPreset,
 ];
 
 export const collectComponentDictionaries = (

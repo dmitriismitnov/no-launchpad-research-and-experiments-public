@@ -1,5 +1,6 @@
 import { AccordionItem, } from "@shared/components/accordion-item";
 import { Alert, } from "@shared/components/alert";
+import { AlertDialog, } from "@shared/components/alert-dialog";
 import { Avatar, } from "@shared/components/avatar";
 import { Badge, } from "@shared/components/badge";
 import { Brand, } from "@shared/components/brand";
@@ -11,14 +12,17 @@ import { Clipboard, } from "@shared/components/clipboard";
 import { CodeBlock, } from "@shared/components/code-block";
 import { ContextMenu, } from "@shared/components/context-menu";
 import { DataTable, } from "@shared/components/data-table";
+import { Dialog, } from "@shared/components/dialog";
 import { Divider, } from "@shared/components/divider";
 import { EmptyState, } from "@shared/components/empty-state";
+import { HoverCard, } from "@shared/components/hover-card";
 import { Link, } from "@shared/components/link";
 import { List, } from "@shared/components/list";
 import { MediaPlaceholder, } from "@shared/components/media-placeholder";
 import { Menu, MenuDivider, MenuItem, } from "@shared/components/menu";
 import { NavItem, } from "@shared/components/nav-item";
 import { Pagination, } from "@shared/components/pagination";
+import { Popover, } from "@shared/components/popover";
 import { Progress, } from "@shared/components/progress";
 import { ProgressRing, } from "@shared/components/progress-ring";
 import { QrCode, } from "@shared/components/qr-code";
@@ -34,6 +38,7 @@ import { Tab, TabList, } from "@shared/components/tab";
 import { Tag, } from "@shared/components/tag";
 import { Timeline, } from "@shared/components/timeline";
 import { Toast, } from "@shared/components/toast";
+import { Tooltip, } from "@shared/components/tooltip";
 import { TopNavigation, } from "@shared/components/top-navigation";
 import { TreeItem, } from "@shared/components/tree-item";
 import { css, cx, } from "@shared/styled-system/css";
@@ -352,6 +357,44 @@ export const App = () => (
                 <MenuItem label="Duplicate" icon="copy" checked />
                 <MenuItem label="Delete" tone="danger" />
             </ContextMenu>
+        </div>
+        <div className={css({ display: "flex", alignItems: "flex-start", gap: "x8", flexWrap: "wrap", })}>
+            <Tooltip label="Duplicate" shortcut="⌘D">
+                <Button tone="secondary" size="sm">Hover for tooltip</Button>
+            </Tooltip>
+            <HoverCard
+                name="Ada Rivera"
+                role="Design Systems Lead"
+                bio="Maintains the foundation layer and reviews component proposals."
+            >
+                <Link href="#">@adarivera</Link>
+            </HoverCard>
+            <Popover
+                trigger="Open popover"
+                title="Notifications"
+                description="Choose what you want to hear about."
+                defaultOpen
+            >
+                <Button size="sm">Save</Button>
+            </Popover>
+            <Dialog
+                title="Publish foundation v2.3?"
+                description="This updates 6 components and 480 tokens across every screen."
+                trigger="Open dialog"
+                actions={
+                    <>
+                        <Button tone="secondary">Not now</Button>
+                        <Button>Publish</Button>
+                    </>
+                }
+            />
+            <AlertDialog
+                title="Delete component?"
+                description="This action cannot be undone."
+                trigger="Delete component"
+                confirmLabel="Delete"
+                destructive
+            />
         </div>
         <InterSpecimen />
         <ThemePanel theme="light" />

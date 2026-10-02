@@ -60,6 +60,33 @@ export default defineConfig({
                     disabled: [ "true", ],
                 },
             ],
+            // Placement/size/boolean variants are passed as runtime variables,
+            // which the static extractor cannot resolve.
+            tooltip: [
+                {
+                    placement: [ "top", "right", "bottom", "left", ],
+                },
+            ],
+            popover: [
+                {
+                    placement: [ "top", "right", "bottom", "left", ],
+                },
+            ],
+            hoverCard: [
+                {
+                    placement: [ "top", "right", "bottom", "left", ],
+                },
+            ],
+            dialog: [
+                {
+                    size: [ "sm", "md", "lg", ],
+                },
+            ],
+            alertDialog: [
+                {
+                    destructive: [ "true", ],
+                },
+            ],
         },
     },
     presets,
