@@ -82,7 +82,7 @@
         "src/shared/components/tour/index.ts",
         "src/shared/components/tree-item/index.ts",
         "src/shared/utils/index.ts",
-        ".storybook/*.ts",
+        ".storybook/*.{ts,tsx}",
         "test/**/*.{ts,tsx}",
         "*.config.{js,mjs,cjs,ts,mts,cts}"
     ],

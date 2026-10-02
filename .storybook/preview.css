@@ -1,0 +1,10 @@
+/*
+ * Storybook canvas surface.
+ *
+ * `html[data-theme]` is set by the global theme decorator, so `body` is a
+ * descendant of the active theme context and can resolve semantic tokens.
+ */
+body {
+    background-color: var(--colors-semantic-common-50-background);
+    color: var(--colors-semantic-common-50-text);
+}

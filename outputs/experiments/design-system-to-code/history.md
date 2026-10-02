@@ -86,3 +86,17 @@
 - Визуальная проверка: Playwright-скриншоты `notes/landing-desktop.png` и
   `notes/landing-mobile.png`; лендинг рендерится в light и dark из одних
   компонентов, адаптивен на мобильной ширине.
+
+## 2026-10-02 — fix: theme-контекст в Storybook
+
+- Проблема: semantic-токены объявлены только под `[data-theme="light"|"dark"]`, а
+  базовый `:root` не содержит `--colors-semantic-*`; Storybook не выставлял тему,
+  поэтому стори без своей обёртки показывали неопределённые переменные
+  (например `--colors-semantic-brand-100-text`).
+- Решение (как в приложении): глобальный декоратор в `.storybook/preview.tsx`
+  ставит `data-theme` на `<html>`, плюс переключатель темы в тулбаре
+  (`globalTypes.theme`), плюс `.storybook/preview.css` задаёт фон/текст canvas
+  через semantic-токены. `preview.ts` → `preview.tsx`.
+- Обновлены `knip.jsonc` (entry `.storybook/*.{ts,tsx}`) и `Font.test.ts`.
+- Проверено визуально: `notes/avatar-light.png`, `notes/avatar-dark.png`.
+- Проверки: `mise run check`, `mise run check:deps` — зелёные.

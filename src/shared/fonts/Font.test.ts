@@ -7,7 +7,7 @@ import { WEB_FONT_FACES, } from "./manifest.generated";
 const fontCss = readFileSync(new URL("./font.generated.css", import.meta.url), "utf8");
 const mainSource = readFileSync(new URL("../../main.tsx", import.meta.url), "utf8");
 const storybookPreview = readFileSync(
-    new URL("../../../.storybook/preview.ts", import.meta.url),
+    new URL("../../../.storybook/preview.tsx", import.meta.url),
     "utf8",
 );
 
