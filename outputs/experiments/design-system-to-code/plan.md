@@ -2,6 +2,15 @@
 
 > Steps are executed with tests and `mise run check` before every commit.
 
+## T0 — Port Pen palette + semantic matrix (atomic)
+
+- Replace `paletteValues` with Pen family values and add `base` (white/black).
+- Replace the semantic matrix with Pen values, including the boundary split
+  (`border.subtle` + `border.strong`) and `divider`.
+- These must land together: a palette-only change fails 53 contrast checks and 22
+  `divider < border` checks. Evidence: `bun test src/shared/styles/foundation`.
+- Update `SEMANTIC_PROJECTIONS` and `foundation.test.ts` accordingly.
+
 ## T1 — Align the semantic boundary model with Pen
 
 - Replace the single `border` projection with `border.subtle` + `border.strong`

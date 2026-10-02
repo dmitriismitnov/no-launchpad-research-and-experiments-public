@@ -7,6 +7,14 @@
 Can the Pen design system be ported into the PandaCSS/React codebase so the code
 becomes the source of truth, verified by a real landing screen?
 
+## Decisions (2026-10-02)
+
+- **Pen is the full source of truth for color.** The code palette and semantic
+  matrix adopt Pen values (Tailwind-like palette; brand is green).
+- **All ~70 documented Pen components** are in scope, over multiple increments.
+- Because the palette and the semantic matrix are tuned to each other, they are
+  ported as one atomic change; a palette-only swap leaves the contrast tests red.
+
 ## Scope
 
 In scope:
