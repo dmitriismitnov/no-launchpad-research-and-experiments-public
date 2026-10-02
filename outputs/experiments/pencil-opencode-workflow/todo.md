@@ -6,7 +6,7 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 
 ## Active
 
-- [ ] **Inventory source contracts and create isolated Pen copy**
+- [x] **Inventory source contracts and create isolated Pen copy** — `verified`
   - Read code-side contracts (`src/shared/components/`, `src/shared/styles/foundation/`,
     `src/shared/components/icon/`, `.agents/project.md`) and the design brief.
   - Copy the source Pen document to `artifacts/create-project.pen` without mutation.
@@ -15,8 +15,8 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 
 ## Planned
 
-- [ ] Confirm Gate A: isolated artifact exists, brief and acceptance criteria
-  approved, contracts and baseline recorded.
+- [x] Confirm Gate A: isolated artifact exists, brief and acceptance criteria
+  approved, contracts and baseline recorded. — `verified`
 - [ ] Freeze the atomic Create Project composition plan.
 - [ ] Confirm Gate B for the first allowed experiment frame and target sizes.
 - [ ] Compose Projects entry with the Create Project trigger.

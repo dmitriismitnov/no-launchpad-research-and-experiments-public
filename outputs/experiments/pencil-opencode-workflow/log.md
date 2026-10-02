@@ -58,3 +58,6 @@ plan file was modified.
 | # | Action | Role | Model/variant | Evidence / disposition |
 | - | ------ | ---- | ------------- | ---------------------- |
 | 7 | GPT limits exhausted; switched to single-model operation | planning/orchestration | `deepseek/deepseek-flash` | Reason and compensation recorded in roadmap decision 4, history.md and benchmark-protocol.md. Independent cross-model review unavailable; replaced by rubric-based evidence self-audit plus mandatory human visual review. |
+
+| 8 | Code-system audit (read-only) | orchestration/audit | `deepseek/deepseek-flash` | `notes/code-system-inventory.md`; five components, tokens, themes, 17 icon keys; divergence code `border` vs Pen `border/subtle+strong` recorded as INFO. |
+| 9 | Re-queried Pen copy variables and re-ran baseline structural facts | orchestration/audit | `deepseek/deepseek-flash` | 451 semantic variables, palette roots, themes light/dark; baseline 155 root frames / 82 masters / 1720 refs / 0 problems confirmed. |

@@ -32,3 +32,10 @@
 - Решение: **все роли выполняет текущая модель `deepseek/deepseek-flash` (DeepSeek V4.1 Flash)** — implementation, planning, orchestration, audit и review.
 - Компенсация: rubric-based evidence self-audit (каждое finding обязано ссылаться на raw Pen/code/screenshot artifact, который перепроверяется до принятия) и обязательный человеческий visual review в конце.
 - Причина изменения зафиксирована в `roadmap.md` (decision 4), `log.md` и `notes/benchmark-protocol.md`.
+
+## 2026-10-02 — Task 3 завершён
+
+- Code-system inventory (`notes/code-system-inventory.md`) зафиксировал пять реализованных компонентов (`Button`, `ButtonIcon`, `Input`, `Card`, `Icon`), token ownership, theme mechanism и 17 canonical icon keys.
+- Подтверждено расхождение code/Pen: код использует `border` + `divider`, Pen-копия — `border/subtle` + `border/strong` + `divider`; benchmark следует Pen-токенам, код не меняется.
+- Baseline `notes/pen-baseline.md` перепроверен: 155 root frames, 82 masters, 1720 refs, 0 `ctx.problems`, copy hash неизменен.
+- Gate A выполнен. Source-of-truth изменения не требуются.

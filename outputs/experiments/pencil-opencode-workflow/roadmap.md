@@ -2,16 +2,17 @@
 
 **Status:** active (2026-10-02).
 
-Current checkpoint position: **Bootstrap — active**. Durable state was opened;
-no isolated Pen copy and no Pencil mutation exist yet.
+Current checkpoint position: **Brief and plan — done; Design and verification — active**.
+Durable state, code-system inventory, isolated Pen copy and verified baseline exist.
+No Pencil mutation has been made yet.
 
 ## Phases
 
 | Phase                            | Status | Goal                                                                                  |
 | -------------------------------- | ------ | ------------------------------------------------------------------------------------- |
-| Bootstrap                        | active | Open durable state and registry entry; define brief and benchmark protocol.           |
-| Brief and plan                   | planned | Inventory code/Pen contracts, confirm Gate A and freeze the atomic plan.              |
-| Design and verification          | planned | Create the isolated Pen baseline, then compose and verify the Create Project flow.    |
+| Bootstrap                        | done   | Open durable state and registry entry; define brief and benchmark protocol.           |
+| Brief and plan                   | done   | Inventory code/Pen contracts, confirm Gate A and freeze the atomic plan.              |
+| Design and verification          | active | Create the isolated Pen baseline, then compose and verify the Create Project flow.    |
 | Human review and retrospective   | planned | Present Gate D to the user; record results and update the skill from evidence.        |
 
 ## Phase detail
@@ -74,4 +75,4 @@ no isolated Pen copy and no Pencil mutation exist yet.
 
 | Date       | Position  | Durable files updated         | Exact next action                                                |
 | ---------- | --------- | ----------------------------- | ---------------------------------------------------------------- |
-| 2026-10-02 | Bootstrap | README, roadmap, todo, log, history | Run the code-system inventory and create the isolated Pen copy. |
+| 2026-10-02 | Brief and plan | scripts/, notes/code-system-inventory.md, notes/pen-baseline.md, roadmap, todo, log, history | Confirm Gate A; freeze the atomic Create Project plan; then compose the Projects entry section. |

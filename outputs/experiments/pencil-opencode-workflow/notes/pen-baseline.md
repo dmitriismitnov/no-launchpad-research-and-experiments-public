@@ -1,6 +1,6 @@
 # Pen baseline: isolated `create-project.pen` copy
 
-**Status:** drafted (worker evidence only; not yet reviewed/verified).
+**Status:** verified (2026-10-02) — re-queried by the single-model operator; raw facts confirmed.
 **Task:** Task 3, Step 3 — copy and inspect baseline without mutation.
 **Worker role/model:** implementation worker — `deepseek/deepseek-flash#high`.
 **Timestamp:** 2026-10-02T04:13:50Z (2026-10-02 07:13:50 MSK).
