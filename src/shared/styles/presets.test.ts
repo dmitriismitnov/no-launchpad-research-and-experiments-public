@@ -6,6 +6,8 @@ import type { Config, } from "@pandacss/dev";
 import { alertRecipe, } from "../components/alert/preset";
 import { avatarRecipe, } from "../components/avatar/preset";
 import { badgeRecipe, } from "../components/badge/preset";
+import { brandRecipe, } from "../components/brand/preset";
+import { breadcrumbsRecipe, } from "../components/breadcrumbs/preset";
 import { buttonIconRecipe, } from "../components/button-icon/preset";
 import { buttonRecipe, } from "../components/button/preset";
 import { cardRecipe, } from "../components/card/preset";
@@ -16,12 +18,15 @@ import { dividerRecipe, } from "../components/divider/preset";
 import { emptyStateRecipe, } from "../components/empty-state/preset";
 import { iconRecipe, } from "../components/icon/preset";
 import { inputRecipe, } from "../components/input/preset";
+import { linkRecipe, } from "../components/link/preset";
 import { listRecipe, } from "../components/list/preset";
 import { mediaPlaceholderRecipe, } from "../components/media-placeholder/preset";
+import { navItemRecipe, } from "../components/nav-item/preset";
 import { progressRingRecipe, } from "../components/progress-ring/preset";
 import { progressRecipe, } from "../components/progress/preset";
 import { qrCodeRecipe, } from "../components/qr-code/preset";
 import { scrollAreaRecipe, } from "../components/scroll-area/preset";
+import { sidebarItemRecipe, } from "../components/sidebar-item/preset";
 import { skeletonRecipe, } from "../components/skeleton/preset";
 import { spinnerRecipe, } from "../components/spinner/preset";
 import { splitterRecipe, } from "../components/splitter/preset";
@@ -30,6 +35,7 @@ import { statusIndicatorRecipe, } from "../components/status-indicator/preset";
 import { tagRecipe, } from "../components/tag/preset";
 import { timelineRecipe, } from "../components/timeline/preset";
 import { toastRecipe, } from "../components/toast/preset";
+import { topNavigationRecipe, } from "../components/top-navigation/preset";
 import { foundationPreset, } from "./foundation";
 import { collectComponentDictionaries, componentPresetSources, presets, settingsPreset, } from "./index";
 
@@ -78,6 +84,12 @@ describe("preset composition", () => {
             "splitter",
             "mediaPlaceholder",
             "qrCode",
+            "link",
+            "navItem",
+            "brand",
+            "breadcrumbs",
+            "sidebarItem",
+            "topNavigation",
         ]);
         expect(Object.keys(componentPreset?.theme?.recipes ?? {})).toEqual([
             "icon",
@@ -111,6 +123,12 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["splitter"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["mediaPlaceholder"]).toBeDefined();
         expect(mergedConfig.theme?.slotRecipes?.["qrCode"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["link"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["navItem"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["brand"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["breadcrumbs"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["sidebarItem"]).toBeDefined();
+        expect(mergedConfig.theme?.slotRecipes?.["topNavigation"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["icon"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toBeDefined();
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toBeDefined();
@@ -141,6 +159,12 @@ describe("preset composition", () => {
         expect(mergedConfig.theme?.slotRecipes?.["splitter"]).toEqual(splitterRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["mediaPlaceholder"]).toEqual(mediaPlaceholderRecipe);
         expect(mergedConfig.theme?.slotRecipes?.["qrCode"]).toEqual(qrCodeRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["link"]).toEqual(linkRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["navItem"]).toEqual(navItemRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["brand"]).toEqual(brandRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["breadcrumbs"]).toEqual(breadcrumbsRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["sidebarItem"]).toEqual(sidebarItemRecipe);
+        expect(mergedConfig.theme?.slotRecipes?.["topNavigation"]).toEqual(topNavigationRecipe);
         expect(mergedConfig.theme?.recipes?.["icon"]).toEqual(iconRecipe);
         expect(mergedConfig.theme?.recipes?.["dividerRule"]).toEqual(dividerRecipe);
         expect(mergedConfig.theme?.recipes?.["skeleton"]).toEqual(skeletonRecipe);
@@ -194,8 +218,20 @@ describe("preset composition", () => {
             "splitter",
             "mediaPlaceholder",
             "qrCode",
+            "link",
+            "navItem",
+            "brand",
+            "breadcrumbs",
+            "sidebarItem",
+            "topNavigation",
         ]);
         expect(Object.keys(reversed.slotRecipes)).toEqual([
+            "topNavigation",
+            "sidebarItem",
+            "breadcrumbs",
+            "brand",
+            "navItem",
+            "link",
             "qrCode",
             "mediaPlaceholder",
             "splitter",

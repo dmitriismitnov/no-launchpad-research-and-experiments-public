@@ -1,6 +1,8 @@
 import { Alert, } from "@shared/components/alert";
 import { Avatar, } from "@shared/components/avatar";
 import { Badge, } from "@shared/components/badge";
+import { Brand, } from "@shared/components/brand";
+import { Breadcrumbs, } from "@shared/components/breadcrumbs";
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
 import { Clipboard, } from "@shared/components/clipboard";
@@ -8,12 +10,15 @@ import { CodeBlock, } from "@shared/components/code-block";
 import { DataTable, } from "@shared/components/data-table";
 import { Divider, } from "@shared/components/divider";
 import { EmptyState, } from "@shared/components/empty-state";
+import { Link, } from "@shared/components/link";
 import { List, } from "@shared/components/list";
 import { MediaPlaceholder, } from "@shared/components/media-placeholder";
+import { NavItem, } from "@shared/components/nav-item";
 import { Progress, } from "@shared/components/progress";
 import { ProgressRing, } from "@shared/components/progress-ring";
 import { QrCode, } from "@shared/components/qr-code";
 import { ScrollArea, } from "@shared/components/scroll-area";
+import { SidebarItem, } from "@shared/components/sidebar-item";
 import { Skeleton, } from "@shared/components/skeleton";
 import { Spinner, } from "@shared/components/spinner";
 import { Splitter, } from "@shared/components/splitter";
@@ -22,6 +27,7 @@ import { StatusIndicator, } from "@shared/components/status-indicator";
 import { Tag, } from "@shared/components/tag";
 import { Timeline, } from "@shared/components/timeline";
 import { Toast, } from "@shared/components/toast";
+import { TopNavigation, } from "@shared/components/top-navigation";
 import { css, cx, } from "@shared/styled-system/css";
 
 const tones = [ "primary", "secondary", "ghost", ] as const;
@@ -163,6 +169,47 @@ export const App = () => (
             <Badge label="Failed" tone="negative" />
             <Badge label="New" tone="brand" />
             <Badge label="No dot" withDot={false} />
+        </div>
+        <div className={css({ display: "grid", gap: "x8", })}>
+            <TopNavigation
+                brand={<Brand />}
+                nav={
+                    <>
+                        <NavItem href="#" label="Overview" active />
+                        <NavItem href="#" label="Components" />
+                        <NavItem href="#" label="Pricing" />
+                    </>
+                }
+                actions={
+                    <>
+                        <NavItem href="#" label="Sign in" />
+                        <Button size="sm">Get started</Button>
+                    </>
+                }
+            />
+            <TopNavigation
+                surface="transparent"
+                brand={<Brand name="Acme" />}
+                actions={<Link href="#" external>Open changelog</Link>}
+            />
+        </div>
+        <div className={css({ display: "flex", alignItems: "center", gap: "x8", flexWrap: "wrap", })}>
+            <Link href="#">Read the docs</Link>
+            <Link href="#" tone="subtle">Subtle link</Link>
+            <Link href="#" leadingIcon="file">Design tokens</Link>
+            <Link href="#" disabled>Disabled</Link>
+            <Breadcrumbs
+                items={[
+                    { label: "Foundation", href: "#", },
+                    { label: "Components", href: "#", },
+                    { label: "Button", },
+                ]}
+            />
+        </div>
+        <div className={css({ display: "flex", flexDirection: "column", gap: "x1", width: "200px", })}>
+            <SidebarItem href="#" label="Dashboard" icon="layout-grid" active />
+            <SidebarItem href="#" label="Tokens" icon="sliders-horizontal" />
+            <SidebarItem href="#" label="Archived" icon="file" disabled />
         </div>
         <div className={css({ display: "flex", gap: "x8", alignItems: "center", flexWrap: "wrap", })}>
             <Avatar name="Alice Ryder" presence="online" />
