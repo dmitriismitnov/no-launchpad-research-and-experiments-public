@@ -2,7 +2,7 @@ import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 import { useState, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, userEvent, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -152,25 +152,20 @@ export const Dark: Story = {
     play: async (context) => assertThemeControl(context, "rgb(2, 6, 23)"),
 };
 
-// Pen `EZfrL` (`ox2RF` / `W1OqsJ`): a reached bound disables the saturated
-// stepper direction, so the value is never trapped at the bound.
-const assertMinReached = async (
-    { canvasElement, }: { canvasElement: HTMLElement; },
-): Promise<void> => {
-    const canvas = within(canvasElement);
-
-    await expect(canvas.getByRole("button", { name: "Decrease value", })).toBeDisabled();
-    await expect(canvas.getByRole("button", { name: "Increase value", })).not.toBeDisabled();
-};
-
-const assertMaxReached = async (
+// Pen `EZfrL` (`ox2RF` / `W1OqsJ`): a reached bound disables the complete
+// Stepper (`Stepper ENABLED=false`); the native number input stays editable.
+const assertStepperDisabled = async (
     { canvasElement, }: { canvasElement: HTMLElement; },
 ): Promise<void> => {
     const canvas = within(canvasElement);
 
     await expect(canvas.getByRole("button", { name: "Increase value", })).toBeDisabled();
-    await expect(canvas.getByRole("button", { name: "Decrease value", })).not.toBeDisabled();
+    await expect(canvas.getByRole("button", { name: "Decrease value", })).toBeDisabled();
+    await expect(canvas.getByRole("spinbutton", { name: "КОЛИЧЕСТВО", })).not.toBeDisabled();
 };
+
+const assertMinReached = assertStepperDisabled;
+const assertMaxReached = assertStepperDisabled;
 
 export const MinReached: Story = {
     args: { label: "КОЛИЧЕСТВО", defaultValue: 0, min: 0, max: 64, },
@@ -196,73 +191,116 @@ export const DarkMaxReached: Story = {
     play: assertMaxReached,
 };
 
-// Pen `EZfrL` content rule: clamp silently at min / max; typing stays available.
-export const StepperClamp: Story = {
-    args: { label: "КОЛИЧЕСТВО", defaultValue: 2, min: 0, max: 3, },
-    render: renderIn("light"),
-    play: async ({ canvasElement, }) => {
-        const canvas = within(canvasElement);
-        const input = canvas.getByRole("spinbutton", { name: "КОЛИЧЕСТВО", });
-        const increase = canvas.getByRole("button", { name: "Increase value", });
-        const decrease = canvas.getByRole("button", { name: "Decrease value", });
-
-        await fireEvent.click(increase);
-        await expect(input).toHaveValue(3);
-        await expect(increase).toBeDisabled();
-
-        for ( let step = 0; step < 4; step += 1 ) {
-            await fireEvent.click(decrease);
-        }
-
-        await expect(input).toHaveValue(0);
-        await expect(decrease).toBeDisabled();
-    },
-};
-
-const ControlledStepper = () => {
-    const [ value, setValue, ] = useState(2);
-
-    return (
-        <NumberInput
-            label="КОЛИЧЕСТВО"
-            min={0}
-            max={3}
-            value={value}
-            onChange={(event) => setValue(Number(event.target.value))}
-        />
-    );
-};
-
-const controlledClampPlay = async (
+// Pen `EZfrL` content rule: the stepper is only an accelerator; typing is the
+// way off a bound, where both stepper buttons are disabled.
+const typedFromBoundPlay = async (
     { canvasElement, }: { canvasElement: HTMLElement; },
 ): Promise<void> => {
     const canvas = within(canvasElement);
     const input = canvas.getByRole("spinbutton", { name: "КОЛИЧЕСТВО", });
     const increase = canvas.getByRole("button", { name: "Increase value", });
+    const decrease = canvas.getByRole("button", { name: "Decrease value", });
+    const user = userEvent.setup();
 
-    await fireEvent.click(increase);
-    await expect(input).toHaveValue(3);
     await expect(increase).toBeDisabled();
+    await expect(decrease).toBeDisabled();
+    await expect(input).toHaveValue(0);
+
+    await user.clear(input);
+    await user.type(input, "32");
+
+    await expect(input).toHaveValue(32);
+    await expect(increase).not.toBeDisabled();
+    await expect(decrease).not.toBeDisabled();
 };
 
-export const ControlledClamp: Story = {
+export const TypedFromMin: Story = {
+    args: { label: "КОЛИЧЕСТВО", defaultValue: 0, min: 0, max: 64, },
+    render: renderIn("light"),
+    play: typedFromBoundPlay,
+};
+
+const ControlledTypedStepper = () => {
+    const [ value, setValue, ] = useState("0");
+
+    return (
+        <NumberInput
+            label="КОЛИЧЕСТВО"
+            min={0}
+            max={64}
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
+        />
+    );
+};
+
+const controlledTypedPlay = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole("spinbutton", { name: "КОЛИЧЕСТВО", });
+    const increase = canvas.getByRole("button", { name: "Increase value", });
+    const decrease = canvas.getByRole("button", { name: "Decrease value", });
+    const user = userEvent.setup();
+
+    await expect(increase).toBeDisabled();
+    await expect(decrease).toBeDisabled();
+
+    await user.clear(input);
+    await user.type(input, "24");
+
+    await expect(input).toHaveValue(24);
+    await expect(increase).not.toBeDisabled();
+    await expect(decrease).not.toBeDisabled();
+};
+
+export const ControlledTyped: Story = {
     render: () => (
         <ThemeShell theme="light">
             <div className={frame}>
-                <ControlledStepper />
+                <ControlledTypedStepper />
             </div>
         </ThemeShell>
     ),
-    play: controlledClampPlay,
+    play: controlledTypedPlay,
 };
 
-export const DarkControlledClamp: Story = {
+export const DarkControlledTyped: Story = {
     render: () => (
         <ThemeShell theme="dark">
             <div className={frame}>
-                <ControlledStepper />
+                <ControlledTypedStepper />
             </div>
         </ThemeShell>
     ),
-    play: controlledClampPlay,
+    play: controlledTypedPlay,
+};
+
+// Pen `EZfrL`: read-only disables the complete Stepper while the native input
+// keeps `readonly`, so the buttons cannot mutate the value.
+const assertReadOnlyStepper = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole("spinbutton", { name: "КОЛИЧЕСТВО", });
+
+    await expect(input).toHaveAttribute("readonly");
+    await expect(input).not.toBeDisabled();
+    await expect(canvas.getByRole("button", { name: "Increase value", })).toBeDisabled();
+    await expect(canvas.getByRole("button", { name: "Decrease value", })).toBeDisabled();
+
+    await fireEvent.click(canvas.getByRole("button", { name: "Increase value", }));
+    await expect(input).toHaveValue(8);
+};
+
+export const ReadOnly: Story = {
+    args: { label: "КОЛИЧЕСТВО", defaultValue: 8, min: 0, max: 64, readOnly: true, },
+    render: renderIn("light"),
+    play: assertReadOnlyStepper,
+};
+
+export const DarkReadOnly: Story = {
+    args: { label: "КОЛИЧЕСТВО", defaultValue: 8, min: 0, max: 64, readOnly: true, },
+    render: renderIn("dark"),
+    play: assertReadOnlyStepper,
 };

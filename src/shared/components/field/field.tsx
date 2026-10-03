@@ -1,6 +1,10 @@
 import type { ComponentProps, ReactNode, } from "react";
 import { cloneElement, isValidElement, useId, } from "react";
 
+import { Input, } from "../input/input";
+import { NumberInput, } from "../number-input/number-input";
+import { Textarea, } from "../textarea/textarea";
+
 import { cx, } from "@shared/styled-system/css";
 import { field, } from "@shared/styled-system/recipes";
 
@@ -33,6 +37,8 @@ type FieldControlProps = {
     id?: string;
     required?: boolean;
     disabled?: boolean;
+    invalid?: boolean;
+    error?: string;
     "aria-describedby"?: string;
     "aria-invalid"?: boolean;
     "aria-required"?: boolean;
@@ -41,11 +47,21 @@ type FieldControlProps = {
 
 const NATIVE_FORM_CONTROLS = new Set([ "input", "select", "textarea", ]);
 
+/** Компоненты проекта, которым Field передаёт свой полный state-контракт. */
+const PROJECT_CONTROLS = new Set<unknown>([ Input, Textarea, NumberInput, ]);
+
 /**
  * Обёртка поля: лейбл, необязательный маркер обязательности, hint и error.
  * Связывает лейбл с контролом и владеет `aria-invalid` / `aria-describedby`.
- * Контрол передаётся единственным ребёнком; потребительские значения этих двух
- * ARIA-атрибутов на ребёнке перезаписываются.
+ * Контрол передаётся единственным ребёнком.
+ *
+ * `Input` / `Textarea` / `NumberInput` получают полный state-контракт
+ * (`id`, `required`, `disabled`, `invalid`) и активное описание Field; их
+ * локальный `error` сбрасывается, чтобы видимая ошибка и `id="…-error"`
+ * оставались ровно в одном месте. Нативные `input` / `select` / `textarea`
+ * и произвольные React-дети сохраняют прежнее обобщённое поведение: ID, ARIA
+ * state и, при отсутствии активного описания Field, собственный
+ * `aria-describedby` ребёнка.
  */
 export const Field = ({
     label,
@@ -66,14 +82,27 @@ export const Field = ({
     const errorId = `${controlId}-error`;
     const showError = invalid && hasText(error);
     const showHint = !showError && hasText(hint);
-    const describedBy = showError ? errorId : ( showHint ? hintId : undefined );
+    const childDescribedBy = child?.props["aria-describedby"];
+    const describedBy = showError
+        ? errorId
+        : ( showHint ? hintId : childDescribedBy );
     const styles = field({ disabled, });
     const isNativeControl = child !== null
         && typeof child.type === "string"
         && NATIVE_FORM_CONTROLS.has(child.type);
+    const isProjectControl = child !== null && PROJECT_CONTROLS.has(child.type);
 
     const control = child === null
         ? children
+        : isProjectControl
+        ? cloneElement(child, {
+            id: controlId,
+            required: required || undefined,
+            disabled: disabled || undefined,
+            invalid: invalid || undefined,
+            error: undefined,
+            "aria-describedby": describedBy,
+        })
         : cloneElement(child, {
             id: controlId,
             "aria-describedby": describedBy,

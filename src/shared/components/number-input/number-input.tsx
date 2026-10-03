@@ -37,6 +37,7 @@ export const NumberInput = ({
     unit,
     stepper = true,
     disabled = false,
+    readOnly = false,
     className,
     id,
     value,
@@ -52,7 +53,7 @@ export const NumberInput = ({
         type: _type,
         children: _children,
         "aria-invalid": _ariaInvalid,
-        "aria-describedby": _ariaDescribedBy,
+        "aria-describedby": externalDescribedBy,
         ...inputProps
     } = props as ComponentProps<"input">;
     const generatedId = useId();
@@ -70,11 +71,11 @@ export const NumberInput = ({
     const maxNumber = toFiniteNumber(max);
     const atMin = currentNumber !== undefined && minNumber !== undefined && currentNumber <= minNumber;
     const atMax = currentNumber !== undefined && maxNumber !== undefined && currentNumber >= maxNumber;
-    // Pen `EZfrL` (`ox2RF` / `W1OqsJ`): a reached bound disables the saturated
-    // stepper direction so the control does not get trapped at a bound. Typing
-    // stays available; the stepper is only an accelerator.
-    const increaseDisabled = disabled || atMax;
-    const decreaseDisabled = disabled || atMin;
+    // Pen `EZfrL` (`ox2RF` / `W1OqsJ`): a reached bound disables the whole
+    // stepper (`Stepper ENABLED=false`) so neither button can move the value
+    // off a bound; the native input stays editable and is the only way out.
+    // `readOnly` and `disabled` deactivate the accelerator the same way.
+    const stepperDisabled = disabled || readOnly || atMin || atMax;
 
     const handleChange: NonNullable<ComponentProps<"input">["onChange"]> = (event) => {
         if ( value === undefined ) {
@@ -86,9 +87,8 @@ export const NumberInput = ({
 
     const handleStep = (direction: 1 | -1) => {
         const input = innerRef.current;
-        const stepDisabled = direction === 1 ? increaseDisabled : decreaseDisabled;
 
-        if ( disabled || stepDisabled || input == null ) {
+        if ( disabled || readOnly || stepperDisabled || input == null ) {
             return;
         }
 
@@ -125,9 +125,10 @@ export const NumberInput = ({
                     max={max}
                     step={step}
                     disabled={disabled}
+                    readOnly={readOnly}
                     className={cx(styles.input, className)}
                     aria-invalid={invalid || undefined}
-                    aria-describedby={showError ? errorId : undefined}
+                    aria-describedby={showError ? errorId : externalDescribedBy}
                 />
                 {hasText(unit) && <span className={styles.unit}>{unit}</span>}
                 {stepper && (
@@ -136,7 +137,7 @@ export const NumberInput = ({
                             type="button"
                             className={styles.stepButton}
                             aria-label="Increase value"
-                            disabled={increaseDisabled}
+                            disabled={stepperDisabled}
                             onClick={() => handleStep(1)}
                         >
                             <Icon name="plus" size="sm" />
@@ -145,7 +146,7 @@ export const NumberInput = ({
                             type="button"
                             className={styles.stepButton}
                             aria-label="Decrease value"
-                            disabled={decreaseDisabled}
+                            disabled={stepperDisabled}
                             onClick={() => handleStep(-1)}
                         >
                             <Icon name="minus" size="sm" />

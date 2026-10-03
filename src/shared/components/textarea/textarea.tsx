@@ -5,9 +5,10 @@ import { cx, } from "@shared/styled-system/css";
 import { textarea, } from "@shared/styled-system/recipes";
 
 /**
- * Публичные пропсы Textarea. Компонент владеет `aria-invalid` и
- * `aria-describedby`: потребительские значения этих двух атрибутов
- * игнорируются, чтобы связь «контрол ↔ ошибка» оставалась корректной.
+ * Публичные пропсы Textarea. Компонент владеет `aria-invalid`. Собственная
+ * ошибка (`invalid` + непустой `error`) владеет `aria-describedby` и
+ * переопределяет внешнее значение; без локальной ошибки внешний
+ * `aria-describedby` (например, от `Field`) сохраняется.
  */
 export type TextareaProps = Omit<ComponentProps<"textarea">, "children"> & {
     /** Лейбл над контролом; связывается с контролом через htmlFor/id. */
@@ -39,7 +40,7 @@ export const Textarea = ({
 }: TextareaProps) => {
     const {
         "aria-invalid": _ariaInvalid,
-        "aria-describedby": _ariaDescribedBy,
+        "aria-describedby": externalDescribedBy,
         ...textareaProps
     } = props as ComponentProps<"textarea">;
     const generatedId = useId();
@@ -77,7 +78,7 @@ export const Textarea = ({
                 onChange={handleChange}
                 className={cx(styles.control, className)}
                 aria-invalid={invalid || undefined}
-                aria-describedby={showError ? errorId : undefined}
+                aria-describedby={showError ? errorId : externalDescribedBy}
             />
             {showCounter && (
                 <div className={styles.footer}>

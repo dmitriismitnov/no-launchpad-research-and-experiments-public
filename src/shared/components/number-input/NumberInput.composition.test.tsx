@@ -11,6 +11,13 @@ const stepperButton = (markup: string, name: string): string =>
 const isStepperDisabled = (markup: string, name: string): boolean =>
     /\sdisabled(?:="")?(?=[\s>])/.test(stepperButton(markup, name));
 
+/** Открывающий тег нативного числового контрола. */
+const numberControlTag = (markup: string): string => markup.match(/<input\b[^>]*>/)?.[0] ?? "";
+
+/** Проверяет нативный `disabled` на самом `<input>`, не путая его с классами. */
+const isNumberControlDisabled = (markup: string): boolean =>
+    /\sdisabled(?:="")?(?=[\s/>])/.test(numberControlTag(markup));
+
 describe("NumberInput composition", () => {
     test("links a label to the number control and forwards native attributes", () => {
         const markup = renderToStaticMarkup(
@@ -48,24 +55,26 @@ describe("NumberInput composition", () => {
         expect(markup).toContain('step="2"');
     });
 
-    test("disables only the saturated direction when an uncontrolled value reaches a bound", () => {
+    test("disables both stepper buttons when an uncontrolled value reaches a bound, keeping the native input editable", () => {
         const atMin = renderToStaticMarkup(<NumberInput defaultValue={0} min={0} max={64} />);
         const atMax = renderToStaticMarkup(<NumberInput defaultValue={64} min={0} max={64} />);
 
-        expect(isStepperDisabled(atMin, "Decrease value")).toBe(true);
-        expect(isStepperDisabled(atMin, "Increase value")).toBe(false);
-        expect(isStepperDisabled(atMax, "Increase value")).toBe(true);
-        expect(isStepperDisabled(atMax, "Decrease value")).toBe(false);
+        for ( const markup of [ atMin, atMax, ] ) {
+            expect(isStepperDisabled(markup, "Increase value")).toBe(true);
+            expect(isStepperDisabled(markup, "Decrease value")).toBe(true);
+            expect(isNumberControlDisabled(markup)).toBe(false);
+        }
     });
 
-    test("disables only the saturated direction when a controlled value reaches a bound", () => {
-        const atMin = renderToStaticMarkup(<NumberInput value={0} min={0} max={64} readOnly />);
-        const atMax = renderToStaticMarkup(<NumberInput value={64} min={0} max={64} readOnly />);
+    test("disables both stepper buttons when a controlled value reaches a bound", () => {
+        const atMin = renderToStaticMarkup(<NumberInput value={0} min={0} max={64} />);
+        const atMax = renderToStaticMarkup(<NumberInput value={64} min={0} max={64} />);
 
-        expect(isStepperDisabled(atMin, "Decrease value")).toBe(true);
-        expect(isStepperDisabled(atMin, "Increase value")).toBe(false);
-        expect(isStepperDisabled(atMax, "Increase value")).toBe(true);
-        expect(isStepperDisabled(atMax, "Decrease value")).toBe(false);
+        for ( const markup of [ atMin, atMax, ] ) {
+            expect(isStepperDisabled(markup, "Increase value")).toBe(true);
+            expect(isStepperDisabled(markup, "Decrease value")).toBe(true);
+            expect(isNumberControlDisabled(markup)).toBe(false);
+        }
     });
 
     test("keeps both stepper directions enabled between the bounds", () => {
@@ -73,6 +82,15 @@ describe("NumberInput composition", () => {
 
         expect(isStepperDisabled(markup, "Increase value")).toBe(false);
         expect(isStepperDisabled(markup, "Decrease value")).toBe(false);
+    });
+
+    test("readOnly disables both stepper buttons while the native input stays read-only and non-disabled", () => {
+        const markup = renderToStaticMarkup(<NumberInput defaultValue={8} min={0} max={64} readOnly />);
+
+        expect(isStepperDisabled(markup, "Increase value")).toBe(true);
+        expect(isStepperDisabled(markup, "Decrease value")).toBe(true);
+        expect(markup).toMatch(/readonly/i);
+        expect(isNumberControlDisabled(markup)).toBe(false);
     });
 
     test("omits the stepper when stepper is false", () => {
@@ -131,12 +149,20 @@ describe("NumberInput composition", () => {
         expect(markup).not.toContain("injected");
     });
 
-    test("owns aria-invalid and aria-describedby, ignoring consumer values", () => {
+    test("preserves an external aria-describedby when no local error is rendered", () => {
+        const markup = renderToStaticMarkup(<NumberInput aria-describedby="outer-help" />);
+
+        expect(markup).toContain('aria-describedby="outer-help"');
+    });
+
+    test("local invalid error overrides an external aria-describedby", () => {
         const markup = renderToStaticMarkup(
-            <NumberInput invalid error="Ошибка" aria-invalid={false} aria-describedby="external" />,
+            <NumberInput id="count" invalid error="Ошибка" aria-invalid={false} aria-describedby="outer-help" />,
         );
 
         expect(markup).toContain('aria-invalid="true"');
-        expect(markup).not.toContain("external");
+        expect(markup).toContain('aria-describedby="count-error"');
+        expect(markup).toContain('id="count-error"');
+        expect(markup).not.toContain("outer-help");
     });
 });

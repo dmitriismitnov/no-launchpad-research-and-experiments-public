@@ -6,9 +6,10 @@ import { cx, } from "@shared/styled-system/css";
 import { input, } from "@shared/styled-system/recipes";
 
 /**
- * Публичные пропсы Input. Компонент владеет `aria-invalid` и
- * `aria-describedby`: потребительские значения этих двух атрибутов
- * игнорируются, чтобы связь «контрол ↔ ошибка» оставалась корректной.
+ * Публичные пропсы Input. Компонент владеет `aria-invalid`. Собственная
+ * ошибка (`invalid` + непустой `error`) владеет `aria-describedby` и
+ * переопределяет внешнее значение; без локальной ошибки внешний
+ * `aria-describedby` (например, от `Field`) сохраняется.
  */
 export type InputProps = Omit<ComponentProps<"input">, "size" | "children"> & {
     /** Лейбл над контролом; связывается с контролом через htmlFor/id. */
@@ -44,7 +45,7 @@ export const Input = ({
         size: _size,
         children: _children,
         "aria-invalid": _ariaInvalid,
-        "aria-describedby": _ariaDescribedBy,
+        "aria-describedby": externalDescribedBy,
         ...inputProps
     } = props as ComponentProps<"input">;
     const generatedId = useId();
@@ -72,7 +73,7 @@ export const Input = ({
                     id={controlId}
                     className={cx(styles.input, className)}
                     aria-invalid={invalid || undefined}
-                    aria-describedby={showError ? errorId : undefined}
+                    aria-describedby={showError ? errorId : externalDescribedBy}
                 />
                 {suffixIcon != null && (
                     <span className={styles.suffixIcon}>

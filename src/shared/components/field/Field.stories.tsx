@@ -6,6 +6,10 @@ import { expect, within, } from "storybook/test";
 import type { FieldProps, } from "./field";
 import { Field, } from "./field";
 
+import { Input, } from "../input/input";
+import { NumberInput, } from "../number-input/number-input";
+import { Textarea, } from "../textarea/textarea";
+
 import { css, } from "@shared/styled-system/css";
 
 const shell = css({
@@ -236,4 +240,69 @@ export const NonNativeControl: Story = {
 export const DarkNonNativeControl: Story = {
     render: renderNonNative("dark"),
     play: assertNonNativeState,
+};
+
+// Field owns label / hint / error: known project controls receive id, native
+// required/disabled, invalid and the active description, and their local error
+// is suppressed so the error text and id occur exactly once.
+const renderProjectControls = (theme: "light" | "dark") => () => (
+    <ThemeShell theme={theme}>
+        <div className={frame}>
+            <Field id="pc-name" label="Имя" required disabled invalid hint="Старая подсказка" error="Имя обязательно">
+                <Input error="локальный дубль" />
+            </Field>
+            <Field id="pc-bio" label="Био" required disabled invalid hint="Старая подсказка" error="Био обязательно">
+                <Textarea error="локальный дубль" />
+            </Field>
+            <Field
+                id="pc-count"
+                label="Количество"
+                required
+                disabled
+                invalid
+                hint="Старая подсказка"
+                error="Количество обязательно"
+            >
+                <NumberInput error="локальный дубль" />
+            </Field>
+        </div>
+    </ThemeShell>
+);
+
+const assertProjectControls = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const canvas = within(canvasElement);
+    const cases = [
+        { label: "Имя", id: "pc-name", },
+        { label: "Био", id: "pc-bio", },
+        { label: "Количество", id: "pc-count", },
+    ];
+
+    for ( const { label, id, } of cases ) {
+        const control = canvas.getByLabelText(label);
+
+        await expect(control).toBeRequired();
+        await expect(control).toBeDisabled();
+        await expect(control).toHaveAttribute("aria-invalid", "true");
+        await expect(control).toHaveAttribute("aria-describedby", `${id}-error`);
+        await expect(canvasElement.querySelectorAll(`#${id}-error`).length).toBe(1);
+    }
+
+    await expect(canvasElement.querySelectorAll(".field__error").length).toBe(3);
+    await expect(canvasElement.textContent).toContain("Имя обязательно");
+    await expect(canvasElement.textContent).toContain("Био обязательно");
+    await expect(canvasElement.textContent).toContain("Количество обязательно");
+    await expect(canvasElement.textContent).not.toContain("Старая подсказка");
+    await expect(canvasElement.textContent).not.toContain("локальный дубль");
+};
+
+export const ProjectControls: Story = {
+    render: renderProjectControls("light"),
+    play: assertProjectControls,
+};
+
+export const DarkProjectControls: Story = {
+    render: renderProjectControls("dark"),
+    play: assertProjectControls,
 };

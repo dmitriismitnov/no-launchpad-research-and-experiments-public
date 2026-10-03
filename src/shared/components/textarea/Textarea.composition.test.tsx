@@ -76,12 +76,20 @@ describe("Textarea composition", () => {
         expect(markup).toContain("textarea__control");
     });
 
-    test("owns aria-invalid and aria-describedby, ignoring consumer values", () => {
+    test("preserves an external aria-describedby when no local error is rendered", () => {
+        const markup = renderToStaticMarkup(<Textarea aria-describedby="external" />);
+
+        expect(markup).toContain('aria-describedby="external"');
+    });
+
+    test("local invalid error overrides an external aria-describedby", () => {
         const markup = renderToStaticMarkup(
-            <Textarea invalid error="Ошибка" aria-invalid={false} aria-describedby="external" />,
+            <Textarea id="bio" invalid error="Ошибка" aria-invalid={false} aria-describedby="external" />,
         );
 
         expect(markup).toContain('aria-invalid="true"');
+        expect(markup).toContain('aria-describedby="bio-error"');
+        expect(markup).toContain('id="bio-error"');
         expect(markup).not.toContain("external");
     });
 });

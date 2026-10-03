@@ -544,7 +544,100 @@ Counts moved from the Batch B1 shipped baseline (`0709208`): unit `696 → 709` 
 
 ### Remaining concerns
 
-- **INFO — NumberInput `min/max reached` projection.** Pen `EZfrL` (`ox2RF` / `W1OqsJ`) sets the whole `Stepper` frame `ENABLED=false` at a bound. Disabling the cluster in both directions would trap the value (no way back from a bound), which contradicts `RAOC3` ("the stepper is an accelerator"). The implementation disables only the saturated direction (increase at max, decrease at min) so the control stays operable; this is the chosen interpretation, not a new public axis.
+- **INFO — NumberInput `min/max reached` projection (superseded by the cycle-2 correction below).** Pen `EZfrL` (`ox2RF` / `W1OqsJ`) sets the whole `Stepper` frame `ENABLED=false` at a bound. Disabling the cluster in both directions would trap the value (no way back from a bound), which contradicts `RAOC3` ("the stepper is an accelerator"). The implementation disables only the saturated direction (increase at max, decrease at min) so the control stays operable; this is the chosen interpretation, not a new public axis. **Withdrawn in the B2 correction — cycle 2/2, which disables both stepper buttons at either bound and keeps typing as the way out.**
 - **INFO — Input `read-only` border.subtle.** `NEbdq` describes a `border.subtle` + disabled surface for read-only. The native `readOnly` behaviour and value visibility are implemented and tested; the read-only *border/background* swap is not claimed this cycle (the user approval covered the icon slots only). Recorded so the reviewer can decide whether the visual is required. Disabled contrast remains `DISABLED / REVIEW`.
 - **INFO — Input `valid` and `size`.** `VSh2R` and `oTL4D` list `valid` and `size`, and `N0ymEX`/`c6uIoT` list `auto-grow`/`label placement`; all are recorded `BLOCKED` per the user's explicit scope decision, with no `BLOCKED` API shipped.
 - **INFO — Field non-native state.** `aria-required` / `aria-disabled` are forwarded to a non-native child because Pen `ZbhVg` requires the state to be exposed and `SbjP5` requires forwarding; the consumer remains responsible for the enforced behaviour.
+
+## B2 correction — NumberInput full-stepper bound state and Field project-control composition (cycle 2/2)
+
+**Base commit:** `0fdd25f` (`feat(shared): add Input icon slots and entry-control state semantics`).\
+**Correction plan:** the reviewer's cycle-1 findings on the B2 slice: (1) Pen disables the complete `Stepper` at a bound, but the implementation disabled only the saturated direction; (2) `Field` did not integrate the project `Input` / `Textarea` / `NumberInput` state contract and could duplicate label/error ownership; (3) `readOnly` allowed stepper mutation.\
+**Status:** **PASS** (the former per-direction `INFO` is withdrawn).
+
+### Direct Pen facts re-used (read-only)
+
+- `oTL4D` `ox2RF` ("Min reached") and `W1OqsJ` ("Max reached") both set the complete `Stepper` frame `enabled: false` at the bound.
+- `bm5Z2` / `RAOC3` — "Allow typing; the stepper is an accelerator, not the only input."
+- `c6uIoT` (`I8f79X`, `j4P442`, `SbjP5`, `ZbhVg`) — Field forwards `invalid` / `disabled` / `required`; Field owns label, hint and error, with error replacing hint and never appearing without an invalid control.
+
+### Fixes implemented
+
+| # | Finding | Fix |
+| --- | --- | --- |
+| 1 | Only the saturated stepper direction was disabled at a bound. | `stepperDisabled = disabled ‖ readOnly ‖ atMin ‖ atMax` now drives **both** named buttons, matching Pen `Stepper ENABLED=false`; the native `<input type="number">` stays editable. |
+| 2 | `readOnly` did not disable or guard the stepper. | `readOnly` is destructured, forwarded to the native input, included in `stepperDisabled`, and re-checked in `handleStep`, so the accelerator cannot mutate a read-only value. |
+| 3 | `Field` did not pass the state/description contract to project controls, so a `Field`-wrapped `Input` / `Textarea` / `NumberInput` lost the Field description and could render a duplicate local error. | Field detects the three project component types by identity and clones them with `id`, native `required` / `disabled`, `invalid`, `error: undefined` and its active hint/error descriptor. Field remains the sole label/hint/error owner. |
+| 4 | Components discarded a consumer/Field `aria-describedby`. | `Input`, `Textarea` and `NumberInput` keep the supplied descriptor when they render no local invalid error, and their local `${id}-error` overrides it when they do. |
+| 5 | A project control's own descriptor could be clobbered when Field had no active description. | Field falls back to the child's own `aria-describedby` when it has neither active hint nor error. Intrinsic and foreign children keep the generic ID / ARIA-state behaviour and receive no project-only `invalid` / `error`. |
+
+No public API, token, preset, barrel, Panda configuration or generated output was changed. `mise run gen` was therefore not required.
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun), command `bun test src/shared/components/input/Input.composition.test.tsx src/shared/components/textarea/Textarea.composition.test.tsx src/shared/components/number-input/NumberInput.composition.test.tsx src/shared/components/field/Field.composition.test.tsx`:
+
+| Field | Value |
+| --- | --- |
+| RED exit | `1` |
+| RED result | `10 fail` / `47 pass` (57 total), `184 expect() calls` |
+| RED failures | NumberInput both-buttons-at-bound (uncontrolled), both-buttons-at-bound (controlled), readOnly both disabled + native non-disabled, external-descriptor preserved; Input and Textarea external-descriptor preserved; Field project-control composition for Input / Textarea / NumberInput and Field child-descriptor fallback |
+| GREEN exit | `0` |
+| GREEN result | `57 pass` / `0 fail` (57 total), `218 expect() calls` |
+
+With `Input.test.ts` added, the plan's final focused unit command is `70 pass` / `0 fail` (5 files), `238 expect() calls`.
+
+Focused browser stories (Vitest + Playwright Chromium), proven test-first by `git stash push` of only `number-input/number-input.tsx` and `field/field.tsx` (no `mise run gen`, since no preset changed), observing RED, then `git stash pop`:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/number-input/NumberInput.stories.tsx src/shared/components/field/Field.stories.tsx` |
+| RED exit | `1` |
+| RED result | `2 failed` files, `11 failed` / `21 passed` (32) — `Min Reached`, `Dark Min Reached`, `Max Reached`, `Dark Max Reached`, `Read Only`, `Dark Read Only`, `Typed From Min`, `Controlled Typed`, `Dark Controlled Typed`, `Project Controls`, `Dark Project Controls` |
+| GREEN exit | `0` |
+| GREEN result | `2 passed` files, `32 passed` (32) |
+
+### Both-theme story coverage (computed/DOM, in browser)
+
+| Story (theme) | Assertion | Observed |
+| --- | --- | --- |
+| `MinReached` / `DarkMinReached` | both named buttons disabled, spinbutton enabled | pass |
+| `MaxReached` / `DarkMaxReached` | both named buttons disabled, spinbutton enabled | pass |
+| `TypedFromMin` | at bound both buttons disabled; clear + type `32` → value `32` and both buttons re-enabled | pass |
+| `ControlledTyped` / `DarkControlledTyped` | controlled value starts at the bound with both buttons disabled; typed `24` propagates through `onChange` and re-enables both | pass |
+| `ReadOnly` / `DarkReadOnly` | native control `readonly`, non-disabled; both buttons disabled; clicking does not mutate the value (`8`) | pass |
+| `ProjectControls` / `DarkProjectControls` | Field-wrapped `Input`, `Textarea`, `NumberInput`: actual native control `required`, `disabled`, `aria-invalid="true"`, `aria-describedby="pc-*-error"`; exactly one `#pc-*-error` and three `.field__error`; hint and child-local error text absent | pass |
+
+Disabled contrast remains **`DISABLED / REVIEW`** in both themes.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| focused composition RED | `1` | `10 fail` / `47 pass` |
+| focused composition GREEN | `0` | `57 pass` / `0 fail` (`70 pass` with `Input.test.ts`) |
+| focused browser RED | `1` | `11 failed` / `21 passed` (32) |
+| focused browser GREEN | `0` | `32 passed` (32) |
+| `git diff --check` | `0` | clean |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `717 pass / 0 fail` (90 files); browser `456 passed` (73 files) |
+
+Counts moved from the B2 cycle-1 shipped baseline (`0fdd25f`): unit `709 → 717` (`+8`), browser `452 → 456` (`+4`).
+
+### Changed paths
+
+`src/shared/components/number-input/{number-input.tsx,NumberInput.composition.test.tsx,NumberInput.stories.tsx}`, `src/shared/components/field/{field.tsx,Field.composition.test.tsx,Field.stories.tsx}`, `src/shared/components/input/{input.tsx,Input.composition.test.tsx}`, `src/shared/components/textarea/{textarea.tsx,Textarea.composition.test.tsx}`, this evidence. No `index.ts`, `preset.ts`, `panda.config.ts`, token, dependency, Pen or generated file was touched.
+
+### Disposition (cycle 2/2)
+
+| Row | Disposition |
+| --- | --- |
+| NumberInput full `Stepper` disabled at min **or** max, native input editable | **PASS** |
+| NumberInput mid-range both buttons enabled | **PASS** |
+| NumberInput controlled and uncontrolled typed movement off a bound re-enables both buttons | **PASS** |
+| NumberInput `readOnly` disables both buttons, native stays `readonly` and non-disabled, guard blocks mutation | **PASS** |
+| Field forwards `id` / `required` / `disabled` / `invalid` / active description to `Input`, `Textarea`, `NumberInput` | **PASS** |
+| Field is the sole label/hint/error owner; child-local error suppressed; one error text and one `id="…-error"` | **PASS** |
+| External `aria-describedby` preserved without a local invalid error; local error overrides it | **PASS** |
+| Intrinsic and foreign children keep generic ID/ARIA-state behaviour without project-only props | **PASS** |
+| Disabled contrast | `DISABLED / REVIEW` (both themes) |
+| **B2 correction final status** | **PASS** |

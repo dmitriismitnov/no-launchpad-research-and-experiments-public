@@ -142,12 +142,20 @@ describe("Input composition", () => {
         expect(markup).not.toContain("injected");
     });
 
-    test("owns aria-invalid and aria-describedby, ignoring consumer values", () => {
+    test("preserves an external aria-describedby when no local error is rendered", () => {
+        const markup = renderToStaticMarkup(<Input aria-describedby="external" />);
+
+        expect(markup).toContain('aria-describedby="external"');
+    });
+
+    test("local invalid error overrides an external aria-describedby", () => {
         const markup = renderToStaticMarkup(
-            <Input invalid error="Заполните поле" aria-invalid={false} aria-describedby="external" />,
+            <Input id="email" invalid error="Заполните поле" aria-invalid={false} aria-describedby="external" />,
         );
 
         expect(markup).toContain('aria-invalid="true"');
+        expect(markup).toContain('aria-describedby="email-error"');
+        expect(markup).toContain('id="email-error"');
         expect(markup).not.toContain("external");
     });
 });
