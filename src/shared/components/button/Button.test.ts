@@ -47,6 +47,7 @@ describe("button recipe", () => {
             "primary",
             "secondary",
             "ghost",
+            "destructive",
         ]);
         expect(Object.keys(buttonRecipe.variants?.["size"] ?? {})).toEqual([ "sm", "md", ]);
     });
@@ -120,6 +121,29 @@ describe("button recipe", () => {
         expect(root).not.toHaveProperty("opacity");
     });
 
+    test("matches the PEN destructive action contract", () => {
+        // Pen `IcuBw` destructive (IcuBw + state contract `xw0yy`): red.600
+        // resting/loading, red.700 hover and active, white foreground; disabled
+        // falls back to the shared disabled role. Filled, so no boundary.
+        const root = buttonRecipe.variants?.["tone"]?.["destructive"]?.["root"];
+
+        expect(root).toMatchObject({
+            borderWidth: "none",
+            borderStyle: "none",
+            backgroundColor: {
+                base: "semantic.action.danger.background",
+                _enabled: {
+                    _hover: "semantic.action.danger.hover",
+                    _active: "semantic.action.danger.hover",
+                },
+                _disabled: "semantic.action.disabled.background",
+            },
+        });
+        expect(root).not.toHaveProperty("boxShadow");
+        expect(root).not.toHaveProperty("opacity");
+        expect(root).not.toHaveProperty("borderColor");
+    });
+
     test("secondary is a raised surface with a functional boundary", () => {
         const root = buttonRecipe.variants?.["tone"]?.["secondary"]?.["root"];
 
@@ -169,6 +193,7 @@ describe("button recipe", () => {
         primary: "semantic.action.primary.foreground",
         secondary: "semantic.action.secondary.foreground",
         ghost: "semantic.text.secondary",
+        destructive: "semantic.action.danger.foreground",
     } as const;
 
     test("paints both the label and the icons from the tone foreground", () => {

@@ -47,6 +47,19 @@ describe("button icon composition", () => {
         expect(none).not.toContain("button__suffixIcon");
     });
 
+    test("maps the destructive tone onto the danger action role", () => {
+        const markup = renderToStaticMarkup(
+            <Button tone="destructive" prefixIcon="triangle-alert" suffixIcon="arrow-right">
+                Delete
+            </Button>,
+        );
+
+        expect(markup).toContain("button__root--tone_destructive");
+        expect(markup).toContain("button__label--tone_destructive");
+        expect(markup).toContain("button__prefixIcon--tone_destructive");
+        expect(markup).toContain("button__suffixIcon--tone_destructive");
+    });
+
     test("passes native button attributes through", () => {
         const markup = renderToStaticMarkup(
             <Button type="submit" disabled aria-label="Continue" prefixIcon="check" />,

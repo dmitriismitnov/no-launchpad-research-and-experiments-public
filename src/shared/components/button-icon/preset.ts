@@ -107,6 +107,29 @@ export const buttonIconRecipe = defineSlotRecipe({
                     },
                 },
             },
+
+            // Pen `Icon Button` (L72UAx) destructive (`LVKWA`): the same danger
+            // role as the Button, so the two controls never diverge.
+            destructive: {
+                root: {
+                    borderWidth: "none",
+                    borderStyle: "none",
+                    backgroundColor: {
+                        base: "semantic.action.danger.background",
+                        _enabled: {
+                            _hover: "semantic.action.danger.hover",
+                            _active: "semantic.action.danger.hover",
+                        },
+                        _disabled: "semantic.action.disabled.background",
+                    },
+                },
+                icon: {
+                    color: {
+                        base: "semantic.action.danger.foreground",
+                        _disabled: "semantic.action.disabled.foreground",
+                    },
+                },
+            },
         },
 
         // The square matches the height of the same-sized Button, so the two

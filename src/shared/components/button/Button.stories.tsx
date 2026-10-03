@@ -52,7 +52,7 @@ const ThemeShell = ({ theme, children, }: { theme: "light" | "dark"; children: R
     </div>
 );
 
-const tones = [ "primary", "secondary", "ghost", ] as const;
+const tones = [ "primary", "secondary", "ghost", "destructive", ] as const;
 
 // Storybook-only state metadata. Uses data attributes so interaction states are
 // deterministic and independent of pointer timing.
@@ -93,7 +93,7 @@ const meta = {
     argTypes: {
         tone: {
             control: { type: "select", },
-            options: [ "primary", "secondary", "ghost", ],
+            options: [ "primary", "secondary", "ghost", "destructive", ],
         },
         size: {
             control: { type: "select", },
@@ -200,6 +200,10 @@ const foregroundVariable = (tone: typeof tones[number]): string => {
         return "--colors-semantic-action-secondary-foreground";
     }
 
+    if ( tone === "destructive" ) {
+        return "--colors-semantic-action-danger-foreground";
+    }
+
     return "--colors-semantic-text-secondary";
 };
 
@@ -246,6 +250,64 @@ export const SlotColourRoles: Story = {
 export const DarkSlotColourRoles: Story = {
     render: () => <SlotRoleProbe theme="dark" />,
     play: assertSlotRoles,
+};
+
+const destructiveStates = [ "default", "hover", "active", "disabled", ] as const;
+
+// Storybook-only state metadata, mirroring the shared matrix. The `data-*`
+// attributes let the recipe's interaction selectors resolve deterministically.
+const destructiveStateProps: Record<typeof destructiveStates[number], ButtonProps> = {
+    default: { "data-testid": "destructive-default", } as ButtonProps,
+    hover: { "data-testid": "destructive-hover", "data-hover": "", } as ButtonProps,
+    active: { "data-testid": "destructive-active", "data-active": "", } as ButtonProps,
+    disabled: { "data-testid": "destructive-disabled", disabled: true, } as ButtonProps,
+};
+
+const DestructiveRow = () => (
+    <div className={row}>
+        {destructiveStates.map((state) => (
+            <Button
+                key={state}
+                tone="destructive"
+                prefixIcon="triangle-alert"
+                {...destructiveStateProps[state]}
+            >
+                Delete
+            </Button>
+        ))}
+    </div>
+);
+
+const assertDestructiveStates =
+    (disabledFill: string) => async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+        const canvas = within(canvasElement);
+        const background = (id: string) => getComputedStyle(canvas.getByTestId(id)).backgroundColor;
+
+        // Pen `IcuBw` destructive (state contract `xw0yy`): red.600 at rest and
+        // loading, red.700 on hover and active, in both themes.
+        await expect(background("destructive-default")).toBe("rgb(220, 38, 38)");
+        await expect(background("destructive-hover")).toBe("rgb(185, 28, 28)");
+        await expect(background("destructive-active")).toBe("rgb(185, 28, 28)");
+        // Disabled falls back to the shared disabled role, resolved per theme.
+        await expect(background("destructive-disabled")).toBe(disabledFill);
+    };
+
+export const DestructiveStates: Story = {
+    render: () => (
+        <ThemeShell theme="light">
+            <DestructiveRow />
+        </ThemeShell>
+    ),
+    play: assertDestructiveStates("rgb(241, 245, 249)"),
+};
+
+export const DarkDestructiveStates: Story = {
+    render: () => (
+        <ThemeShell theme="dark">
+            <DestructiveRow />
+        </ThemeShell>
+    ),
+    play: assertDestructiveStates("rgb(30, 41, 59)"),
 };
 
 const RefProbe = () => {

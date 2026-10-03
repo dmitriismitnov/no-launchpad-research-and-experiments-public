@@ -47,6 +47,7 @@ describe("buttonIcon recipe", () => {
             "primary",
             "secondary",
             "ghost",
+            "destructive",
         ]);
         expect(Object.keys(buttonIconRecipe.variants?.["size"] ?? {})).toEqual([ "sm", "md", ]);
     });
@@ -86,6 +87,29 @@ describe("buttonIcon recipe", () => {
         });
         expect(primary).not.toHaveProperty("boxShadow");
         expect(primary).not.toHaveProperty("opacity");
+    });
+
+    test("matches the Button destructive action contract", () => {
+        // Pen `Icon Button` (L72UAx) destructive (specimen `LVKWA`): red.600
+        // fill with a white glyph, mirroring the Button's danger role in both
+        // themes. Disabled falls back to the shared disabled role.
+        const root = buttonIconRecipe.variants?.["tone"]?.["destructive"]?.["root"];
+
+        expect(root).toMatchObject({
+            borderWidth: "none",
+            borderStyle: "none",
+            backgroundColor: {
+                base: "semantic.action.danger.background",
+                _enabled: {
+                    _hover: "semantic.action.danger.hover",
+                    _active: "semantic.action.danger.hover",
+                },
+                _disabled: "semantic.action.disabled.background",
+            },
+        });
+        expect(root).not.toHaveProperty("boxShadow");
+        expect(root).not.toHaveProperty("opacity");
+        expect(root).not.toHaveProperty("borderColor");
     });
 
     test("secondary is a raised surface with a functional boundary", () => {
@@ -137,6 +161,7 @@ describe("buttonIcon recipe", () => {
         primary: "semantic.action.primary.foreground",
         secondary: "semantic.action.secondary.foreground",
         ghost: "semantic.text.secondary",
+        destructive: "semantic.action.danger.foreground",
     } as const;
 
     test("paints the glyph from the tone foreground", () => {

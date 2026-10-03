@@ -10,7 +10,8 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  *
  * The action roles are Pen's: `primary` is the green action fill, `secondary`
  * is a raised surface with a functional boundary, `ghost` is transparent with a
- * hover surface. Feedback is a colour swap, never an opacity fade or a shadow.
+ * hover surface, and `destructive` is the danger-filled irreversible action.
+ * Feedback is a colour swap, never an opacity fade or a shadow.
  * The label and both icon slots paint from one foreground per tone.
  */
 export const buttonRecipe = defineSlotRecipe({
@@ -166,6 +167,43 @@ export const buttonRecipe = defineSlotRecipe({
                             _hover: "semantic.action.ghost.foreground",
                             _active: "semantic.text.secondary",
                         },
+                        _disabled: "semantic.action.disabled.foreground",
+                    },
+                },
+            },
+
+            // Pen `IcuBw` destructive (state contract `xw0yy`): red.600 resting
+            // and loading, red.700 hover and active, white foreground. Disabled
+            // falls back to the shared disabled role. Filled, so no boundary,
+            // and feedback is colour-only (no shadow or opacity).
+            destructive: {
+                root: {
+                    borderWidth: "none",
+                    borderStyle: "none",
+                    backgroundColor: {
+                        base: "semantic.action.danger.background",
+                        _enabled: {
+                            _hover: "semantic.action.danger.hover",
+                            _active: "semantic.action.danger.hover",
+                        },
+                        _disabled: "semantic.action.disabled.background",
+                    },
+                },
+                label: {
+                    color: {
+                        base: "semantic.action.danger.foreground",
+                        _disabled: "semantic.action.disabled.foreground",
+                    },
+                },
+                prefixIcon: {
+                    color: {
+                        base: "semantic.action.danger.foreground",
+                        _disabled: "semantic.action.disabled.foreground",
+                    },
+                },
+                suffixIcon: {
+                    color: {
+                        base: "semantic.action.danger.foreground",
                         _disabled: "semantic.action.disabled.foreground",
                     },
                 },

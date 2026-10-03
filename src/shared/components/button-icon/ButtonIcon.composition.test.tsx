@@ -46,6 +46,15 @@ describe("buttonIcon composition", () => {
         expect(small).not.toContain("buttonIcon__icon--size_md");
     });
 
+    test("maps the destructive tone onto the danger action role", () => {
+        const markup = renderToStaticMarkup(
+            <ButtonIcon tone="destructive" icon="triangle-alert" label="Delete" />,
+        );
+
+        expect(markup).toContain("buttonIcon__root--tone_destructive");
+        expect(markup).toContain("buttonIcon__icon--tone_destructive");
+    });
+
     test("passes native button attributes through", () => {
         const markup = renderToStaticMarkup(
             <ButtonIcon type="submit" disabled icon="check" label="Continue" />,
