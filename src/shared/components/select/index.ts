@@ -1,3 +1,3 @@
 export { selectPreset, selectRecipe, } from "./preset";
 export { Select, } from "./select";
-export type { SelectOption, SelectProps, } from "./select";
+export type { SelectGroup, SelectOption, SelectProps, } from "./select";

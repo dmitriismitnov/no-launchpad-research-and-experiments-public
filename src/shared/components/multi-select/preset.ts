@@ -2,7 +2,8 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
  * Multi Select visual projection. Slots: root / label / control / placeholder /
- * count / toggle / listbox / option / optionLabel / check / hint / error.
+ * count / toggle / popup / search / searchInput / listbox / option / optionLabel /
+ * check / status / hint / error.
  *
  * A trigger that shows the current selection as removable chips and opens an
  * inline `role="listbox"` of option rows. Chips reuse the public `Tag`
@@ -14,6 +15,7 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * - surface/selected -> brand.50.background (exact)
  * - surface/hover -> common.100.background (light exact; dark one step)
  * - surface/overlay -> common.50.background (white near-exact; dark one step)
+ * - surface/sunken -> common.100.background
  * - border/strong -> common.50.border.strong (light exact; dark one step)
  * - border/subtle -> common.200.divider (nearest structural boundary)
  * - text/primary -> common.50.text (exact)
@@ -27,8 +29,8 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * Approximations: Pen's trigger pads 6px / 10px (`x3` / `x5`) with a 6px (`x3`)
  * gap and a 300px width; the port keeps the padding/gap and fills the width.
  * Pen's overflow counter reads the mono face; the foundation ships only `body`,
- * so the counter uses `body` + `xs`. The search row inside Pen's popup is out of
- * scope; the listbox is a plain multi-select list.
+ * so the counter uses `body` + `xs`. Pen's search row carries a magnifier glyph
+ * that the icon set does not ship, so the row is text-only.
  */
 export const multiSelectRecipe = defineSlotRecipe({
     className: "multiSelect",
@@ -39,10 +41,14 @@ export const multiSelectRecipe = defineSlotRecipe({
         "placeholder",
         "count",
         "toggle",
+        "popup",
+        "search",
+        "searchInput",
         "listbox",
         "option",
         "optionLabel",
         "check",
+        "status",
         "hint",
         "error",
     ],
@@ -67,6 +73,7 @@ export const multiSelectRecipe = defineSlotRecipe({
         },
 
         control: {
+            position: "relative",
             display: "flex",
             flexWrap: "wrap",
             alignItems: "center",
@@ -123,16 +130,12 @@ export const multiSelectRecipe = defineSlotRecipe({
             outlineColor: { _focusVisible: "semantic.brand.500.background", },
         },
 
-        listbox: {
+        popup: {
             position: "absolute",
             zIndex: "20",
             top: "calc(100% + {spacing.x2})",
             left: "0",
-            display: "flex",
-            flexDirection: "column",
-            gap: "x1",
             width: "100%",
-            minWidth: "max-content",
             padding: "x3",
             borderRadius: "md",
             borderWidth: "thin",
@@ -140,6 +143,40 @@ export const multiSelectRecipe = defineSlotRecipe({
             borderColor: "semantic.common.200.divider",
             backgroundColor: "semantic.common.50.background",
             boxShadow: "0 10px 28px {colors.semantic.shadow.500}",
+        },
+
+        search: {
+            display: "flex",
+            alignItems: "center",
+            gap: "x4",
+            marginBottom: "x2",
+            paddingBlock: "x3",
+            paddingInline: "x5",
+            borderRadius: "sm",
+            backgroundColor: "semantic.common.100.background",
+        },
+
+        searchInput: {
+            flex: "1",
+            minWidth: "0",
+            borderWidth: "none",
+            borderStyle: "none",
+            backgroundColor: "transparent",
+            color: "semantic.common.50.text",
+            fontFamily: "body",
+            fontSize: "sm",
+            fontWeight: "regular",
+            lineHeight: "normal",
+            outlineStyle: "none",
+            "&::placeholder": {
+                color: "semantic.common.500.background",
+            },
+        },
+
+        listbox: {
+            display: "flex",
+            flexDirection: "column",
+            gap: "x1",
         },
 
         option: {
@@ -163,6 +200,10 @@ export const multiSelectRecipe = defineSlotRecipe({
             _enabled: {
                 _hover: { backgroundColor: "semantic.common.100.background", },
             },
+            "&[data-max-reached='true']": {
+                cursor: "not-allowed",
+                opacity: 0.5,
+            },
         },
 
         optionLabel: {
@@ -178,6 +219,19 @@ export const multiSelectRecipe = defineSlotRecipe({
             flexShrink: "0",
             color: "semantic.brand.700.background",
             opacity: "0",
+        },
+
+        // The selected count is announced, never painted.
+        status: {
+            position: "absolute",
+            width: "1px",
+            height: "1px",
+            padding: "0",
+            margin: "-1px",
+            overflow: "hidden",
+            clip: "rect(0, 0, 0, 0)",
+            whiteSpace: "nowrap",
+            borderWidth: "0",
         },
 
         hint: {

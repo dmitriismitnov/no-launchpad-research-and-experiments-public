@@ -19,6 +19,11 @@ export type MultiSelectOption = {
 /**
  * Публичные пропсы Multi Select. Значение — массив выбранных значений:
  * контролируемое (`value` + `onChange`) или неконтролируемое (`defaultValue`).
+ *
+ * `maxSelected` ограничивает добавление новых значений: при достижении лимита
+ * новые варианты не выбираются, но уже выбранные остаются удаляемыми.
+ * `searchable` показывает поле ввода в popup и отдаёт текст наружу через
+ * `onQueryChange`; компонент никогда не фильтрует варианты сам.
  */
 export type MultiSelectProps = Omit<ComponentProps<"div">, "onChange" | "defaultValue"> & {
     /** Опции списка в порядке отображения. */
@@ -43,6 +48,16 @@ export type MultiSelectProps = Omit<ComponentProps<"div">, "onChange" | "default
     disabled?: boolean;
     /** Сколько чипов показывать до счётчика переполнения. */
     maxVisible?: number;
+    /** Максимум выбранных значений; блокирует только новые добавления. */
+    maxSelected?: number;
+    /** Показывает поле поиска в popup; фильтрация не выполняется компонентом. */
+    searchable?: boolean;
+    /** Контролируемый текст запроса; передавайте с `onQueryChange`. */
+    query?: string;
+    /** Начальный текст запроса, когда контрол неконтролируемый. */
+    defaultQuery?: string;
+    /** Вызывается с новым текстом запроса. */
+    onQueryChange?: (query: string) => void;
     /** Доступное имя контрола, когда нет видимого лейбла. */
     "aria-label"?: string;
 };
@@ -50,7 +65,8 @@ export type MultiSelectProps = Omit<ComponentProps<"div">, "onChange" | "default
 /**
  * Множественный выбор с чипами. Чипы — публичный `Tag`; список — встроенный
  * `role="listbox"` с `aria-multiselectable`, без порталов. Открытие и закрытие
- * управляются кнопкой-шевроном; `Escape` и клик вне закрывают список.
+ * управляются кнопкой-шевроном; `Escape` и клик вне закрывают список. Выбор
+ * опции не закрывает popup; удаление чипа не открывает его.
  */
 export const MultiSelect = ({
     options,
@@ -64,6 +80,11 @@ export const MultiSelect = ({
     placeholder,
     disabled = false,
     maxVisible = 3,
+    maxSelected,
+    searchable = false,
+    query,
+    defaultQuery,
+    onQueryChange,
     className,
     id,
     ...props
@@ -76,10 +97,14 @@ export const MultiSelect = ({
         ...divProps
     } = props;
     const [ uncontrolledValue, setUncontrolledValue, ] = useState<string[]>(() => [ ...( defaultValue ?? [] ), ]);
+    const [ uncontrolledQuery, setUncontrolledQuery, ] = useState(defaultQuery ?? "");
     const [ isOpen, setIsOpen, ] = useState(false);
     const rootRef = useRef<HTMLDivElement>(null);
+    const searchRef = useRef<HTMLInputElement>(null);
     const isControlled = value !== undefined;
+    const isQueryControlled = query !== undefined;
     const selected = isControlled ? [ ...value, ] : uncontrolledValue;
+    const currentQuery = isQueryControlled ? query : uncontrolledQuery;
     const generatedId = useId();
     const baseId = id ?? generatedId;
     const labelId = `${baseId}-label`;
@@ -96,6 +121,10 @@ export const MultiSelect = ({
     );
     const visibleOptions = maxVisible >= 0 ? selectedOptions.slice(0, maxVisible) : selectedOptions;
     const hiddenCount = selectedOptions.length - visibleOptions.length;
+    const atCap = maxSelected !== undefined && selected.length >= maxSelected;
+    const countAnnouncement = maxSelected !== undefined
+        ? `${selected.length} of ${maxSelected} selected`
+        : `${selected.length} selected`;
 
     const commit = (next: string[]) => {
         if ( !isControlled ) {
@@ -111,11 +140,26 @@ export const MultiSelect = ({
         }
 
         const isSelected = selected.includes(optionValue);
+
+        if ( !isSelected && atCap ) {
+            return;
+        }
+
         commit(
             isSelected
                 ? selected.filter((entry) => entry !== optionValue)
                 : [ ...selected, optionValue, ],
         );
+    };
+
+    const handleQueryChange: NonNullable<ComponentProps<"input">["onChange"]> = (event) => {
+        const next = event.target.value;
+
+        if ( !isQueryControlled ) {
+            setUncontrolledQuery(next);
+        }
+
+        onQueryChange?.(next);
     };
 
     useEffect(() => {
@@ -134,10 +178,18 @@ export const MultiSelect = ({
         return () => document.removeEventListener("pointerdown", handlePointerDown);
     }, [ isOpen, ]);
 
+    // The search field takes focus when the popup opens so typing reaches it.
+    useEffect(() => {
+        if ( isOpen && searchable ) {
+            searchRef.current?.focus();
+        }
+    }, [ isOpen, searchable, ]);
+
     return (
         <div
             {...divProps}
             ref={rootRef}
+            id={baseId}
             className={cx(styles.root, className)}
             onKeyDown={(event) => {
                 onKeyDown?.(event);
@@ -183,41 +235,60 @@ export const MultiSelect = ({
                 >
                     <Icon name="chevron-down" size="sm" />
                 </button>
-            </div>
-            {isOpen && (
-                <div
-                    id={listboxId}
-                    role="listbox"
-                    aria-multiselectable="true"
-                    aria-labelledby={hasText(label) ? labelId : undefined}
-                    aria-label={hasText(label) ? undefined : ariaLabel}
-                    className={styles.listbox}
-                >
-                    {options.map((option) => {
-                        const isSelected = selected.includes(option.value);
-                        const optionStyles = multiSelect({
-                            invalid,
-                            disabled,
-                            selected: isSelected,
-                        });
+                <div className={styles.popup} hidden={!isOpen}>
+                    {searchable && (
+                        <div className={styles.search}>
+                            <input
+                                ref={searchRef}
+                                type="text"
+                                className={styles.searchInput}
+                                value={currentQuery}
+                                placeholder="Search…"
+                                aria-label={hasText(label) ? `${label} search` : "Search"}
+                                onChange={handleQueryChange}
+                            />
+                        </div>
+                    )}
+                    <div
+                        id={listboxId}
+                        role="listbox"
+                        aria-multiselectable="true"
+                        aria-labelledby={hasText(label) ? labelId : undefined}
+                        aria-label={hasText(label) ? undefined : ariaLabel}
+                        className={styles.listbox}
+                    >
+                        {options.map((option) => {
+                            const isSelected = selected.includes(option.value);
+                            const isBlocked = !isSelected && atCap;
+                            const optionStyles = multiSelect({
+                                invalid,
+                                disabled,
+                                selected: isSelected,
+                            });
 
-                        return (
-                            <button
-                                key={option.value}
-                                type="button"
-                                role="option"
-                                aria-selected={isSelected}
-                                className={optionStyles.option}
-                                disabled={disabled || option.disabled === true}
-                                onClick={() => toggleOption(option.value)}
-                            >
-                                <span className={optionStyles.optionLabel}>{option.label}</span>
-                                <Icon name="check" size="sm" className={optionStyles.check} />
-                            </button>
-                        );
-                    })}
+                            return (
+                                <button
+                                    key={option.value}
+                                    type="button"
+                                    role="option"
+                                    aria-selected={isSelected}
+                                    aria-disabled={isBlocked || undefined}
+                                    data-max-reached={isBlocked ? "true" : undefined}
+                                    className={optionStyles.option}
+                                    disabled={disabled || option.disabled === true}
+                                    onClick={() => toggleOption(option.value)}
+                                >
+                                    <span className={optionStyles.optionLabel}>{option.label}</span>
+                                    <Icon name="check" size="sm" className={optionStyles.check} />
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
-            )}
+            </div>
+            <span className={styles.status} role="status" aria-live="polite">
+                {countAnnouncement}
+            </span>
             {showHint && (
                 <p className={styles.hint} id={hintId}>
                     {hint}

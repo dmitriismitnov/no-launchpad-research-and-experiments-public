@@ -864,3 +864,132 @@ Counts moved from the B3 cycle-1 baseline (`3fa6f14`): unit `726 → 726` (uncha
 | Canonical `vitest/browser` import, CDP keyboard test preserved | **PASS** |
 | Disabled contrast | `DISABLED / REVIEW` (both themes) |
 | **B3 correction final status** | **PASS** |
+
+## B4 — Select and MultiSelect, with Option/Popup retained internally (cycle 1/2)
+
+**Date:** 2026-10-04\
+**Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` — SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes (unchanged; re-verified after the read-only queries).\
+**Base commit:** `fc1acbb` (`fix(shared): correct Slider disabled pointer state and browser test import`).\
+**Method:** Pencil MCP `execute` read-only `Get` visitor (`get_app_state` confirmed `ex_2.pen` as the active canvas editor; no `Insert`/`Update`/`Replace`/`Move`/`Delete`/`SetVariables`/`Copy`), focused Bun composition tests and Vitest + Playwright Chromium story tests, plus `mise run gen` / `check` / `check:deps` / `build`. The browser RED was proven test-first by running the new stories against the pre-change implementation.\
+**Owner paths:** `src/shared/components/{select,multi-select}/`.
+
+### Pen enumeration gate (B4)
+
+| Owner | Pen master → documentation frame | Documented public variant / state | Disposition |
+| --- | --- | --- | --- |
+| Select | `tOLtR` → `vMd62` | trigger `root · trigger · value or placeholder · chevron`; public variants **`closed · open, searchable, with prefix, invalid, disabled`**; option states `default · hover · selected · disabled`; grouped options | **PASS** — combobox trigger + inline popup, `searchable`, `prefixIcon`, flat + additive grouped options, invalid/disabled |
+| Select | `vMd62` content rules | "The trigger shows the current selection, never a verb." · **"The popup opens below and flips when space is short."** · **"Option rows keep the same width as the trigger."** | **PASS** — trigger shows value/placeholder; `data-placement="top"` flip; popup `width: 100%` matches the trigger |
+| Select | `vMd62` accessibility | **"Combobox semantics with an expanded state."** · **"Arrow keys move through options; Enter selects; Escape closes."** · **"The selected option is announced."** | **PASS** — `role="combobox"` + `aria-expanded` + `aria-activedescendant`; arrows skip disabled; Enter selects; Escape closes; `role="status"` selected announcement |
+| Option (aggregate) | `GjzX0` (consumed by `aXD61` / `tOLtR`) | label + trailing check, `fill` `surface/hover` / `surface/selected` | **PASS** — remains private anatomy inside `select.tsx`; no public `Option` export |
+| Select Popup (aggregate) | `aXD61` (consumed by `tOLtR`) | `surface/overlay` + `border/subtle` + `shadow/500`; `SearchRow` + option rows | **PASS** — inline popup with optional search row; no public `SelectPopup` export, no portal |
+| Multi Select | `f985P` → `jZrkt` | chips + overflow counter trigger; public variants **`closed · open, with search, max selection, invalid, disabled`**; item `hover · selected`; chip removal | **PASS** — chips, overflow counter, `searchable`, `maxSelected`, invalid/disabled, item states |
+| Multi Select | `jZrkt` content rules | **"Chips wrap in the trigger and collapse into a counter when space runs out."** · **"Removing a chip never opens the popup."** · **"The popup stays open while several options are picked."** | **PASS** — `Tag` chips + `+N` counter; chip removal does not open the popup; selecting an option keeps it open |
+| Multi Select | `jZrkt` accessibility | **"Each chip's remove control needs its own accessible label."** · **"Announce how many options are selected."** · **"Keyboard selection toggles without closing the popup."** | **PASS** — `Remove {label}` on every chip; `role="status"` count announcement; option toggles leave the popup open |
+
+Pen facts used verbatim: `vMd62` "Public variants: closed · open, searchable, with prefix, invalid, disabled"; "The popup opens below and flips when space is short."; "Option rows keep the same width as the trigger."; "Combobox semantics with an expanded state."; "Arrow keys move through options; Enter selects; Escape closes."; "The selected option is announced." · `jZrkt` "Public variants: closed · open, with search, max selection, invalid, disabled"; "Removing a chip never opens the popup."; "The popup stays open while several options are picked."; "Each chip's remove control needs its own accessible label."; "Announce how many options are selected."
+
+### User-approved axes (this cycle)
+
+- **Approved:** `Select` `prefixIcon?: IconName` (following the B2 Input icon-slot pattern); additive `groups?: ReadonlyArray<{ label: string; options: SelectOption[] }>` while preserving the flat `options`; `Select`/`MultiSelect` `searchable?: boolean` with `query?` / `defaultQuery?` / `onQueryChange?` controlled or uncontrolled query UI and **no local or remote filtering**; `MultiSelect` `maxSelected?: number` blocks only new additions at the cap while existing selections stay removable, with a selected-count announcement.
+- **B4 planner handoff implemented:** the native-only `<select>` was replaced by the Pen-documented combobox/popup; MultiSelect keeps its chips/listbox projection.
+- **Retained for compatibility:** `SelectOption` / `MultiSelectOption`, `invalid`/`error`/`hint`, `disabled`, `maxVisible`, and the `Select`/`MultiSelect` barrel exports. No `Option` or `SelectPopup` export was added.
+
+### Approved public surface and behaviour
+
+- **Select** — the native `<select>` became a combobox **button** (`role="combobox"`, `aria-haspopup="listbox"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`) plus an inline `role="listbox"` popup (no portal). Flat `options` render first, then each `groups` entry as a labelled `role="group"`. `prefixIcon` is a decorative glyph. Selection is controlled (`value` + `onChange`) or uncontrolled (`defaultValue`); a controlled value is never mutated (the callback fires, the display stays). Keyboard: ArrowDown/ArrowUp/Home/End move the active option and **skip disabled options**; Enter/Space select the active option; Escape closes and returns focus to the trigger; the popup flips above via `data-placement="top"` and keeps the trigger width. A visually-hidden `role="status"` region announces `"{label} selected"`.
+- **Select searchable** — a search row with an `aria-label`led textbox appears in the popup; `query` is controlled or `defaultQuery` uncontrolled, and `onQueryChange` fires on every input. The component never filters: the option list is always the full supplied set.
+- **MultiSelect** — `searchable` adds the same query UI to the popup. `maxSelected` blocks only new additions (`atCap` short-circuits `toggleOption` for unselected values); selected values remain removable and become addable again below the cap; at-cap unselected options expose `aria-disabled="true"` and `data-max-reached="true"`. A `role="status"` region announces `"{n} selected"` or `"{n} of {max} selected"`. The popup stays open across toggles and chip removal never opens it.
+- **No new policy was invented:** no portal, virtualisation, local/remote filtering, persistence, networking or validation rules; disabled contrast remains `DISABLED / REVIEW`.
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun): `bun test src/shared/components/select/Select.composition.test.tsx src/shared/components/multi-select/MultiSelect.composition.test.tsx`
+
+| Field | Value |
+| --- | --- |
+| RED exit | `1` |
+| RED result | `16 pass` / `14 fail` (`54 expect() calls`), `30 tests` across `2 files` |
+| RED failures | Select: combobox trigger, controlled value display, uncontrolled `defaultValue` display, grouped options, prefix icon, search field, selected-status region, disabled trigger class, className-on-trigger, consumer-id label wiring; MultiSelect: selected-count status, `{n} of {max} selected`, searchable query field, no-search-when-closed, max-reached option marking |
+| GREEN exit | `0` |
+| GREEN result | `30 pass` / `0 fail` (`87 expect() calls`) |
+
+Focused browser stories (Vitest + Playwright Chromium): `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/select/Select.stories.tsx src/shared/components/multi-select/MultiSelect.stories.tsx` (new stories run first against the unchanged native-select/chip implementation).
+
+| Field | Value |
+| --- | --- |
+| RED exit | `1` |
+| RED result | `2 failed` files, `26 failed \| 15 passed (41)` |
+| RED failures (Select) | `Reference`, `Filled`, `Open Popup`, `Dark Open Popup`, `Grouped Options`, `Dark Grouped Options`, `Prefix Icon`, `Dark Prefix Icon`, `Keyboard Skips Disabled`, `Keyboard Enter Selects`, `Escape Closes`, `Uncontrolled Selection`, `Controlled Selection`, `Popup Matches Trigger Width`, `Popup Flips Top`, `Dark Popup Flips Top`, `Searchable Query`, `Dark Searchable Query`, `Controlled Query` |
+| RED failures (MultiSelect) | `Stay Open Toggles`, `Selected Count Announcement`, `Dark Selected Count Announcement`, `Max Selected Blocks Additions`, `Searchable Query`, `Dark Searchable Query`, `Controlled Query` |
+| GREEN exit | `0` |
+| GREEN result | `2 passed` files, `41 passed (41)` |
+
+The eight stories that passed on the first RED run (`MultiSelect` `Reference`/`Interactive`/`Remove Chip`/`Invalid`/`Disabled`/`Light`/`Dark`/`Dark Stay Open Toggles`, plus the Select theme/validation stories) are retained regression coverage of behaviour that already existed; the failures above are the newly documented Pen behaviour.
+
+### Both-theme / state coverage (browser)
+
+| Contract | Light story | Dark story |
+| --- | --- | --- |
+| Select trigger surface | `Light` → `rgb(248, 250, 252)` | `Dark` → `rgb(2, 6, 23)` |
+| Select popup surface, option states, grouped options | `Open Popup` / `Grouped Options` | `Dark Open Popup` / `Dark Grouped Options` |
+| Select prefix icon (decorative) | `Prefix Icon` | `Dark Prefix Icon` |
+| Select keyboard skip/Enter/Escape | `Keyboard Skips Disabled`, `Keyboard Enter Selects`, `Escape Closes` | — (theme-independent logic) |
+| Select controlled vs uncontrolled selection | `Controlled Selection`, `Uncontrolled Selection` | — (theme-independent logic) |
+| Select popup width + short-space flip | `Popup Matches Trigger Width`, `Popup Flips Top` | `Dark Popup Flips Top` |
+| Select searchable query, no filtering | `Searchable Query` | `Dark Searchable Query` |
+| Select controlled query | `Controlled Query` (`query` stays `""`, callback gets `abc`) | — |
+| MultiSelect control surface | `Light` → `rgb(248, 250, 252)` | `Dark` → `rgb(2, 6, 23)` |
+| MultiSelect stay-open toggle + chip removal/no-open | `Stay Open Toggles`, `Remove Does Not Open` | `Dark Stay Open Toggles` |
+| MultiSelect selected-count / max-selection announcement | `Selected Count Announcement`, `Max Selected Blocks Additions` | `Dark Selected Count Announcement` |
+| MultiSelect searchable query, no filtering | `Searchable Query` | `Dark Searchable Query` |
+| MultiSelect controlled query | `Controlled Query` | — |
+| Disabled contrast (both owners) | existing `Disabled` stories (unchanged) | `DISABLED / REVIEW` |
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| focused composition RED | `1` | `16 pass` / `14 fail` |
+| focused composition GREEN | `0` | `30 pass` / `0 fail` (`87 expect() calls`) |
+| focused browser RED | `1` | `2 failed` files, `26 failed \| 15 passed (41)` |
+| focused browser GREEN | `0` | `2 passed` files, `41 passed (41)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `738 pass / 0 fail` (90 files, `3948 expect() calls`); browser `510 passed` (73 files) |
+| `mise run check:deps` | `0` | Knip, no findings |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-_kX2xiic.css 219.62 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the B3 shipped baseline (`fc1acbb`): unit `726 → 738` (`+12`), browser `484 → 510` (`+26`).
+
+### Changed paths
+
+`src/shared/components/select/{select.tsx,preset.ts,index.ts,Select.composition.test.tsx,Select.stories.tsx}`, `src/shared/components/multi-select/{multi-select.tsx,preset.ts,MultiSelect.composition.test.tsx,MultiSelect.stories.tsx}`, this evidence. No `panda.config.ts`, token, icon, dependency, Pen or other component file was changed; generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited).
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| Select combobox semantics + inline popup (no portal) | **PASS** |
+| Select arrow navigation skips disabled; Enter selects; Escape closes | **PASS** |
+| Select selected-option announcement (`role="status"`) | **PASS** |
+| Select popup matches trigger width and flips on short space | **PASS** |
+| Select flat `options` + additive `groups` | **PASS** |
+| Select `prefixIcon` decorative slot (approved) | **PASS** |
+| Select controlled/uncontrolled selection | **PASS** |
+| Select `searchable` query UI + callback, no filtering | **PASS** |
+| `GjzX0` Option / `aXD61` Select Popup owned privately, no export | **PASS** |
+| MultiSelect stay-open option toggles | **PASS** |
+| MultiSelect chip named removal, removal does not open the popup | **PASS** |
+| MultiSelect selected-count announcement | **PASS** |
+| MultiSelect `searchable` controlled/uncontrolled query, no filtering | **PASS** |
+| MultiSelect `maxSelected` blocks additions but permits removal | **PASS** |
+| Disabled contrast (both owners) | `DISABLED / REVIEW` (both themes) |
+| **B4 final status** | **PASS** — every approved axis and the planner handoff are implemented and evidenced; no unresolved `FAIL` / `BLOCKED` / Critical / Important finding |
+
+### Remaining concerns
+
+- **INFO — search glyph.** Pen `aXD61` `SearchRow` carries a magnifier glyph, but the icon set ships no `search` icon and icons are out of scope for B4, so the search row is text-only (`Search…` placeholder + accessible name). Adding the glyph is a separate icon-pipeline change.
+- **INFO — popup lifetime.** The popup is always mounted and `hidden` while closed (no portal), mirroring the repo's in-place overlay pattern; role queries do not see it until it is expanded.
+- **INFO — flip heuristic.** Placement is measured from the trigger's viewport rect against an estimated popup height (row height × count, capped); it is a documented approximation of "flips when space is short", not an overlay policy engine.
+- **INFO — MultiSelect at-cap surface.** At-cap unselected options are `aria-disabled`/`data-max-reached` and dimmed, but remain in the tab order so the blocked state is discoverable; no second disabled-cursor policy was added.
+- Disabled contrast remains `DISABLED / REVIEW` in both themes.

@@ -1,7 +1,8 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
+import { useState, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, userEvent, within, } from "storybook/test";
 
 import type { MultiSelectOption, MultiSelectProps, } from "./multi-select";
 import { MultiSelect, } from "./multi-select";
@@ -87,7 +88,7 @@ export const Reference: Story = {
         const canvas = within(canvasElement);
 
         await expect(canvas.getByRole("button", { name: "ТЕГИ options", })).toHaveAttribute("aria-expanded", "false");
-        await expect(canvas.getByText("foundation")).toBeTruthy();
+        await expect(canvas.getByRole("button", { name: "Remove foundation", })).toBeTruthy();
         await expect(canvas.getByText("+1")).toBeTruthy();
     },
 };
@@ -165,4 +166,187 @@ export const Dark: Story = {
     args: reference,
     render: renderIn("dark"),
     play: async (context) => assertThemeControl(context, "rgb(2, 6, 23)"),
+};
+
+const openList = async (
+    canvasElement: HTMLElement,
+): Promise<{ toggle: HTMLElement; listbox: HTMLElement; }> => {
+    const user = userEvent.setup();
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole("button", { name: "ТЕГИ options", });
+
+    await user.click(toggle);
+
+    return { toggle, listbox: canvas.getByRole("listbox"), };
+};
+
+export const StayOpenToggles: Story = {
+    args: { ...reference, defaultValue: [], placeholder: "Выберите теги", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const { toggle, listbox, } = await openList(canvasElement);
+        const option = within(listbox).getByRole("option", { name: "patterns", });
+
+        await user.click(option);
+
+        await expect(option).toHaveAttribute("aria-selected", "true");
+        await expect(toggle).toHaveAttribute("aria-expanded", "true");
+        await expect(canvas.getByRole("status")).toHaveTextContent("1 selected");
+    },
+};
+
+export const DarkStayOpenToggles: Story = {
+    args: { ...reference, defaultValue: [], placeholder: "Выберите теги", },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const { toggle, listbox, } = await openList(canvasElement);
+
+        await user.click(within(listbox).getByRole("option", { name: "patterns", }));
+
+        await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    },
+};
+
+export const RemoveDoesNotOpen: Story = {
+    args: { ...reference, defaultValue: [ "foundation", ], maxVisible: 3, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const toggle = canvas.getByRole("button", { name: "ТЕГИ options", });
+        const remove = canvas.getByRole("button", { name: "Remove foundation", });
+
+        await user.click(remove);
+
+        await expect(canvas.queryByRole("button", { name: "Remove foundation", })).toBeNull();
+        await expect(toggle).toHaveAttribute("aria-expanded", "false");
+        await expect(canvas.queryByRole("listbox")).toBeNull();
+    },
+};
+
+export const SelectedCountAnnouncement: Story = {
+    args: { ...reference, defaultValue: [ "foundation", ], maxVisible: 3, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const { listbox, } = await openList(canvasElement);
+
+        await expect(canvas.getByRole("status")).toHaveTextContent("1 selected");
+
+        await user.click(within(listbox).getByRole("option", { name: "semantic", }));
+
+        await expect(canvas.getByRole("status")).toHaveTextContent("2 selected");
+    },
+};
+
+export const DarkSelectedCountAnnouncement: Story = {
+    args: { ...reference, defaultValue: [ "foundation", ], maxVisible: 3, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(canvas.getByRole("status")).toHaveTextContent("1 selected");
+    },
+};
+
+export const MaxSelectedBlocksAdditions: Story = {
+    args: {
+        ...reference,
+        maxVisible: 3,
+        maxSelected: 2,
+        defaultValue: [ "foundation", "semantic", ],
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const { listbox, } = await openList(canvasElement);
+        const components = within(listbox).getByRole("option", { name: "components", });
+        const foundation = within(listbox).getByRole("option", { name: "foundation", });
+
+        await expect(components).toHaveAttribute("aria-disabled", "true");
+        await expect(canvas.getByRole("status")).toHaveTextContent("2 of 2 selected");
+
+        // A new addition is blocked at the cap.
+        await user.click(components);
+        await expect(components).toHaveAttribute("aria-selected", "false");
+        await expect(canvas.getByRole("status")).toHaveTextContent("2 of 2 selected");
+
+        // An existing selection stays removable.
+        await user.click(foundation);
+        await expect(foundation).toHaveAttribute("aria-selected", "false");
+        await expect(canvas.getByRole("status")).toHaveTextContent("1 of 2 selected");
+
+        // Once below the cap, the blocked option becomes addable.
+        await user.click(components);
+        await expect(components).toHaveAttribute("aria-selected", "true");
+        await expect(canvas.getByRole("status")).toHaveTextContent("2 of 2 selected");
+    },
+};
+
+export const SearchableQuery: Story = {
+    args: { ...reference, searchable: true, defaultQuery: "", defaultValue: [], },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const { listbox, } = await openList(canvasElement);
+        const search = canvas.getByRole("textbox", { name: "ТЕГИ search", });
+
+        await user.type(search, "zzz");
+
+        await expect(search).toHaveValue("zzz");
+        // No local filtering: every option is still rendered.
+        await expect(within(listbox).getAllByRole("option").length).toBe(options.length);
+    },
+};
+
+export const DarkSearchableQuery: Story = {
+    args: { ...reference, searchable: true, defaultQuery: "", defaultValue: [], },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const { listbox, } = await openList(canvasElement);
+        const search = canvas.getByRole("textbox", { name: "ТЕГИ search", });
+
+        await user.type(search, "abc");
+
+        await expect(search).toHaveValue("abc");
+        await expect(within(listbox).getAllByRole("option").length).toBe(options.length);
+    },
+};
+
+const ControlledQueryProbe = ({ theme, }: { theme: "light" | "dark"; }) => {
+    const [ last, setLast, ] = useState("");
+
+    return (
+        <ThemeShell theme={theme}>
+            <div className={frame}>
+                <MultiSelect label="ТЕГИ" searchable query="" options={options} onQueryChange={setLast} />
+                <p data-testid="last">{last}</p>
+            </div>
+        </ThemeShell>
+    );
+};
+
+export const ControlledQuery: Story = {
+    render: () => <ControlledQueryProbe theme="light" />,
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+
+        await user.click(canvas.getByRole("button", { name: "ТЕГИ options", }));
+
+        const search = canvas.getByRole("textbox", { name: "ТЕГИ search", });
+
+        await fireEvent.change(search, { target: { value: "abc", }, });
+
+        await expect(search).toHaveValue("");
+        await expect(canvas.getByTestId("last")).toHaveTextContent("abc");
+    },
 };

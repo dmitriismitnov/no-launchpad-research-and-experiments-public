@@ -118,4 +118,60 @@ describe("Multi Select composition", () => {
         expect(markup).not.toContain('size="sm"');
         expect(markup).not.toContain("injected");
     });
+
+    test("announces the selected count in a polite status region", () => {
+        const markup = renderToStaticMarkup(
+            <MultiSelect label="ТЕГИ" defaultValue={[ "foundation", "semantic", ]} options={options} />,
+        );
+
+        expect(markup).toContain("multiSelect__status");
+        expect(markup).toContain('role="status"');
+        expect(markup).toContain('aria-live="polite"');
+        expect(markup).toContain("2 selected");
+    });
+
+    test("announces the max selection count when maxSelected is set", () => {
+        const markup = renderToStaticMarkup(
+            <MultiSelect
+                label="ТЕГИ"
+                maxSelected={3}
+                defaultValue={[ "foundation", ]}
+                options={options}
+            />,
+        );
+
+        expect(markup).toContain("1 of 3 selected");
+    });
+
+    test("renders a search field reflecting the uncontrolled default query when searchable", () => {
+        const markup = renderToStaticMarkup(
+            <MultiSelect label="ТЕГИ" searchable defaultQuery="fo" options={options} />,
+        );
+
+        expect(markup).toContain("multiSelect__searchInput");
+        expect(markup).toContain('value="fo"');
+    });
+
+    test("renders no search field when not searchable", () => {
+        const markup = renderToStaticMarkup(<MultiSelect label="ТЕГИ" options={options} />);
+
+        expect(markup).not.toContain("multiSelect__searchInput");
+    });
+
+    test("marks unselected options as max reached at the cap but keeps selected options removable", () => {
+        const markup = renderToStaticMarkup(
+            <MultiSelect
+                label="ТЕГИ"
+                maxSelected={2}
+                defaultValue={[ "foundation", "semantic", ]}
+                options={options}
+            />,
+        );
+
+        expect(markup).toContain("multiSelect__option");
+        expect(markup).toContain('data-max-reached="true"');
+        // The two selected options stay selectable so they can be removed.
+        expect(markup).toContain('aria-selected="true"');
+        expect(markup).toContain('aria-label="Remove foundation"');
+    });
 });
