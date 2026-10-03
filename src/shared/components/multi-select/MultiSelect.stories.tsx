@@ -350,3 +350,104 @@ export const ControlledQuery: Story = {
         await expect(canvas.getByTestId("last")).toHaveTextContent("abc");
     },
 };
+
+// A multi-word query must not toggle any root option; the search field owns it.
+export const SearchableQueryAlphaBeta: Story = {
+    args: { ...reference, searchable: true, defaultQuery: "", defaultValue: [], },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const { toggle, listbox, } = await openList(canvasElement);
+        const search = canvas.getByRole("textbox", { name: "ТЕГИ search", });
+
+        await user.type(search, "alpha beta");
+
+        await expect(search).toHaveValue("alpha beta");
+        await expect(toggle).toHaveAttribute("aria-expanded", "true");
+        await expect(within(listbox).getAllByRole("option").length).toBe(options.length);
+        await expect(canvas.queryByRole("button", { name: "Remove foundation", })).toBeNull();
+    },
+};
+
+// Arrow keys and Enter stay in the text field and never toggle the root list.
+export const SearchableKeysDoNotSelect: Story = {
+    args: { ...reference, searchable: true, defaultQuery: "", defaultValue: [], },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const { toggle, listbox, } = await openList(canvasElement);
+        const search = canvas.getByRole("textbox", { name: "ТЕГИ search", });
+
+        await user.keyboard("{ArrowDown}");
+        await user.keyboard("{Enter}");
+
+        await expect(search).toHaveFocus();
+        await expect(toggle).toHaveAttribute("aria-expanded", "true");
+        await expect(within(listbox).queryAllByRole("option", { selected: true, }).length).toBe(0);
+    },
+};
+
+// Escape closes from the search field.
+export const SearchableEscapeCloses: Story = {
+    args: { ...reference, searchable: true, defaultQuery: "", defaultValue: [], },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const { toggle, } = await openList(canvasElement);
+
+        await user.keyboard("{Escape}");
+
+        await expect(toggle).toHaveAttribute("aria-expanded", "false");
+        await expect(canvas.queryByRole("listbox")).toBeNull();
+    },
+};
+
+// Both-theme computed surfaces for the invalid / disabled states.
+export const InvalidSurfaceLight: Story = {
+    args: { ...reference, invalid: true, error: "Выберите тег", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const control = canvasElement.querySelector(".multiSelect__control") as HTMLElement;
+
+        await expect(getComputedStyle(control).borderColor).toBe("rgb(220, 38, 38)");
+    },
+};
+
+export const InvalidSurfaceDark: Story = {
+    args: { ...reference, invalid: true, error: "Выберите тег", },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const control = canvasElement.querySelector(".multiSelect__control") as HTMLElement;
+
+        await expect(getComputedStyle(control).borderColor).toBe("rgb(248, 113, 113)");
+    },
+};
+
+export const DisabledSurfaceLight: Story = {
+    args: { ...reference, disabled: true, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const control = canvasElement.querySelector(".multiSelect__control") as HTMLElement;
+        const toggle = canvasElement.querySelector(".multiSelect__toggle") as HTMLElement;
+
+        await expect(getComputedStyle(control).backgroundColor).toBe("rgb(241, 245, 249)");
+        await expect(getComputedStyle(control).cursor).toBe("not-allowed");
+        await expect(getComputedStyle(toggle).color).toBe("rgb(148, 163, 184)");
+    },
+};
+
+export const DisabledSurfaceDark: Story = {
+    args: { ...reference, disabled: true, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const control = canvasElement.querySelector(".multiSelect__control") as HTMLElement;
+        const toggle = canvasElement.querySelector(".multiSelect__toggle") as HTMLElement;
+
+        await expect(getComputedStyle(control).backgroundColor).toBe("rgb(15, 23, 42)");
+        await expect(getComputedStyle(control).cursor).toBe("not-allowed");
+        await expect(getComputedStyle(toggle).color).toBe("rgb(71, 85, 105)");
+    },
+};

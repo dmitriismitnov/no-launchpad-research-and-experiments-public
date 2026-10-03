@@ -1,5 +1,5 @@
 import type { ComponentProps, KeyboardEvent, } from "react";
-import { useEffect, useId, useRef, useState, } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, } from "react";
 
 import { Icon, type IconName, } from "@shared/components/icon";
 import { cx, } from "@shared/styled-system/css";
@@ -71,9 +71,6 @@ export type SelectProps = Omit<ComponentProps<"div">, "onChange" | "defaultValue
 
 type Placement = "top" | "bottom";
 
-const ROW_HEIGHT = 36;
-const MAX_POPUP_HEIGHT = 288;
-
 /**
  * Combobox с одним значением. Триггер держит combobox-семантику
  * (`aria-expanded` / `aria-activedescendant`), popup — `role="listbox"` без
@@ -119,6 +116,7 @@ export const Select = ({
     const [ announcement, setAnnouncement, ] = useState("");
     const rootRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
+    const popupRef = useRef<HTMLDivElement>(null);
     const searchRef = useRef<HTMLInputElement>(null);
     const generatedId = useId();
     const baseId = id ?? generatedId;
@@ -159,27 +157,10 @@ export const Select = ({
         return indices.length === 0 ? -1 : ( indices[indices.length - 1] ?? -1 );
     };
 
-    const measurePlacement = (): Placement => {
-        const trigger = triggerRef.current;
-
-        if ( trigger === null ) {
-            return "bottom";
-        }
-
-        const rect = trigger.getBoundingClientRect();
-        const estimated = Math.min(ordered.length * ROW_HEIGHT + 12, MAX_POPUP_HEIGHT);
-        const spaceBelow = window.innerHeight - rect.bottom;
-        const spaceAbove = rect.top;
-
-        return spaceBelow < estimated && spaceAbove > spaceBelow ? "top" : "bottom";
-    };
-
     const openPopup = () => {
         if ( disabled ) {
             return;
         }
-
-        setPlacement(measurePlacement());
 
         const selectedIndex = ordered.findIndex(
             (option) => option.value === currentValue && option.disabled !== true,
@@ -324,6 +305,30 @@ export const Select = ({
         }
     }, [ isOpen, searchable, ]);
 
+    // Placement is decided from the popup's real rendered height, not a row
+    // estimate: after the popup commits we compare the measured height with the
+    // space around the trigger and flip above only when it cannot fit below.
+    useLayoutEffect(() => {
+        if ( !isOpen ) {
+            return;
+        }
+
+        const trigger = triggerRef.current;
+        const popup = popupRef.current;
+
+        if ( trigger === null || popup === null ) {
+            return;
+        }
+
+        const rect = trigger.getBoundingClientRect();
+        const measured = popup.getBoundingClientRect().height;
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const spaceAbove = rect.top;
+        const next: Placement = spaceBelow < measured && spaceAbove > spaceBelow ? "top" : "bottom";
+
+        setPlacement((current) => ( current === next ? current : next ));
+    }, [ isOpen, ordered.length, currentQuery, searchable, ]);
+
     const renderRow = (option: SelectOption, index: number) => {
         const isSelected = option.value === currentValue;
         const isActive = index === activeIndex;
@@ -394,7 +399,7 @@ export const Select = ({
                         <Icon name="chevron-down" size="sm" />
                     </span>
                 </button>
-                <div className={styles.popup} data-placement={placement} hidden={!isOpen}>
+                <div ref={popupRef} className={styles.popup} data-placement={placement} hidden={!isOpen}>
                     {searchable && (
                         <div className={styles.search}>
                             <input
@@ -406,6 +411,15 @@ export const Select = ({
                                 aria-label={hasText(label) ? `${label} search` : "Search"}
                                 aria-activedescendant={isOpen && activeIndex >= 0 ? optionId(activeIndex) : undefined}
                                 onChange={handleQueryChange}
+                                onKeyDown={(event) => {
+                                    // The search field owns its keys: arrows, Enter
+                                    // and Space stay local so they never move or
+                                    // select a root option while typing. Escape still
+                                    // bubbles to close and refocus the trigger.
+                                    if ( event.key !== "Escape" ) {
+                                        event.stopPropagation();
+                                    }
+                                }}
                             />
                         </div>
                     )}

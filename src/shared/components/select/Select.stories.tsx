@@ -486,3 +486,200 @@ export const ControlledQuery: Story = {
         await expect(canvas.getByTestId("last")).toHaveTextContent("abc");
     },
 };
+
+// A multi-word query is the cheapest way to prove the search field owns the
+// space key: with root key handling active it would select the active option.
+export const SearchableQueryAlphaBeta: Story = {
+    args: { ...reference, searchable: true, defaultQuery: "", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByRole("combobox", { name: "КОМАНДА", });
+
+        await user.click(trigger);
+
+        const search = canvas.getByRole("textbox", { name: "КОМАНДА search", });
+
+        await user.type(search, "alpha beta");
+
+        await expect(search).toHaveValue("alpha beta");
+        await expect(trigger).toHaveAttribute("aria-expanded", "true");
+        await expect(trigger).toHaveTextContent("Выберите команду");
+        await expect(within(canvas.getByRole("listbox")).getAllByRole("option").length).toBe(
+            options.length,
+        );
+    },
+};
+
+// Arrow keys stay in the text field: they never move the root active option.
+export const SearchableArrowKeysStayLocal: Story = {
+    args: { ...reference, searchable: true, defaultQuery: "", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByRole("combobox", { name: "КОМАНДА", });
+
+        await user.click(trigger);
+
+        const search = canvas.getByRole("textbox", { name: "КОМАНДА search", });
+        const activeBefore = activeOptionLabel(trigger);
+
+        await user.keyboard("{ArrowDown}");
+        await expect(activeOptionLabel(trigger)).toBe(activeBefore);
+
+        await user.keyboard("{ArrowUp}");
+        await expect(activeOptionLabel(trigger)).toBe(activeBefore);
+
+        await expect(trigger).toHaveAttribute("aria-expanded", "true");
+        await expect(search).toHaveFocus();
+    },
+};
+
+// Enter stays in the text field: it never selects the root active option.
+export const SearchableEnterStaysLocal: Story = {
+    args: { ...reference, searchable: true, defaultQuery: "", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByRole("combobox", { name: "КОМАНДА", });
+
+        await user.click(trigger);
+        await user.keyboard("{Enter}");
+
+        await expect(trigger).toHaveAttribute("aria-expanded", "true");
+        await expect(trigger).toHaveTextContent("Выберите команду");
+        await expect(canvasElement.querySelector(".select__status")?.textContent).toBe("");
+    },
+};
+
+// Escape is the one key the search field forwards: it closes and refocuses.
+export const SearchableEscapeClosesAndRefocuses: Story = {
+    args: { ...reference, searchable: true, defaultQuery: "", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByRole("combobox", { name: "КОМАНДА", });
+
+        await user.click(trigger);
+        await user.keyboard("{Escape}");
+
+        await expect(trigger).toHaveAttribute("aria-expanded", "false");
+        await expect(trigger).toHaveFocus();
+    },
+};
+
+// A single grouped option keeps the legacy row estimate (1 x 36 + 12 = 48px)
+// under the 60px gap, while the real popup (search row + group label + option)
+// renders taller than 60px. Placement must follow the measured height.
+const shortSpaceGroups: readonly SelectGroup[] = [
+    {
+        label: "ONLY",
+        options: [
+            { value: "single", label: "Single", },
+        ],
+    },
+];
+
+// Inline style keeps the 60px gap exact; the `bottom` utility drops raw px.
+const anchoredShortSpace = {
+    position: "fixed",
+    left: "24px",
+    bottom: "60px",
+    width: "280px",
+} as const;
+
+const MeasuredFlipProbe = ({ theme, }: { theme: "light" | "dark"; }) => (
+    <ThemeShell theme={theme}>
+        <div style={anchoredShortSpace}>
+            <Select label="КОМАНДА" searchable options={[]} groups={shortSpaceGroups} />
+        </div>
+    </ThemeShell>
+);
+
+export const SearchableGroupedPopupFlipsOnMeasuredHeight: Story = {
+    render: () => <MeasuredFlipProbe theme="light" />,
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByRole("combobox", { name: "КОМАНДА", });
+
+        await user.click(trigger);
+
+        const popup = canvasElement.querySelector(".select__popup") as HTMLElement;
+        const renderedHeight = popup.getBoundingClientRect().height;
+        const spaceBelow = window.innerHeight - trigger.getBoundingClientRect().bottom;
+        const spaceAbove = trigger.getBoundingClientRect().top;
+
+        await expect(renderedHeight).toBeGreaterThan(60);
+        await expect(spaceBelow).toBeLessThanOrEqual(60);
+        await expect(spaceAbove).toBeGreaterThanOrEqual(100);
+        await expect(popup).toHaveAttribute("data-placement", "top");
+    },
+};
+
+export const DarkSearchableGroupedPopupFlipsOnMeasuredHeight: Story = {
+    render: () => <MeasuredFlipProbe theme="dark" />,
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByRole("combobox", { name: "КОМАНДА", });
+
+        await user.click(trigger);
+
+        const popup = canvasElement.querySelector(".select__popup") as HTMLElement;
+
+        await expect(popup.getBoundingClientRect().height).toBeGreaterThan(60);
+        await expect(popup).toHaveAttribute("data-placement", "top");
+    },
+};
+
+// Both-theme computed surfaces for the invalid / disabled states.
+export const InvalidSurfaceLight: Story = {
+    args: { ...reference, invalid: true, error: "Выберите значение", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const trigger = canvasElement.querySelector(".select__trigger") as HTMLElement;
+
+        await expect(getComputedStyle(trigger).borderColor).toBe("rgb(220, 38, 38)");
+    },
+};
+
+export const InvalidSurfaceDark: Story = {
+    args: { ...reference, invalid: true, error: "Выберите значение", },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const trigger = canvasElement.querySelector(".select__trigger") as HTMLElement;
+
+        await expect(getComputedStyle(trigger).borderColor).toBe("rgb(248, 113, 113)");
+    },
+};
+
+export const DisabledSurfaceLight: Story = {
+    args: { ...reference, disabled: true, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const trigger = canvasElement.querySelector(".select__trigger") as HTMLElement;
+        const style = getComputedStyle(trigger);
+
+        await expect(style.backgroundColor).toBe("rgb(241, 245, 249)");
+        await expect(style.color).toBe("rgb(148, 163, 184)");
+        await expect(style.cursor).toBe("not-allowed");
+    },
+};
+
+export const DisabledSurfaceDark: Story = {
+    args: { ...reference, disabled: true, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const trigger = canvasElement.querySelector(".select__trigger") as HTMLElement;
+        const style = getComputedStyle(trigger);
+
+        await expect(style.backgroundColor).toBe("rgb(15, 23, 42)");
+        await expect(style.color).toBe("rgb(71, 85, 105)");
+        await expect(style.cursor).toBe("not-allowed");
+    },
+};

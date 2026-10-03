@@ -990,6 +990,69 @@ Counts moved from the B3 shipped baseline (`fc1acbb`): unit `726 → 738` (`+12`
 
 - **INFO — search glyph.** Pen `aXD61` `SearchRow` carries a magnifier glyph, but the icon set ships no `search` icon and icons are out of scope for B4, so the search row is text-only (`Search…` placeholder + accessible name). Adding the glyph is a separate icon-pipeline change.
 - **INFO — popup lifetime.** The popup is always mounted and `hidden` while closed (no portal), mirroring the repo's in-place overlay pattern; role queries do not see it until it is expanded.
-- **INFO — flip heuristic.** Placement is measured from the trigger's viewport rect against an estimated popup height (row height × count, capped); it is a documented approximation of "flips when space is short", not an overlay policy engine.
+- **INFO — flip measurement.** Placement is measured from the trigger's viewport rect against the popup's real rendered height (`popupRef` + `useLayoutEffect`); it is a documented in-place approximation of "flips when space is short", not an overlay policy engine. (Corrected in cycle 2/2: the earlier row-count estimate missed the search row and group labels.)
 - **INFO — MultiSelect at-cap surface.** At-cap unselected options are `aria-disabled`/`data-max-reached` and dimmed, but remain in the tab order so the blocked state is discoverable; no second disabled-cursor policy was added.
 - Disabled contrast remains `DISABLED / REVIEW` in both themes.
+
+## B4 correction cycle 2/2 — measured placement and search-local keys
+
+**Date:** 2026-10-04\
+**Base commit:** `4b690bb` (B4 cycle-1 implementation).\
+**Scope:** `select/select.tsx`, `Select.stories.tsx`, `MultiSelect.stories.tsx`, this evidence and `artifacts/batch-b/actions/b4-red-green.md`. No API, filtering, portal, icon, token, preset, generated-file, dependency, Pen or other-component change.
+
+### Corrections
+
+1. **Measured placement.** The pane is now placed from `popupRef.getBoundingClientRect().height` measured in a `useLayoutEffect` after the popup commits, not from `ordered.length × 36 + 12`. The searchable grouped flip story pins the trigger `60px` above the viewport bottom with `spaceAbove=800px`; the pane's real height is `111.984375px` (the old estimate was `48px`), so the pane flips `top` in both themes.
+2. **Search-local keys.** The search input stops propagation for every key except `Escape`. `Space` no longer selects the active option (query `"alpha beta"` is preserved instead of being truncated to `"alpha"`), and `ArrowUp`/`ArrowDown`/`Enter` no longer move or select a root option. `Escape` still closes and refocuses the trigger.
+
+### Tests-first proof (RED → GREEN)
+
+Focused browser stories: `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/select/Select.stories.tsx src/shared/components/multi-select/MultiSelect.stories.tsx`
+
+| Field | Value |
+| --- | --- |
+| RED exit | `1` |
+| RED result | `1 failed \| 1 passed` files, `5 failed \| 53 passed (58)` |
+| RED failures | Select — `Searchable Query Alpha Beta`, `Searchable Arrow Keys Stay Local`, `Searchable Enter Stays Local`, `Searchable Grouped Popup Flips On Measured Height`, `Dark Searchable Grouped Popup Flips On Measured Height` |
+| GREEN exit | `0` |
+| GREEN result | `2 passed` files, `58 passed (58)` |
+
+`Searchable Escape Closes And Refocuses` (Select) and the MultiSelect search stories passed on the RED run and are retained regression coverage.
+
+### Both-theme computed surfaces added
+
+| Contract | Light | Dark |
+| --- | --- | --- |
+| Select invalid trigger border | `rgb(220, 38, 38)` | `rgb(248, 113, 113)` |
+| Select disabled trigger bg / fg / cursor | `rgb(241, 245, 249)` / `rgb(148, 163, 184)` / `not-allowed` | `rgb(15, 23, 42)` / `rgb(71, 85, 105)` / `not-allowed` |
+| MultiSelect invalid control border | `rgb(220, 38, 38)` | `rgb(248, 113, 113)` |
+| MultiSelect disabled control bg / cursor / toggle fg | `rgb(241, 245, 249)` / `not-allowed` / `rgb(148, 163, 184)` | `rgb(15, 23, 42)` / `not-allowed` / `rgb(71, 85, 105)` |
+
+Disabled contrast stays `DISABLED / REVIEW`.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| focused browser RED | `1` | `1 failed \| 1 passed` files, `5 failed \| 53 passed (58)` |
+| focused browser GREEN | `0` | `2 passed` files, `58 passed (58)` |
+| focused composition (Bun) | `0` | `30 pass` / `0 fail` (`87 expect() calls`) |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `738 pass / 0 fail` (90 files); browser `527 passed` (73 files) |
+| `mise run check:deps` | `0` | Knip, no findings |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-_kX2xiic.css 219.62 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the cycle-1 baseline (`4b690bb`): browser `510 → 527` (`+17`); unit unchanged at `738`.
+
+### Row disposition
+
+| Row | Disposition |
+| --- | --- |
+| Select popup flips on the popup's real rendered height | **PASS** |
+| Search field keeps arrows / Enter / Space local; no root selection | **PASS** |
+| Search field still forwards Escape (close + refocus) | **PASS** |
+| Select invalid / disabled computed styles, both themes | **PASS** (disabled contrast `DISABLED / REVIEW`) |
+| MultiSelect invalid / disabled computed styles, both themes | **PASS** (disabled contrast `DISABLED / REVIEW`) |
+| **B4 cycle 2/2 status** | **PASS** — both corrections implemented and evidenced; no new API or policy; no unresolved `FAIL` / `BLOCKED` / Critical / Important finding |
+
