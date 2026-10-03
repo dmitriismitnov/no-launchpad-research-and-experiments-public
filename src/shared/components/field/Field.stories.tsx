@@ -161,3 +161,79 @@ export const Dark: Story = {
     render: renderIn("dark"),
     play: async (context) => assertThemeControl(context, "rgb(2, 6, 23)"),
 };
+
+// Pen `c6uIoT` accessibility: "Hint and error are announced when they change."
+const assertHintAnnouncement = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const hint = canvasElement.querySelector(".field__hint") as Element;
+
+    await expect(hint.getAttribute("role")).toBe("status");
+    await expect(hint.getAttribute("aria-live")).toBe("polite");
+    await expect(canvasElement.textContent).toContain("Строчные буквы, без пробелов.");
+};
+
+export const HintAnnouncement: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: assertHintAnnouncement,
+};
+
+export const DarkHintAnnouncement: Story = {
+    args: reference,
+    render: renderIn("dark"),
+    play: assertHintAnnouncement,
+};
+
+const assertErrorAnnouncement = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const error = canvasElement.querySelector(".field__error") as Element;
+
+    await expect(error.getAttribute("role")).toBe("status");
+    await expect(error.getAttribute("aria-live")).toBe("polite");
+    await expect(canvasElement.textContent).toContain("Обязательное поле");
+};
+
+export const ErrorAnnouncement: Story = {
+    args: { ...reference, invalid: true, error: "Обязательное поле", },
+    render: renderIn("light"),
+    play: assertErrorAnnouncement,
+};
+
+export const DarkErrorAnnouncement: Story = {
+    args: { ...reference, invalid: true, error: "Обязательное поле", },
+    render: renderIn("dark"),
+    play: assertErrorAnnouncement,
+};
+
+// Pen `c6uIoT` accessibility: "Required is exposed as a state, not only as an
+// asterisk." A non-native control receives aria-required / aria-disabled.
+const renderNonNative = (theme: "light" | "dark") => () => (
+    <ThemeShell theme={theme}>
+        <div className={frame}>
+            <Field id="custom" label="Рабочая область" required disabled>
+                <div role="textbox" tabIndex={0} aria-label="Рабочая область" />
+            </Field>
+        </div>
+    </ThemeShell>
+);
+
+const assertNonNativeState = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const control = canvasElement.querySelector('[role="textbox"]') as Element;
+
+    await expect(control.getAttribute("aria-required")).toBe("true");
+    await expect(control.getAttribute("aria-disabled")).toBe("true");
+};
+
+export const NonNativeControl: Story = {
+    render: renderNonNative("light"),
+    play: assertNonNativeState,
+};
+
+export const DarkNonNativeControl: Story = {
+    render: renderNonNative("dark"),
+    play: assertNonNativeState,
+};

@@ -1,5 +1,5 @@
 import type { ComponentProps, } from "react";
-import { useId, useRef, } from "react";
+import { useId, useRef, useState, } from "react";
 
 import { Icon, } from "@shared/components/icon";
 import { cx, } from "@shared/styled-system/css";
@@ -24,10 +24,11 @@ export type NumberInputProps = Omit<ComponentProps<"input">, "size" | "children"
 };
 
 /**
- * Числовое поле с необязательными кнопками-степперами. Нативный
- * `<input type="number">`; кнопки используют `stepUp` / `stepDown` и
- * пробрасывают нативное `input`-событие, поэтому работают и для
- * контролируемого, и для неконтролируемого режима.
+ * Числовое поле с необязательными кнопками-степперами. Контролем остаётся
+ * нативный `<input type="number">`; кнопки используют `stepUp` / `stepDown`,
+ * которые сами клампят значение к `min` / `max`. Pen `EZfrL` показывает
+ * состояние «min / max reached», поэтому при достижении границы кластер
+ * степпера деактивируется, а значение всё ещё можно ввести с клавиатуры.
  */
 export const NumberInput = ({
     label,
@@ -38,6 +39,12 @@ export const NumberInput = ({
     disabled = false,
     className,
     id,
+    value,
+    defaultValue,
+    onChange,
+    min,
+    max,
+    step,
     ...props
 }: NumberInputProps) => {
     const {
@@ -54,11 +61,34 @@ export const NumberInput = ({
     const showError = invalid && hasText(error);
     const styles = numberInput({ invalid, disabled, });
     const innerRef = useRef<HTMLInputElement>(null);
+    const [ uncontrolledValue, setUncontrolledValue, ] = useState(
+        () => ( defaultValue == null ? "" : String(defaultValue) ),
+    );
+    const currentValue = value !== undefined ? String(value) : uncontrolledValue;
+    const currentNumber = toFiniteNumber(currentValue);
+    const minNumber = toFiniteNumber(min);
+    const maxNumber = toFiniteNumber(max);
+    const atMin = currentNumber !== undefined && minNumber !== undefined && currentNumber <= minNumber;
+    const atMax = currentNumber !== undefined && maxNumber !== undefined && currentNumber >= maxNumber;
+    // Pen `EZfrL` (`ox2RF` / `W1OqsJ`): a reached bound disables the saturated
+    // stepper direction so the control does not get trapped at a bound. Typing
+    // stays available; the stepper is only an accelerator.
+    const increaseDisabled = disabled || atMax;
+    const decreaseDisabled = disabled || atMin;
+
+    const handleChange: NonNullable<ComponentProps<"input">["onChange"]> = (event) => {
+        if ( value === undefined ) {
+            setUncontrolledValue(event.target.value);
+        }
+
+        onChange?.(event);
+    };
 
     const handleStep = (direction: 1 | -1) => {
         const input = innerRef.current;
+        const stepDisabled = direction === 1 ? increaseDisabled : decreaseDisabled;
 
-        if ( disabled || input == null ) {
+        if ( disabled || stepDisabled || input == null ) {
             return;
         }
 
@@ -66,6 +96,10 @@ export const NumberInput = ({
             input.stepUp();
         } else {
             input.stepDown();
+        }
+
+        if ( value === undefined ) {
+            setUncontrolledValue(input.value);
         }
 
         input.dispatchEvent(new Event("input", { bubbles: true, }));
@@ -84,6 +118,12 @@ export const NumberInput = ({
                     ref={innerRef}
                     id={controlId}
                     type="number"
+                    value={value}
+                    defaultValue={defaultValue}
+                    onChange={handleChange}
+                    min={min}
+                    max={max}
+                    step={step}
                     disabled={disabled}
                     className={cx(styles.input, className)}
                     aria-invalid={invalid || undefined}
@@ -96,7 +136,7 @@ export const NumberInput = ({
                             type="button"
                             className={styles.stepButton}
                             aria-label="Increase value"
-                            disabled={disabled}
+                            disabled={increaseDisabled}
                             onClick={() => handleStep(1)}
                         >
                             <Icon name="plus" size="sm" />
@@ -105,7 +145,7 @@ export const NumberInput = ({
                             type="button"
                             className={styles.stepButton}
                             aria-label="Decrease value"
-                            disabled={disabled}
+                            disabled={decreaseDisabled}
                             onClick={() => handleStep(-1)}
                         >
                             <Icon name="minus" size="sm" />
@@ -125,4 +165,15 @@ export const NumberInput = ({
 /** Пустая или пробельная строка считается отсутствующей и не рендерит область. */
 function hasText(value: string | undefined): boolean {
     return value != null && value.trim() !== "";
+}
+
+/** Число из строкового/числового пропса; `undefined`, если его нельзя разобрать. */
+function toFiniteNumber(value: string | number | undefined): number | undefined {
+    if ( value === undefined || value === "" ) {
+        return undefined;
+    }
+
+    const parsed = typeof value === "number" ? value : Number(value);
+
+    return Number.isFinite(parsed) ? parsed : undefined;
 }

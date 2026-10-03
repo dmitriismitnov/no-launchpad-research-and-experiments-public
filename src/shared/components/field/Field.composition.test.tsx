@@ -91,4 +91,36 @@ describe("Field composition", () => {
         expect(markup).toContain('id="email"');
         expect(markup).toContain('aria-describedby="email-hint"');
     });
+
+    test("announces the hint and the error when they change", () => {
+        const hint = renderToStaticMarkup(
+            <Field id="workspace" label="Рабочая область" hint="Подсказка">
+                <input />
+            </Field>,
+        );
+        const error = renderToStaticMarkup(
+            <Field id="workspace" label="Рабочая область" invalid error="Ошибка">
+                <input />
+            </Field>,
+        );
+
+        for ( const markup of [ hint, error, ] ) {
+            expect(markup).toContain('role="status"');
+            expect(markup).toContain('aria-live="polite"');
+        }
+
+        expect(hint).toContain("Подсказка");
+        expect(error).toContain("Ошибка");
+    });
+
+    test("exposes required and disabled as states on a non-native control", () => {
+        const markup = renderToStaticMarkup(
+            <Field id="workspace" label="Рабочая область" required disabled>
+                <div role="textbox" />
+            </Field>,
+        );
+
+        expect(markup).toContain('aria-required="true"');
+        expect(markup).toContain('aria-disabled="true"');
+    });
 });

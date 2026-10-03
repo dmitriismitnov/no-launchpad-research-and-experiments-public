@@ -1,9 +1,17 @@
 import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
- * Input visual projection. Slots: root / label / control / error.
+ * Input visual projection. Slots: root / label / control / input / prefixIcon /
+ * suffixIcon / error.
  * Colors come from the semantic layer; the recipe never branches on
  * `_light` / `_dark`.
+ *
+ * `control` is the bordered surface and the native `input` sits transparently
+ * inside it, so the optional `prefixIcon` / `suffixIcon` slots share the same
+ * boundary. This mirrors the Pen `dO8tX` anatomy (`root · prefix icon · value
+ * or placeholder · suffix slot · focus ring`) and the sibling Number Input /
+ * Select control wrapper. The icon slots are decorative and inherit the
+ * tertiary content role; the control owns the focus ring (`:focus-within`).
  *
  * The label face is a deliberate approximation: the reference uses a mono
  * field-label face, but the foundation ships only the `body` (Inter) font,
@@ -12,7 +20,7 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  */
 export const inputRecipe = defineSlotRecipe({
     className: "input",
-    slots: [ "root", "label", "control", "error", ],
+    slots: [ "root", "label", "control", "input", "prefixIcon", "suffixIcon", "error", ],
 
     base: {
         root: {
@@ -33,6 +41,9 @@ export const inputRecipe = defineSlotRecipe({
         },
 
         control: {
+            display: "flex",
+            alignItems: "center",
+            gap: "x4",
             width: "100%",
             height: "x25",
             paddingInline: "x6",
@@ -42,20 +53,50 @@ export const inputRecipe = defineSlotRecipe({
             borderColor: "semantic.common.200.divider",
             backgroundColor: "semantic.common.50.background",
             color: "semantic.common.50.text",
+            boxShadow: "0 1px 2px {colors.semantic.shadow.200}",
+            outlineStyle: { _focusWithin: "solid", },
+            outlineWidth: { _focusWithin: "{borderWidths.thick}", },
+            outlineOffset: { _focusWithin: "0", },
+            outlineColor: { _focusWithin: "semantic.brand.500.background", },
+        },
+
+        input: {
+            flex: "1",
+            minWidth: "0",
+            width: "100%",
+            borderWidth: "none",
+            borderStyle: "none",
+            backgroundColor: "transparent",
+            color: "inherit",
             fontFamily: "body",
             fontSize: "sm",
             fontWeight: "regular",
             lineHeight: "normal",
-            boxShadow: "0 1px 2px {colors.semantic.shadow.200}",
-            outlineStyle: { _focusVisible: "solid", },
-            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
-            outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineStyle: "none",
             cursor: { _disabled: "not-allowed", },
-            opacity: { _disabled: 0.45, },
             "&::placeholder": {
                 color: "semantic.common.500.background",
             },
+        },
+
+        prefixIcon: {
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: "0",
+            width: "x8",
+            height: "x8",
+            color: "semantic.common.600.background",
+        },
+
+        suffixIcon: {
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: "0",
+            width: "x8",
+            height: "x8",
+            color: "semantic.common.600.background",
         },
 
         error: {
@@ -75,10 +116,20 @@ export const inputRecipe = defineSlotRecipe({
                 },
             },
         },
+
+        disabled: {
+            true: {
+                control: {
+                    cursor: "not-allowed",
+                    opacity: 0.45,
+                },
+            },
+        },
     },
 
     defaultVariants: {
         invalid: false,
+        disabled: false,
     },
 });
 

@@ -24,7 +24,7 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  */
 export const textareaRecipe = defineSlotRecipe({
     className: "textarea",
-    slots: [ "root", "label", "control", "footer", "counter", "error", ],
+    slots: [ "root", "label", "control", "footer", "counter", "visuallyHidden", "error", ],
 
     base: {
         root: {
@@ -83,6 +83,20 @@ export const textareaRecipe = defineSlotRecipe({
             fontWeight: "regular",
             lineHeight: "normal",
             color: "semantic.common.600.background",
+        },
+
+        // Screen-reader-only text inside the live counter. Pen `N0ymEX`
+        // accessibility: "Announce remaining characters when a limit exists."
+        visuallyHidden: {
+            position: "absolute",
+            width: "1px",
+            height: "1px",
+            padding: "0",
+            margin: "-1px",
+            overflow: "hidden",
+            clip: "rect(0, 0, 0, 0)",
+            whiteSpace: "nowrap",
+            borderWidth: "0",
         },
 
         error: {

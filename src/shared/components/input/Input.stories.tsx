@@ -121,10 +121,9 @@ const assertThemeControl = async (
     { canvasElement, }: { canvasElement: HTMLElement; },
     background: string,
 ): Promise<void> => {
-    const canvas = within(canvasElement);
-    const input = canvas.getByRole("textbox", { name: "ИМЯ", });
+    const control = canvasElement.querySelector(".input__control") as Element;
 
-    await expect(getComputedStyle(input).backgroundColor).toBe(background);
+    await expect(getComputedStyle(control).backgroundColor).toBe(background);
 };
 
 export const Light: Story = {
@@ -137,4 +136,97 @@ export const Dark: Story = {
     args: reference,
     render: renderIn("dark"),
     play: async (context) => assertThemeControl(context, "rgb(2, 6, 23)"),
+};
+
+// Pen `dO8tX` anatomy: the decorative prefix / suffix icons share the control
+// boundary with the native value, and stay decorative (no accessible name).
+const assertPrefixSuffix = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const control = canvasElement.querySelector(".input__control") as Element;
+    const label = canvasElement.querySelector(".input__label") as Element;
+    const prefix = canvasElement.querySelector(".input__prefixIcon") as Element;
+    const suffix = canvasElement.querySelector(".input__suffixIcon") as Element;
+    const glyph = canvasElement.querySelector(".input__prefixIcon .icon") as Element;
+
+    await expect(control.contains(prefix)).toBe(true);
+    await expect(control.contains(suffix)).toBe(true);
+    await expect(glyph.getAttribute("aria-hidden")).toBe("true");
+    // The icon slots paint from the tertiary text role, like the field label.
+    await expect(getComputedStyle(prefix).color).toBe(getComputedStyle(label).color);
+    await expect(getComputedStyle(suffix).color).toBe(getComputedStyle(label).color);
+};
+
+export const PrefixSuffix: Story = {
+    args: { label: "ПОИСК", placeholder: "Найти", prefixIcon: "mail", suffixIcon: "x", },
+    render: renderIn("light"),
+    play: assertPrefixSuffix,
+};
+
+export const DarkPrefixSuffix: Story = {
+    args: { label: "ПОИСК", placeholder: "Найти", prefixIcon: "mail", suffixIcon: "x", },
+    render: renderIn("dark"),
+    play: assertPrefixSuffix,
+};
+
+// Pen `dO8tX` states: read-only keeps the value visible but not editable.
+const assertReadOnly = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const input = canvasElement.querySelector(".input__input") as HTMLInputElement;
+
+    await expect(input.readOnly).toBe(true);
+    await expect(input).toHaveValue("user@example.com");
+    await expect(input).not.toHaveAttribute("aria-invalid", "true");
+};
+
+export const ReadOnly: Story = {
+    args: { label: "EMAIL", defaultValue: "user@example.com", readOnly: true, },
+    render: renderIn("light"),
+    play: assertReadOnly,
+};
+
+export const DarkReadOnly: Story = {
+    args: { label: "EMAIL", defaultValue: "user@example.com", readOnly: true, },
+    render: renderIn("dark"),
+    play: assertReadOnly,
+};
+
+// Pen `dO8tX` public variant `type: text · email · password · search`.
+const assertNativeTypes = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const types = [ ...canvasElement.querySelectorAll(".input__input"), ].map(
+        (node) => ( node as HTMLInputElement ).type,
+    );
+
+    await expect(types).toEqual([ "text", "email", "password", "search", ]);
+};
+
+export const NativeTypes: Story = {
+    render: () => (
+        <ThemeShell theme="light">
+            <div className={frame}>
+                <Input label="TEXT" type="text" />
+                <Input label="EMAIL" type="email" />
+                <Input label="PASSWORD" type="password" />
+                <Input label="SEARCH" type="search" />
+            </div>
+        </ThemeShell>
+    ),
+    play: assertNativeTypes,
+};
+
+export const DarkNativeTypes: Story = {
+    render: () => (
+        <ThemeShell theme="dark">
+            <div className={frame}>
+                <Input label="TEXT" type="text" />
+                <Input label="EMAIL" type="email" />
+                <Input label="PASSWORD" type="password" />
+                <Input label="SEARCH" type="search" />
+            </div>
+        </ThemeShell>
+    ),
+    play: assertNativeTypes,
 };

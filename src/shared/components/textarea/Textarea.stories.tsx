@@ -137,3 +137,39 @@ export const Dark: Story = {
     render: renderIn("dark"),
     play: async (context) => assertThemeControl(context, "rgb(2, 6, 23)"),
 };
+
+// Pen `N0ymEX` public variant `rows`.
+export const Rows: Story = {
+    args: { label: "ОПИСАНИЕ", rows: 6, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const textarea = canvas.getByRole("textbox", { name: "ОПИСАНИЕ", });
+
+        await expect(textarea).toHaveAttribute("rows", "6");
+    },
+};
+
+// Pen `N0ymEX` accessibility: "Announce remaining characters when a limit exists."
+const assertCounterAnnouncement = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const counter = canvasElement.querySelector(".textarea__counter") as Element;
+
+    await expect(counter.getAttribute("role")).toBe("status");
+    await expect(counter.getAttribute("aria-live")).toBe("polite");
+    await expect(canvasElement.textContent).toContain("197 characters remaining");
+    await expect(canvasElement.textContent).toContain("3 / 200");
+};
+
+export const CounterAnnouncement: Story = {
+    args: { label: "ОПИСАНИЕ", maxLength: 200, defaultValue: "abc", },
+    render: renderIn("light"),
+    play: assertCounterAnnouncement,
+};
+
+export const DarkCounterAnnouncement: Story = {
+    args: { label: "ОПИСАНИЕ", maxLength: 200, defaultValue: "abc", },
+    render: renderIn("dark"),
+    play: assertCounterAnnouncement,
+};

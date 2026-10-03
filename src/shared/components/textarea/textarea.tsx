@@ -81,8 +81,15 @@ export const Textarea = ({
             />
             {showCounter && (
                 <div className={styles.footer}>
-                    <span className={styles.counter}>
-                        {maxLength != null ? `${currentLength} / ${maxLength}` : currentLength}
+                    <span className={styles.counter} role="status" aria-live="polite">
+                        {maxLength != null && (
+                            <span className={styles.visuallyHidden}>
+                                {Math.max(maxLength - currentLength, 0)} characters remaining
+                            </span>
+                        )}
+                        <span aria-hidden={maxLength != null ? true : undefined}>
+                            {maxLength != null ? `${currentLength} / ${maxLength}` : currentLength}
+                        </span>
                     </span>
                 </div>
             )}

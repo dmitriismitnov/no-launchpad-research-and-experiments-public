@@ -1,5 +1,6 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
+import { useState, } from "react";
 
 import { expect, fireEvent, within, } from "storybook/test";
 
@@ -149,4 +150,119 @@ export const Dark: Story = {
     args: reference,
     render: renderIn("dark"),
     play: async (context) => assertThemeControl(context, "rgb(2, 6, 23)"),
+};
+
+// Pen `EZfrL` (`ox2RF` / `W1OqsJ`): a reached bound disables the saturated
+// stepper direction, so the value is never trapped at the bound.
+const assertMinReached = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByRole("button", { name: "Decrease value", })).toBeDisabled();
+    await expect(canvas.getByRole("button", { name: "Increase value", })).not.toBeDisabled();
+};
+
+const assertMaxReached = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByRole("button", { name: "Increase value", })).toBeDisabled();
+    await expect(canvas.getByRole("button", { name: "Decrease value", })).not.toBeDisabled();
+};
+
+export const MinReached: Story = {
+    args: { label: "КОЛИЧЕСТВО", defaultValue: 0, min: 0, max: 64, },
+    render: renderIn("light"),
+    play: assertMinReached,
+};
+
+export const DarkMinReached: Story = {
+    args: { label: "КОЛИЧЕСТВО", defaultValue: 0, min: 0, max: 64, },
+    render: renderIn("dark"),
+    play: assertMinReached,
+};
+
+export const MaxReached: Story = {
+    args: { label: "КОЛИЧЕСТВО", defaultValue: 64, min: 0, max: 64, },
+    render: renderIn("light"),
+    play: assertMaxReached,
+};
+
+export const DarkMaxReached: Story = {
+    args: { label: "КОЛИЧЕСТВО", defaultValue: 64, min: 0, max: 64, },
+    render: renderIn("dark"),
+    play: assertMaxReached,
+};
+
+// Pen `EZfrL` content rule: clamp silently at min / max; typing stays available.
+export const StepperClamp: Story = {
+    args: { label: "КОЛИЧЕСТВО", defaultValue: 2, min: 0, max: 3, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const input = canvas.getByRole("spinbutton", { name: "КОЛИЧЕСТВО", });
+        const increase = canvas.getByRole("button", { name: "Increase value", });
+        const decrease = canvas.getByRole("button", { name: "Decrease value", });
+
+        await fireEvent.click(increase);
+        await expect(input).toHaveValue(3);
+        await expect(increase).toBeDisabled();
+
+        for ( let step = 0; step < 4; step += 1 ) {
+            await fireEvent.click(decrease);
+        }
+
+        await expect(input).toHaveValue(0);
+        await expect(decrease).toBeDisabled();
+    },
+};
+
+const ControlledStepper = () => {
+    const [ value, setValue, ] = useState(2);
+
+    return (
+        <NumberInput
+            label="КОЛИЧЕСТВО"
+            min={0}
+            max={3}
+            value={value}
+            onChange={(event) => setValue(Number(event.target.value))}
+        />
+    );
+};
+
+const controlledClampPlay = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole("spinbutton", { name: "КОЛИЧЕСТВО", });
+    const increase = canvas.getByRole("button", { name: "Increase value", });
+
+    await fireEvent.click(increase);
+    await expect(input).toHaveValue(3);
+    await expect(increase).toBeDisabled();
+};
+
+export const ControlledClamp: Story = {
+    render: () => (
+        <ThemeShell theme="light">
+            <div className={frame}>
+                <ControlledStepper />
+            </div>
+        </ThemeShell>
+    ),
+    play: controlledClampPlay,
+};
+
+export const DarkControlledClamp: Story = {
+    render: () => (
+        <ThemeShell theme="dark">
+            <div className={frame}>
+                <ControlledStepper />
+            </div>
+        </ThemeShell>
+    ),
+    play: controlledClampPlay,
 };

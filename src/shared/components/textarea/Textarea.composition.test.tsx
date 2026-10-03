@@ -56,6 +56,14 @@ describe("Textarea composition", () => {
         expect(markup).toContain("3 / 200");
     });
 
+    test("announces the remaining characters when a limit exists", () => {
+        const markup = renderToStaticMarkup(<Textarea maxLength={200} defaultValue="abc" />);
+
+        expect(markup).toContain('role="status"');
+        expect(markup).toContain('aria-live="polite"');
+        expect(markup).toContain("197 characters remaining");
+    });
+
     test("omits the counter when maxLength is absent and showCount is not forced", () => {
         expect(renderToStaticMarkup(<Textarea />)).not.toContain("textarea__counter");
         expect(renderToStaticMarkup(<Textarea showCount />)).toContain("textarea__counter");

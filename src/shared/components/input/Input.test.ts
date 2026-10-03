@@ -38,16 +38,25 @@ const collectKeys = (value: unknown, keys: string[] = []): string[] => {
 
 describe("input recipe", () => {
     test("declares the anatomy", () => {
-        expect(inputRecipe.slots).toEqual([ "root", "label", "control", "error", ]);
+        expect(inputRecipe.slots).toEqual([
+            "root",
+            "label",
+            "control",
+            "input",
+            "prefixIcon",
+            "suffixIcon",
+            "error",
+        ]);
     });
 
     test("declares public variants only", () => {
-        expect(Object.keys(inputRecipe.variants ?? {})).toEqual([ "invalid", ]);
+        expect(Object.keys(inputRecipe.variants ?? {})).toEqual([ "invalid", "disabled", ]);
         expect(Object.keys(inputRecipe.variants?.["invalid"] ?? {})).toEqual([ "true", ]);
+        expect(Object.keys(inputRecipe.variants?.["disabled"] ?? {})).toEqual([ "true", ]);
     });
 
     test("declares default variants", () => {
-        expect(inputRecipe.defaultVariants).toEqual({ invalid: false, });
+        expect(inputRecipe.defaultVariants).toEqual({ invalid: false, disabled: false, });
     });
 
     test("does not branch on theme inside the recipe", () => {
@@ -55,9 +64,9 @@ describe("input recipe", () => {
     });
 
     test("uses no shorthand property names", () => {
-        const variantStyles = [
-            ...Object.values(inputRecipe.variants?.["invalid"] ?? {}),
-        ];
+        const variantStyles = Object.values(inputRecipe.variants ?? {}).flatMap(
+            (variant) => Object.values(variant ?? {}),
+        );
         const compoundStyles = ( inputRecipe.compoundVariants ?? [] ).map(
             (entry) => ( entry as { css: unknown; } ).css,
         );
@@ -75,24 +84,24 @@ describe("input recipe", () => {
         const control = inputRecipe.base?.["control"];
 
         expect(control).toMatchObject({
-            outlineStyle: { _focusVisible: "solid", },
-            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
-            outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineStyle: { _focusWithin: "solid", },
+            outlineWidth: { _focusWithin: "{borderWidths.thick}", },
+            outlineOffset: { _focusWithin: "0", },
+            outlineColor: { _focusWithin: "semantic.brand.500.background", },
         });
     });
 
     test("disabled control drops opacity and cursor", () => {
-        const control = inputRecipe.base?.["control"];
+        const control = inputRecipe.variants?.["disabled"]?.["true"]?.["control"];
 
         expect(control).toMatchObject({
-            cursor: { _disabled: "not-allowed", },
-            opacity: { _disabled: 0.45, },
+            cursor: "not-allowed",
+            opacity: 0.45,
         });
     });
 
     test("placeholder is muted via the background projection", () => {
-        expect(inputRecipe.base?.["control"]?.["&::placeholder"]).toMatchObject({
+        expect(inputRecipe.base?.["input"]?.["&::placeholder"]).toMatchObject({
             color: "semantic.common.500.background",
         });
     });
@@ -115,12 +124,24 @@ describe("input recipe", () => {
     });
 
     test("composes control typography from foundation atoms", () => {
-        expect(inputRecipe.base?.["control"]).toMatchObject({
+        expect(inputRecipe.base?.["input"]).toMatchObject({
             fontFamily: "body",
             fontSize: "sm",
             fontWeight: "regular",
             lineHeight: "normal",
         });
+    });
+
+    test("composes the icon slots from the tertiary text role", () => {
+        for ( const slot of [ "prefixIcon", "suffixIcon", ] ) {
+            expect(inputRecipe.base?.[slot]).toMatchObject({
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: "0",
+                color: "semantic.common.600.background",
+            });
+        }
     });
 
     test("keeps typography out of the root", () => {

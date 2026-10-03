@@ -1,7 +1,11 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { ICON_CODEPOINTS, } from "../icon/manifest.generated";
+
 import { Input, type InputProps, } from "./input";
+
+const glyph = (name: keyof typeof ICON_CODEPOINTS): string => String.fromCodePoint(ICON_CODEPOINTS[name]);
 
 describe("Input composition", () => {
     test("links a label to the control and forwards native attributes", () => {
@@ -48,11 +52,57 @@ describe("Input composition", () => {
         expect(markup).toContain('aria-describedby="email-error"');
     });
 
-    test("className is merged with the control class, not replacing it", () => {
+    test("className is merged with the input class, not replacing it", () => {
         const markup = renderToStaticMarkup(<Input className="my-field" />);
 
         expect(markup).toContain("my-field");
-        expect(markup).toContain("input__control");
+        expect(markup).toContain("input__input");
+    });
+
+    test("forwards the documented native input types", () => {
+        for ( const type of [ "text", "email", "password", "search", ] as const ) {
+            const markup = renderToStaticMarkup(<Input type={type} />);
+
+            expect(markup).toContain(`type="${type}"`);
+        }
+    });
+
+    test("forwards the required and read-only native states", () => {
+        const markup = renderToStaticMarkup(<Input required readOnly defaultValue="fixed" />);
+
+        expect(markup).toContain("required");
+        expect(markup).toMatch(/readonly/i);
+        expect(markup).toContain('value="fixed"');
+        expect(markup).not.toContain("aria-invalid");
+    });
+
+    test("renders decorative prefix and suffix icons in their slots", () => {
+        const markup = renderToStaticMarkup(<Input prefixIcon="mail" suffixIcon="x" />);
+
+        expect(markup).toContain("input__prefixIcon");
+        expect(markup).toContain("input__suffixIcon");
+        expect(markup).toContain("icon--size_sm");
+        expect(markup).toContain(glyph("mail"));
+        expect(markup).toContain(glyph("x"));
+        expect(markup).toContain(`aria-hidden="true"`);
+        expect(markup).not.toContain(`role="img"`);
+    });
+
+    test("omits the icon slots when no icons are supplied", () => {
+        const markup = renderToStaticMarkup(<Input />);
+
+        expect(markup).not.toContain("input__prefixIcon");
+        expect(markup).not.toContain("input__suffixIcon");
+    });
+
+    test("rejects unknown icon names and ReactNode at the type level", () => {
+        // @ts-expect-error an unknown icon name is not assignable to IconName
+        const unknown = <Input prefixIcon="definitely-not-an-icon" />;
+        // @ts-expect-error a ReactNode is not assignable to IconName
+        const node = <Input suffixIcon={<span />} />;
+
+        expect(unknown).toBeDefined();
+        expect(node).toBeDefined();
     });
 
     test("invalid without a non-blank error keeps aria-invalid and renders no message", () => {

@@ -399,3 +399,152 @@ Counts moved from the B1 cycle-1 baseline (`42c0f864`): unit `687 → 696` (`+9`
 | Hover / active visuals | **not claimed** this cycle |
 | Disabled contrast | `DISABLED / REVIEW` (both themes) |
 | **B1 correction final status** | **PASS** |
+
+## B2 — Native entry controls and Field composition (cycle 1/2)
+
+**Date:** 2026-10-04\
+**Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` — SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes (unchanged; re-verified after the read-only queries).\
+**Base commit:** `070920857f6645cda8a078ac821227cdde75bec9` (`build(deps): declare @pandacss/node as a direct devDependency`).\
+**Method:** Pencil MCP read-only `Get`/`Print` + `TakeScreenshot` (`get_app_state` confirmed `ex_2.pen` as the active editor; no mutation, no `SetVariables`/`Insert`/`Update`/`Replace`); focused Bun composition/recipe tests and Vitest + Playwright Chromium story tests, with the browser RED proven by temporarily stashing only the four owners' implementations and regenerating.\
+**Owner paths:** `src/shared/components/{input,textarea,number-input,field}/`.
+
+### Pen enumeration gate (B2)
+
+| Owner | Pen master → documentation frame | Documented public variant / state | Disposition |
+| --- | --- | --- | --- |
+| Text Input | `dO8tX` → `VSh2R` | anatomy `root · prefix icon · value or placeholder · suffix slot · focus ring` (named parts `h51Bm`); public variants (`tpCGz`) `type: text · email · password · search`, `size`, `prefix/suffix icon`, `required`; behavior (`MPSkP`) `empty · filled · disabled · read-only · invalid · valid` | **PASS** for `type` / `required` / `read-only` (native) and `prefix/suffix icon` (new decorative slots). **BLOCKED**: `size`, `valid` visual state (user decision) |
+| Text Input | `VSh2R` border role (`NEbdq`), content rules (`n7zVp`, `mQhvr`, `AH4At`), accessibility (`AB5bA`, `sqZFF`, `weeU6`) | `border.strong` default; focus `semantic/focus/ring`; invalid negative roles; prefix/suffix hold icons/units/reveal; pair with a Field label; announce invalid/required; typed value announced on submit | **PASS** for the existing `border.strong` + `semantic.brand.500.background` focus + `negative.600` invalid roles and the retained `aria-invalid`/`aria-describedby` wiring. `read-only` border.subtle visual is **not claimed** (see Remaining concerns) |
+| Textarea | `w6oNZ7` → `N0ymEX` | public variants (`dCzhj`) `rows`, `auto-grow`, `character counter`, `invalid`; states `default · focus-visible · disabled · invalid`; content (`IfXee`, `WqFI5`, `UDCUt`); accessibility (`sMQ1v`, `yWMaC`) `... announce remaining characters when a limit exists` | **PASS** for `rows` (native), `character counter` + remaining-character announcement (new polite live region), `invalid`/`disabled` (existing). **BLOCKED**: `auto-grow` (user decision) |
+| Number Input | `EZfrL` → `oTL4D` | anatomy `root · prefix or unit · value · stepper controls`; public variants (`a2tQM`) `stepper on/off`, `unit`, `min/max`, `size`; states `default · focus-visible · disabled · invalid` + `num-Min reached` (`ox2RF`) / `num-Max reached` (`W1OqsJ`); content (`T6nMPR`, `bm5Z2`, `RAOC3`) clamp silently; accessibility (`rf7CW`, `RhpAf`) numeric role with min/max/step, labelled steppers | **PASS** for `stepper on/off`, `unit`, `min/max` (native bounds + saturated-direction stepper disabling), numeric role/labels. **BLOCKED**: `size` (user decision). The `min/max reached` visual is projected per-direction (see Remaining concerns) |
+| Field | `pHfEy` → `c6uIoT` | anatomy `root · label row · required marker · control slot · hint · error message` (`rfCG2`); public variants (`I8f79X`) `label placement`, `hint on/off`, `error on/off`, `required`; states `default · focus-visible · invalid · disabled`; content (`NDLPr`, `j4P442`, `SbjP5`); accessibility (`jZwOO`, `vmbkG`, `ZbhVg`) label associated, hint/error announced on change, required exposed as a state | **PASS** for `hint on/off` + `error on/off` replacement, `required`, label association, invalid/disabled forwarding, and hint/error update announcement (new polite live regions). **BLOCKED**: `label placement` (user decision) |
+
+Verbatim Pen facts used:
+
+- `h51Bm` — "Named parts: root · prefix icon · value or placeholder · suffix slot · focus ring".
+- `tpCGz` — "Public variants: type: text · email · password · search, size, prefix/suffix icon, required".
+- `MPSkP` — "Text Input · public: text, email, search, password, prefix, suffix · behavior: empty, filled, disabled, read-only, invalid, valid".
+- `NEbdq` — "Boundary: border.strong … Read-only and disabled keep geometry and drop to border.subtle with the disabled surface. Focus: semantic/focus/ring, never a border token. Invalid: semantic/feedback/negative-* roles, never a generic border."
+- `AB5bA` / `sqZFF` — "Always pair with a Field label; placeholder is not an accessible name." / "Announce invalid and required states."
+- `dCzhj` — "Public variants: rows, auto-grow, character counter, invalid".
+- `yWMaC` — "Announce remaining characters when a limit exists."
+- `WqFI5` — "Show a counter only when a limit exists."
+- `a2tQM` — "Public variants: stepper on/off, unit, min/max, size".
+- `bm5Z2` / `RAOC3` — "Clamp silently at min and max rather than failing validation." / "Allow typing; the stepper is an accelerator, not the only input."
+- `rf7CW` / `RhpAf` — "Numeric input role with min, max and step exposed." / "Stepper buttons need accessible labels."
+- `oTL4D` `ox2RF` / `W1OqsJ` — "Min reached" (`1`, stepper `ENABLED=false`) / "Max reached" (`64`, stepper `ENABLED=false`).
+- `I8f79X` — "Public variants: label placement, hint on/off, error on/off, required".
+- `j4P442` / `SbjP5` — "Error replaces the hint and never appears without an invalid control." / "Field forwards invalid, disabled and required to the control inside."
+- `vmbkG` / `ZbhVg` — "Hint and error are announced when they change." / "Required is exposed as a state, not only as an asterisk."
+
+### User decisions applied
+
+- **Approved:** `Input` gains `prefixIcon?: IconName` and `suffixIcon?: IconName`, following the existing Button pattern — the component renders `Icon size="sm"` in the `prefixIcon` / `suffixIcon` slots, decorative (`aria-hidden`), coloured by the recipe, never a public node/children API.
+- **BLOCKED (recorded, no API):** `Input` `size`, `Input` `valid` visual state, `NumberInput` `size`, `Textarea` `auto-grow`, `Field` `label placement`.
+- **Retained for compatibility:** the per-control `label` / `invalid` / `error` props stay; `Field` remains the composition owner and is not reduced to a forwarding-only shell.
+
+### Approved public surface and behaviour
+
+- **Input** — `control` is now the bordered surface and the native `<input>` is transparent inside it, so the new decorative `prefixIcon` / `suffixIcon` slots share the same boundary (Pen `dO8tX`). `aria-invalid` / `aria-describedby` ownership is unchanged; native `type`, `required`, `readOnly`, `value`/`defaultValue`/`onChange` still pass through. A new internal `disabled` variant dims the whole control (cursor `not-allowed`, opacity `0.45`). The icon slots inherit the tertiary text role and add no accessible name.
+- **Textarea** — the optional counter is a `role="status"` / `aria-live="polite"` region; when `maxLength` exists it carries a visually-hidden `${remaining} characters remaining` announcement while the visible text remains `current / max` (Pen `N0ymEX`). `rows`, `maxLength`, `invalid`/`disabled` wiring unchanged.
+- **NumberInput** — the native `<input type="number">` remains the control (`min`/`max`/`step` exposed for the implicit spinbutton role) and both stepper buttons keep accessible names. The component now tracks the controlled (`value`) and uncontrolled (`defaultValue` + `onChange`) value: the **saturated** direction is disabled at a bound (increase at max, decrease at min), and `stepUp`/`stepDown` clamp silently. No explicit `aria-valuemin/max/now` is added because the native `type="number"` already exposes them and hand-set values would go stale on typing.
+- **Field** — label/hint/error association and `required`/`invalid`/`disabled` forwarding retained; hint and error are now `role="status"` / `aria-live="polite"` regions so a change is announced. Native children still receive the native `required`/`disabled`; non-native children now receive `aria-required` / `aria-disabled` so the state is exposed "not only as an asterisk".
+
+No submission-time announcement, validation policy, persistence, auto-grow, route, backend or animation behaviour was added.
+
+### Tests-first proof (RED → GREEN)
+
+Focused unit + composition (Bun):
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/components/input/Input.test.ts src/shared/components/input/Input.composition.test.tsx src/shared/components/textarea/Textarea.composition.test.tsx src/shared/components/number-input/NumberInput.composition.test.tsx src/shared/components/field/Field.composition.test.tsx` |
+| RED exit | `1` |
+| RED result | `47 pass` / `15 fail` (62 total), `161 expect() calls` |
+| RED failures | Input recipe `declares the anatomy`, `declares public variants only`, `declares default variants`, `shares one focus ring with Button`, `disabled control drops opacity and cursor`, `placeholder is muted…`, `composes control typography…`, `composes the icon slots from the tertiary text role`; Input composition `className is merged with the input class…`, `forwards the required and read-only native states`, `renders decorative prefix and suffix icons…`; NumberInput `disables… at a bound` (2 tests), `keeps the stepper enabled between the bounds`; Field `announces the hint and the error…`, `exposes required and disabled as states on a non-native control`; Textarea `announces the remaining characters…` |
+| GREEN exit | `0` |
+| GREEN result | `62 pass` / `0 fail` (181 expect calls) |
+
+Focused browser stories (Vitest + Playwright Chromium), proven test-first by `git stash push` of only `{input/input.tsx,input/preset.ts,textarea/textarea.tsx,textarea/preset.ts,number-input/number-input.tsx,field/field.tsx}`, `mise run gen`, observing RED, then `git stash pop` + `mise run gen`:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/input/Input.stories.tsx src/shared/components/textarea/Textarea.stories.tsx src/shared/components/number-input/NumberInput.stories.tsx src/shared/components/field/Field.stories.tsx` |
+| RED exit | `1` |
+| RED result | `4 failed` files, `21 failed \| 30 passed (51)` |
+| RED failures | Input `Prefix Suffix`, `Dark Prefix Suffix`, `Read Only`, `Dark Read Only`, `Native Types`, `Dark Native Types`; Textarea `Counter Announcement`, `Dark Counter Announcement`; NumberInput `Min Reached`, `Dark Min Reached`, `Max Reached`, `Dark Max Reached`, `Stepper Clamp`, `Controlled Clamp`, `Dark Controlled Clamp`; Field `Hint Announcement`, `Dark Hint Announcement`, `Error Announcement`, `Dark Error Announcement`, `Non Native Control`, `Dark Non Native Control` |
+| GREEN exit | `0` |
+| GREEN result | `4 passed` files, `51 passed (51)` |
+
+### Both-theme / state coverage (computed style, in browser)
+
+| Owner | Light story assertion | Dark story assertion |
+| --- | --- | --- |
+| Input control surface | `Light` → `rgb(248, 250, 252)` | `Dark` → `rgb(2, 6, 23)` |
+| Input prefix/suffix icons (decorative, shared boundary) | `PrefixSuffix` → icons inside `.input__control`, glyph `aria-hidden="true"`, icon colour = label tertiary role = `rgb(71, 85, 105)` | `DarkPrefixSuffix` → same, icon colour `rgb(148, 163, 184)` |
+| Input read-only (value visible, not editable) | `ReadOnly` → `.input__input` `readOnly`, `value="user@example.com"`, no `aria-invalid` | `DarkReadOnly` → same |
+| Input native types | `NativeTypes` → `[ "text", "email", "password", "search" ]` | `DarkNativeTypes` → same |
+| Input disabled contrast | existing `Disabled` (unchanged) | — `DISABLED / REVIEW` |
+| Textarea rows | `Rows` → `rows="6"` | — (structural, theme-independent) |
+| Textarea counter announcement | `CounterAnnouncement` → `role="status"`, `aria-live="polite"`, `197 characters remaining`, `3 / 200` | `DarkCounterAnnouncement` → same |
+| Textarea disabled contrast | existing `Disabled` (unchanged) | — `DISABLED / REVIEW` |
+| NumberInput min reached | `MinReached` → decrease `disabled`, increase enabled | `DarkMinReached` → same |
+| NumberInput max reached | `MaxReached` → increase `disabled`, decrease enabled | `DarkMaxReached` → same |
+| NumberInput uncontrolled clamp | `StepperClamp` → 2→3, increase disabled, then 3→0, decrease disabled | — (logic theme-independent) |
+| NumberInput controlled clamp | `ControlledClamp` → `value` 2→3 via `onChange`, increase disabled | `DarkControlledClamp` → same |
+| Field hint announcement | `HintAnnouncement` → `.field__hint` `role="status"`, `aria-live="polite"` | `DarkHintAnnouncement` → same |
+| Field error announcement | `ErrorAnnouncement` → `.field__error` `role="status"`, `aria-live="polite"`, error replaces hint | `DarkErrorAnnouncement` → same |
+| Field non-native required/disabled state | `NonNativeControl` → child `aria-required="true"`, `aria-disabled="true"` | `DarkNonNativeControl` → same |
+| Field disabled contrast | existing `Disabled` (unchanged) | — `DISABLED / REVIEW` |
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| focused unit RED | `1` | `15 fail` / `47 pass` |
+| focused unit GREEN | `0` | `62 pass` / `0 fail` |
+| focused browser RED | `1` | `21 failed` / `30 passed` (51) |
+| focused browser GREEN | `0` | `51 passed` (51) |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `709 pass / 0 fail` (90 files); browser `452 passed` (73 files) |
+| `mise run check:deps` | `0` | Knip, no findings (the Batch B0 `@pandacss/node` finding is resolved by `0709208`) |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-Cb_XQEPt.css 214.75 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the Batch B1 shipped baseline (`0709208`): unit `696 → 709` (`+13`), browser `430 → 452` (`+22`). One `mise run check` browser pass was flaky on `card/Card.stories.tsx` (unrelated to B2: passes in isolation and on re-run); the re-run was fully green.
+
+### Changed paths
+
+`src/shared/components/input/{input.tsx,preset.ts,index.ts,Input.test.ts,Input.composition.test.tsx,Input.stories.tsx}`, `src/shared/components/textarea/{textarea.tsx,preset.ts,Textarea.composition.test.tsx,Textarea.stories.tsx}`, `src/shared/components/number-input/{number-input.tsx,NumberInput.composition.test.tsx,NumberInput.stories.tsx}`, `src/shared/components/field/{field.tsx,Field.composition.test.tsx,Field.stories.tsx}`, this evidence. `index.ts` barrels were left unchanged (no new exports). Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited).
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| Input `type: text · email · password · search` | **PASS** |
+| Input `required` / `read-only` native behaviour | **PASS** |
+| Input `prefix/suffix` decorative icon slots (approved, Button pattern) | **PASS** |
+| Input `invalid` / error association | **PASS** (retained) |
+| Input `size` | **BLOCKED** (user decision, no API) |
+| Input `valid` visual state | **BLOCKED** (user decision, no API) |
+| Textarea `rows` | **PASS** |
+| Textarea `character counter` + remaining-character announcement | **PASS** |
+| Textarea `invalid` / `disabled` | **PASS** (retained) |
+| Textarea `auto-grow` | **BLOCKED** (user decision, no API) |
+| NumberInput `stepper on/off` + accessible names | **PASS** |
+| NumberInput `unit` | **PASS** |
+| NumberInput `min/max` + saturated-direction disabling + controlled/uncontrolled clamp | **PASS** |
+| NumberInput numeric role with min/max/step | **PASS** |
+| NumberInput `size` | **BLOCKED** (user decision, no API) |
+| Field label association + `hint on/off` / `error on/off` replacement | **PASS** |
+| Field `required` / `invalid` / `disabled` forwarding (native and non-native) | **PASS** |
+| Field hint/error update announcement | **PASS** |
+| Field `label placement` | **BLOCKED** (user decision, no API) |
+| Disabled contrast (all four owners) | `DISABLED / REVIEW` (both themes) |
+| **B2 final status** | **PASS** — every non-blocked Pen axis is implemented and evidenced; the blocked axes are explicit user decisions with no speculative API |
+
+### Remaining concerns
+
+- **INFO — NumberInput `min/max reached` projection.** Pen `EZfrL` (`ox2RF` / `W1OqsJ`) sets the whole `Stepper` frame `ENABLED=false` at a bound. Disabling the cluster in both directions would trap the value (no way back from a bound), which contradicts `RAOC3` ("the stepper is an accelerator"). The implementation disables only the saturated direction (increase at max, decrease at min) so the control stays operable; this is the chosen interpretation, not a new public axis.
+- **INFO — Input `read-only` border.subtle.** `NEbdq` describes a `border.subtle` + disabled surface for read-only. The native `readOnly` behaviour and value visibility are implemented and tested; the read-only *border/background* swap is not claimed this cycle (the user approval covered the icon slots only). Recorded so the reviewer can decide whether the visual is required. Disabled contrast remains `DISABLED / REVIEW`.
+- **INFO — Input `valid` and `size`.** `VSh2R` and `oTL4D` list `valid` and `size`, and `N0ymEX`/`c6uIoT` list `auto-grow`/`label placement`; all are recorded `BLOCKED` per the user's explicit scope decision, with no `BLOCKED` API shipped.
+- **INFO — Field non-native state.** `aria-required` / `aria-disabled` are forwarded to a non-native child because Pen `ZbhVg` requires the state to be exposed and `SbjP5` requires forwarding; the consumer remains responsible for the enforced behaviour.

@@ -35,6 +35,8 @@ type FieldControlProps = {
     disabled?: boolean;
     "aria-describedby"?: string;
     "aria-invalid"?: boolean;
+    "aria-required"?: boolean;
+    "aria-disabled"?: boolean;
 };
 
 const NATIVE_FORM_CONTROLS = new Set([ "input", "select", "textarea", ]);
@@ -78,7 +80,7 @@ export const Field = ({
             "aria-invalid": invalid || undefined,
             ...( isNativeControl
                 ? { required: required || undefined, disabled: disabled || undefined, }
-                : {} ),
+                : { "aria-required": required || undefined, "aria-disabled": disabled || undefined, } ),
         });
 
     return (
@@ -99,12 +101,12 @@ export const Field = ({
             )}
             <div className={styles.control}>{control}</div>
             {showHint && (
-                <p className={styles.hint} id={hintId}>
+                <p className={styles.hint} id={hintId} role="status" aria-live="polite">
                     {hint}
                 </p>
             )}
             {showError && (
-                <p className={styles.error} id={errorId}>
+                <p className={styles.error} id={errorId} role="status" aria-live="polite">
                     {error}
                 </p>
             )}
