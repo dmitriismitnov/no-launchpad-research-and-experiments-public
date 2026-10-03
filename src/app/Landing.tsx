@@ -151,9 +151,9 @@ const lead = css({
 
 const actionRow = css({ display: "flex", alignItems: "center", gap: "x5", flexWrap: "wrap", });
 
-// Pen mobile hero actions (`P6A8Xm`): the two controls become a full-width
-// stack with the 12px Pen gap and 48px controls. From `md` the pre-existing
-// horizontal intrinsic 40px row is kept, as freezes the parity plan.
+// Pen hero actions: mobile `P6A8Xm` stacks two full-width 350x48 controls with
+// the 12px Pen gap; desktop `bambL` and tablet `L1Xf4m` are horizontal 48px
+// controls.
 const heroActions = css({
     display: "flex",
     flexDirection: { base: "column", md: "row", },
@@ -163,7 +163,7 @@ const heroActions = css({
 
 const heroActionButton = css({
     width: { base: "100%", md: "auto", },
-    height: { base: "x24", md: "x20", },
+    height: "x24",
 });
 
 const trustRow = css({ display: "flex", alignItems: "center", gap: "x5", flexWrap: "wrap", });
@@ -299,11 +299,14 @@ const valueBody = css({ fontSize: "sm", lineHeight: "relaxed", color: "semantic.
 // Features
 // ---------------------------------------------------------------------------
 
+// Pen feature frames: `paddingBlock` 64 / 48 / 36 (desktop / tablet / mobile)
+// and `gap` 72 / 32 / 16 (`M2zLU` / `vzXfY` / `pRsS2`). Desktop 72 and mobile 36
+// exceed the xN scale, so they keep the literal Pen values.
 const featureGrid = {
     display: "grid",
-    gap: { base: "x12", xl: "x16", },
+    gap: { base: "x8", md: "x16", xl: "72px", },
     alignItems: "center",
-    paddingBlock: { base: "x12", xl: "x16", },
+    paddingBlock: { base: "36px", md: "x24", xl: "x32", },
 };
 
 // Pen `10 Landing — desktop` (`DsHK8`) keeps the feature section header
@@ -361,8 +364,11 @@ const bullet = css({ display: "flex", alignItems: "flex-start", gap: "x3", fontS
 
 const bulletIcon = css({ flexShrink: "0", color: "semantic.action.primary.background", marginTop: "x1", });
 
+// Pen feature visuals are fixed-height, clipped frames: `k6MjK` 380 desktop,
+// `whc8u` 300 tablet, `XoL2U` 260 mobile.
 const visualPanel = css({
     display: "grid",
+    height: { base: "260px", md: "300px", xl: "380px", },
     borderWidth: "thin",
     borderStyle: "solid",
     borderColor: "semantic.border.subtle",
