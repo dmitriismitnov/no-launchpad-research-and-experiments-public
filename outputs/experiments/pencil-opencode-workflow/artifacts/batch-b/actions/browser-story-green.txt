@@ -1,0 +1,15 @@
+│
+▲  No story files found for the specified pattern: src/**/*.mdx
+
+ RUN  v4.1.11 /Users/es/Shared/vm/no-vm-shared/no-launchpad/no-launchpad-landing
+
+ ✓  storybook (chromium)  src/shared/components/toggle/Toggle.stories.tsx (12 tests) 671ms
+   ✓ Playground  361ms
+ ✓  storybook (chromium)  src/shared/components/toggle-group/ToggleGroup.stories.tsx (15 tests) 810ms
+   ✓ Playground  391ms
+
+ Test Files  2 passed (2)
+      Tests  27 passed (27)
+   Start at  15:49:18
+   Duration  2.57s (transform 0ms, setup 1.69s, import 286ms, tests 1.48s, environment 0ms)
+

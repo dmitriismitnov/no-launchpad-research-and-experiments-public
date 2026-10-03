@@ -1,0 +1,1172 @@
+│
+▲  No story files found for the specified pattern: src/**/*.mdx
+
+ RUN  v4.1.11 /Users/es/Shared/vm/no-vm-shared/no-launchpad/no-launchpad-landing
+
+stderr | src/shared/components/toggle-group/ToggleGroup.stories.tsx > Single Exclusive
+React does not recognize the `selectionMode` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `selectionmode` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+ ❯  storybook (chromium)  src/shared/components/toggle-group/ToggleGroup.stories.tsx (15 tests | 8 failed) 671ms
+   ✓ Playground  375ms
+   ✓ Reference Light 27ms
+   ✓ Reference Dark 33ms
+   ✓ Multi Select 30ms
+   ✓ Interactive 29ms
+   ✓ Disabled 18ms
+   ✓ Multiple Independent 35ms
+   × Single Exclusive 8ms
+   × Dark Single Exclusive 15ms
+   × Single Keyboard 16ms
+   × Single Disabled No Op 17ms
+   × Icon Only 15ms
+   × Dark Icon Only 15ms
+   × Segment Counts 18ms
+   × Dark Segment Counts 17ms
+ ❯  storybook (chromium)  src/shared/components/toggle/Toggle.stories.tsx (12 tests | 2 failed) 646ms
+   ✓ Playground  371ms
+   ✓ Reference 30ms
+   ✓ Pressed 30ms
+   ✓ Without Icon 29ms
+   ✓ Disabled 21ms
+   × Icon Only 23ms
+   × Dark Icon Only 14ms
+   ✓ Uncontrolled Interaction 44ms
+   ✓ Keyboard 22ms
+   ✓ Disabled No Op 23ms
+   ✓ Light 20ms
+   ✓ Dark 15ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL   storybook (chromium)  src/shared/components/toggle/Toggle.stories.tsx > Icon Only
+AssertionError: 
+Click to debug the error directly in Storybook: http://localhost:6006/?path=/story/components-actions-toggle--icon-only&addonPanel=storybook/interactions/panel
+
+expected <span …(1)></span> to be null
+
+- Expected
++ Received
+
+- null
++ <span
++   class="toggle__label toggle__label--pressed_false toggle__label--disabled_false"
++ />
+
+ ❯ toBeNull src/shared/components/toggle/Toggle.stories.tsx:80:30
+     78| };
+     79|
+     80| export const Pressed: Story = {
+       |                              ^
+     81|     args: { ...reference, pressed: true, },
+     82|     render: renderIn("light"),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL   storybook (chromium)  src/shared/components/toggle/Toggle.stories.tsx > Dark Icon Only
+AssertionError: 
+Click to debug the error directly in Storybook: http://localhost:6006/?path=/story/components-actions-toggle--dark-icon-only&addonPanel=storybook/interactions/panel
+
+expected <span …(1)></span> to be null
+
+- Expected
++ Received
+
+- null
++ <span
++   class="toggle__label toggle__label--pressed_false toggle__label--disabled_false"
++ />
+
+ ❯ toBeNull src/shared/components/toggle/Toggle.stories.tsx:86:106
+     84|         const canvas = within(canvasElement);
+     85|
+     86|         await expect(canvas.getByRole("button", { name: "Bold", })).to…
+       |                                                                                                          ^
+     87|     },
+     88| };
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+ FAIL   storybook (chromium)  src/shared/components/toggle-group/ToggleGroup.stories.tsx > Single Exclusive
+TestingLibraryElementError: 
+Click to debug the error directly in Storybook: http://localhost:6006/?path=/story/components-actions-toggle-group--single-exclusive&addonPanel=storybook/interactions/panel
+
+Unable to find an accessible element with the role "radiogroup" and name "View"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "View":
+  <div
+    aria-label="View"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  --------------------------------------------------
+  button:
+
+  Name "Grid":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "List":
+  <button
+    aria-pressed="true"
+    class="toggleGroup__item toggleGroup__item--pressed_true toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Board":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+<div>
+  <div
+    data-theme="light"
+  >
+    <div
+      class="p_x12 bg-c_semantic.common.100.background c_semantic.common.100.text"
+    >
+      <div
+        aria-label="View"
+        class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+        role="group"
+        selectionmode="single"
+      >
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          >
+            Grid
+          </span>
+        </button>
+        <button
+          aria-pressed="true"
+          class="toggleGroup__item toggleGroup__item--pressed_true toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_true toggleGroup__label--disabled_false"
+          >
+            List
+          </span>
+        </button>
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          >
+            Board
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:338:18
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1197:24
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1176:16
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1219:18
+ ❯ getByRole src/shared/components/toggle-group/ToggleGroup.stories.tsx:123:19
+    121|         </ThemeShell>
+    122|     ),
+    123|     play: async ({ canvasElement, }) => {
+       |                   ^
+    124|         const canvas = within(canvasElement);
+    125|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯
+
+ FAIL   storybook (chromium)  src/shared/components/toggle-group/ToggleGroup.stories.tsx > Dark Single Exclusive
+TestingLibraryElementError: 
+Click to debug the error directly in Storybook: http://localhost:6006/?path=/story/components-actions-toggle-group--dark-single-exclusive&addonPanel=storybook/interactions/panel
+
+Unable to find an accessible element with the role "radio" and name "List"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "View":
+  <div
+    aria-label="View"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  --------------------------------------------------
+  button:
+
+  Name "Grid":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "List":
+  <button
+    aria-pressed="true"
+    class="toggleGroup__item toggleGroup__item--pressed_true toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Board":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+<div>
+  <div
+    data-theme="dark"
+  >
+    <div
+      class="p_x12 bg-c_semantic.common.100.background c_semantic.common.100.text"
+    >
+      <div
+        aria-label="View"
+        class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+        role="group"
+        selectionmode="single"
+      >
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          >
+            Grid
+          </span>
+        </button>
+        <button
+          aria-pressed="true"
+          class="toggleGroup__item toggleGroup__item--pressed_true toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_true toggleGroup__label--disabled_false"
+          >
+            List
+          </span>
+        </button>
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          >
+            Board
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:338:18
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1197:24
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1176:16
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1219:18
+ ❯ args src/shared/components/toggle-group/ToggleGroup.stories.tsx:135:36
+    133|     render: (args) => (
+    134|         <ThemeShell theme="light">
+    135|             <ToggleGroup {...args} />
+       |                                    ^
+    136|         </ThemeShell>
+    137|     ),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯
+
+ FAIL   storybook (chromium)  src/shared/components/toggle-group/ToggleGroup.stories.tsx > Single Keyboard
+TestingLibraryElementError: 
+Click to debug the error directly in Storybook: http://localhost:6006/?path=/story/components-actions-toggle-group--single-keyboard&addonPanel=storybook/interactions/panel
+
+Unable to find an accessible element with the role "radio" and name "Grid"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "View":
+  <div
+    aria-label="View"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  --------------------------------------------------
+  button:
+
+  Name "Grid":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "List":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_true"
+    disabled=""
+    type="button"
+  />
+
+  Name "Board":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+<div>
+  <div
+    data-theme="light"
+  >
+    <div
+      class="p_x12 bg-c_semantic.common.100.background c_semantic.common.100.text"
+    >
+      <div
+        aria-label="View"
+        class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+        role="group"
+        selectionmode="single"
+      >
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          >
+            Grid
+          </span>
+        </button>
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_true"
+          disabled=""
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_true"
+          >
+            List
+          </span>
+        </button>
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          >
+            Board
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:338:18
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1197:24
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1176:16
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1219:18
+ ❯ canvasElement src/shared/components/toggle-group/ToggleGroup.stories.tsx:139:30
+    137|     ),
+    138|     play: async ({ canvasElement, }) => {
+    139|         const canvas = within(canvasElement);
+       |                              ^
+    140|         const list = canvas.getByRole("button", { name: "List", });
+    141|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯
+
+ FAIL   storybook (chromium)  src/shared/components/toggle-group/ToggleGroup.stories.tsx > Single Disabled No Op
+TestingLibraryElementError: 
+Click to debug the error directly in Storybook: http://localhost:6006/?path=/story/components-actions-toggle-group--single-disabled-no-op&addonPanel=storybook/interactions/panel
+
+Unable to find an accessible element with the role "radio" and name "Grid"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "View":
+  <div
+    aria-label="View"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  --------------------------------------------------
+  button:
+
+  Name "Grid":
+  <button
+    aria-pressed="true"
+    class="toggleGroup__item toggleGroup__item--pressed_true toggleGroup__item--disabled_true"
+    disabled=""
+    type="button"
+  />
+
+  Name "List":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_true"
+    disabled=""
+    type="button"
+  />
+
+  Name "Board":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_true"
+    disabled=""
+    type="button"
+  />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+<div>
+  <div
+    data-theme="light"
+  >
+    <div
+      class="p_x12 bg-c_semantic.common.100.background c_semantic.common.100.text"
+    >
+      <div
+        aria-label="View"
+        class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+        role="group"
+        selectionmode="single"
+      >
+        <button
+          aria-pressed="true"
+          class="toggleGroup__item toggleGroup__item--pressed_true toggleGroup__item--disabled_true"
+          disabled=""
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_true toggleGroup__label--disabled_true"
+          >
+            Grid
+          </span>
+        </button>
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_true"
+          disabled=""
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_true"
+          >
+            List
+          </span>
+        </button>
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_true"
+          disabled=""
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_true"
+          >
+            Board
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:338:18
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1197:24
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1176:16
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1219:18
+ ❯ play src/shared/components/toggle-group/ToggleGroup.stories.tsx:438:25
+    320|         await expect(canvas.getAllByRole("radio").length).toBe(2 + 4);
+    321|     },
+    322| };
+       |             ^
+    323|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯
+
+ FAIL   storybook (chromium)  src/shared/components/toggle-group/ToggleGroup.stories.tsx > Icon Only
+TestingLibraryElementError: 
+Click to debug the error directly in Storybook: http://localhost:6006/?path=/story/components-actions-toggle-group--icon-only&addonPanel=storybook/interactions/panel
+
+Unable to find an accessible element with the role "radiogroup" and name "View"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "View":
+  <div
+    aria-label="View"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  --------------------------------------------------
+  button:
+
+  Name "":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+<div>
+  <div
+    data-theme="light"
+  >
+    <div
+      class="p_x12 bg-c_semantic.common.100.background c_semantic.common.100.text"
+    >
+      <div
+        aria-label="View"
+        class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+        role="group"
+        selectionmode="single"
+      >
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          />
+        </button>
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          />
+        </button>
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:338:18
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1197:24
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1176:16
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1219:18
+ ❯ getByRole src/shared/components/toggle-group/ToggleGroup.stories.tsx:165:12
+    163|
+    164| export const MultipleIndependent: Story = {
+    165|     args: { options, "aria-label": "View", },
+       |            ^
+    166|     render: (args) => (
+    167|         <ThemeShell theme="light">
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯
+
+ FAIL   storybook (chromium)  src/shared/components/toggle-group/ToggleGroup.stories.tsx > Dark Icon Only
+TestingLibraryElementError: 
+Click to debug the error directly in Storybook: http://localhost:6006/?path=/story/components-actions-toggle-group--dark-icon-only&addonPanel=storybook/interactions/panel
+
+Unable to find an accessible element with the role "radio" and name "Grid view"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "View":
+  <div
+    aria-label="View"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  --------------------------------------------------
+  button:
+
+  Name "":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+<div>
+  <div
+    data-theme="dark"
+  >
+    <div
+      class="p_x12 bg-c_semantic.common.100.background c_semantic.common.100.text"
+    >
+      <div
+        aria-label="View"
+        class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+        role="group"
+        selectionmode="single"
+      >
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          />
+        </button>
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          />
+        </button>
+        <button
+          aria-pressed="false"
+          class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+          type="button"
+        >
+          <span
+            class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:338:18
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1197:24
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1176:16
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1219:18
+ ❯ canvasElement src/shared/components/toggle-group/ToggleGroup.stories.tsx:171:19
+    169|         </ThemeShell>
+    170|     ),
+    171|     play: async ({ canvasElement, }) => {
+       |                   ^
+    172|         const user = userEvent.setup();
+    173|         const canvas = within(canvasElement);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/10]⎯
+
+ FAIL   storybook (chromium)  src/shared/components/toggle-group/ToggleGroup.stories.tsx > Segment Counts
+TestingLibraryElementError: 
+Click to debug the error directly in Storybook: http://localhost:6006/?path=/story/components-actions-toggle-group--segment-counts&addonPanel=storybook/interactions/panel
+
+Unable to find an accessible element with the role "radiogroup"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "Two":
+  <div
+    aria-label="Two"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  Name "Three":
+  <div
+    aria-label="Three"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  Name "Four":
+  <div
+    aria-label="Four"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  --------------------------------------------------
+  button:
+
+  Name "Day":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Week":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Grid":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "List":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Board":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "One":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Two":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Three":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Four":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+<div>
+  <div
+    data-theme="light"
+  >
+    <div
+      class="p_x12 bg-c_semantic.common.100.background c_semantic.common.100.text"
+    >
+      <div
+        class="d_flex flex-d_column ai_flex-start gap_x8"
+      >
+        <div
+          aria-label="Two"
+          class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+          role="group"
+          selectionmode="single"
+        >
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Day
+            </span>
+          </button>
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Week
+            </span>
+          </button>
+        </div>
+        <div
+          aria-label="Three"
+          class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+          role="group"
+          selectionmode="single"
+        >
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Grid
+            </span>
+          </button>
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              List
+            </span>
+          </button>
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Board
+            </span>
+          </button>
+        </div>
+        <div
+          aria-label="Four"
+          class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+          role="group"
+          selectionmode="single"
+        >
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              One
+            </span>
+          </button>
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Two
+            </span>
+          </button>
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Three
+            </span>
+          </button>
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Four
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:338:18
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1197:24
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1237:14
+ ❯ getAllByRole src/shared/components/toggle-group/ToggleGroup.stories.tsx:185:10
+    183|
+    184| export const SingleExclusive: Story = {
+    185|     args: { options, selectionMode: "single", "aria-label": "View", de…
+       |          ^
+    186|     render: (args) => (
+    187|         <ThemeShell theme="light">
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/10]⎯
+
+ FAIL   storybook (chromium)  src/shared/components/toggle-group/ToggleGroup.stories.tsx > Dark Segment Counts
+TestingLibraryElementError: 
+Click to debug the error directly in Storybook: http://localhost:6006/?path=/story/components-actions-toggle-group--dark-segment-counts&addonPanel=storybook/interactions/panel
+
+Unable to find an accessible element with the role "radio"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "Two":
+  <div
+    aria-label="Two"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  Name "Four":
+  <div
+    aria-label="Four"
+    class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+    role="group"
+    selectionmode="single"
+  />
+
+  --------------------------------------------------
+  button:
+
+  Name "Day":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Week":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "One":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Two":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Three":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  Name "Four":
+  <button
+    aria-pressed="false"
+    class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+    type="button"
+  />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+<div>
+  <div
+    data-theme="dark"
+  >
+    <div
+      class="p_x12 bg-c_semantic.common.100.background c_semantic.common.100.text"
+    >
+      <div
+        class="d_flex flex-d_column ai_flex-start gap_x8"
+      >
+        <div
+          aria-label="Two"
+          class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+          role="group"
+          selectionmode="single"
+        >
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Day
+            </span>
+          </button>
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Week
+            </span>
+          </button>
+        </div>
+        <div
+          aria-label="Four"
+          class="toggleGroup__root toggleGroup__root--pressed_false toggleGroup__root--disabled_false"
+          role="group"
+          selectionmode="single"
+        >
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              One
+            </span>
+          </button>
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Two
+            </span>
+          </button>
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Three
+            </span>
+          </button>
+          <button
+            aria-pressed="false"
+            class="toggleGroup__item toggleGroup__item--pressed_false toggleGroup__item--disabled_false"
+            type="button"
+          >
+            <span
+              class="toggleGroup__label toggleGroup__label--pressed_false toggleGroup__label--disabled_false"
+            >
+              Four
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:338:18
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1197:24
+ ❯ node_modules/@testing-library/dom/dist/@testing-library/dom.esm.js:1237:14
+ ❯ play src/shared/components/toggle-group/ToggleGroup.stories.tsx:599:25
+    320|         await expect(canvas.getAllByRole("radio").length).toBe(2 + 4);
+    321|     },
+    322| };
+       |             ^
+    323|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/10]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  10 failed | 17 passed (27)
+   Start at  15:49:01
+   Duration  2.54s (transform 0ms, setup 1.62s, import 271ms, tests 1.32s, environment 0ms)
+

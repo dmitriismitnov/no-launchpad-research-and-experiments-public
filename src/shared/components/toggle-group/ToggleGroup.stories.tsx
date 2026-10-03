@@ -1,7 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, userEvent, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -19,10 +19,41 @@ const ThemeShell = ({ theme, children, }: { theme: "light" | "dark"; children: R
     </div>
 );
 
+const stack = css({
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: "x8",
+});
+
 const options: readonly ToggleGroupOption[] = [
     { value: "grid", label: "Grid", },
     { value: "list", label: "List", },
     { value: "board", label: "Board", },
+];
+
+const optionsWithDisabled: readonly ToggleGroupOption[] = [
+    { value: "grid", label: "Grid", },
+    { value: "list", label: "List", disabled: true, },
+    { value: "board", label: "Board", },
+];
+
+const iconOptions: readonly ToggleGroupOption[] = [
+    { value: "grid", icon: "layout-grid", "aria-label": "Grid view", },
+    { value: "list", icon: "menu", "aria-label": "List view", },
+    { value: "board", icon: "image", "aria-label": "Board view", },
+];
+
+const twoOptions: readonly ToggleGroupOption[] = [
+    { value: "day", label: "Day", },
+    { value: "week", label: "Week", },
+];
+
+const fourOptions: readonly ToggleGroupOption[] = [
+    { value: "one", label: "One", },
+    { value: "two", label: "Two", },
+    { value: "three", label: "Three", },
+    { value: "four", label: "Four", },
 ];
 
 // The PEN reference (`Toggle Group`, id `e5ySA`) with its "List" segment on.
@@ -127,5 +158,165 @@ export const Disabled: Story = {
         const canvas = within(canvasElement);
 
         await expect(canvas.getByRole("button", { name: "Grid", })).toBeDisabled();
+    },
+};
+
+export const MultipleIndependent: Story = {
+    args: { options, "aria-label": "View", },
+    render: (args) => (
+        <ThemeShell theme="light">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const grid = canvas.getByRole("button", { name: "Grid", });
+        const list = canvas.getByRole("button", { name: "List", });
+
+        await user.click(grid);
+        await user.click(list);
+        await expect(grid).toHaveAttribute("aria-pressed", "true");
+        await expect(list).toHaveAttribute("aria-pressed", "true");
+    },
+};
+
+export const SingleExclusive: Story = {
+    args: { options, selectionMode: "single", "aria-label": "View", defaultValue: [ "list", ], },
+    render: (args) => (
+        <ThemeShell theme="light">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const group = canvas.getByRole("radiogroup", { name: "View", });
+        const list = canvas.getByRole("radio", { name: "List", });
+
+        await expect(group).toBeTruthy();
+        await expect(canvas.getAllByRole("radio").length).toBe(options.length);
+        await expect(list).toHaveAttribute("aria-checked", "true");
+        await expect(canvas.getByRole("radio", { name: "Grid", })).toHaveAttribute("aria-checked", "false");
+    },
+};
+
+export const DarkSingleExclusive: Story = {
+    args: { options, selectionMode: "single", "aria-label": "View", defaultValue: [ "list", ], },
+    render: (args) => (
+        <ThemeShell theme="dark">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(canvas.getByRole("radio", { name: "List", })).toHaveAttribute("aria-checked", "true");
+    },
+};
+
+export const SingleKeyboard: Story = {
+    args: { options: optionsWithDisabled, selectionMode: "single", "aria-label": "View", },
+    render: (args) => (
+        <ThemeShell theme="light">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const grid = canvas.getByRole("radio", { name: "Grid", });
+        const board = canvas.getByRole("radio", { name: "Board", });
+
+        grid.focus();
+        await user.keyboard("{ArrowRight}");
+        await expect(board).toHaveFocus();
+        await expect(board).toHaveAttribute("aria-checked", "false");
+        await user.keyboard("{Enter}");
+        await expect(board).toHaveAttribute("aria-checked", "true");
+        await expect(grid).toHaveAttribute("aria-checked", "false");
+    },
+};
+
+export const SingleDisabledNoOp: Story = {
+    args: { options, selectionMode: "single", "aria-label": "View", disabled: true, defaultValue: [ "grid", ], },
+    render: (args) => (
+        <ThemeShell theme="light">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const grid = canvas.getByRole("radio", { name: "Grid", });
+        const list = canvas.getByRole("radio", { name: "List", });
+
+        list.click();
+        await expect(grid).toHaveAttribute("aria-checked", "true");
+        await expect(list).toHaveAttribute("aria-checked", "false");
+    },
+};
+
+export const IconOnly: Story = {
+    args: { options: iconOptions, selectionMode: "single", "aria-label": "View", },
+    render: (args) => (
+        <ThemeShell theme="light">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(canvas.getByRole("radiogroup", { name: "View", })).toBeTruthy();
+        await expect(canvas.getByRole("radio", { name: "Grid view", })).toBeTruthy();
+        await expect(canvas.getByRole("radio", { name: "Board view", })).toBeTruthy();
+        await expect(canvasElement.querySelectorAll(".toggleGroup__icon").length).toBe(iconOptions.length);
+        await expect(canvasElement.querySelector(".toggleGroup__label")).toBeNull();
+    },
+};
+
+export const DarkIconOnly: Story = {
+    args: { options: iconOptions, selectionMode: "single", "aria-label": "View", },
+    render: (args) => (
+        <ThemeShell theme="dark">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(canvas.getByRole("radio", { name: "Grid view", })).toBeTruthy();
+    },
+};
+
+export const SegmentCounts: Story = {
+    render: () => (
+        <ThemeShell theme="light">
+            <div className={stack}>
+                <ToggleGroup selectionMode="single" options={twoOptions} aria-label="Two" />
+                <ToggleGroup selectionMode="single" options={options} aria-label="Three" />
+                <ToggleGroup selectionMode="single" options={fourOptions} aria-label="Four" />
+            </div>
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(canvas.getAllByRole("radiogroup").length).toBe(3);
+        await expect(canvas.getAllByRole("radio").length).toBe(2 + 3 + 4);
+    },
+};
+
+export const DarkSegmentCounts: Story = {
+    render: () => (
+        <ThemeShell theme="dark">
+            <div className={stack}>
+                <ToggleGroup selectionMode="single" options={twoOptions} aria-label="Two" />
+                <ToggleGroup selectionMode="single" options={fourOptions} aria-label="Four" />
+            </div>
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(canvas.getAllByRole("radio").length).toBe(2 + 4);
     },
 };

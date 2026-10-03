@@ -1,7 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
-import { Toggle, } from "./toggle";
+import { Toggle, type ToggleProps, } from "./toggle";
 
 describe("Toggle composition", () => {
     test("renders a pressed-state button with the label in its slot", () => {
@@ -52,5 +52,26 @@ describe("Toggle composition", () => {
 
         expect(markup).toContain('type="submit"');
         expect(markup).toContain('data-testid="t"');
+    });
+
+    test("names the icon-only form from aria-label and drops the label slot", () => {
+        const markup = renderToStaticMarkup(<Toggle icon="check" aria-label="Bold" />);
+
+        expect(markup).toContain('aria-label="Bold"');
+        expect(markup).toContain("toggle__icon");
+        expect(markup).not.toContain("toggle__label");
+    });
+
+    test("rejects an icon-only toggle without a non-empty accessible label", () => {
+        const unlabelled = { icon: "check", } as unknown as ToggleProps;
+
+        expect(() => renderToStaticMarkup(<Toggle {...unlabelled} />)).toThrow(/non-empty/);
+    });
+
+    test("keeps the button accessible name when the visible label is empty", () => {
+        const markup = renderToStaticMarkup(<Toggle label="" icon="check" aria-label="Bold" />);
+
+        expect(markup).toContain('aria-label="Bold"');
+        expect(markup).not.toContain("toggle__label");
     });
 });

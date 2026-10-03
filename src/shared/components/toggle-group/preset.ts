@@ -22,7 +22,7 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  */
 export const toggleGroupRecipe = defineSlotRecipe({
     className: "toggleGroup",
-    slots: [ "root", "item", "label", ],
+    slots: [ "root", "item", "icon", "label", ],
 
     base: {
         root: {
@@ -41,6 +41,7 @@ export const toggleGroupRecipe = defineSlotRecipe({
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
+            gap: "x2",
             paddingBlock: "x3",
             paddingInline: "x8",
             borderRadius: "sm",
@@ -57,6 +58,12 @@ export const toggleGroupRecipe = defineSlotRecipe({
             _enabled: {
                 _hover: { backgroundColor: "semantic.common.50.background", },
             },
+        },
+
+        icon: {
+            flexShrink: "0",
+            width: "x8",
+            height: "x8",
         },
 
         label: {

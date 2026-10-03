@@ -1,7 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, within, } from "storybook/test";
+import { expect, userEvent, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -99,6 +99,73 @@ export const Disabled: Story = {
         const canvas = within(canvasElement);
 
         await expect(canvas.getByRole("button", { name: "Disabled toggle", })).toBeDisabled();
+    },
+};
+
+export const IconOnly: Story = {
+    args: { icon: "check", "aria-label": "Bold", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const toggle = canvas.getByRole("button", { name: "Bold", });
+
+        await expect(toggle).toHaveAttribute("aria-pressed", "false");
+        await expect(canvasElement.querySelector(".toggle__label")).toBeNull();
+        await expect(canvasElement.querySelector(".toggle__icon")).not.toBeNull();
+    },
+};
+
+export const DarkIconOnly: Story = {
+    args: { icon: "check", "aria-label": "Bold", },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(canvas.getByRole("button", { name: "Bold", })).toBeTruthy();
+        await expect(canvasElement.querySelector(".toggle__label")).toBeNull();
+    },
+};
+
+export const UncontrolledInteraction: Story = {
+    args: { label: "Bold", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const toggle = canvas.getByRole("button", { name: "Bold", });
+
+        await user.click(toggle);
+        await expect(toggle).toHaveAttribute("aria-pressed", "true");
+        await user.click(toggle);
+        await expect(toggle).toHaveAttribute("aria-pressed", "false");
+    },
+};
+
+export const Keyboard: Story = {
+    args: { label: "Bold", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const toggle = canvas.getByRole("button", { name: "Bold", });
+
+        toggle.focus();
+        await user.keyboard("{Enter}");
+        await expect(toggle).toHaveAttribute("aria-pressed", "true");
+        await user.keyboard(" ");
+        await expect(toggle).toHaveAttribute("aria-pressed", "false");
+    },
+};
+
+export const DisabledNoOp: Story = {
+    args: { label: "Disabled toggle", disabled: true, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const toggle = canvas.getByRole("button", { name: "Disabled toggle", });
+
+        toggle.click();
+        await expect(toggle).toHaveAttribute("aria-pressed", "false");
     },
 };
 

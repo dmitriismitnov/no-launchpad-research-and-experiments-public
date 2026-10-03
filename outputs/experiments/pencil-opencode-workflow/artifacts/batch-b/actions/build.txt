@@ -1,0 +1,26 @@
+[build] $ mise run gen && bunx --no-install vite build
+[gen] $ mise run panda:gen && mise run panda:cssgen
+[panda:gen] $ bunx --no-install panda codegen
+✔️ `src/shared/styled-system/css`: the css function to author styles
+✔️ `src/shared/styled-system/tokens`: the css variables and js function to query your tokens
+✔️ `src/shared/styled-system/patterns`: functions to implement and apply common layout patterns
+✔️ `src/shared/styled-system/recipes`: functions to create multi-variant styles
+✔️ `src/shared/styled-system/jsx`: styled jsx elements for react
+
+
+[panda:cssgen] $ bunx --no-install panda cssgen --outfile src/shared/styled-sys…
+🐼 info [css] /Users/es/Shared/vm/no-vm-shared/no-launchpad/no-launchpad-landing/src/shared/styled-system/styles.css
+🐼 info [hrtime] Successfully extracted css from 426 file(s) ✨ (167.64ms)
+vite v8.3.0 building client environment for production...
+transforming...
+✓ 141 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                            0.42 kB │ gzip:  0.27 kB
+dist/assets/icon-DleFgobe.woff2            5.73 kB
+dist/assets/inter-normal-BrXsWJWV.woff2  349.43 kB
+dist/assets/inter-italic-C9UHaEYJ.woff2  385.12 kB
+dist/assets/index-RgfOP5jp.css           213.78 kB │ gzip: 21.37 kB
+dist/assets/index-Bm1BAuzW.js            272.70 kB │ gzip: 83.63 kB
+
+✓ built in 102ms
