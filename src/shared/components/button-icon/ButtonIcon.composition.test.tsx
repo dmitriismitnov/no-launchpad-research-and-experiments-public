@@ -55,6 +55,21 @@ describe("buttonIcon composition", () => {
         expect(markup).toContain("buttonIcon__icon--tone_destructive");
     });
 
+    test("keeps the label and swaps in a decorative loader while loading", () => {
+        // Pen `R3LwyT`: the glyph slot swaps to the loader while the square,
+        // the required accessible label and the decorative semantics stay.
+        const markup = renderToStaticMarkup(<ButtonIcon loading icon="check" label="Save" />);
+
+        expect(markup).toContain("disabled");
+        expect(markup).toContain(`data-loading="true"`);
+        expect(markup).toContain(`aria-label="Save"`);
+        expect(markup.match(/aria-label=/g)?.length).toBe(1);
+        expect(markup).toContain(glyph("loader"));
+        expect(markup).toContain(`aria-hidden="true"`);
+        expect(markup).not.toContain(`role="img"`);
+        expect(markup).not.toMatch(/(?<![-\w])loading=/);
+    });
+
     test("passes native button attributes through", () => {
         const markup = renderToStaticMarkup(
             <ButtonIcon type="submit" disabled icon="check" label="Continue" />,

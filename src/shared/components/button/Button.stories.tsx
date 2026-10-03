@@ -99,6 +99,13 @@ const meta = {
             control: { type: "select", },
             options: [ "sm", "md", ],
         },
+        width: {
+            control: { type: "select", },
+            options: [ "hug", "full", ],
+        },
+        loading: {
+            control: { type: "boolean", },
+        },
         prefixIcon: {
             control: { type: "select", },
             options: iconNames,
@@ -354,4 +361,125 @@ export const DarkStateMatrix: Story = {
             <Matrix />
         </ThemeShell>
     ),
+};
+
+// Pen `IcuBw` full width (`MboG8` / `GW4Jy`) is a fill-container override inside
+// a fixed column; `hug` (`Z8OMS4`) stays intrinsic.
+const widthColumn = css({
+    width: "280px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "x3",
+});
+
+const WidthProbe = ({ theme, }: { theme: "light" | "dark"; }) => (
+    <ThemeShell theme={theme}>
+        <div className={widthColumn}>
+            <Button width="full" tone="secondary">Full width</Button>
+            <Button>Hug width</Button>
+        </div>
+    </ThemeShell>
+);
+
+const assertWidthAxis = async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+    const canvas = within(canvasElement);
+    const full = canvas.getByRole("button", { name: "Full width", });
+    const hug = canvas.getByRole("button", { name: "Hug width", });
+    const column = full.parentElement as Element;
+
+    // The Pen fill-container override spans the 280px column; hug is intrinsic.
+    await expect(Math.round(column.getBoundingClientRect().width)).toBe(280);
+    await expect(Math.round(full.getBoundingClientRect().width)).toBe(280);
+    await expect(hug.getBoundingClientRect().width).toBeLessThan(280);
+    await expect(hug.getBoundingClientRect().width).toBeGreaterThan(0);
+};
+
+export const WidthHugAndFull: Story = {
+    render: () => <WidthProbe theme="light" />,
+    play: assertWidthAxis,
+};
+
+export const DarkWidthHugAndFull: Story = {
+    render: () => <WidthProbe theme="dark" />,
+    play: assertWidthAxis,
+};
+
+// Pen shared rule `Qur3j`: loading swaps in the indicator without shifting
+// layout, and `sxGsG` adds that loading never changes the control geometry.
+const LoadingProbe = ({ theme, }: { theme: "light" | "dark"; }) => (
+    <ThemeShell theme={theme}>
+        <div className={row}>
+            <Button prefixIcon="check" suffixIcon="arrow-right">Save changes</Button>
+            <Button loading prefixIcon="check" suffixIcon="arrow-right">Save changes</Button>
+        </div>
+    </ThemeShell>
+);
+
+const assertLoadingGeometry = async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+    const canvas = within(canvasElement);
+    const loadingButtons = canvas.getAllByRole("button", { name: "Save changes", });
+    const idle = loadingButtons[0] as HTMLElement;
+    const active = loadingButtons[1] as HTMLElement;
+
+    await expect(active).toBeDisabled();
+    await expect(idle).not.toBeDisabled();
+
+    // Fixed root dimensions and preserved label/icon layout width.
+    const idleBox = idle.getBoundingClientRect();
+    const activeBox = active.getBoundingClientRect();
+    await expect(Math.round(activeBox.width)).toBe(Math.round(idleBox.width));
+    await expect(Math.round(activeBox.height)).toBe(Math.round(idleBox.height));
+
+    const idleLabel = idle.querySelector(".button__label") as Element;
+    const activeLabel = active.querySelector(".button__label") as Element;
+    await expect(Math.round(activeLabel.getBoundingClientRect().width)).toBe(
+        Math.round(idleLabel.getBoundingClientRect().width),
+    );
+    // The label is hidden from paint but keeps its box and accessible name.
+    await expect(getComputedStyle(activeLabel).opacity).toBe("0");
+
+    const spinner = active.querySelector(".button__spinner") as Element;
+    await expect(spinner).not.toBeNull();
+    await expect(spinner.querySelector(".icon")).toHaveAttribute("aria-hidden", "true");
+};
+
+export const LoadingGeometry: Story = {
+    render: () => <LoadingProbe theme="light" />,
+    play: assertLoadingGeometry,
+};
+
+export const DarkLoadingGeometry: Story = {
+    render: () => <LoadingProbe theme="dark" />,
+    play: assertLoadingGeometry,
+};
+
+// Pen destructive loading (`chU7Q` / `bv3v1`): `danger-bg` fill and `danger-fg`
+// indicator in both themes, never the muted disabled role.
+const DestructiveLoadingProbe = ({ theme, }: { theme: "light" | "dark"; }) => (
+    <ThemeShell theme={theme}>
+        <div className={row}>
+            <Button tone="destructive" loading prefixIcon="triangle-alert">Delete project</Button>
+        </div>
+    </ThemeShell>
+);
+
+const assertDestructiveLoading = async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Delete project", });
+
+    await expect(button).toBeDisabled();
+    await expect(getComputedStyle(button).backgroundColor).toBe("rgb(220, 38, 38)");
+
+    const spinner = button.querySelector(".button__spinner .icon") as Element;
+    await expect(getComputedStyle(spinner).color).toBe("rgb(255, 255, 255)");
+};
+
+export const DestructiveLoading: Story = {
+    render: () => <DestructiveLoadingProbe theme="light" />,
+    play: assertDestructiveLoading,
+};
+
+export const DarkDestructiveLoading: Story = {
+    render: () => <DestructiveLoadingProbe theme="dark" />,
+    play: assertDestructiveLoading,
 };

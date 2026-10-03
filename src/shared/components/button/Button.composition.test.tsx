@@ -60,6 +60,49 @@ describe("button icon composition", () => {
         expect(markup).toContain("button__suffixIcon--tone_destructive");
     });
 
+    test("maps the Pen width axis onto hug and full recipe variants", () => {
+        // Pen `IcuBw` (`Z8OMS4`): width `hug · full`; `full` is the
+        // fill-container override (`MboG8` / `GW4Jy`) and `hug` stays intrinsic.
+        const full = renderToStaticMarkup(<Button width="full">Save</Button>);
+        const hug = renderToStaticMarkup(<Button>Save</Button>);
+        const explicitHug = renderToStaticMarkup(<Button width="hug">Save</Button>);
+
+        expect(full).toContain("button__root--width_full");
+        expect(hug).toContain("button__root--width_hug");
+        expect(explicitHug).toContain("button__root--width_hug");
+    });
+
+    test("renders a decorative spinner and disables the button while loading", () => {
+        const markup = renderToStaticMarkup(
+            <Button loading prefixIcon="check" suffixIcon="arrow-right">Save</Button>,
+        );
+
+        // Disabled from interaction, but the label and both icon slots stay in
+        // the DOM so geometry and the accessible name are preserved.
+        expect(markup).toContain("disabled");
+        expect(markup).toContain(`data-loading="true"`);
+        expect(markup).toContain("button__spinner");
+        expect(markup).toContain("button__label");
+        expect(markup).toContain("button__prefixIcon");
+        expect(markup).toContain("button__suffixIcon");
+        expect(markup).toContain("Save");
+        expect(markup).toContain(glyph("loader"));
+        // The spinner glyph is decorative and never becomes a second name.
+        expect(markup).toContain(`aria-hidden="true"`);
+        expect(markup).not.toContain(`role="img"`);
+    });
+
+    test("does not leak the width or loading props to the native button", () => {
+        const markup = renderToStaticMarkup(
+            <Button loading width="full" prefixIcon="check">Save</Button>,
+        );
+
+        // `data-loading` carries the loading state for the recipe; a bare
+        // `loading`/`width` attribute must not reach the DOM.
+        expect(markup).not.toMatch(/(?<![-\w])loading=/);
+        expect(markup).not.toMatch(/(?<![-\w])width=/);
+    });
+
     test("passes native button attributes through", () => {
         const markup = renderToStaticMarkup(
             <Button type="submit" disabled aria-label="Continue" prefixIcon="check" />,
@@ -89,9 +132,15 @@ describe("button icon composition", () => {
         // @ts-expect-error the icon tone was removed; icon-only buttons get a
         // dedicated component
         const iconTone = <Button tone="icon">x</Button>;
+        // @ts-expect-error width only accepts the Pen `hug` / `full` axis
+        const badWidth = <Button width="half">x</Button>;
+        // @ts-expect-error loading is a boolean, not a string mode
+        const badLoading = <Button loading="yes">x</Button>;
 
         expect(unknownName).toBeDefined();
         expect(nodeValue).toBeDefined();
         expect(iconTone).toBeDefined();
+        expect(badWidth).toBeDefined();
+        expect(badLoading).toBeDefined();
     });
 });

@@ -14,9 +14,16 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * Feedback is a colour swap, never an opacity fade or a shadow.
  * The label and both icon slots paint from one foreground per tone.
  */
+/**
+ * The shared disabled paint. It is skipped while loading: Pen `IcuBw` loading
+ * (`chU7Q` / `bv3v1`) keeps the tone fill and only disables interaction, so the
+ * loading state must not read as the muted disabled role.
+ */
+const disabledStateSelector = "&:is(:disabled, [disabled], [data-disabled], [aria-disabled=true]):not([data-loading])";
+
 export const buttonRecipe = defineSlotRecipe({
     className: "button",
-    slots: [ "root", "prefixIcon", "label", "suffixIcon", ],
+    slots: [ "root", "prefixIcon", "label", "suffixIcon", "spinner", ],
 
     base: {
         root: {
@@ -56,6 +63,22 @@ export const buttonRecipe = defineSlotRecipe({
             width: "x8",
             height: "x8",
         },
+
+        // Pen `IcuBw` anatomy (`utSXT`) names a `spinner` part. It is an
+        // absolute overlay so the label and icons keep their layout box; only
+        // the glyph rotates, and reduced motion stops it.
+        spinner: {
+            position: "absolute",
+            inset: "0",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+            "& .icon": {
+                animation: "spin 1s linear infinite",
+                "@media (prefers-reduced-motion: reduce)": { animation: "none", },
+            },
+        },
     },
 
     variants: {
@@ -70,8 +93,13 @@ export const buttonRecipe = defineSlotRecipe({
                             _hover: "semantic.action.primary.hover",
                             _active: "semantic.action.primary.active",
                         },
-                        _disabled: "semantic.action.disabled.background",
                     },
+                    [disabledStateSelector]: {
+                        backgroundColor: "semantic.action.disabled.background",
+                    },
+                },
+                spinner: {
+                    color: { base: "semantic.action.primary.foreground", },
                 },
                 label: {
                     color: {
@@ -104,8 +132,13 @@ export const buttonRecipe = defineSlotRecipe({
                             _hover: "semantic.action.secondary.hover",
                             _active: "semantic.action.secondary.hover",
                         },
-                        _disabled: "semantic.action.disabled.background",
                     },
+                    [disabledStateSelector]: {
+                        backgroundColor: "semantic.action.disabled.background",
+                    },
+                },
+                spinner: {
+                    color: { base: "semantic.action.secondary.foreground", },
                 },
                 label: {
                     color: {
@@ -137,8 +170,13 @@ export const buttonRecipe = defineSlotRecipe({
                             _hover: "semantic.action.ghost.hover",
                             _active: "semantic.surface.selected",
                         },
-                        _disabled: "semantic.action.disabled.background",
                     },
+                    [disabledStateSelector]: {
+                        backgroundColor: "semantic.action.disabled.background",
+                    },
+                },
+                spinner: {
+                    color: { base: "semantic.text.secondary", },
                 },
                 label: {
                     color: {
@@ -186,8 +224,13 @@ export const buttonRecipe = defineSlotRecipe({
                             _hover: "semantic.action.danger.hover",
                             _active: "semantic.action.danger.hover",
                         },
-                        _disabled: "semantic.action.disabled.background",
                     },
+                    [disabledStateSelector]: {
+                        backgroundColor: "semantic.action.disabled.background",
+                    },
+                },
+                spinner: {
+                    color: { base: "semantic.action.danger.foreground", },
                 },
                 label: {
                     color: {
@@ -219,11 +262,36 @@ export const buttonRecipe = defineSlotRecipe({
                 root: { paddingInline: "x8", },
             },
         },
+
+        // Pen `IcuBw` public variants (`Z8OMS4`): width `hug · full`. `hug`
+        // stays intrinsic; `full` is the `MboG8` / `GW4Jy` fill-container
+        // override, so it spans its column instead of stretching in a row.
+        width: {
+            hug: {
+                root: { width: "fit-content", },
+            },
+            full: {
+                root: { width: "100%", },
+            },
+        },
+
+        // Pen shared rules (`Qur3j`, `sxGsG`): loading disables interaction and
+        // swaps in the indicator without changing geometry or the label width.
+        loading: {
+            true: {
+                root: { position: "relative", },
+                prefixIcon: { opacity: "0", },
+                label: { opacity: "0", },
+                suffixIcon: { opacity: "0", },
+            },
+        },
     },
 
     defaultVariants: {
         tone: "primary",
         size: "md",
+        width: "hug",
+        loading: false,
     },
 });
 

@@ -112,6 +112,9 @@ const meta = {
         label: {
             control: { type: "text", },
         },
+        loading: {
+            control: { type: "boolean", },
+        },
     },
 } satisfies Meta<typeof ButtonIcon>;
 
@@ -370,4 +373,40 @@ export const DarkStateMatrix: Story = {
             <Matrix />
         </ThemeShell>
     ),
+};
+
+// Pen `L2cyL` state contract (`nqoVi` / `upZl4`) lists loading, and `R3LwyT`
+// swaps `Or7zW` to the loader at the same square geometry while the mandatory
+// accessible label stays.
+const LoadingProbe = ({ theme, }: { theme: "light" | "dark"; }) => (
+    <ThemeShell theme={theme}>
+        <div className={row}>
+            <ButtonIcon loading icon="settings" label="Save settings" />
+        </div>
+    </ThemeShell>
+);
+
+const assertLoadingContract = async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Save settings", });
+
+    await expect(button).toBeDisabled();
+
+    const box = button.getBoundingClientRect();
+    await expect(Math.round(box.width)).toBe(40);
+    await expect(Math.round(box.height)).toBe(40);
+
+    const glyph = button.querySelector(".buttonIcon__icon .icon") as Element;
+    await expect(glyph).toHaveAttribute("aria-hidden", "true");
+    await expect(glyph.textContent).toBe(String.fromCodePoint(ICON_CODEPOINTS["loader"]));
+};
+
+export const LoadingContract: Story = {
+    render: () => <LoadingProbe theme="light" />,
+    play: assertLoadingContract,
+};
+
+export const DarkLoadingContract: Story = {
+    render: () => <LoadingProbe theme="dark" />,
+    play: assertLoadingContract,
 };

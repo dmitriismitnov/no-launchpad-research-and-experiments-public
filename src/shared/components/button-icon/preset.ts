@@ -10,6 +10,12 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * come from the semantic layer, which switches theme inside the token; the
  * recipe never branches on `_light` / `_dark`.
  */
+/**
+ * The shared disabled paint. It is skipped while loading: Pen `R3LwyT`
+ * (`ib-Loading`) keeps the tone fill and only disables interaction.
+ */
+const disabledStateSelector = "&:is(:disabled, [disabled], [data-disabled], [aria-disabled=true]):not([data-loading])";
+
 export const buttonIconRecipe = defineSlotRecipe({
     className: "buttonIcon",
     slots: [ "root", "icon", ],
@@ -50,7 +56,9 @@ export const buttonIconRecipe = defineSlotRecipe({
                             _hover: "semantic.action.primary.hover",
                             _active: "semantic.action.primary.active",
                         },
-                        _disabled: "semantic.action.disabled.background",
+                    },
+                    [disabledStateSelector]: {
+                        backgroundColor: "semantic.action.disabled.background",
                     },
                 },
                 icon: {
@@ -72,7 +80,9 @@ export const buttonIconRecipe = defineSlotRecipe({
                             _hover: "semantic.action.secondary.hover",
                             _active: "semantic.action.secondary.hover",
                         },
-                        _disabled: "semantic.action.disabled.background",
+                    },
+                    [disabledStateSelector]: {
+                        backgroundColor: "semantic.action.disabled.background",
                     },
                 },
                 icon: {
@@ -93,7 +103,9 @@ export const buttonIconRecipe = defineSlotRecipe({
                             _hover: "semantic.action.ghost.hover",
                             _active: "semantic.surface.selected",
                         },
-                        _disabled: "semantic.action.disabled.background",
+                    },
+                    [disabledStateSelector]: {
+                        backgroundColor: "semantic.action.disabled.background",
                     },
                 },
                 icon: {
@@ -120,7 +132,9 @@ export const buttonIconRecipe = defineSlotRecipe({
                             _hover: "semantic.action.danger.hover",
                             _active: "semantic.action.danger.hover",
                         },
-                        _disabled: "semantic.action.disabled.background",
+                    },
+                    [disabledStateSelector]: {
+                        backgroundColor: "semantic.action.disabled.background",
                     },
                 },
                 icon: {
@@ -155,11 +169,26 @@ export const buttonIconRecipe = defineSlotRecipe({
                 },
             },
         },
+
+        // Pen `L2cyL` state contract (`nqoVi`) lists loading, evidenced by
+        // `R3LwyT`: the single `/icon` slot swaps its glyph to the loader, so
+        // the square geometry never changes. Only the glyph rotates.
+        loading: {
+            true: {
+                icon: {
+                    "& .icon": {
+                        animation: "spin 1s linear infinite",
+                        "@media (prefers-reduced-motion: reduce)": { animation: "none", },
+                    },
+                },
+            },
+        },
     },
 
     defaultVariants: {
         tone: "primary",
         size: "md",
+        loading: false,
     },
 });
 

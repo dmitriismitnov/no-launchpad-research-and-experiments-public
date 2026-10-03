@@ -23,12 +23,15 @@ export default defineConfig({
                 {
                     tone: [ "primary", "secondary", "ghost", ],
                     size: [ "sm", "md", ],
+                    width: [ "hug", "full", ],
+                    loading: [ "true", ],
                 },
             ],
             buttonIcon: [
                 {
                     tone: [ "primary", "secondary", "ghost", ],
                     size: [ "sm", "md", ],
+                    loading: [ "true", ],
                 },
             ],
             // Card variants are selected at runtime by the `variant` prop.

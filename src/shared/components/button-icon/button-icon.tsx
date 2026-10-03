@@ -17,6 +17,11 @@ export type ButtonIconProps = Omit<ComponentProps<"button">, "children"> & {
     label: string;
     tone?: ButtonIconTone;
     size?: ButtonIconSize;
+    /**
+     * Pen loading state (`R3LwyT`). Disables the control from interaction and
+     * swaps the glyph for a decorative loader in the same square slot.
+     */
+    loading?: boolean;
 };
 
 /**
@@ -30,16 +35,24 @@ export const ButtonIcon = ({
     label,
     tone = "primary",
     size = "md",
+    loading = false,
+    disabled,
     className,
     ...props
 }: ButtonIconProps) => {
-    const styles = buttonIcon({ tone, size, });
+    const styles = buttonIcon({ tone, size, loading, });
     const iconSize = ICON_SIZE_BY_BUTTON_ICON_SIZE[size];
 
     return (
-        <button {...props} aria-label={label} className={cx(styles.root, className)}>
+        <button
+            {...props}
+            disabled={disabled === true || loading}
+            data-loading={loading ? "true" : undefined}
+            aria-label={label}
+            className={cx(styles.root, className)}
+        >
             <span className={styles.icon}>
-                <Icon name={icon} size={iconSize} />
+                <Icon name={loading ? "loader" : icon} size={iconSize} />
             </span>
         </button>
     );

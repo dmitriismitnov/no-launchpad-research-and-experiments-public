@@ -166,3 +166,23 @@ Unit count moved `659 → 663` (Batch A baseline → now): `+4` destructive reci
 - **`INFO` — code-side raster capture.** Only Pen reference PNGs and in-browser computed-style assertions were produced for this slice; if the reviewer requires code PNG side-by-side for every state, Batch E should capture them.
 
 No unresolved `FAIL` or new `BLOCKED` introduced by this slice beyond the two API decisions already named in the plan; no component outside `button/` and `button-icon/` was changed.
+
+## Update — Batch B0 API decision approved (2026-10-03)
+
+The two `BLOCKED` rows above are resolved by an explicit, user-approved API decision and implemented in Batch B cycle 1/2. This addendum supersedes only those two rows; every other B0 disposition stands.
+
+| Superseded row | Before | After |
+| --- | --- | --- |
+| `IcuBw` width `hug · full` | **BLOCKED** — no public `width` prop | **PASS** — public `Button` `width: "hug" \| "full"`, default `hug`, Pen refs `MboG8` / `GW4Jy` fill the 280px `K4pyRx` column |
+| `IcuBw` / `L72UAx` loading | **BLOCKED** — no public `loading` prop or spinner slot | **PASS** — public `loading: boolean` on `Button` and `ButtonIcon` with a geometry-preserving decorative spinner |
+
+Approved Pen basis (re-queried read-only; `ex_2.pen` unchanged, SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`):
+
+- `utSXT` — `Button · anatomy: root / prefix / label / suffix / spinner · public: tone, size, width, icon placement`.
+- `MboG8` / `GW4Jy` — `width: fill_container` full-width refs inside the 280px `K4pyRx` column; `Z8OMS4` variant-names text `width: hug · full`.
+- `Qur3j` rule `N3n07C` — "loading keeps the label width and swaps in the indicator so layout never shifts".
+- `xw0yy` contract cap `sxGsG` — "Loading and focus-visible never change the control geometry".
+- `chU7Q` / `bv3v1` — destructive loading keeps `$semantic/action/danger-bg` and `danger-fg`.
+- `TVJu8` — Icon Button public `tone, size` only (no width axis); `R3LwyT` swaps `Or7zW` to the loader at the same 18px square; `BAqGc` keeps the mandatory accessible label.
+
+Full Batch B0 evidence (enumeration, RED/GREEN, both-theme computed captures, final disposition) is in `outputs/experiments/pencil-opencode-workflow/notes/batch-b-evidence.md`.

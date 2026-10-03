@@ -36,13 +36,24 @@ const collectKeys = (value: unknown, keys: string[] = []): string[] => {
     return keys;
 };
 
+/** Resolves the shared disabled paint on a tone root, which excludes loading. */
+const disabledBackground = (root: Record<string, unknown> | undefined): unknown => {
+    const selector = Object.keys(root ?? {}).find(
+        (candidate) => candidate.includes(":disabled") && candidate.includes(":not([data-loading])"),
+    );
+
+    return selector === undefined
+        ? undefined
+        : ( root as Record<string, { backgroundColor?: unknown; }> )[selector]?.backgroundColor;
+};
+
 describe("button recipe", () => {
     test("declares the anatomy", () => {
-        expect(buttonRecipe.slots).toEqual([ "root", "prefixIcon", "label", "suffixIcon", ]);
+        expect(buttonRecipe.slots).toEqual([ "root", "prefixIcon", "label", "suffixIcon", "spinner", ]);
     });
 
     test("declares public variants only", () => {
-        expect(Object.keys(buttonRecipe.variants ?? {})).toEqual([ "tone", "size", ]);
+        expect(Object.keys(buttonRecipe.variants ?? {})).toEqual([ "tone", "size", "width", "loading", ]);
         expect(Object.keys(buttonRecipe.variants?.["tone"] ?? {})).toEqual([
             "primary",
             "secondary",
@@ -50,6 +61,8 @@ describe("button recipe", () => {
             "destructive",
         ]);
         expect(Object.keys(buttonRecipe.variants?.["size"] ?? {})).toEqual([ "sm", "md", ]);
+        expect(Object.keys(buttonRecipe.variants?.["width"] ?? {})).toEqual([ "hug", "full", ]);
+        expect(Object.keys(buttonRecipe.variants?.["loading"] ?? {})).toEqual([ "true", ]);
     });
 
     test("keeps no icon tone: icon-only buttons get a dedicated component", () => {
@@ -63,6 +76,8 @@ describe("button recipe", () => {
         const variantStyles = [
             ...Object.values(buttonRecipe.variants?.["tone"] ?? {}),
             ...Object.values(buttonRecipe.variants?.["size"] ?? {}),
+            ...Object.values(buttonRecipe.variants?.["width"] ?? {}),
+            ...Object.values(buttonRecipe.variants?.["loading"] ?? {}),
         ];
         const compoundStyles = ( buttonRecipe.compoundVariants ?? [] ).map(
             (entry) => ( entry as { css: unknown; } ).css,
@@ -78,7 +93,46 @@ describe("button recipe", () => {
     });
 
     test("declares default variants", () => {
-        expect(buttonRecipe.defaultVariants).toEqual({ tone: "primary", size: "md", });
+        expect(buttonRecipe.defaultVariants).toEqual({
+            tone: "primary",
+            size: "md",
+            width: "hug",
+            loading: false,
+        });
+    });
+
+    test("maps width hug to content sizing and full to the PEN fill container", () => {
+        // Pen `IcuBw` public variants (`Z8OMS4`): width `hug · full`. `hug` is
+        // intrinsic; `full` is the `MboG8` / `GW4Jy` fill-container override
+        // inside the 280px `K4pyRx` column. It is not a layout stretch variant.
+        expect(buttonRecipe.variants?.["width"]?.["hug"]?.["root"]).toMatchObject({
+            width: "fit-content",
+        });
+        expect(buttonRecipe.variants?.["width"]?.["full"]?.["root"]).toMatchObject({
+            width: "100%",
+        });
+    });
+
+    test("preserves geometry and exposes the spinner while loading", () => {
+        // Pen `IcuBw` shared rules (`Qur3j`): "loading keeps the label width and
+        // swaps in the indicator so layout never shifts". The spinner is an
+        // absolute, non-interactive overlay; the content keeps its layout box
+        // (opacity 0 removes paint, never width).
+        const loading = buttonRecipe.variants?.["loading"]?.["true"];
+
+        expect(loading?.["root"]).toMatchObject({ position: "relative", });
+        for ( const slot of [ "prefixIcon", "label", "suffixIcon", ] as const ) {
+            expect(loading?.[slot]).toMatchObject({ opacity: "0", });
+        }
+
+        const spinner = buttonRecipe.base?.["spinner"];
+        expect(spinner).toMatchObject({
+            position: "absolute",
+            pointerEvents: "none",
+        });
+        expect(( spinner as Record<string, unknown> | undefined )?.["& .icon"]).toMatchObject({
+            animation: "spin 1s linear infinite",
+        });
     });
 
     test("matches the PEN control geometry", () => {
@@ -113,9 +167,12 @@ describe("button recipe", () => {
                     _hover: "semantic.action.primary.hover",
                     _active: "semantic.action.primary.active",
                 },
-                _disabled: "semantic.action.disabled.background",
             },
         });
+        // The shared disabled paint is skipped while loading so the tone fill
+        // (and the Pen loading indicator) stays.
+        expect(disabledBackground(root)).toBe("semantic.action.disabled.background");
+        expect(root?.["backgroundColor"]).not.toHaveProperty("_disabled");
         // Pen paints primary feedback with colour, never a shadow or opacity.
         expect(root).not.toHaveProperty("boxShadow");
         expect(root).not.toHaveProperty("opacity");
@@ -136,9 +193,11 @@ describe("button recipe", () => {
                     _hover: "semantic.action.danger.hover",
                     _active: "semantic.action.danger.hover",
                 },
-                _disabled: "semantic.action.disabled.background",
             },
         });
+        // Destructive loading (`chU7Q` / `bv3v1`) keeps the danger fill.
+        expect(disabledBackground(root)).toBe("semantic.action.disabled.background");
+        expect(root?.["backgroundColor"]).not.toHaveProperty("_disabled");
         expect(root).not.toHaveProperty("boxShadow");
         expect(root).not.toHaveProperty("opacity");
         expect(root).not.toHaveProperty("borderColor");
@@ -154,12 +213,12 @@ describe("button recipe", () => {
                     _hover: "semantic.action.secondary.hover",
                     _active: "semantic.action.secondary.hover",
                 },
-                _disabled: "semantic.action.disabled.background",
             },
             borderWidth: "thin",
             borderStyle: "solid",
             borderColor: "semantic.action.secondary.border",
         });
+        expect(disabledBackground(root)).toBe("semantic.action.disabled.background");
         expect(root).not.toHaveProperty("boxShadow");
         expect(root).not.toHaveProperty("opacity");
     });
@@ -176,9 +235,9 @@ describe("button recipe", () => {
                     _hover: "semantic.action.ghost.hover",
                     _active: "semantic.surface.selected",
                 },
-                _disabled: "semantic.action.disabled.background",
             },
         });
+        expect(disabledBackground(root)).toBe("semantic.action.disabled.background");
         expect(root).not.toHaveProperty("boxShadow");
         expect(root).not.toHaveProperty("opacity");
     });
@@ -204,6 +263,17 @@ describe("button recipe", () => {
             for ( const slot of [ "label", "prefixIcon", "suffixIcon", ] as const ) {
                 expect(variant?.[slot]).toMatchObject({ color: { base: expected, }, });
             }
+        }
+    });
+
+    test("paints the loading spinner from the tone foreground", () => {
+        // Pen `chU7Q`: the destructive loading indicator keeps `danger-fg`; the
+        // spinner never falls back to the shared disabled foreground.
+        for ( const [ tone, expected, ] of Object.entries(slotColours) ) {
+            const spinner = buttonRecipe.variants?.["tone"]?.[tone]?.["spinner"];
+
+            expect(spinner).toMatchObject({ color: { base: expected, }, });
+            expect(spinner?.["color"]).not.toHaveProperty("_disabled");
         }
     });
 
