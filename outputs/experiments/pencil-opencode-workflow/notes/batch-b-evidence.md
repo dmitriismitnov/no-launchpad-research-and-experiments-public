@@ -641,3 +641,148 @@ Counts moved from the B2 cycle-1 shipped baseline (`0fdd25f`): unit `709 → 717
 | Intrinsic and foreign children keep generic ID/ARIA-state behaviour without project-only props | **PASS** |
 | Disabled contrast | `DISABLED / REVIEW` (both themes) |
 | **B2 correction final status** | **PASS** |
+
+## B3 — Checkbox, Radio/RadioGroup, Switch and Slider (cycle 1/2)
+
+**Date:** 2026-10-04\
+**Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` — SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes (unchanged; re-verified after the read-only queries).\
+**Base commit:** `7ece9ae` (`fix(shared): correct NumberInput bound stepper and Field control composition`).\
+**Method:** Pencil MCP `execute` read-only `Get`/`Print` (`get_app_state` confirmed `ex_2.pen` as the active canvas editor; no `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`), focused Bun composition tests, and Vitest + Playwright Chromium story tests. Arrow-key stepping is driven through the provider CDP session because the Storybook user-event harness does not deliver range arrow keys.\
+**Owner paths:** `src/shared/components/{checkbox,radio,radio-group,switch,slider}/`.
+
+### Pen enumeration gate (B3)
+
+| Owner | Pen master → documentation frame | Documented public variant / state | Disposition |
+| --- | --- | --- | --- |
+| Checkbox | `e2q2z` → `RB6lx` | named parts `root · box · mark · label`; variant names `checked · unchecked · indeterminate, with label, disabled`; states `unchecked · checked · indeterminate · focus-visible · disabled` | **PASS** — native checkbox is the source; all listed states present |
+| Checkbox | `RB6lx` content + accessibility | "Clicking the label toggles the box."; "Indeterminate is a display-only parent state."; "Expose checked and indeterminate states."; "Space toggles the focused checkbox." | **PASS** — label association, native Space, `input.indeterminate` (mixed) |
+| Checkbox | `RB6lx` invalid | "Invalid: semantic/feedback/negative-* roles"; box `border.strong` | **PASS** — retained `aria-invalid` + error `aria-describedby` |
+| Radio (atomic) | `UrFJz` → `BRhSj` | single native control: `Circle` (`Gqmap`), `Dot` (`Nn6mZ`), `Label` (`uJlDG`); consumed by `IENTK` refs `CzAuD`/`dJQgp`/`XmHy8` | **PASS** (atomic member; no standalone group feature inferred) |
+| Radio Group | `IENTK` → `BRhSj` | named parts `root · group label · radio item · circle · option label · description`; variant names `vertical · horizontal, with description, invalid, disabled`; spec `2–5 options`, `default · selected · invalid · disabled`, `hover · focus-visible` | **PASS** — orientation, group `hint` (description), invalid, disabled, 3-option specimens |
+| Radio Group | `BRhSj` accessibility | "Arrow keys move within the group, one tab stop per group."; "The group has an accessible name; each option its own label."; "Invalid state is announced on the group." | **PASS** — `role="radiogroup"` + name, native arrow movement/one tab stop, group `aria-invalid`/`aria-describedby` |
+| Switch | `BQvnn` → `gHtWp` | named parts `root · track · thumb · label`; variant names `on · off, size, with label, disabled`; states `off · on · hover · focus-visible · disabled` | **PASS** for `on/off`, `with label`, `disabled`, `hover`, `focus-visible`. **BLOCKED**: `size` (user decision) |
+| Switch | `gHtWp` accessibility | "Expose the switch role with checked state."; "Space toggles; the label is part of the target." | **PASS** — `role="switch"` + `aria-checked`; label target; native Space |
+| Slider | `z57yzW` → `lLkUG` | named parts `root · track · filled range · thumb · value label · ticks`; variant names `single · range, with value label, stepped, disabled`; states `default · hover · focus-visible · disabled` | **PASS** for `single`, `with value label` (default on), `stepped`, `disabled`, `default/hover/focus-visible/dragging`. **BLOCKED**: `range`, `ticks` (user decision) |
+| Slider | `lLkUG` content + accessibility | "Always show the current value near the control."; "Offer a numeric fallback for precise entry."; "Expose min, max and current value."; "Arrow keys adjust by one step; Home and End jump to bounds." | **PASS** for the visible value default, native `min`/`max`/`step`, native keyboard. **BLOCKED**: numeric fallback (user decision) |
+| Slider | `lLkUG` thumb specimens | `sl-Hover thumb` 24px `#166534` stroke; `sl-Focus thumb` 28px `#16A34A` stroke; `sl-Dragging` 22px `#15803D` fill | **PASS** — peer-driven thumb states (light values asserted; dark tokens flip) |
+
+Verbatim Pen facts used:
+
+- `RB6lx` "Purpose: Checkbox selects zero or more independent options, or acknowledges a single statement." · "Public variants: checked · unchecked · indeterminate, with label, disabled" · "Clicking the label toggles the box." · "Indeterminate is a display-only parent state." · "Expose checked and indeterminate states." · "Space toggles the focused checkbox."
+- `BRhSj` "Purpose: Radio Group selects exactly one option from a small, visible set." · "Public variants: vertical · horizontal, with description, invalid, disabled" · "Arrow keys move within the group, one tab stop per group." · "The group has an accessible name; each option its own label." · "Invalid state is announced on the group."
+- `gHtWp` "Purpose: Switch turns a single setting on or off and applies the change immediately." · "Public variants: on · off, size, with label, disabled" · "Expose the switch role with checked state." · "Space toggles; the label is part of the target."
+- `lLkUG` "Public variants: single · range, with value label, stepped, disabled" · "Always show the current value near the control." · "Expose min, max and current value." · "Arrow keys adjust by one step; Home and End jump to bounds." · thumb specimens `sl-Hover thumb`, `sl-Focus thumb`, `sl-Dragging`.
+
+### User decisions applied
+
+- **Approved:** `Slider` `showValue` defaults to `true` per Pen "Always show the current value near the control."; `showValue={false}` remains the documented opt-out.
+- **BLOCKED (recorded, no API):** `Switch` `size`; `Slider` `range` (two thumbs); `Slider` `ticks`; `Slider` numeric fallback.
+- **Not added (justified):** `RadioGroup` `aria-orientation`. Pen's contract only requires arrow movement with one tab stop, and native radios respond to all arrow directions regardless of layout; adding `aria-orientation` would announce a restriction the control does not enforce. Recorded as `INFO`.
+- **Retained:** `Radio` remains the atomic native control; `RadioGroup` owns the group `name`, `value`, `hint`/`error` and `orientation`. No standalone group feature was inferred for `Radio`.
+
+### Approved public surface and behaviour
+
+- **Checkbox / Radio / RadioGroup / Switch** — no implementation change was required: the documented Pen facts were already satisfied by the shipped native-control behaviour. This cycle adds the missing focused composition and browser regression assertions only (`radio/radio.tsx`, `radio/preset.ts`, `checkbox/checkbox.tsx`, `switch/switch.tsx` and their presets are untouched).
+- **Slider** — two minimal changes. (1) `showValue` default is now `true`. (2) The native `<input type="range">` now precedes the decorative `track`/`range`/`thumb` spans so Panda's `peer`-relative conditions can reach them; the three decorative spans get `pointer-events: none`, keeping the native range as the pointer source. The preset adds Pen's `Hover thumb` (24px, `brand.800` stroke), `Focus thumb` (28px, `focus/ring` stroke) and `Dragging` (22px, `brand.700` fill) states, and the thumb outline now reads `semantic.focus.ring` (the Pen focus role, matching the B0 focus ring) instead of `brand.500.background`.
+- No public API, token, barrel, dependency or generated-config file was added or changed. `mise run gen` was run because the Slider preset changed.
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun), command `bun test src/shared/components/{checkbox/Checkbox,radio/Radio,radio-group/RadioGroup,switch/Switch,slider/Slider}.composition.test.tsx`:
+
+| Field | Value |
+| --- | --- |
+| RED exit | `1` |
+| RED result | `60 pass` / `1 fail` (61 total), `168 expect() calls` |
+| RED failures | `Slider composition > shows the current value by default (Pen: always show the value)` (default `showValue` was `false`) |
+| GREEN exit | `0` |
+| GREEN result | `61 pass` / `0 fail` (5 files), `169 expect() calls` |
+
+The Checkbox / RadioGroup / Switch composition assertions (`for`/`id` association, error-id/`described-by` match, vertical default, per-option labels) passed on the first run: those Pen facts were already implemented, so no RED was achievable for them. They are logged as verified regression coverage rather than fabricated failures.
+
+Focused browser stories (Vitest + Playwright Chromium), command `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/{checkbox/Checkbox,radio/Radio,radio-group/RadioGroup,switch/Switch,slider/Slider}.stories.tsx`:
+
+| Field | Value |
+| --- | --- |
+| RED exit | `1` (Slider file only, proven test-first against the pre-change implementation) |
+| RED result | `1 failed` file, `9 failed \| 9 passed (18)` |
+| RED failures | `Value By Default`, `Dark Value By Default`, `Keyboard`, `Thumb Hover`, `Dark Thumb Hover`, `Thumb Focus`, `Dark Thumb Focus`, `Thumb Active`, `Dark Thumb Active` |
+| GREEN exit | `0` |
+| GREEN result | `5 passed` files, `66 passed (66)` |
+
+### Both-theme / state coverage (computed style and DOM, in browser)
+
+| Owner | Light story assertion | Dark story assertion |
+| --- | --- | --- |
+| Checkbox label target | `LabelClickToggles` → clicking the label toggles both ways | — (logic is theme-independent) |
+| Checkbox native Space | `SpaceToggles` → `aria`/checked toggles on Space | — (logic is theme-independent) |
+| Checkbox indeterminate DOM/mixed | `IndeterminateDom` → `input.indeterminate === true`, `toBePartiallyChecked()` | `DarkIndeterminateDom` → same |
+| Checkbox checked fill | `CheckedFillLight` → `rgb(21, 128, 61)` | `CheckedFillDark` → `rgb(134, 239, 172)` |
+| Checkbox invalid description | composition `aria-describedby` = error `<p>` id | — (structural) |
+| RadioGroup orientation / radiogroup / labels | composition + `Horizontal` | — (structural) |
+| RadioGroup native arrows / one tab stop | `NativeArrows` (ArrowDown moves focus and selection), `OneTabStop` | — (logic is theme-independent) |
+| RadioGroup error description | `ErrorDescription` → group `aria-describedby` targets the error text | `DarkErrorDescription` → same |
+| RadioGroup selected dot | `SelectedDotLight` → opacity `1`, `rgb(21, 128, 61)` | `DarkSelected` → opacity `1`, `rgb(134, 239, 172)` |
+| Switch label target / Space | `LabelClickToggles`, `SpaceToggles` → `aria-checked` toggles | — (logic is theme-independent) |
+| Switch `role="switch"` / checked / disabled | `Reference`, `On`, `Invalid`, `Disabled` | `DarkOn` → `aria-checked="true"`, track `rgb(134, 239, 172)`; `DarkDisabled` → disabled |
+| Slider visible value default | `ValueByDefault` → value rendered without the prop; `ValueOptOut` → hidden with `showValue={false}` | `DarkValueByDefault` → value rendered |
+| Slider native keyboard `min`/`max`/`step` | `Keyboard` → ArrowRight `50→55`, Home `0`, End `100`; composition asserts `min`/`max`/`step`/`value` | — (logic is theme-independent) |
+| Slider thumb hover 24px | `ThumbHover` → `24×24`, border `rgb(22, 101, 52)` (`#166534`) | `DarkThumbHover` → `24px`, border `rgb(187, 247, 208)` |
+| Slider thumb focus 28px | `ThumbFocus` → `28×28`, border `rgb(22, 163, 74)` (`#16A34A`) | `DarkThumbFocus` → `28px`, border `rgb(34, 197, 94)` |
+| Slider thumb active 22px fill | `ThumbActive` → `22×22`, background `rgb(21, 128, 61)` (`#15803D`) | `DarkThumbActive` → `22px`, background `rgb(134, 239, 172)` |
+| Disabled contrast (all five owners) | existing `Disabled` stories (unchanged) | `DISABLED / REVIEW` |
+
+Hover and active are asserted through Panda's documented `[data-hover]` / `[data-active]` conditions on the peer input because the Storybook user-event harness performs no real pointer move for CSS `:hover`/`:active`; focus and keyboard are real (Tab and CDP `Input.dispatchKeyEvent`). This is recorded as an evidence-mechanism limitation, not a product behaviour change.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| focused composition RED | `1` | `60 pass` / `1 fail` (61 total, `168 expect() calls`) |
+| focused composition GREEN | `0` | `61 pass` / `0 fail` (`169 expect() calls`) |
+| focused browser RED (Slider) | `1` | `9 failed \| 9 passed (18)` |
+| focused browser GREEN (5 files) | `0` | `66 passed (66)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `726 pass / 0 fail` (90 files, `3914 expect() calls`); browser `482 passed` (73 files) |
+| `mise run check:deps` | `0` | Knip, no findings (no exports/dependencies changed) |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-BdPXuZt4.css 215.11 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the B2 shipped baseline (`7ece9ae`): unit `717 → 726` (`+9`), browser `456 → 482` (`+26`).
+
+### Changed paths
+
+`src/shared/components/checkbox/{Checkbox.composition.test.tsx,Checkbox.stories.tsx}`, `src/shared/components/radio-group/{RadioGroup.composition.test.tsx,RadioGroup.stories.tsx}`, `src/shared/components/switch/{Switch.composition.test.tsx,Switch.stories.tsx}`, `src/shared/components/slider/{slider.tsx,preset.ts,Slider.composition.test.tsx,Slider.stories.tsx}`, this evidence. `radio/` was read-only. No `index.ts`, dependency, token, `panda.config.ts`, Pen or generated-config file was changed; `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored).
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| Checkbox label click / native Space toggles | **PASS** |
+| Checkbox `input.indeterminate` (DOM) + announced mixed | **PASS** |
+| Checkbox invalid description wiring | **PASS** |
+| Radio `UrFJz` atomic member consumed by `IENTK` | **PASS** |
+| RadioGroup `vertical · horizontal` orientation | **PASS** |
+| RadioGroup `role="radiogroup"` + accessible name + per-option label | **PASS** |
+| RadioGroup native arrows / one tab stop | **PASS** |
+| RadioGroup error description + invalid announcement | **PASS** |
+| Switch label target + native Space | **PASS** |
+| Switch `role="switch"` + `aria-checked` + disabled | **PASS** |
+| Switch `size` | **BLOCKED** (user decision, no API) |
+| Slider value label shown by default | **PASS** |
+| Slider `min`/`max`/`step` + Arrow/Home/End keyboard | **PASS** |
+| Slider hover 24px `#166534` / focus 28px `#16A34A` / active 22px `#15803D` thumb | **PASS** |
+| Slider `range` (two thumbs) | **BLOCKED** (user decision, no API) |
+| Slider `ticks` | **BLOCKED** (user decision, no API) |
+| Slider numeric fallback | **BLOCKED** (user decision, no API) |
+| RadioGroup `aria-orientation` | **INFO** — not added; native arrows are not axis-restricted |
+| RadioGroup per-option `description` | **INFO** — no specimen renders it; the existing group `hint` carries the description role |
+| Disabled contrast (all five owners) | `DISABLED / REVIEW` (both themes) |
+| **B3 final status** | **PASS** — every non-blocked Pen axis is implemented or verified; the blocked axes are explicit user decisions with no speculative API |
+
+### Remaining concerns
+
+- **INFO — pointer-state evidence mechanism.** Hover and active thumb states are asserted through `[data-hover]`/`[data-active]`; the harness cannot deliver a real CSS `:hover`/`:active`. Focus (Tab) and keyboard (CDP) are real.
+- **INFO — disabled + pointer cascade.** A disabled range can still match `:hover`/`:active`; the disabled variant continues to paint the disabled thumb and the row is `DISABLED / REVIEW`, consistent with the other owners.
+- **INFO — `RadioGroup` description.** Pen's variant text names `description`; only the group-level `hint` exists and no specimen renders an option-level description. No new option field was added.
+- **INFO — Slider focus outline.** The thumb outline colour was aligned from `brand.500.background` to `semantic.focus.ring` (the Pen focus role and the B0 focus ring); the 28px `focus/ring` thumb stroke is asserted in both themes.

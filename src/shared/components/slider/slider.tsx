@@ -20,7 +20,7 @@ export type SliderProps =
         invalid?: boolean;
         /** Сообщение об ошибке; показывается только когда invalid === true. */
         error?: string;
-        /** Показывает текущее значение рядом с лейблом; по умолчанию выключено. */
+        /** Показывает текущее значение рядом с лейблом; по умолчанию включено (Pen: всегда показывать значение). */
         showValue?: boolean;
         /** Формат отображаемого значения; также задаёт `aria-valuetext`. */
         formatValue?: (value: number) => string;
@@ -43,7 +43,7 @@ export const Slider = ({
     label,
     invalid = false,
     error,
-    showValue = false,
+    showValue = true,
     formatValue,
     value,
     defaultValue,
@@ -98,9 +98,10 @@ export const Slider = ({
                 </div>
             )}
             <div className={styles.control}>
-                <span className={styles.track} aria-hidden="true" />
-                <span className={styles.range} style={{ width: `${percent}%`, }} aria-hidden="true" />
-                <span className={styles.thumb} style={{ left: `${percent}%`, }} aria-hidden="true" />
+                {
+                    /* The native range must precede the decorative spans so the
+                    `peer`-relative hover/focus/active rules can target them. */
+                }
                 <input
                     {...inputProps}
                     ref={ref}
@@ -115,6 +116,9 @@ export const Slider = ({
                     aria-describedby={showError ? errorId : undefined}
                     aria-valuetext={formatValue != null ? displayValue : undefined}
                 />
+                <span className={styles.track} aria-hidden="true" />
+                <span className={styles.range} style={{ width: `${percent}%`, }} aria-hidden="true" />
+                <span className={styles.thumb} style={{ left: `${percent}%`, }} aria-hidden="true" />
             </div>
             {showError && (
                 <p className={styles.error} id={errorId}>

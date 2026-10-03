@@ -19,6 +19,23 @@ describe("Checkbox composition", () => {
         expect(markup).toContain("required");
     });
 
+    test("associates the label with the native control through matching for/id", () => {
+        const markup = renderToStaticMarkup(<Checkbox id="terms" label="Согласен" />);
+
+        expect(markup).toContain('for="terms"');
+        expect(markup).toContain('id="terms"');
+    });
+
+    test("links the rendered error paragraph id as the described-by of the input", () => {
+        const markup = renderToStaticMarkup(<Checkbox id="terms" invalid error="Обязательное поле" />);
+        const describedBy = /aria-describedby="([^"]+)"/u.exec(markup)?.[1];
+        const errorId = /<p[^>]*id="([^"]+)"[^>]*>Обязательное поле<\/p>/u.exec(markup)?.[1];
+
+        expect(describedBy).toBeDefined();
+        expect(errorId).toBeDefined();
+        expect(describedBy).toBe(errorId);
+    });
+
     test("the native input carries the peer class used by the visual state", () => {
         const markup = renderToStaticMarkup(<Checkbox />);
 

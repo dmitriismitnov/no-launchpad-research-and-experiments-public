@@ -1,7 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, userEvent, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -98,6 +98,170 @@ export const Formatted: Story = {
         const canvas = within(canvasElement);
 
         await expect(canvas.getByRole("slider", { name: "OPACITY", })).toHaveAttribute("aria-valuetext", "50%");
+    },
+};
+
+export const ValueByDefault: Story = {
+    args: { label: "OPACITY", defaultValue: 57, min: 0, max: 100, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        await expect(canvasElement.querySelector(".slider__value")).not.toBeNull();
+        await expect(canvasElement.textContent).toContain("57");
+    },
+};
+
+export const DarkValueByDefault: Story = {
+    args: { label: "OPACITY", defaultValue: 57, min: 0, max: 100, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        await expect(canvasElement.textContent).toContain("57");
+    },
+};
+
+export const ValueOptOut: Story = {
+    args: { label: "OPACITY", defaultValue: 57, min: 0, max: 100, showValue: false, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        await expect(canvasElement.querySelector(".slider__value")).toBeNull();
+        await expect(canvasElement.textContent).not.toContain("57");
+    },
+};
+
+// The vitest browser user-event does not drive range arrow keys, so the native
+// keyboard stepping is exercised through the provider's CDP session.
+const pressKey = async (key: string, code: string, virtualKeyCode: number): Promise<void> => {
+    const { cdp, } = await import("@vitest/browser/context");
+    const session = cdp();
+    const base = {
+        key,
+        code,
+        windowsVirtualKeyCode: virtualKeyCode,
+        nativeVirtualKeyCode: virtualKeyCode,
+    };
+
+    await session.send("Input.dispatchKeyEvent", { ...base, type: "keyDown", });
+    await session.send("Input.dispatchKeyEvent", { ...base, type: "keyUp", });
+};
+
+export const Keyboard: Story = {
+    args: { label: "OPACITY", defaultValue: 50, min: 0, max: 100, step: 5, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const slider = canvas.getByRole("slider", { name: "OPACITY", });
+        const user = userEvent.setup();
+
+        await user.tab();
+        await expect(slider).toHaveFocus();
+
+        await pressKey("ArrowRight", "ArrowRight", 39);
+        await expect(slider).toHaveValue("55");
+
+        await pressKey("Home", "Home", 36);
+        await expect(slider).toHaveValue("0");
+
+        await pressKey("End", "End", 35);
+        await expect(slider).toHaveValue("100");
+    },
+};
+
+const thumbStyle = (canvasElement: HTMLElement): CSSStyleDeclaration =>
+    getComputedStyle(canvasElement.querySelector(".slider__thumb") as Element);
+
+export const ThumbHover: Story = {
+    args: { label: "OPACITY", defaultValue: 50, min: 0, max: 100, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const slider = canvas.getByRole("slider", { name: "OPACITY", });
+
+        slider.setAttribute("data-hover", "true");
+
+        const style = thumbStyle(canvasElement);
+
+        await expect(style.width).toBe("24px");
+        await expect(style.height).toBe("24px");
+        await expect(style.borderTopColor).toBe("rgb(22, 101, 52)");
+    },
+};
+
+export const DarkThumbHover: Story = {
+    args: { label: "OPACITY", defaultValue: 50, min: 0, max: 100, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const slider = canvas.getByRole("slider", { name: "OPACITY", });
+
+        slider.setAttribute("data-hover", "true");
+
+        const style = thumbStyle(canvasElement);
+
+        await expect(style.width).toBe("24px");
+        await expect(style.borderTopColor).toBe("rgb(187, 247, 208)");
+    },
+};
+
+export const ThumbFocus: Story = {
+    args: { label: "OPACITY", defaultValue: 50, min: 0, max: 100, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+
+        await user.tab();
+
+        const style = thumbStyle(canvasElement);
+
+        await expect(style.width).toBe("28px");
+        await expect(style.height).toBe("28px");
+        await expect(style.borderTopColor).toBe("rgb(22, 163, 74)");
+    },
+};
+
+export const DarkThumbFocus: Story = {
+    args: { label: "OPACITY", defaultValue: 50, min: 0, max: 100, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+
+        await user.tab();
+
+        const style = thumbStyle(canvasElement);
+
+        await expect(style.width).toBe("28px");
+        await expect(style.borderTopColor).toBe("rgb(34, 197, 94)");
+    },
+};
+
+export const ThumbActive: Story = {
+    args: { label: "OPACITY", defaultValue: 50, min: 0, max: 100, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const slider = canvas.getByRole("slider", { name: "OPACITY", });
+
+        slider.setAttribute("data-active", "true");
+
+        const style = thumbStyle(canvasElement);
+
+        await expect(style.width).toBe("22px");
+        await expect(style.height).toBe("22px");
+        await expect(style.backgroundColor).toBe("rgb(21, 128, 61)");
+    },
+};
+
+export const DarkThumbActive: Story = {
+    args: { label: "OPACITY", defaultValue: 50, min: 0, max: 100, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const slider = canvas.getByRole("slider", { name: "OPACITY", });
+
+        slider.setAttribute("data-active", "true");
+
+        const style = thumbStyle(canvasElement);
+
+        await expect(style.width).toBe("22px");
+        await expect(style.backgroundColor).toBe("rgb(134, 239, 172)");
     },
 };
 

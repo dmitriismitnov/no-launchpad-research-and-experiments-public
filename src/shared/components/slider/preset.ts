@@ -20,13 +20,15 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * - shadow/300 -> semantic.shadow.300
  * - focus/ring -> brand.500.background
  *
- * Approximations: Pen's thumb grows to 24px on hover and 28px on focus and
- * fills with the brand colour while dragging; the port keeps the 20px thumb and
- * moves only the focus ring, to keep the geometry stable under pointer
- * interaction. Pen's 4px track and 20px thumb are the `x2` / `x10` scale steps.
- * Pen's `disabled` fill uses `text/disabled`; the port reads
- * `common.400.background` for the same value. The range variant (two thumbs) and
- * the tick marks are out of scope.
+ * Pen `lLkUG` thumb states (`z57yzW`): the 20px thumb grows to 24px with a
+ * `brand.800` stroke on hover, to 28px with the `focus/ring` stroke on
+ * focus-visible, and to a 22px `action/primary` fill while dragging/active.
+ * These follow the native range through `peer` conditions, so the input
+ * precedes the decorative track/range/thumb in the DOM. Pen's 4px track and
+ * 20px thumb are the `x2` / `x10` scale steps; the 24/28/22px thumb states are
+ * off the scale and stay literals. Pen's `disabled` fill uses `text/disabled`;
+ * the port reads `common.400.background` for the same value. The range variant
+ * (two thumbs), the tick marks and the numeric fallback are out of scope.
  */
 export const sliderRecipe = defineSlotRecipe({
     className: "slider",
@@ -90,6 +92,8 @@ export const sliderRecipe = defineSlotRecipe({
             transform: "translateY(-50%)",
             borderRadius: "full",
             backgroundColor: "semantic.common.100.background",
+            // The native range sits underneath and owns every pointer event.
+            pointerEvents: "none",
         },
 
         range: {
@@ -100,6 +104,7 @@ export const sliderRecipe = defineSlotRecipe({
             transform: "translateY(-50%)",
             borderRadius: "full",
             backgroundColor: "semantic.brand.700.background",
+            pointerEvents: "none",
         },
 
         thumb: {
@@ -114,11 +119,32 @@ export const sliderRecipe = defineSlotRecipe({
             borderColor: "semantic.brand.700.background",
             backgroundColor: "semantic.common.50.background",
             boxShadow: "0 1px 2px {colors.semantic.shadow.300}",
+            pointerEvents: "none",
+            // Pen `lLkUG` "Hover thumb": 24px with the `action/primary-bg-hover`
+            // stroke. (`_peerHover` also matches `[data-hover]`.)
+            _peerHover: {
+                width: "24px",
+                height: "24px",
+                borderColor: "semantic.brand.800.background",
+            },
+            // Pen `lLkUG` "Focus thumb": 28px with the `focus/ring` stroke; the
+            // outline keeps the Pen focus ring outside the control.
             _peerFocusVisible: {
+                width: "28px",
+                height: "28px",
+                borderColor: "semantic.focus.ring",
                 outlineStyle: "solid",
                 outlineWidth: "{borderWidths.thick}",
                 outlineOffset: "0",
-                outlineColor: "semantic.brand.500.background",
+                outlineColor: "semantic.focus.ring",
+            },
+            // Pen `lLkUG` "Dragging": 22px filled with `action/primary-bg`.
+            // (`_peerActive` also matches `[data-active]`.)
+            _peerActive: {
+                width: "22px",
+                height: "22px",
+                borderColor: "semantic.brand.700.background",
+                backgroundColor: "semantic.brand.700.background",
             },
         },
 

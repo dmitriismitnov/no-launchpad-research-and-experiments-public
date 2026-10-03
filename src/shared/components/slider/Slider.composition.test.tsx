@@ -48,11 +48,35 @@ describe("Slider composition", () => {
         expect(markup).toContain('aria-valuetext="50%"');
     });
 
-    test("omits the header when there is no label and no value", () => {
-        const markup = renderToStaticMarkup(<Slider />);
+    test("shows the current value by default (Pen: always show the value)", () => {
+        const markup = renderToStaticMarkup(<Slider defaultValue={40} />);
+
+        expect(markup).toContain("slider__value");
+        expect(markup).toContain(">40<");
+    });
+
+    test("hides the value when showValue is false", () => {
+        const markup = renderToStaticMarkup(<Slider defaultValue={40} showValue={false} />);
+
+        expect(markup).not.toContain("slider__value");
+    });
+
+    test("omits the header when showValue is false and there is no label", () => {
+        const markup = renderToStaticMarkup(<Slider showValue={false} />);
 
         expect(markup).not.toContain("slider__header");
         expect(markup).not.toContain("slider__value");
+    });
+
+    test("exposes min, max and step on the native range for keyboard stepping", () => {
+        const markup = renderToStaticMarkup(
+            <Slider min={10} max={90} step={5} defaultValue={50} showValue={false} />,
+        );
+
+        expect(markup).toContain('min="10"');
+        expect(markup).toContain('max="90"');
+        expect(markup).toContain('step="5"');
+        expect(markup).toContain('value="50"');
     });
 
     test("invalid slider sets aria-invalid and links the error via aria-describedby", () => {

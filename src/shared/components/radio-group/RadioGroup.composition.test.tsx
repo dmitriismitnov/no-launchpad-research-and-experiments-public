@@ -52,6 +52,35 @@ describe("Radio Group composition", () => {
         expect(markup).toContain("radioGroup__options--orientation_horizontal");
     });
 
+    test("vertical orientation is the default options column", () => {
+        const markup = renderToStaticMarkup(<RadioGroup label="ПЛАН" options={options} />);
+
+        expect(markup).toContain("radioGroup__options--orientation_vertical");
+        expect(markup).not.toContain("radioGroup__options--orientation_horizontal");
+    });
+
+    test("links the group to the error text as its described-by", () => {
+        const markup = renderToStaticMarkup(
+            <RadioGroup id="plan" label="ПЛАН" invalid error="Выберите план" options={options} />,
+        );
+        const group = /role="radiogroup"[^>]*/u.exec(markup)?.[0] ?? "";
+        const describedBy = /aria-describedby="([^"]+)"/u.exec(group)?.[1];
+
+        expect(describedBy).toBe("plan-error");
+        expect(markup).toContain('id="plan-error"');
+    });
+
+    test("each option keeps its own accessible label from the group name", () => {
+        const markup = renderToStaticMarkup(
+            <RadioGroup label="ПЛАН" name="plan" options={options} />,
+        );
+
+        expect(markup).toContain('name="plan"');
+        expect(markup).toContain("Starter");
+        expect(markup).toContain("Team");
+        expect(markup).toContain("Enterprise");
+    });
+
     test("disabled marks every radio disabled", () => {
         const markup = renderToStaticMarkup(<RadioGroup label="ПЛАН" disabled options={options} />);
 

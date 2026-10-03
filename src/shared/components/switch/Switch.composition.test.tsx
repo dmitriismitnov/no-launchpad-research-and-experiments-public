@@ -17,6 +17,13 @@ describe("Switch composition", () => {
         expect(markup).toContain("switch__thumb");
     });
 
+    test("associates the label with the switch through matching for/id", () => {
+        const markup = renderToStaticMarkup(<Switch id="notify" label="Уведомления" />);
+
+        expect(markup).toContain('for="notify"');
+        expect(markup).toContain('id="notify"');
+    });
+
     test("reflects the checked state in both checked and aria-checked", () => {
         const off = renderToStaticMarkup(<Switch label="Off" />);
         const on = renderToStaticMarkup(<Switch label="On" defaultChecked />);

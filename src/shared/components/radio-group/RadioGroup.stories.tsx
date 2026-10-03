@@ -1,7 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, userEvent, within, } from "storybook/test";
 
 import type { RadioGroupOption, RadioGroupProps, } from "./radio-group";
 import { RadioGroup, } from "./radio-group";
@@ -105,6 +105,106 @@ export const Interactive: Story = {
         await fireEvent.click(team);
         await expect(team).toBeChecked();
         await expect(starter).not.toBeChecked();
+    },
+};
+
+export const NativeArrows: Story = {
+    args: { ...reference, defaultValue: "starter", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const starter = canvas.getByRole("radio", { name: "Starter", });
+        const team = canvas.getByRole("radio", { name: "Team", });
+        const enterprise = canvas.getByRole("radio", { name: "Enterprise", });
+        const user = userEvent.setup();
+
+        await user.tab();
+        await expect(starter).toHaveFocus();
+        await expect(starter).toBeChecked();
+
+        await user.keyboard("{ArrowDown}");
+        await expect(team).toHaveFocus();
+        await expect(team).toBeChecked();
+        await expect(starter).not.toBeChecked();
+
+        await user.keyboard("{ArrowDown}");
+        await expect(enterprise).toHaveFocus();
+        await expect(enterprise).toBeChecked();
+        await expect(team).not.toBeChecked();
+    },
+};
+
+export const OneTabStop: Story = {
+    args: { ...reference, defaultValue: "team", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const radios = canvas.getAllByRole("radio");
+        const user = userEvent.setup();
+
+        await user.tab();
+        await expect(canvas.getByRole("radio", { name: "Team", })).toHaveFocus();
+
+        await user.tab();
+        await expect(radios).not.toContain(document.activeElement);
+    },
+};
+
+export const ErrorDescription: Story = {
+    args: { ...reference, invalid: true, error: "Выберите план", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const group = canvas.getByRole("radiogroup", { name: "ПЛАН", });
+        const describedBy = group.getAttribute("aria-describedby");
+
+        await expect(describedBy).not.toBeNull();
+        await expect(canvasElement.querySelector(`#${describedBy}`)?.textContent).toBe("Выберите план");
+    },
+};
+
+export const DarkErrorDescription: Story = {
+    args: { ...reference, invalid: true, error: "Выберите план", },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const group = canvas.getByRole("radiogroup", { name: "ПЛАН", });
+        const describedBy = group.getAttribute("aria-describedby");
+
+        await expect(describedBy).not.toBeNull();
+        await expect(canvasElement.querySelector(`#${describedBy}`)?.textContent).toBe("Выберите план");
+    },
+};
+
+const selectedDot = (canvasElement: HTMLElement): Element => {
+    const checked = canvasElement.querySelector('input[type="radio"]:checked') as Element;
+
+    return checked.closest("label")?.querySelector(".radio__dot") as Element;
+};
+
+export const SelectedDotLight: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const dot = selectedDot(canvasElement);
+
+        await expect(canvas.getByRole("radio", { name: "Team", })).toBeChecked();
+        await expect(getComputedStyle(dot).opacity).toBe("1");
+        await expect(getComputedStyle(dot).backgroundColor).toBe("rgb(21, 128, 61)");
+    },
+};
+
+export const DarkSelected: Story = {
+    args: reference,
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const dot = selectedDot(canvasElement);
+
+        await expect(canvas.getByRole("radio", { name: "Team", })).toBeChecked();
+        await expect(getComputedStyle(dot).opacity).toBe("1");
+        await expect(getComputedStyle(dot).backgroundColor).toBe("rgb(134, 239, 172)");
     },
 };
 

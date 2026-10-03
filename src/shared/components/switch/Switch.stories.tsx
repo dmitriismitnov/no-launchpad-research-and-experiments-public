@@ -1,7 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, userEvent, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -92,6 +92,64 @@ export const Interactive: Story = {
 
         await fireEvent.click(control);
         await expect(control).toHaveAttribute("aria-checked", "false");
+    },
+};
+
+export const SpaceToggles: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const control = canvas.getByRole("switch", { name: "Switch", });
+        const user = userEvent.setup();
+
+        await user.tab();
+        await expect(control).toHaveFocus();
+
+        await user.keyboard(" ");
+        await expect(control).toHaveAttribute("aria-checked", "true");
+
+        await user.keyboard(" ");
+        await expect(control).toHaveAttribute("aria-checked", "false");
+    },
+};
+
+export const LabelClickToggles: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const control = canvas.getByRole("switch", { name: "Switch", });
+        const user = userEvent.setup();
+
+        await user.click(canvas.getByText("Switch"));
+        await expect(control).toHaveAttribute("aria-checked", "true");
+
+        await user.click(canvas.getByText("Switch"));
+        await expect(control).toHaveAttribute("aria-checked", "false");
+    },
+};
+
+export const DarkOn: Story = {
+    args: { ...reference, defaultChecked: true, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const control = canvas.getByRole("switch", { name: "Switch", });
+        const track = canvasElement.querySelector(".switch__track") as Element;
+
+        await expect(control).toHaveAttribute("aria-checked", "true");
+        await expect(getComputedStyle(track).backgroundColor).toBe("rgb(134, 239, 172)");
+    },
+};
+
+export const DarkDisabled: Story = {
+    args: { ...reference, disabled: true, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(canvas.getByRole("switch", { name: "Switch", })).toBeDisabled();
     },
 };
 

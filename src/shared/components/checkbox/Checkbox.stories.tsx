@@ -1,7 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, userEvent, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -84,6 +84,90 @@ export const Interactive: Story = {
         await fireEvent.click(checkbox);
         await expect(checkbox).not.toBeChecked();
     },
+};
+
+export const LabelClickToggles: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const checkbox = canvas.getByRole("checkbox", { name: "Checkbox", });
+        const user = userEvent.setup();
+
+        await expect(checkbox).not.toBeChecked();
+
+        await user.click(canvas.getByText("Checkbox"));
+        await expect(checkbox).toBeChecked();
+
+        await user.click(canvas.getByText("Checkbox"));
+        await expect(checkbox).not.toBeChecked();
+    },
+};
+
+export const SpaceToggles: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const checkbox = canvas.getByRole("checkbox", { name: "Checkbox", });
+        const user = userEvent.setup();
+
+        await user.tab();
+        await expect(checkbox).toHaveFocus();
+
+        await user.keyboard(" ");
+        await expect(checkbox).toBeChecked();
+
+        await user.keyboard(" ");
+        await expect(checkbox).not.toBeChecked();
+    },
+};
+
+const isIndeterminate = (element: HTMLElement): boolean => ( element as unknown as HTMLInputElement ).indeterminate;
+
+export const IndeterminateDom: Story = {
+    args: { ...reference, indeterminate: true, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const checkbox = canvas.getByRole("checkbox", { name: "Checkbox", });
+
+        await expect(checkbox).toBePartiallyChecked();
+        await expect(isIndeterminate(checkbox)).toBe(true);
+    },
+};
+
+export const DarkIndeterminateDom: Story = {
+    args: { ...reference, indeterminate: true, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const checkbox = canvas.getByRole("checkbox", { name: "Checkbox", });
+
+        await expect(isIndeterminate(checkbox)).toBe(true);
+        await expect(checkbox).toBePartiallyChecked();
+    },
+};
+
+const checkedBoxColour = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    background: string,
+): Promise<void> => {
+    const box = canvasElement.querySelector(".checkbox__box") as Element;
+
+    await expect(getComputedStyle(box).backgroundColor).toBe(background);
+};
+
+export const CheckedFillLight: Story = {
+    args: { ...reference, defaultChecked: true, },
+    render: renderIn("light"),
+    play: async (context) => checkedBoxColour(context, "rgb(21, 128, 61)"),
+};
+
+export const CheckedFillDark: Story = {
+    args: { ...reference, defaultChecked: true, },
+    render: renderIn("dark"),
+    play: async (context) => checkedBoxColour(context, "rgb(134, 239, 172)"),
 };
 
 export const Checked: Story = {
