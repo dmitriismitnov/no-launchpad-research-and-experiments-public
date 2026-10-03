@@ -110,6 +110,12 @@ const rect = (locator: Locator): Promise<{ x: number; y: number; width: number; 
         return { x: box.x, y: box.y, width: box.width, height: box.height, };
     });
 
+const computedNumber = (locator: Locator, property: string): Promise<number> =>
+    locator.evaluate(
+        (element, name) => Number.parseFloat(getComputedStyle(element).getPropertyValue(name)),
+        property,
+    );
+
 const visibleTestIds = (locator: Locator): Promise<string[]> =>
     locator.evaluateAll((nodes) =>
         nodes
@@ -191,11 +197,14 @@ for ( const viewport of viewports ) {
             const primaryActionBox = await rect(primaryAction);
             const secondaryActionBox = await rect(secondaryAction);
 
+            // Pen hero actions are 48px tall in every frame: desktop `bambL`,
+            // tablet `L1Xf4m` and mobile `P6A8Xm`.
+            expect(Math.round(primaryActionBox.height)).toBe(penHeroActions.buttons[0].height);
+            expect(Math.round(secondaryActionBox.height)).toBe(penHeroActions.buttons[1].height);
+
             if ( penHeroActions.layout === "vertical" ) {
                 expect(Math.round(primaryActionBox.width)).toBe(penHeroActions.buttons[0].width);
-                expect(Math.round(primaryActionBox.height)).toBe(penHeroActions.buttons[0].height);
                 expect(Math.round(secondaryActionBox.width)).toBe(penHeroActions.buttons[1].width);
-                expect(Math.round(secondaryActionBox.height)).toBe(penHeroActions.buttons[1].height);
                 expect(Math.round(secondaryActionBox.x)).toBe(Math.round(primaryActionBox.x));
 
                 const stackOffset = penHeroActions.buttons[1].y - penHeroActions.buttons[0].y;
@@ -232,6 +241,14 @@ for ( const viewport of viewports ) {
 
                 const copyBox = await rect(copy);
                 const visualBox = await rect(visual);
+
+                // Pen feature geometry: `paddingBlock`, `gap` and the visual
+                // height per frame (desktop 64/72/380, tablet 48/32/300,
+                // mobile 36/16/260).
+                expect(await computedNumber(feature, "padding-top")).toBe(penFeatures.paddingBlock);
+                expect(await computedNumber(feature, "padding-bottom")).toBe(penFeatures.paddingBlock);
+                expect(await computedNumber(feature, "row-gap")).toBe(penFeatures.gap);
+                expect(Math.round(visualBox.height)).toBe(penFeatures.visualHeight);
 
                 if ( viewport.copiesBesideVisual ) {
                     // Side by side on one row.
