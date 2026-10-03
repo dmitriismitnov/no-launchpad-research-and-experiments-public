@@ -27,12 +27,14 @@ The MultiSelect story file passed on the RED run (it has no root arrow/Enter han
 
 | Quantity | Value |
 | --- | --- |
-| `spaceBelow` | `60px` |
-| `spaceAbove` | `800px` |
+| `spaceBelow` | `60px` (exact) |
+| `spaceAbove` | `100px` (exact) |
 | Measured popup height | `111.984375px` |
 | Old row estimate | `1 × 36 + 12 = 48px` |
 
-The old estimate (`48`) was below the `60px` gap, so the pane stayed `bottom`; the real height (`≈112`) exceeds the gap, so the corrected pane flips `top`. The story asserts `renderedHeight > 60`, `spaceBelow <= 60`, `spaceAbove >= 100` and `data-placement="top"` in both themes.
+The old estimate (`48`) was below the `60px` gap, so the pane stayed `bottom`; the real height (`≈112`) exceeds the gap, so the corrected pane flips `top`.
+
+The follow-up (`B4 final-review follow-up`, cycle 3/3) makes this deterministic and physical: the story frame is resized to exactly `triggerHeight + 160px` before opening, so `spaceBelow` and `spaceAbove` are the exact values above. Both themes now assert `renderedHeight > 60`, `spaceBelow === 60`, `spaceAbove === 100`, `data-placement="top"` **and** `popupRect.bottom <= triggerRect.top`, so the pane is physically above the trigger rather than only labelled. The placement effect reads the real resized `window.innerHeight`; the assertion does not mock a rect.
 
 ## Search-key isolation
 
@@ -65,9 +67,21 @@ Disabled contrast remains `DISABLED / REVIEW` (computed style recorded, not acce
 | `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `738 pass / 0 fail` (90 files); browser `527 passed` (73 files) |
 | `mise run check:deps` | `0` | Knip, no findings |
 | `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-_kX2xiic.css 219.62 kB` |
-| `git diff --check` | `0` | clean |
+| `git diff --check` | `0` | clean in the working tree; **stale as commit evidence** — the committed range `4b690bb..2fdf6e0` reported `new blank line at EOF` in `notes/batch-b-evidence.md`. Corrected in the final-review follow-up below. |
 
 Counts moved from the cycle-1 baseline (`4b690bb`): browser `510 → 527` (`+17`); unit unchanged at `738`.
+
+## Final-review follow-up (cycle 3/3) — exact and physical flip proof
+
+**Base commit:** `2fdf6e0`. **Scope:** `Select.stories.tsx` and the B4 evidence artifacts; no runtime/API/Pen/token/dependency change.
+
+The cycle-2 flip stories used inequalities (`spaceBelow <= 60`, `spaceAbove >= 100`) and, in the dark story, `data-placement` alone. The follow-up:
+
+1. Resizes the real story frame to exactly `triggerHeight + 160px` before opening, so `spaceBelow = 60px` and `spaceAbove = 100px` are deterministic; the placement effect reads the real resized `window.innerHeight` (no mocked rect).
+2. Asserts the exact values (`spaceBelow === 60`, `spaceAbove === 100`) plus `renderedPopupHeight > 60`.
+3. Asserts physical geometry in both themes: `data-placement="top"` **and** `popupRect.bottom <= triggerRect.top`.
+
+RED (legacy `48px` row estimate restored temporarily in `select.tsx`, then reverted byte-identically): both flip stories fail with `data-placement="bottom"` — `2 failed | 32 passed (34)`. GREEN with the measured runtime: `2 passed` files, `58 passed (58)`. The follow-up commit also removes the blank line at EOF so `git diff --check 2fdf6e0..<follow-up>` exits `0`; it changes no test count, so `mise run check` stays unit `738` / browser `527`.
 
 ## Changed paths
 

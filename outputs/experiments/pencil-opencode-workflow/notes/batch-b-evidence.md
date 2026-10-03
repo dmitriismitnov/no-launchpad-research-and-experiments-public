@@ -1002,7 +1002,7 @@ Counts moved from the B3 shipped baseline (`fc1acbb`): unit `726 → 738` (`+12`
 
 ### Corrections
 
-1. **Measured placement.** The pane is now placed from `popupRef.getBoundingClientRect().height` measured in a `useLayoutEffect` after the popup commits, not from `ordered.length × 36 + 12`. The searchable grouped flip story pins the trigger `60px` above the viewport bottom with `spaceAbove=800px`; the pane's real height is `111.984375px` (the old estimate was `48px`), so the pane flips `top` in both themes.
+1. **Measured placement.** The pane is now placed from `popupRef.getBoundingClientRect().height` measured in a `useLayoutEffect` after the popup commits, not from `ordered.length × 36 + 12`. The searchable grouped flip story now controls the real story viewport (`triggerHeight + 160px`), so the trigger sits exactly `60px` above the viewport bottom and exactly `100px` below the viewport top; the pane's real height is `111.984375px` (the old estimate was `48px`), so the pane flips `top` in both themes. The exact and physical flip proof is recorded in the final-review follow-up below.
 2. **Search-local keys.** The search input stops propagation for every key except `Escape`. `Space` no longer selects the active option (query `"alpha beta"` is preserved instead of being truncated to `"alpha"`), and `ArrowUp`/`ArrowDown`/`Enter` no longer move or select a root option. `Escape` still closes and refocuses the trigger.
 
 ### Tests-first proof (RED → GREEN)
@@ -1041,7 +1041,7 @@ Disabled contrast stays `DISABLED / REVIEW`.
 | `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `738 pass / 0 fail` (90 files); browser `527 passed` (73 files) |
 | `mise run check:deps` | `0` | Knip, no findings |
 | `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-_kX2xiic.css 219.62 kB` |
-| `git diff --check` | `0` | clean |
+| `git diff --check` | `0` | clean in the working tree; **stale as commit evidence** — the committed range `4b690bb..2fdf6e0` reported `new blank line at EOF` in this file (see the final-review follow-up) |
 
 Counts moved from the cycle-1 baseline (`4b690bb`): browser `510 → 527` (`+17`); unit unchanged at `738`.
 
@@ -1056,3 +1056,33 @@ Counts moved from the cycle-1 baseline (`4b690bb`): browser `510 → 527` (`+17`
 | MultiSelect invalid / disabled computed styles, both themes | **PASS** (disabled contrast `DISABLED / REVIEW`) |
 | **B4 cycle 2/2 status** | **PASS** — both corrections implemented and evidenced; no new API or policy; no unresolved `FAIL` / `BLOCKED` / Critical / Important finding |
 
+## B4 final-review follow-up — exact and physical measured-height flip proof (cycle 3/3)
+
+**Base commit:** `2fdf6e0` (`fix(shared): measure Select popup placement and scope search key handling`).\
+**Scope:** `Select.stories.tsx` and the B4 evidence artifacts. No runtime, API, Pen, token, preset, generated-file, dependency or other-component change.
+
+The cycle-2 flip stories proved the measured-height fix with inequalities (`spaceBelow <= 60`, `spaceAbove >= 100`) and, for the dark story, `data-placement` alone. The final review asked for deterministic, exact and physical evidence.
+
+1. **Controlled viewport, not a mocked rect.** The story frame is resized to exactly `triggerHeight + 160px` before the popup opens, so the trigger pinned `60px` above the bottom edge leaves `spaceBelow = 60px` and `spaceAbove = 100px`. The placement effect reads the real resized `window.innerHeight`; both the component and the assertion see the same real geometry.
+2. **Exact values.** Both themes now assert `spaceBelow === 60`, `spaceAbove === 100` and `renderedPopupHeight > 60` (the pane is `111.984375px`).
+3. **Physical geometry.** Both themes assert `data-placement="top"` **and** `popupRect.bottom <= triggerRect.top`, so the pane is physically above the trigger rather than only carrying the attribute.
+
+RED was produced by temporarily restoring the legacy `48px` row estimate in `select.tsx` (reverted immediately; the committed runtime is byte-identical): `2 failed | 32 passed (34)` — `Searchable Grouped Popup Flips On Measured Height` and `Dark Searchable Grouped Popup Flips On Measured Height`, both receiving `data-placement="bottom"`. With the measured runtime restored, the focused suite is `2 passed` files / `58 passed (58)`.
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| focused browser RED (legacy `48px` estimate, local revert) | `1` | `2 failed \| 32 passed (34)` |
+| focused browser GREEN (`Select` + `MultiSelect`) | `0` | `2 passed` files, `58 passed (58)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `738 pass / 0 fail` (90 files); browser `527 passed` (73 files). The first run hit the known flaky `card/Card.stories.tsx` (`active` control expected `true`, received `false`); it passes in isolation and the full re-run is green (same as the B2 note). |
+| `git diff --check 4b690bb..2fdf6e0` | `2` | **corrects the stale claim** — the cycle-2 commit ended this file with a blank line at EOF (`new blank line at EOF`); the follow-up commit removes it |
+| `git diff --check 2fdf6e0..<this follow-up>` | `0` | clean |
+
+### Row disposition (cycle 3/3)
+
+| Row | Disposition |
+| --- | --- |
+| Exact `spaceBelow = 60` and `spaceAbove = 100` in both themes | **PASS** |
+| Measured popup height `> 60` in both themes | **PASS** |
+| Physical top placement (`popup.bottom <= trigger.top`), not only `data-placement` | **PASS** |
+| Committed-range `git diff --check` exits `0` | **PASS** (trailing blank line removed) |
+| **B4 follow-up status** | **PASS** — evidence-only strengthening; runtime unchanged |

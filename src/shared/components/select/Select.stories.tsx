@@ -600,6 +600,75 @@ const MeasuredFlipProbe = ({ theme, }: { theme: "light" | "dark"; }) => (
     </ThemeShell>
 );
 
+const nextFrame = (): Promise<void> =>
+    new Promise((resolve) => {
+        requestAnimationFrame(() => resolve());
+    });
+
+// The measured flip proof needs a real viewport: the story frame is sized to
+// exactly `triggerHeight + 160`, so a trigger pinned 60px above the bottom edge
+// leaves 60px below and exactly 100px above. The placement effect reads the real
+// `window.innerHeight`, so this is controlled geometry, not a mocked rect.
+const runWithControlledFlipViewport = async (
+    trigger: HTMLElement,
+    run: () => Promise<void>,
+): Promise<void> => {
+    const height = Math.round(trigger.getBoundingClientRect().height) + 160;
+    const frame = window.frameElement as HTMLElement | null;
+
+    if ( frame !== null ) {
+        const previous = { width: frame.style.width, height: frame.style.height, };
+        frame.style.width = "1024px";
+        frame.style.height = `${height}px`;
+        await nextFrame();
+
+        try {
+            await run();
+        } finally {
+            frame.style.width = previous.width;
+            frame.style.height = previous.height;
+            await nextFrame();
+        }
+
+        return;
+    }
+
+    const { cdp, } = await import("vitest/browser");
+    const session = cdp();
+
+    await session.send("Emulation.setDeviceMetricsOverride", {
+        width: 1024,
+        height,
+        deviceScaleFactor: 1,
+        mobile: false,
+    });
+    await nextFrame();
+
+    try {
+        await run();
+    } finally {
+        await session.send("Emulation.clearDeviceMetricsOverride");
+        await nextFrame();
+    }
+};
+
+const assertMeasuredFlip = async (
+    canvasElement: HTMLElement,
+    trigger: HTMLElement,
+): Promise<void> => {
+    const popup = canvasElement.querySelector(".select__popup") as HTMLElement;
+    const popupRect = popup.getBoundingClientRect();
+    const triggerRect = trigger.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - triggerRect.bottom;
+    const spaceAbove = triggerRect.top;
+
+    await expect(popupRect.height).toBeGreaterThan(60);
+    await expect(spaceBelow).toBe(60);
+    await expect(spaceAbove).toBe(100);
+    await expect(popup).toHaveAttribute("data-placement", "top");
+    await expect(popupRect.bottom).toBeLessThanOrEqual(triggerRect.top);
+};
+
 export const SearchableGroupedPopupFlipsOnMeasuredHeight: Story = {
     render: () => <MeasuredFlipProbe theme="light" />,
     play: async ({ canvasElement, }) => {
@@ -607,17 +676,10 @@ export const SearchableGroupedPopupFlipsOnMeasuredHeight: Story = {
         const canvas = within(canvasElement);
         const trigger = canvas.getByRole("combobox", { name: "КОМАНДА", });
 
-        await user.click(trigger);
-
-        const popup = canvasElement.querySelector(".select__popup") as HTMLElement;
-        const renderedHeight = popup.getBoundingClientRect().height;
-        const spaceBelow = window.innerHeight - trigger.getBoundingClientRect().bottom;
-        const spaceAbove = trigger.getBoundingClientRect().top;
-
-        await expect(renderedHeight).toBeGreaterThan(60);
-        await expect(spaceBelow).toBeLessThanOrEqual(60);
-        await expect(spaceAbove).toBeGreaterThanOrEqual(100);
-        await expect(popup).toHaveAttribute("data-placement", "top");
+        await runWithControlledFlipViewport(trigger, async () => {
+            await user.click(trigger);
+            await assertMeasuredFlip(canvasElement, trigger);
+        });
     },
 };
 
@@ -628,12 +690,10 @@ export const DarkSearchableGroupedPopupFlipsOnMeasuredHeight: Story = {
         const canvas = within(canvasElement);
         const trigger = canvas.getByRole("combobox", { name: "КОМАНДА", });
 
-        await user.click(trigger);
-
-        const popup = canvasElement.querySelector(".select__popup") as HTMLElement;
-
-        await expect(popup.getBoundingClientRect().height).toBeGreaterThan(60);
-        await expect(popup).toHaveAttribute("data-placement", "top");
+        await runWithControlledFlipViewport(trigger, async () => {
+            await user.click(trigger);
+            await assertMeasuredFlip(canvasElement, trigger);
+        });
     },
 };
 
