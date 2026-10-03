@@ -130,7 +130,7 @@ export const ValueOptOut: Story = {
 // The vitest browser user-event does not drive range arrow keys, so the native
 // keyboard stepping is exercised through the provider's CDP session.
 const pressKey = async (key: string, code: string, virtualKeyCode: number): Promise<void> => {
-    const { cdp, } = await import("@vitest/browser/context");
+    const { cdp, } = await import("vitest/browser");
     const session = cdp();
     const base = {
         key,
@@ -286,6 +286,51 @@ export const Disabled: Story = {
 
         await expect(slider).toBeDisabled();
     },
+};
+
+// A disabled range must not react to pointer state, whether the harness drives
+// the native `:hover`/`:active` or the synthetic `[data-hover]`/`[data-active]`
+// markers. The thumb stays 20px with the disabled fill and border.
+const assertDisabledThumb = async (
+    canvasElement: HTMLElement,
+    expected: { border: string; background: string; },
+): Promise<void> => {
+    const style = thumbStyle(canvasElement);
+
+    await expect(style.width).toBe("20px");
+    await expect(style.height).toBe("20px");
+    await expect(style.borderTopColor).toBe(expected.border);
+    await expect(style.backgroundColor).toBe(expected.background);
+};
+
+const disabledPointer = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    expected: { border: string; background: string; },
+): Promise<void> => {
+    const canvas = within(canvasElement);
+    const slider = canvas.getByRole("slider", { name: "OPACITY", });
+
+    slider.setAttribute("data-hover", "true");
+    await assertDisabledThumb(canvasElement, expected);
+
+    slider.removeAttribute("data-hover");
+    slider.setAttribute("data-active", "true");
+    await assertDisabledThumb(canvasElement, expected);
+};
+
+const lightDisabledThumb = { border: "rgb(148, 163, 184)", background: "rgb(241, 245, 249)", };
+const darkDisabledThumb = { border: "rgb(71, 85, 105)", background: "rgb(15, 23, 42)", };
+
+export const DisabledPointer: Story = {
+    args: { label: "OPACITY", defaultValue: 57, showValue: true, disabled: true, },
+    render: renderIn("light"),
+    play: async (context) => disabledPointer(context, lightDisabledThumb),
+};
+
+export const DarkDisabledPointer: Story = {
+    args: { label: "OPACITY", defaultValue: 57, showValue: true, disabled: true, },
+    render: renderIn("dark"),
+    play: async (context) => disabledPointer(context, darkDisabledThumb),
 };
 
 const assertThemeTrack = async (

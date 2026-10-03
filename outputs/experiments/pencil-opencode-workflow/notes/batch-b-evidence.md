@@ -783,6 +783,84 @@ Counts moved from the B2 shipped baseline (`7ece9ae`): unit `717 → 726` (`+9`)
 ### Remaining concerns
 
 - **INFO — pointer-state evidence mechanism.** Hover and active thumb states are asserted through `[data-hover]`/`[data-active]`; the harness cannot deliver a real CSS `:hover`/`:active`. Focus (Tab) and keyboard (CDP) are real.
-- **INFO — disabled + pointer cascade.** A disabled range can still match `:hover`/`:active`; the disabled variant continues to paint the disabled thumb and the row is `DISABLED / REVIEW`, consistent with the other owners.
+- **INFO — disabled + pointer cascade (superseded by the cycle-2 correction below).** A disabled range could match `:hover`/`:active` (native and synthetic) and override the disabled thumb. The cycle-2 correction adds the `:enabled` guard, so the disabled surface now wins; disabled contrast remains `DISABLED / REVIEW`.
 - **INFO — `RadioGroup` description.** Pen's variant text names `description`; only the group-level `hint` exists and no specimen renders an option-level description. No new option field was added.
 - **INFO — Slider focus outline.** The thumb outline colour was aligned from `brand.500.background` to `semantic.focus.ring` (the Pen focus role and the B0 focus ring); the 28px `focus/ring` thumb stroke is asserted in both themes.
+
+## B3 correction — disabled pointer scoping and canonical browser import (cycle 2/2)
+
+**Base commit:** `3fa6f14` (`feat(shared): default Slider value label and add B3 control coverage`).\
+**Correction plan:** the reviewer's cycle-1 findings on the B3 slice: (1) a disabled Slider still matched the thumb `peer` `:hover`/`:active` conditions — including the synthetic `[data-hover]`/`[data-active]` markers — so the disabled thumb grew to 24px/22px with the brand stroke/fill instead of keeping the disabled geometry and paint; (2) the story file still loaded the deprecated `@vitest/browser/context` module.\
+**Status:** **PASS**.
+
+### Fixes implemented
+
+| # | Finding | Fix |
+| --- | --- | --- |
+| 1 | `_peerHover`/`_peerActive` compile to `.peer:is(:hover, [data-hover]) ~ &` / `.peer:is(:active, [data-active]) ~ &`; both outrank the `slider__thumb--disabled_true` variant, so a disabled range reacted to pointer state in the running app and in the synthetic Storybook states. | Replaced the two conditions with explicit sibling selectors guarded by `:enabled`: `.peer:enabled:is(:hover, [data-hover]) ~ &` and `.peer:enabled:is(:active, [data-active]) ~ &`. The native `:disabled` attribute fails `:enabled`, so neither the native nor the synthetic pointer state reaches the thumb. |
+| 2 | The story file imported the deprecated `@vitest/browser/context` (Vitest emitted a `DEPRECATED` warning on every run). | The CDP helper now dynamically imports `cdp` from the canonical `vitest/browser` entry. |
+
+No public API, token, barrel, dependency, `panda.config.ts`, Pen or other component file was changed. The focus state (`.peer:is(:focus-visible, [data-focus-visible]) ~ &`) is deliberately left peer-native: a disabled range cannot receive focus, and the task scope was hover/active only. `mise run gen` was run because the Slider preset changed.
+
+### Generated selector proof (real `panda cssgen` output)
+
+| State | Emitted selector |
+| --- | --- |
+| Hover (enabled-only) | `.peer:enabled:is(:hover, [data-hover]) ~ .slider__thumb` |
+| Active/dragging (enabled-only) | `.peer:enabled:is(:active, [data-active]) ~ .slider__thumb` |
+| Focus-visible (preserved) | `.peer:is(:focus-visible, [data-focus-visible]) ~ .slider__thumb` |
+
+### Tests-first proof (RED → GREEN)
+
+Focused browser stories (Vitest + Playwright Chromium). The two new stories were added first and run against the unchanged preset, so the RED is a real test-first run (no implementation revert/stash needed):
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/slider/Slider.stories.tsx` |
+| RED exit | `1` |
+| RED result | `2 failed \| 18 passed (20)` — `Disabled Pointer`, `Dark Disabled Pointer` (thumb received `24px` instead of `20px`) |
+| GREEN exit | `0` |
+| GREEN result | `20 passed (20)` |
+
+The full B3 owner set (`checkbox`, `radio`, `radio-group`, `switch`, `slider`) was also run: `5 passed` files, `68 passed (68)`.
+
+### Both-theme browser captures (computed style, in browser)
+
+| Story (theme) | Assertion | Observed |
+| --- | --- | --- |
+| `DisabledPointer` / `DarkDisabledPointer` | disabled range with `data-hover` then `data-active`: thumb geometry and disabled paint unchanged | light `20×20`, border `rgb(148, 163, 184)`, background `rgb(241, 245, 249)`; dark `20×20`, border `rgb(71, 85, 105)`, background `rgb(15, 23, 42)` |
+| `ThumbHover` / `DarkThumbHover` | enabled hover still 24px with the `brand.800` stroke | unchanged (light `rgb(22, 101, 52)`, dark `rgb(187, 247, 208)`) |
+| `ThumbActive` / `DarkThumbActive` | enabled active still 22px with the `brand.700` fill | unchanged (light `rgb(21, 128, 61)`, dark `rgb(134, 239, 172)`) |
+| `ThumbFocus` / `DarkThumbFocus` | focus preserved (28px `focus/ring` stroke) | unchanged |
+| `Keyboard` | the CDP-driven arrow/Home/End test still passes through `vitest/browser` | `50→55`, `0`, `100` |
+
+Disabled contrast remains **`DISABLED / REVIEW`** in both themes.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| focused browser RED | `1` | `2 failed \| 18 passed (20)` |
+| focused browser GREEN (Slider) | `0` | `20 passed (20)` |
+| focused browser GREEN (5 B3 owners) | `0` | `68 passed (68)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `726 pass / 0 fail` (90 files, `3914 expect() calls`); browser `484 passed` (73 files) |
+| `mise run check:deps` | `0` | Knip, no findings |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-CzILDXrW.css 215.12 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the B3 cycle-1 baseline (`3fa6f14`): unit `726 → 726` (unchanged; no unit test added), browser `482 → 484` (`+2`, the two new pointer stories).
+
+### Changed paths
+
+`src/shared/components/slider/preset.ts`, `src/shared/components/slider/Slider.stories.tsx`, this evidence. Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited). No other file, dependency, token, Pen artifact or component was touched.
+
+### Disposition (cycle 2/2)
+
+| Row | Disposition |
+| --- | --- |
+| Disabled Slider ignores native and synthetic hover/active pointer state (stays 20px with disabled border/fill) | **PASS** |
+| Enabled Slider hover 24px / active 22px / focus 28px preserved | **PASS** |
+| Canonical `vitest/browser` import, CDP keyboard test preserved | **PASS** |
+| Disabled contrast | `DISABLED / REVIEW` (both themes) |
+| **B3 correction final status** | **PASS** |

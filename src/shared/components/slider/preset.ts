@@ -121,14 +121,17 @@ export const sliderRecipe = defineSlotRecipe({
             boxShadow: "0 1px 2px {colors.semantic.shadow.300}",
             pointerEvents: "none",
             // Pen `lLkUG` "Hover thumb": 24px with the `action/primary-bg-hover`
-            // stroke. (`_peerHover` also matches `[data-hover]`.)
-            _peerHover: {
+            // stroke. The explicit sibling selector keeps the native `:hover`
+            // and the synthetic `[data-hover]` pointer state but requires the
+            // peer input to be `:enabled`, so a disabled range never reacts.
+            ".peer:enabled:is(:hover, [data-hover]) ~ &": {
                 width: "24px",
                 height: "24px",
                 borderColor: "semantic.brand.800.background",
             },
             // Pen `lLkUG` "Focus thumb": 28px with the `focus/ring` stroke; the
-            // outline keeps the Pen focus ring outside the control.
+            // outline keeps the Pen focus ring outside the control. A disabled
+            // range cannot receive focus, so this stays peer-native.
             _peerFocusVisible: {
                 width: "28px",
                 height: "28px",
@@ -138,9 +141,10 @@ export const sliderRecipe = defineSlotRecipe({
                 outlineOffset: "0",
                 outlineColor: "semantic.focus.ring",
             },
-            // Pen `lLkUG` "Dragging": 22px filled with `action/primary-bg`.
-            // (`_peerActive` also matches `[data-active]`.)
-            _peerActive: {
+            // Pen `lLkUG` "Dragging": 22px filled with `action/primary-bg`. The
+            // same `:enabled` guard blocks the native `:active` and the
+            // synthetic `[data-active]` pointer state on a disabled range.
+            ".peer:enabled:is(:active, [data-active]) ~ &": {
                 width: "22px",
                 height: "22px",
                 borderColor: "semantic.brand.700.background",
