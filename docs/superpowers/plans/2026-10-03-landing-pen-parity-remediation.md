@@ -89,3 +89,10 @@
 4. Never more than two builder/reviewer cycles; remaining load-bearing findings are reported to the user as `BLOCKED`.
 
 > Note: the GPT planner was unavailable (usage limit) when this plan was written, so the orchestrator authored it directly from measured evidence.
+
+## Cycle 1 outcome
+
+- Builder commit `8120b31` (with RED `3fabefb`, GREEN `23979cd`); all four measured facts match Pen.
+- Orchestrator verification on the final commit: read-only Pen re-query independently confirmed feature `padding 64/48/36`, `gap 72/32/16`, Visual `380/300/260`; `mise run test:visual` 7/7 pass; `mise run check` exit 0 (659 unit / 392 browser).
+- The GPT reviewer could not run (usage limit). Review was performed by the orchestrator; residual Landing-wide section deltas and the mobile 260px clipping remain recorded as `HUMAN REVIEW` with numbers in `notes/landing-parity-evidence.md`.
+- Status: the four measured discrepancies that blocked Batch A are resolved; Landing no longer blocks the migration.

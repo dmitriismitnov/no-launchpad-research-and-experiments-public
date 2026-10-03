@@ -83,6 +83,8 @@
 
 **Verification:** focused tests, aria/status/live-region assertions only where the Pen accessibility contract requires them, both-theme screenshots, `mise run gen`, and reviewer confirmation of aggregate ownership.
 
+**Batch A status:** the Landing visual blocker recorded by Batch A was resolved by the standalone remediation batch `docs/superpowers/plans/2026-10-03-landing-pen-parity-remediation.md` (commits `8120b31`); `mise run test:visual` passes 7/7 and the four measured feature/hero mismatches now match `M2zLU`/`vzXfY`/`pRsS2` and `bambL`/`L1Xf4m`/`P6A8Xm`. Residual Landing-wide section deltas remain recorded as `HUMAN REVIEW` in `notes/landing-parity-evidence.md`.
+
 ## Batch E — full evidence and final regression
 
 **File families:** no production changes by default; all mapped stories/tests, Foundation/icon checks, evidence ledger, and existing Landing regression harness.
