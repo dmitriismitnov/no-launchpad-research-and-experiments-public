@@ -1,7 +1,8 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
-import { Calendar, CalendarDay, } from "./calendar";
+import { Calendar, } from "./calendar";
+import * as calendarEntry from "./index";
 
 const march = new Date(2025, 2, 1);
 const selected = new Date(2025, 2, 16);
@@ -47,17 +48,33 @@ describe("Calendar composition", () => {
         expect(markup).toContain('disabled=""');
     });
 
-    test("highlights a range when both bounds are given", () => {
+    test("highlights a controlled range between its endpoints", () => {
         const markup = renderToStaticMarkup(
             <Calendar
+                selectionMode="range"
                 month={march}
                 today={today}
                 weekStartsOn={1}
-                rangeStart={new Date(2025, 2, 10)}
-                rangeEnd={new Date(2025, 2, 14)}
+                value={{ start: new Date(2025, 2, 10), end: new Date(2025, 2, 14), }}
             />,
         );
 
+        expect(markup).toContain("calendar__day--inRange_true");
+        expect(markup.match(/aria-selected="true"/g)?.length).toBe(2);
+    });
+
+    test("normalizes a backwards controlled range", () => {
+        const markup = renderToStaticMarkup(
+            <Calendar
+                selectionMode="range"
+                month={march}
+                today={today}
+                weekStartsOn={1}
+                value={{ start: new Date(2025, 2, 14), end: new Date(2025, 2, 10), }}
+            />,
+        );
+
+        expect(markup.match(/aria-selected="true"/g)?.length).toBe(2);
         expect(markup).toContain("calendar__day--inRange_true");
     });
 
@@ -86,25 +103,12 @@ describe("Calendar composition", () => {
     });
 });
 
-describe("CalendarDay composition", () => {
-    test("renders a labelled day button", () => {
-        const markup = renderToStaticMarkup(<CalendarDay date={selected} />);
+describe("Calendar public surface", () => {
+    test("keeps CalendarDay internal to the owner", () => {
+        const entry = calendarEntry as unknown as Record<string, unknown>;
 
-        expect(markup).toContain('type="button"');
-        expect(markup).toContain('data-date="2025-03-16"');
-        expect(markup).toContain('aria-label="March 16, 2025"');
-        expect(markup).toContain(">16<");
-    });
-
-    test("marks selected, today, in-range and disabled states", () => {
-        const markup = renderToStaticMarkup(
-            <CalendarDay date={selected} selected today inRange disabled />,
-        );
-
-        expect(markup).toContain('aria-selected="true"');
-        expect(markup).toContain('aria-current="date"');
-        expect(markup).toContain('aria-disabled="true"');
-        expect(markup).toContain("disabled");
-        expect(markup).toContain("calendar__day--inRange_true");
+        expect(entry["Calendar"]).toBeDefined();
+        expect(entry["CalendarDay"]).toBeUndefined();
+        expect(entry["CalendarDayProps"]).toBeUndefined();
     });
 });

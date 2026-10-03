@@ -88,6 +88,48 @@ export const formatMonthLabel = (date: Date): string => `${MONTH_LONG_LABELS[dat
 export const formatDateLabel = (date: Date): string =>
     `${MONTH_LONG_LABELS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 
+/** A selection range; either endpoint may still be unset. */
+export type DateRange = {
+    start?: Date;
+    end?: Date;
+};
+
+/** Orders a range so `start <= end`, dropping absent endpoints. */
+export const normalizeRange = (range?: DateRange | null): DateRange => {
+    if ( range == null ) {
+        return {};
+    }
+
+    const start = range.start === undefined ? undefined : toDateOnly(range.start);
+    const end = range.end === undefined ? undefined : toDateOnly(range.end);
+
+    if ( start !== undefined && end !== undefined && end < start ) {
+        return { start: end, end: start, };
+    }
+
+    return { start, end, };
+};
+
+/**
+ * The next range after picking `date`: the first pick starts a range, the
+ * second completes it (in either direction), and any pick after a complete
+ * range starts a fresh one.
+ */
+export const pickRange = (range: DateRange, date: Date): DateRange => {
+    const day = toDateOnly(date);
+    const { start, end, } = normalizeRange(range);
+
+    if ( start === undefined ) {
+        return { start: day, };
+    }
+
+    if ( end === undefined ) {
+        return day < start ? { start: day, end: start, } : { start, end: day, };
+    }
+
+    return { start: day, };
+};
+
 /** Clamps a week-start index into `0..6`. */
 export const normalizeWeekStart = (weekStartsOn: number): number => {
     if ( !Number.isFinite(weekStartsOn) ) {

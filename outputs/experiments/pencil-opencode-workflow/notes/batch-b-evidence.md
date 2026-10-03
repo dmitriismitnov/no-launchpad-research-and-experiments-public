@@ -1086,3 +1086,101 @@ RED was produced by temporarily restoring the legacy `48px` row estimate in `sel
 | Physical top placement (`popup.bottom <= trigger.top`), not only `data-placement` | **PASS** |
 | Committed-range `git diff --check` exits `0` | **PASS** (trailing blank line removed) |
 | **B4 follow-up status** | **PASS** — evidence-only strengthening; runtime unchanged |
+
+## B5 — DateInput, Calendar/CalendarDay, and DatePicker range aggregation (cycle 1/2)
+
+**Date:** 2026-10-04\
+**Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` — SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes (unchanged; re-verified after the read-only queries).\
+**Base commit:** `0034ba5` (`test(shared): assert exact and physical Select popup flip placement`).\
+**Method:** Pencil MCP `execute` read-only `Get`/`Print` (`get_app_state` confirmed `ex_2.pen` as the active editor; no mutation), focused Bun composition tests and Vitest + Playwright Chromium story tests.\
+**Evidence artifact:** `artifacts/batch-b/dates/b5-red-green.md`.
+
+### Pen enumeration gate (B5)
+
+| Owner | Pen master → documentation frame | Documented public variant / state | Disposition |
+| --- | --- | --- | --- |
+| Date Input | `ivx6N` → `dW2kV` | `Public variants: empty · filled, with format hint, invalid, disabled`; states empty/filled/focus-visible/disabled/invalid; "Accept typed and pasted values, not only picked ones"; "Expose the expected format in the hint" | **PASS** — raw typed/pasted string preserved; no parser or formatter added |
+| Calendar Day | `oKLr9` → `qPx25` (`Calendars`) | day cell (number text) | **PASS** — internalized as `Calendar` anatomy; no public `CalendarDay` export |
+| Calendar | `zh2sP` → `qPx25` (`Calendars`) | `single · range, with month navigation, disabled days`; "The calendar opens on the selected month, otherwise the current one."; "Past or unavailable days are disabled, never hidden."; "Arrow keys move by day, Page Up and Down by month."; "Selected and disabled days are announced." | **PASS** — `selectionMode` union; disabled only via `min`/`max`/predicate |
+| Date Picker | `bpCbJ` → `qPx25` | `Public variants: single · range, … invalid`; `dp-{"value":"2025-03-10 – 2025-03-14","range":true}`; "Closing without a selection leaves the previous value untouched."; "The trigger exposes the current value." | **PASS** — range trigger `YYYY-MM-DD – YYYY-MM-DD`, open-after-start/close-after-end, invalid/hint aria wiring |
+
+Verbatim Pen facts used:
+
+- `dW2kV` — `Variant names`: "Public variants: empty · filled, with format hint, invalid, disabled"; content rules: "State the expected format next to the field." · "Accept typed and pasted values, not only picked ones." · "Pair with a Date Picker when browsing is likely."; accessibility: "Expose the expected format in the hint." · "Typing is the primary path; the calendar is an addition."
+- `qPx25` — `Variant names`: "Public variants: single · range, with month navigation, disabled days, invalid"; `Date Picker states` spec: "anatomy: trigger (date input), calendar popup, month navigation, weekday header, day grid, selection. public: single date and range. behavior: idle, open, selected day, disabled days. interaction: focus-visible trigger."; content rules: "The calendar opens on the selected month, otherwise the current one." · "Past or unavailable days are disabled, never hidden." · "Closing without a selection leaves the previous value untouched."; accessibility: "The trigger exposes the current value." · "Arrow keys move by day, Page Up and Down by month." · "Selected and disabled days are announced."
+
+### Approved public surface and behaviour (per dispatch)
+
+- **Calendar** — `selectionMode?: "single" | "range"` (default `single`). `single` keeps `value` / `defaultValue` as `Date | null` + `onChange(date)`. `range` uses `value` / `defaultValue` as `{ start?: Date; end?: Date }` + `onChange(range)`; the first pick sets the start, the second completes the range in either direction, and any later pick starts a fresh range. Controlled `value` is never mutated without `onChange`; uncontrolled `defaultValue` updates visually. Endpoints are `aria-selected`; the span uses the `inRange` recipe. Disabled days come only from `min`/`max` and `isDateDisabled`, and selecting one is a no-op.
+- **CalendarDay** — no longer exported; `CalendarDay` / `CalendarDayProps` are internal. The public entry exports `Calendar`, `CalendarProps`, `CalendarSingleProps`, `CalendarRangeProps`, `CalendarSelectionMode`, `CalendarSurface` and `DateRange`.
+- **DatePicker** — `selectionMode` mirrors the Calendar range contract; the trigger exposes `aria-invalid` and `aria-describedby` to the visible hint/error (error replaces hint). In `range` it stays open after the start pick and closes after the end pick; in `single` a pick closes it; `Escape`/outside close without changing the value; `disabled` blocks opening; the trigger shows `YYYY-MM-DD` or `YYYY-MM-DD – YYYY-MM-DD`.
+- **DateInput** — unchanged raw text field; no parsing, formatting, locale or timezone policy.
+
+No typed DatePicker parser/formatter, automatic past-date disabling, locale/timezone policy, portal change, public `CalendarDay`, or new component/export was added.
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun):
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/components/date-input/DateInput.composition.test.tsx src/shared/components/calendar/Calendar.composition.test.tsx src/shared/components/date-picker/DatePicker.composition.test.tsx` |
+| RED exit / result | `1` — `6 fail` / `24 pass` (30 total), `72 expect() calls` |
+| RED failures | Calendar controlled range highlight, backwards range normalization, `CalendarDay` still public; DatePicker invalid/hint aria association (2), range trigger endpoints |
+| GREEN exit / result | `0` — `30 pass` / `0 fail`, `82 expect() calls` |
+
+Focused browser stories (Vitest + Playwright Chromium):
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/calendar/Calendar.stories.tsx src/shared/components/date-picker/DatePicker.stories.tsx src/shared/components/date-input/DateInput.stories.tsx` |
+| RED exit / result | `1` — `1 failed \| 2 passed` files, `13 failed \| 24 passed (37)` |
+| RED failures | Calendar `Range`, `Range Select`, `Range Backwards`, `Range Controlled`, `Range Controlled Noop`, `Range Colors`, `Dark Range Colors`, `Disabled No Op`, `Keyboard`; DatePicker `Range Flow`, `Dark Range Flow`, `Range Controlled`, `Invalid` |
+| GREEN exit / result | `0` — `3 passed` files, `37 passed (37)` |
+
+### Both-theme computed-style captures (in browser)
+
+| Contract | Light | Dark |
+| --- | --- | --- |
+| Calendar selected day bg | `Selected Colors` → `rgb(21, 128, 61)` | `Dark Selected Colors` → `rgb(134, 239, 172)` |
+| Calendar range span bg | `Range Colors` → `rgb(220, 252, 231)` | `Dark Range Colors` → `rgb(20, 83, 45)` |
+| Calendar disabled day text | `Disabled Days` → `rgb(148, 163, 184)` (`disabled`, `aria-disabled`) | `Dark Disabled Days` → `rgb(71, 85, 105)` |
+| DatePicker disabled field / value | `Disabled Surface` → `rgb(241, 245, 249)` / `rgb(148, 163, 184)` | `Dark Disabled Surface` → `rgb(15, 23, 42)` / `rgb(71, 85, 105)` |
+
+Disabled contrast remains `DISABLED / REVIEW` (computed style recorded, never `PASS`).
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| focused composition RED | `1` | `6 fail` / `24 pass` |
+| focused composition GREEN | `0` | `30 pass` / `0 fail` |
+| focused browser RED | `1` | `13 failed \| 24 passed (37)` |
+| focused browser GREEN | `0` | `3 passed` files, `37 passed (37)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `742 pass / 0 fail` (90 files); browser `543 passed` (73 files) |
+| `mise run check:deps` | `0` | Knip, no findings |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-_kX2xiic.css 219.62 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the B4 shipped baseline (`0034ba5`): unit `738 → 742` (`+4`), browser `527 → 543` (`+16`).
+
+### Changed paths
+
+`src/shared/components/calendar/{calendar.tsx,date-utils.ts,index.ts,Calendar.composition.test.tsx,Calendar.stories.tsx}`, `src/shared/components/date-picker/{date-picker.tsx,index.ts,DatePicker.composition.test.tsx,DatePicker.stories.tsx}`, `src/shared/components/date-input/DateInput.composition.test.tsx`, `artifacts/batch-b/dates/b5-red-green.md`, this evidence. Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited). No `panda.config.ts`, preset, token, icon, font, dependency, Pen or other component file was changed.
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| DateInput raw typed/pasted value (no parser) | **PASS** (preserved) |
+| Calendar `single · range` named public variant | **PASS** |
+| Calendar range endpoint / reset (controlled + uncontrolled) | **PASS** |
+| Calendar disabled days (predicate / `min` / `max` only, no-op selection) | **PASS** |
+| Calendar keyboard semantics (arrows / PageUp-Down / Home-End / Enter) | **PASS** |
+| `CalendarDay` internalized, no public export | **PASS** |
+| DatePicker single/range value + `onChange` | **PASS** |
+| DatePicker open after start, close after end | **PASS** |
+| DatePicker invalid / hint `aria-describedby` association | **PASS** |
+| Both-theme selected / range / disabled captures | **PASS** (disabled contrast `DISABLED / REVIEW`) |
+| **B5 final status** | **PASS** — no unresolved `FAIL` / `BLOCKED` / Critical / Important finding; no new dependency, portal, locale/timezone, parser or past-date policy |

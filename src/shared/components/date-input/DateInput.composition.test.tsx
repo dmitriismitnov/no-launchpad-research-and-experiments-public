@@ -55,6 +55,13 @@ describe("DateInput composition", () => {
         expect(markup).toContain("dateInput__control--disabled_true");
     });
 
+    test("keeps a raw typed value without parsing or reformatting", () => {
+        const markup = renderToStaticMarkup(<DateInput label="ДАТА" value="2025-02-30" readOnly />);
+
+        expect(markup).toContain('value="2025-02-30"');
+        expect(markup).toContain('type="text"');
+    });
+
     test("merges className with the input class, not replacing it", () => {
         const markup = renderToStaticMarkup(<DateInput className="my-date" />);
 

@@ -54,10 +54,39 @@ describe("DatePicker composition", () => {
         expect(withError).not.toContain("Формат ISO.");
     });
 
+    test("associates the invalid error with the trigger", () => {
+        const markup = renderToStaticMarkup(<DatePicker invalid error="Нужна дата" />);
+        const describedBy = markup.match(/aria-describedby="([^"]+)"/)?.[1];
+
+        expect(markup).toContain('aria-invalid="true"');
+        expect(describedBy).toBeDefined();
+        expect(markup).toContain(`id="${describedBy}"`);
+    });
+
+    test("associates the hint with the trigger", () => {
+        const markup = renderToStaticMarkup(<DatePicker hint="Формат ISO." />);
+        const describedBy = markup.match(/aria-describedby="([^"]+)"/)?.[1];
+
+        expect(describedBy).toBeDefined();
+        expect(markup).toContain(`id="${describedBy}"`);
+        expect(markup).toContain("Формат ISO.");
+    });
+
     test("disabled marks the field", () => {
         const markup = renderToStaticMarkup(<DatePicker disabled defaultValue={march} />);
 
         expect(markup).toContain("datePicker__field--disabled_true");
+    });
+
+    test("shows both range endpoints in the trigger", () => {
+        const markup = renderToStaticMarkup(
+            <DatePicker
+                selectionMode="range"
+                defaultValue={{ start: new Date(2025, 2, 10), end: new Date(2025, 2, 14), }}
+            />,
+        );
+
+        expect(markup).toContain("2025-03-10 – 2025-03-14");
     });
 
     test("merges className with the root class, not replacing it", () => {

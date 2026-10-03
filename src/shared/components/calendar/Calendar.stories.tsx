@@ -1,11 +1,12 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
+import { useState, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, userEvent, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
-import type { CalendarProps, } from "./calendar";
+import type { CalendarProps, DateRange, } from "./calendar";
 import { Calendar, } from "./calendar";
 
 const shell = css({
@@ -27,14 +28,18 @@ const renderIn = (theme: "light" | "dark") => (args: CalendarProps) => (
 );
 
 const march = new Date(2025, 2, 1);
+const day = (value: number) => new Date(2025, 2, value);
+const today = day(10);
 
 // The PEN reference (`Calendar`, id `zh2sP`) with a selected day.
 const reference: CalendarProps = {
     month: march,
-    value: new Date(2025, 2, 16),
-    today: new Date(2025, 2, 10),
+    value: day(16),
+    today,
     weekStartsOn: 1,
 };
+
+const inRange: DateRange = { start: day(10), end: day(14), };
 
 const meta = {
     title: "Components/Forms & selection/Calendar",
@@ -43,19 +48,23 @@ const meta = {
         layout: "fullscreen",
         controls: {
             sort: "none",
-            include: [ "monthLabel", "weekStartsOn", "surface", ],
+            include: [ "monthLabel", "weekStartsOn", "surface", "selectionMode", ],
         },
     },
     argTypes: {
         monthLabel: { control: { type: "text", }, },
         weekStartsOn: { control: { type: "number", }, },
         surface: { control: { type: "select", options: [ "overlay", "embedded", ], }, },
+        selectionMode: { control: { type: "select", options: [ "single", "range", ], }, },
     },
 } satisfies Meta<typeof Calendar>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
+
+const cell = (canvasElement: HTMLElement, iso: string): HTMLButtonElement =>
+    canvasElement.querySelector(`[data-date="${iso}"]`) as HTMLButtonElement;
 
 export const Playground: Story = {
     args: reference,
@@ -69,47 +78,163 @@ export const Reference: Story = {
         const canvas = within(canvasElement);
 
         await expect(canvas.getByText("March 2025")).toBeTruthy();
-        await expect(canvasElement.querySelector('[data-date="2025-03-16"]')).toHaveAttribute(
-            "aria-selected",
-            "true",
-        );
+        await expect(cell(canvasElement, "2025-03-16")).toHaveAttribute("aria-selected", "true");
     },
 };
 
 export const Range: Story = {
     args: {
         month: march,
-        today: new Date(2025, 2, 10),
-        rangeStart: new Date(2025, 2, 10),
-        rangeEnd: new Date(2025, 2, 14),
+        today,
+        selectionMode: "range",
+        value: inRange,
         weekStartsOn: 1,
     },
     render: renderIn("light"),
     play: async ({ canvasElement, }) => {
-        const day = canvasElement.querySelector('[data-date="2025-03-12"]') as Element;
+        await expect(cell(canvasElement, "2025-03-12").className).toContain("calendar__day--inRange_true");
+        await expect(cell(canvasElement, "2025-03-10")).toHaveAttribute("aria-selected", "true");
+        await expect(cell(canvasElement, "2025-03-14")).toHaveAttribute("aria-selected", "true");
+    },
+};
 
-        await expect(day.className).toContain("calendar__day--inRange_true");
+export const RangeSelect: Story = {
+    args: { month: march, today, selectionMode: "range", weekStartsOn: 1, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        await fireEvent.click(cell(canvasElement, "2025-03-10"));
+        await expect(cell(canvasElement, "2025-03-10")).toHaveAttribute("aria-selected", "true");
+
+        await fireEvent.click(cell(canvasElement, "2025-03-14"));
+        await expect(cell(canvasElement, "2025-03-10")).toHaveAttribute("aria-selected", "true");
+        await expect(cell(canvasElement, "2025-03-14")).toHaveAttribute("aria-selected", "true");
+        await expect(cell(canvasElement, "2025-03-12").className).toContain("calendar__day--inRange_true");
+
+        await fireEvent.click(cell(canvasElement, "2025-03-20"));
+        await expect(cell(canvasElement, "2025-03-20")).toHaveAttribute("aria-selected", "true");
+        await expect(cell(canvasElement, "2025-03-10")).not.toHaveAttribute("aria-selected", "true");
+        await expect(cell(canvasElement, "2025-03-14")).not.toHaveAttribute("aria-selected", "true");
+    },
+};
+
+export const RangeBackwards: Story = {
+    args: { month: march, today, selectionMode: "range", weekStartsOn: 1, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        await fireEvent.click(cell(canvasElement, "2025-03-14"));
+        await fireEvent.click(cell(canvasElement, "2025-03-10"));
+
+        await expect(cell(canvasElement, "2025-03-10")).toHaveAttribute("aria-selected", "true");
+        await expect(cell(canvasElement, "2025-03-14")).toHaveAttribute("aria-selected", "true");
+        await expect(cell(canvasElement, "2025-03-12").className).toContain("calendar__day--inRange_true");
+    },
+};
+
+const ControlledRange = () => {
+    const [ range, setRange, ] = useState<DateRange>({});
+
+    return (
+        <ThemeShell theme="light">
+            <Calendar
+                month={march}
+                today={today}
+                weekStartsOn={1}
+                selectionMode="range"
+                value={range}
+                onChange={setRange}
+            />
+        </ThemeShell>
+    );
+};
+
+export const RangeControlled: Story = {
+    render: () => <ControlledRange />,
+    play: async ({ canvasElement, }) => {
+        await fireEvent.click(cell(canvasElement, "2025-03-10"));
+        await expect(cell(canvasElement, "2025-03-10")).toHaveAttribute("aria-selected", "true");
+
+        await fireEvent.click(cell(canvasElement, "2025-03-14"));
+        await expect(cell(canvasElement, "2025-03-12").className).toContain("calendar__day--inRange_true");
+    },
+};
+
+export const RangeControlledNoop: Story = {
+    render: () => (
+        <ThemeShell theme="light">
+            <Calendar
+                month={march}
+                today={today}
+                weekStartsOn={1}
+                selectionMode="range"
+                value={{}}
+                onChange={() => {}}
+            />
+        </ThemeShell>
+    ),
+    play: async ({ canvasElement, }) => {
+        await fireEvent.click(cell(canvasElement, "2025-03-10"));
+        await expect(cell(canvasElement, "2025-03-10")).not.toHaveAttribute("aria-selected", "true");
     },
 };
 
 export const DisabledDays: Story = {
     args: {
         month: march,
-        today: new Date(2025, 2, 10),
-        min: new Date(2025, 2, 10),
-        max: new Date(2025, 2, 20),
+        today,
+        min: day(10),
+        max: day(20),
         weekStartsOn: 1,
     },
     render: renderIn("light"),
     play: async ({ canvasElement, }) => {
-        const disabled = canvasElement.querySelector('[data-date="2025-03-05"]') as HTMLButtonElement;
+        const disabled = cell(canvasElement, "2025-03-05");
 
         await expect(disabled.disabled).toBe(true);
+        await expect(disabled).toHaveAttribute("aria-disabled", "true");
+        await expect(getComputedStyle(disabled).color).toBe("rgb(148, 163, 184)");
+    },
+};
+
+export const DarkDisabledDays: Story = {
+    args: {
+        month: march,
+        today,
+        min: day(10),
+        max: day(20),
+        weekStartsOn: 1,
+    },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const disabled = cell(canvasElement, "2025-03-05");
+
+        await expect(disabled.disabled).toBe(true);
+        await expect(getComputedStyle(disabled).color).toBe("rgb(71, 85, 105)");
+    },
+};
+
+export const DisabledNoOp: Story = {
+    args: {
+        month: march,
+        today,
+        defaultValue: day(16),
+        isDateDisabled: (date: Date) => date.getDate() === 20,
+        weekStartsOn: 1,
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const blocked = cell(canvasElement, "2025-03-20");
+
+        await expect(blocked.disabled).toBe(true);
+        await fireEvent.click(blocked);
+        await expect(blocked).not.toHaveAttribute("aria-selected", "true");
+
+        await fireEvent.click(cell(canvasElement, "2025-03-21"));
+        await expect(cell(canvasElement, "2025-03-21")).toHaveAttribute("aria-selected", "true");
     },
 };
 
 export const NextMonth: Story = {
-    args: { defaultMonth: march, today: new Date(2025, 2, 10), weekStartsOn: 1, },
+    args: { defaultMonth: march, today, weekStartsOn: 1, },
     render: renderIn("light"),
     play: async ({ canvasElement, }) => {
         const canvas = within(canvasElement);
@@ -120,13 +245,75 @@ export const NextMonth: Story = {
 };
 
 export const SelectDay: Story = {
-    args: { month: march, today: new Date(2025, 2, 10), weekStartsOn: 1, },
+    args: { month: march, today, weekStartsOn: 1, },
     render: renderIn("light"),
     play: async ({ canvasElement, }) => {
-        const day = canvasElement.querySelector('[data-date="2025-03-20"]') as HTMLButtonElement;
+        const target = cell(canvasElement, "2025-03-20");
 
-        await fireEvent.click(day);
-        await expect(day).toHaveAttribute("aria-selected", "true");
+        await fireEvent.click(target);
+        await expect(target).toHaveAttribute("aria-selected", "true");
+    },
+};
+
+export const Keyboard: Story = {
+    args: { defaultMonth: march, defaultValue: day(16), today, weekStartsOn: 1, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+
+        cell(canvasElement, "2025-03-16").focus();
+        await user.keyboard("{ArrowRight}");
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-17"));
+
+        await user.keyboard("{ArrowDown}");
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-24"));
+
+        await user.keyboard("{PageDown}");
+        await expect(within(canvasElement).getByText("April 2025")).toBeTruthy();
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-04-24"));
+
+        await user.keyboard("{Enter}");
+        await expect(cell(canvasElement, "2025-04-24")).toHaveAttribute("aria-selected", "true");
+    },
+};
+
+export const SelectedColors: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        await expect(getComputedStyle(cell(canvasElement, "2025-03-16")).backgroundColor).toBe(
+            "rgb(21, 128, 61)",
+        );
+    },
+};
+
+export const DarkSelectedColors: Story = {
+    args: reference,
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        await expect(getComputedStyle(cell(canvasElement, "2025-03-16")).backgroundColor).toBe(
+            "rgb(134, 239, 172)",
+        );
+    },
+};
+
+export const RangeColors: Story = {
+    args: { month: march, today, selectionMode: "range", value: inRange, weekStartsOn: 1, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        await expect(getComputedStyle(cell(canvasElement, "2025-03-12")).backgroundColor).toBe(
+            "rgb(220, 252, 231)",
+        );
+    },
+};
+
+export const DarkRangeColors: Story = {
+    args: { month: march, today, selectionMode: "range", value: inRange, weekStartsOn: 1, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        await expect(getComputedStyle(cell(canvasElement, "2025-03-12")).backgroundColor).toBe(
+            "rgb(20, 83, 45)",
+        );
     },
 };
 

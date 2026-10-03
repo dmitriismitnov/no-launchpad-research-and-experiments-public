@@ -14,23 +14,30 @@ import {
     getDaysInMonth,
     isSameDay,
     isSameMonth,
+    normalizeRange,
     normalizeWeekStart,
+    pickRange,
     startOfMonth,
     startOfWeek,
     toDateOnly,
     WEEKDAY_LABELS,
     WEEKDAY_LONG_LABELS,
 } from "./date-utils";
+import type { DateRange, } from "./date-utils";
+
+export type { DateRange, } from "./date-utils";
 
 export type CalendarSurface = "overlay" | "embedded";
 
+/** Pen-documented selection modes: one day, or a start/end pair. */
+export type CalendarSelectionMode = "single" | "range";
+
 /**
- * Публичные пропсы Calendar Day. Значение — конкретный день; `selected`,
- * `today`, `inRange` и `outsideMonth` — визуальные состояния, `disabled`
- * выключает выбор. Компонент не владеет состоянием: выбор сообщается через
- * `onSelect`.
+ * Внутренняя ячейка месяца из мастера Calendar Day: кнопка с числом,
+ * радиусом `sm` и состояниями selected / today / inRange / outsideMonth /
+ * disabled. Является деталью реализации `Calendar` и не экспортируется.
  */
-export type CalendarDayProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onSelect"> & {
+type CalendarDayProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onSelect"> & {
     /** Календарный день, который представляет ячейка. */
     date: Date;
     /** Помечает день выбранным. */
@@ -49,12 +56,7 @@ export type CalendarDayProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "va
     onSelect?: (date: Date) => void;
 };
 
-/**
- * Одна ячейка месяца из мастера Calendar Day: кнопка с числом, радиусом `sm`
- * и состояниями selected / today / inRange / outsideMonth / disabled.
- * Используется сеткой `Calendar`, но пригодна и отдельно.
- */
-export const CalendarDay = ({
+const CalendarDay = ({
     date,
     selected = false,
     today = false,
@@ -90,29 +92,13 @@ export const CalendarDay = ({
     );
 };
 
-/**
- * Публичные пропсы Calendar. Отображаемый месяц контролируется `month` +
- * `onMonthChange` или не контролируется `defaultMonth`; выбранный день —
- * `value` + `onChange` или `defaultValue`. Диапазон `rangeStart`/`rangeEnd`
- * только подсвечивает полосу.
- */
-export type CalendarProps = Omit<ComponentProps<"div">, "onChange" | "defaultValue"> & {
+type CalendarBaseProps = Omit<ComponentProps<"div">, "onChange" | "defaultValue"> & {
     /** Контролируемый отображаемый месяц; передавайте с `onMonthChange`. */
     month?: Date;
     /** Начальный отображаемый месяц, когда контрол неконтролируемый. */
     defaultMonth?: Date;
     /** Вызывается с новым отображаемым месяцем при навигации. */
     onMonthChange?: (month: Date) => void;
-    /** Контролируемый выбранный день; передавайте с `onChange`. */
-    value?: Date | null;
-    /** Начальный выбранный день, когда контрол неконтролируемый. */
-    defaultValue?: Date | null;
-    /** Вызывается с выбранным днём. */
-    onChange?: (date: Date) => void;
-    /** Начало подсвеченного диапазона. */
-    rangeStart?: Date;
-    /** Конец подсвеченного диапазона. */
-    rangeEnd?: Date;
     /** Ранняя доступная дата; более ранние дни отключаются. */
     min?: Date;
     /** Поздняя доступная дата; более поздние дни отключаются. */
@@ -131,55 +117,97 @@ export type CalendarProps = Omit<ComponentProps<"div">, "onChange" | "defaultVal
     "aria-label"?: string;
     /** Доступные имена кнопок навигации. */
     previousMonthLabel?: string;
+    /** Доступные имена кнопок навигации. */
     nextMonthLabel?: string;
 };
 
+/** Контроль выбора одного дня: `value` / `onChange` или `defaultValue`. */
+export type CalendarSingleProps = CalendarBaseProps & {
+    selectionMode?: "single";
+    /** Контролируемый выбранный день; передавайте с `onChange`. */
+    value?: Date | null;
+    /** Начальный выбранный день, когда контрол неконтролируемый. */
+    defaultValue?: Date | null;
+    /** Вызывается с выбранным днём. */
+    onChange?: (date: Date) => void;
+};
+
+/** Контроль диапазона: `{ start, end }` через `value` / `onChange` или `defaultValue`. */
+export type CalendarRangeProps = CalendarBaseProps & {
+    selectionMode: "range";
+    /** Контролируемый диапазон; передавайте с `onChange`. */
+    value?: DateRange | null;
+    /** Начальный диапазон, когда контрол неконтролируемый. */
+    defaultValue?: DateRange | null;
+    /** Вызывается с новым диапазоном после каждого выбора. */
+    onChange?: (range: DateRange) => void;
+};
+
+export type CalendarProps = CalendarSingleProps | CalendarRangeProps;
+
 /**
- * Сетка месяца из `CalendarDay`. Управление: `month` / `onMonthChange` и
- * `value` / `onChange`. Стрелки двигают фокус по дням, `PageUp` / `PageDown` —
- * по месяцам, `Home` / `End` — по краям недели; выбранный и сегодняшний дни
- * помечаются `aria-selected` / `aria-current`.
+ * Сетка месяца. Управление: `month` / `onMonthChange` и `value` / `onChange`.
+ * `selectionMode` выбирает один день либо диапазон; в режиме `range` первый
+ * выбор задаёт начало, второй — конец, а следующий начинает новый диапазон.
+ * Стрелки двигают фокус по дням, `PageUp` / `PageDown` — по месяцам,
+ * `Home` / `End` — по краям недели; выбранные, сегодняшний и недоступные дни
+ * объявляются через `aria-selected` / `aria-current` / `aria-disabled`.
  */
-export const Calendar = ({
-    month,
-    defaultMonth,
-    onMonthChange,
-    value,
-    defaultValue,
-    onChange,
-    rangeStart,
-    rangeEnd,
-    min,
-    max,
-    today,
-    weekStartsOn = 1,
-    monthLabel,
-    isDateDisabled,
-    surface = "overlay",
-    previousMonthLabel = "Previous month",
-    nextMonthLabel = "Next month",
-    className,
-    onKeyDown,
-    "aria-label": ariaLabel = "Calendar",
-    ...props
-}: CalendarProps) => {
+export const Calendar = (props: CalendarProps) => {
+    const {
+        selectionMode = "single",
+        month,
+        defaultMonth,
+        onMonthChange,
+        value,
+        defaultValue,
+        onChange,
+        min,
+        max,
+        today,
+        weekStartsOn = 1,
+        monthLabel,
+        isDateDisabled,
+        surface = "overlay",
+        previousMonthLabel = "Previous month",
+        nextMonthLabel = "Next month",
+        className,
+        onKeyDown,
+        "aria-label": ariaLabel = "Calendar",
+        ...rest
+    } = props as CalendarBaseProps & {
+        selectionMode?: CalendarSelectionMode;
+        value?: Date | DateRange | null;
+        defaultValue?: Date | DateRange | null;
+        onChange?: ((date: Date) => void) | ((range: DateRange) => void);
+    };
+    const isRange = selectionMode === "range";
     const weekStart = normalizeWeekStart(weekStartsOn);
     const todayDate = toDateOnly(today ?? new Date());
     const minDate = min === undefined ? undefined : toDateOnly(min);
     const maxDate = max === undefined ? undefined : toDateOnly(max);
     const isMonthControlled = month !== undefined;
     const isValueControlled = value !== undefined;
+    const initialValue = isValueControlled ? value : defaultValue;
+    const initialRange = isRange ? normalizeRange(initialValue as DateRange | null | undefined) : {};
+    const initialAnchor = isRange
+        ? ( initialRange.start ?? initialRange.end )
+        : ( ( initialValue as Date | null | undefined ) ?? undefined );
     const [ uncontrolledMonth, setUncontrolledMonth, ] = useState<Date>(
-        () => startOfMonth(defaultMonth ?? value ?? defaultValue ?? todayDate),
+        () => startOfMonth(defaultMonth ?? initialAnchor ?? todayDate),
     );
-    const [ uncontrolledValue, setUncontrolledValue, ] = useState<Date | null>(() => defaultValue ?? null);
+    const [ uncontrolledValue, setUncontrolledValue, ] = useState<Date | DateRange | null>(
+        () => defaultValue ?? null,
+    );
     const [ focusedDate, setFocusedDate, ] = useState<Date>(
-        () => toDateOnly(value ?? defaultValue ?? todayDate),
+        () => toDateOnly(initialAnchor ?? todayDate),
     );
     const gridRef = useRef<HTMLDivElement>(null);
     const pendingFocusRef = useRef(false);
     const displayMonth = startOfMonth(isMonthControlled ? month : uncontrolledMonth);
-    const selectedDate = isValueControlled ? value : uncontrolledValue;
+    const rawValue = isValueControlled ? value : uncontrolledValue;
+    const selectedDate = isRange ? null : ( ( rawValue as Date | null | undefined ) ?? null );
+    const selectedRange = isRange ? normalizeRange(rawValue as DateRange | null | undefined) : {};
     const styles = calendar({ surface, });
 
     const firstOfMonth = startOfMonth(displayMonth);
@@ -219,15 +247,25 @@ export const Calendar = ({
         return isOutOfRange || isDateDisabled?.(date) === true;
     };
 
+    const isSelected = (date: Date): boolean => {
+        if ( isRange ) {
+            const { start, end, } = selectedRange;
+
+            return ( start !== undefined && isSameDay(date, start) )
+                || ( end !== undefined && isSameDay(date, end) );
+        }
+
+        return selectedDate !== null && isSameDay(date, selectedDate);
+    };
+
     const isInRange = (date: Date): boolean => {
-        if ( rangeStart === undefined || rangeEnd === undefined ) {
+        const { start, end, } = selectedRange;
+
+        if ( start === undefined || end === undefined ) {
             return false;
         }
 
-        const start = toDateOnly(rangeStart);
-        const end = toDateOnly(rangeEnd);
-
-        return date >= start && date <= end;
+        return date > start && date < end;
     };
 
     const changeMonth = (next: Date) => {
@@ -247,11 +285,21 @@ export const Calendar = ({
 
         setFocusedDate(date);
 
-        if ( !isValueControlled ) {
-            setUncontrolledValue(date);
-        }
+        if ( isRange ) {
+            const next = pickRange(selectedRange, date);
 
-        onChange?.(date);
+            if ( !isValueControlled ) {
+                setUncontrolledValue(next);
+            }
+
+            ( onChange as ((range: DateRange) => void) | undefined )?.(next);
+        } else {
+            if ( !isValueControlled ) {
+                setUncontrolledValue(date);
+            }
+
+            ( onChange as ((date: Date) => void) | undefined )?.(date);
+        }
 
         if ( !isSameMonth(date, displayMonth) ) {
             changeMonth(date);
@@ -315,7 +363,7 @@ export const Calendar = ({
     };
 
     return (
-        <div className={cx(styles.root, className)} {...props}>
+        <div className={cx(styles.root, className)} {...rest}>
             <div className={styles.header}>
                 <p className={styles.monthLabel} aria-live="polite">
                     {monthLabel ?? formatMonthLabel(displayMonth)}
@@ -363,8 +411,7 @@ export const Calendar = ({
                                 key={formatIso(date)}
                                 role="gridcell"
                                 date={date}
-                                selected={selectedDate !== null && selectedDate !== undefined
-                                    && isSameDay(date, selectedDate)}
+                                selected={isSelected(date)}
                                 today={isSameDay(date, todayDate)}
                                 inRange={isInRange(date)}
                                 outsideMonth={!isSameMonth(date, displayMonth)}

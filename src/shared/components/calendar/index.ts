@@ -1,3 +1,10 @@
-export { Calendar, CalendarDay, } from "./calendar";
-export type { CalendarDayProps, CalendarProps, CalendarSurface, } from "./calendar";
+export { Calendar, } from "./calendar";
+export type {
+    CalendarProps,
+    CalendarRangeProps,
+    CalendarSelectionMode,
+    CalendarSingleProps,
+    CalendarSurface,
+    DateRange,
+} from "./calendar";
 export { calendarPreset, calendarRecipe, } from "./preset";
