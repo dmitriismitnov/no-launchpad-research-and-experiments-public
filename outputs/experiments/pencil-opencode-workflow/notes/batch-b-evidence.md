@@ -129,3 +129,94 @@ Counts moved from the Batch B0 baseline (`6e3b000`): unit `663 → 671` (`+8`), 
 - **INFO — code-side raster.** See above; Batch E can add PNG side-by-side if the reviewer requires it.
 - **INFO — `alert-dialog`.** Unchanged; its `negative.600` role still diverges from Pen `action/danger` in dark theme.
 - Disabled contrast is unchanged from B0 and remains `DISABLED / REVIEW`; loading is not a disabled-contrast state (it keeps the tone fill).
+
+## B0 correction — disabled foreground scoping and destructive static emission (cycle 2/2)
+
+**Base commit:** `b81a080f859d50e41ea38aad2774ab3956ffb58f` (`feat(shared): add Button width and loading states`).\
+**Correction plan:** the reviewer's cycle-1 findings on the B0 destructive/disabled slice: (1) the child `_disabled` foreground never applied because the child slots are never the disabled element, and (2) the destructive tone was only reaching the stylesheet through source extraction, not through `staticCss`.\
+**Status:** **PASS** (with one recorded `INFO`, below).
+
+### Fixes implemented
+
+| # | Finding | Fix |
+| --- | --- | --- |
+| 1 | `_disabled` on `label` / `prefixIcon` / `suffixIcon` (Button) and `icon` (ButtonIcon) compiles to `child:disabled`, which never matches a disabled native root. | Moved the shared disabled foreground onto the native root as a descendant rule per tone: `<root>:is(:disabled, [disabled], [data-disabled], [aria-disabled=true]):not([data-loading]) .<slot>` → `semantic.action.disabled.foreground`. Child slots now carry only their tone `base` (and `_enabled` hover/active for ghost). |
+| 2 | `staticCss.recipes.button[0].tone` and `buttonIcon[0].tone` omitted `destructive`, so the tone survived only because stories happen to spell `tone="destructive"`. | Added `"destructive"` to both static recipe declarations in `panda.config.ts`. |
+| 3 | Unit recipe assertions asserted the (dead) child `_disabled` condition. | Assertions now target the root-to-descendant selector and assert the child slots no longer carry `_disabled`. |
+
+The `:not([data-loading])` guard is shared with the root background rule, so loading keeps the tone fill and tone foreground: the destructive loading root stays `danger.background` (red.600) and its spinner/label/prefix stay `danger.foreground` (white) rather than the muted disabled role.
+
+### INFO — resolved disabled-foreground hex differs from the plan text
+
+The correction plan named disabled foreground light `rgb(168,176,187)` / dark `rgb(102,102,102)`. Those are the **pre-migration Pen palette** values (`neutral.400` `#A8B0BB` / `neutral.500` `#666666`, see `outputs/shared/pen-design-system-integration/tools/migrate-pen.ts`). The repository's `semantic.action.disabled.foreground` resolves to the migrated palette: light `palette.neutral.400` `#94A3B8` = `rgb(148,163,184)`, dark `palette.neutral.500` `#64748B` = `rgb(100,116,139)`. This matches the B0 evidence token mapping (`action/disabled-fg` `#94A3B8` / `#64748B`) and the generated `--colors-semantic-action-disabled-foreground`. Tokens are explicitly out of scope for this correction, so the browser assertions use the repository's resolved values; changing the palette would be a separate Foundation change. Recorded as **INFO**.
+
+### Tests-first proof (RED → GREEN)
+
+Unit recipe (Bun):
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/components/button/Button.test.ts src/shared/components/button-icon/ButtonIcon.test.ts` |
+| RED exit | `1` |
+| RED result | `4 fail` / `36 pass` (40 total); `scopes disabled foregrounds…`, `keeps the disabled condition off the child slots…`, `scopes the disabled foreground… (ButtonIcon)`, `keeps the disabled condition off the glyph slot…` |
+| GREEN exit | `0` |
+| GREEN result | `40 pass` / `0 fail` (168 expect calls) |
+
+Static CSS generation (Bun, real `panda.config.ts` compiled with `include: []` and a temporary `outfile`):
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/styles/panda-static-css.test.ts` |
+| RED exit | `1` |
+| RED result | `0 pass` / `3 fail`; no `.button__root--tone_destructive` / `.buttonIcon__root--tone_destructive` and no descendant disabled rule in the static-only sheet |
+| GREEN exit | `0` |
+| GREEN result | `3 pass` / `0 fail` (10 expect calls); `Successfully extracted css from 0 file(s)` proves emission without source extraction |
+
+Focused browser stories (Vitest + Playwright Chromium):
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/button/Button.stories.tsx src/shared/components/button-icon/ButtonIcon.stories.tsx` |
+| RED exit | `1` |
+| RED result | `4 failed \| 31 passed (35)`; `Disabled Slot Foregrounds`, `Dark Disabled Slot Foregrounds`, `Disabled Glyph Foregrounds`, `Dark Disabled Glyph Foregrounds` (children rendered white instead of the disabled role) |
+| GREEN exit | `0` |
+| GREEN result | `35 passed (35)` |
+
+### Both-theme computed-style captures (in-browser)
+
+| Story (theme) | Assertion | Observed |
+| --- | --- | --- |
+| `DisabledSlotForegrounds` / `DarkDisabledSlotForegrounds` | disabled Button `label`, `prefixIcon`, `suffixIcon` and both glyphs | light `rgb(148, 163, 184)`, dark `rgb(100, 116, 139)` |
+| `DisabledGlyphForegrounds` / `DarkDisabledGlyphForegrounds` | disabled ButtonIcon `.buttonIcon__icon` and glyph | light `rgb(148, 163, 184)`, dark `rgb(100, 116, 139)` |
+| `DestructiveLoading` / `DarkDestructiveLoading` | root fill + spinner foreground + child foreground while loading | fill `rgb(220, 38, 38)`, spinner/label/prefix `rgb(255, 255, 255)`, both themes (the `:not([data-loading])` exclusion keeps the danger role) |
+| `DestructiveStates` / `DarkDestructiveStates` | disabled destructive root fill | light `rgb(241, 245, 249)`, dark `rgb(30, 41, 59)` (unchanged) |
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| focused unit RED | `1` | `4 fail` / `36 pass` |
+| focused unit GREEN | `0` | `40 pass` / `0 fail` |
+| static RED | `1` | `0 pass` / `3 fail` |
+| static GREEN | `0` | `3 pass` / `0 fail`; extracted from `0 file(s)` |
+| focused browser RED | `1` | `4 failed \| 31 passed (35)` |
+| focused browser GREEN | `0` | `35 passed (35)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `676 pass / 0 fail` (90 files); browser `408 passed` (73 files) |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-CO3QQwv2.css 213.68 kB` |
+
+Counts moved from the Batch B0 shipped baseline (`b81a080`): unit `671 → 676` (`+5`), browser `404 → 408` (`+4`).
+
+### Changed paths
+
+`panda.config.ts`, `src/shared/components/button/{preset.ts,Button.test.ts,Button.stories.tsx}`, `src/shared/components/button-icon/{preset.ts,ButtonIcon.test.ts,ButtonIcon.stories.tsx}`, new `src/shared/styles/panda-static-css.test.ts`, this evidence. Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited).
+
+### Disposition
+
+| Row | Disposition |
+| --- | --- |
+| Disabled foreground scoping (Button child slots + ButtonIcon glyph) | **PASS** |
+| Destructive static emission without source extraction | **PASS** |
+| Destructive loading regression (fill + white spinner/children) | **PASS** |
+| Plan hex vs repository palette | **INFO** (documented above; tokens out of scope) |
+| Disabled contrast | `DISABLED / REVIEW` (unchanged from B0) |

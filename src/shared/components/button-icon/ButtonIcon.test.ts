@@ -207,13 +207,34 @@ describe("buttonIcon recipe", () => {
         }
     });
 
-    test("paints a disabled foreground from the shared disabled role", () => {
+    test("scopes the disabled foreground from the disabled native root to the glyph slot", () => {
+        // The glyph slot is not the disabled element, so the shared disabled
+        // foreground is scoped from `button:disabled` to the descendant icon
+        // slot, excluding loading so the tone glyph survives the loading state.
+        for ( const tone of Object.keys(iconColours) ) {
+            const root = buttonIconRecipe.variants?.["tone"]?.[tone]?.["root"] as
+                | Record<string, unknown>
+                | undefined;
+            const selector = Object.keys(root ?? {}).find(
+                (candidate) =>
+                    candidate.includes(".buttonIcon__icon")
+                    && candidate.includes(":disabled")
+                    && candidate.includes(":not([data-loading])"),
+            );
+            const rule = selector === undefined
+                ? undefined
+                : ( root as Record<string, { color?: unknown; }> )[selector];
+
+            expect(selector).toBeDefined();
+            expect(rule).toMatchObject({ color: "semantic.action.disabled.foreground", });
+        }
+    });
+
+    test("keeps the disabled condition off the glyph slot itself", () => {
         for ( const tone of Object.keys(iconColours) ) {
             const variant = buttonIconRecipe.variants?.["tone"]?.[tone];
 
-            expect(variant?.["icon"]).toMatchObject({
-                color: { _disabled: "semantic.action.disabled.foreground", },
-            });
+            expect(variant?.["icon"]?.["color"]).not.toHaveProperty("_disabled");
         }
     });
 

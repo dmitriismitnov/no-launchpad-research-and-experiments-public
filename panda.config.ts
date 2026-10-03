@@ -21,7 +21,7 @@ export default defineConfig({
         recipes: {
             button: [
                 {
-                    tone: [ "primary", "secondary", "ghost", ],
+                    tone: [ "primary", "secondary", "ghost", "destructive", ],
                     size: [ "sm", "md", ],
                     width: [ "hug", "full", ],
                     loading: [ "true", ],
@@ -29,7 +29,7 @@ export default defineConfig({
             ],
             buttonIcon: [
                 {
-                    tone: [ "primary", "secondary", "ghost", ],
+                    tone: [ "primary", "secondary", "ghost", "destructive", ],
                     size: [ "sm", "md", ],
                     loading: [ "true", ],
                 },

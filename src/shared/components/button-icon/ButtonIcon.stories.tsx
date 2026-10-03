@@ -240,6 +240,57 @@ export const DarkSlotColourRoles: Story = {
     play: assertSlotRoles,
 };
 
+// The glyph slot is a descendant of the disabled native root, so the shared
+// disabled foreground is scoped from `button:disabled` to `.buttonIcon__icon`.
+// Expected values are the resolved `semantic.action.disabled.foreground` role:
+// light `palette.neutral.400` (`#94A3B8`), dark `palette.neutral.500`
+// (`#64748B`).
+const disabledForegrounds = {
+    light: "rgb(148, 163, 184)",
+    dark: "rgb(100, 116, 139)",
+} as const;
+
+const DisabledGlyphProbe = ({ theme, }: { theme: "light" | "dark"; }) => (
+    <ThemeShell theme={theme}>
+        <div className={row}>
+            {tones.map((tone) => (
+                <ButtonIcon
+                    key={tone}
+                    tone={tone}
+                    icon="settings"
+                    label={`${tone} disabled`}
+                    disabled
+                />
+            ))}
+        </div>
+    </ThemeShell>
+);
+
+const assertDisabledGlyphs = (expected: string) => async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+    const canvas = within(canvasElement);
+
+    for ( const tone of tones ) {
+        const button = canvas.getByRole("button", { name: `${tone} disabled`, });
+        await expect(button).toBeDisabled();
+
+        const slot = button.querySelector(".buttonIcon__icon") as Element;
+        const glyph = button.querySelector(".buttonIcon__icon .icon") as Element;
+
+        await expect(getComputedStyle(slot).color).toBe(expected);
+        await expect(getComputedStyle(glyph).color).toBe(expected);
+    }
+};
+
+export const DisabledGlyphForegrounds: Story = {
+    render: () => <DisabledGlyphProbe theme="light" />,
+    play: assertDisabledGlyphs(disabledForegrounds.light),
+};
+
+export const DarkDisabledGlyphForegrounds: Story = {
+    render: () => <DisabledGlyphProbe theme="dark" />,
+    play: assertDisabledGlyphs(disabledForegrounds.dark),
+};
+
 const destructiveStates = [ "default", "hover", "active", "disabled", ] as const;
 
 // Storybook-only state metadata, mirroring the shared matrix. The `data-*`

@@ -16,6 +16,16 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  */
 const disabledStateSelector = "&:is(:disabled, [disabled], [data-disabled], [aria-disabled=true]):not([data-loading])";
 
+/**
+ * Disabled glyph paint. Only the native root can match `:disabled`; the glyph
+ * slot is a descendant, so the shared disabled foreground is scoped from the
+ * disabled root to `.buttonIcon__icon`, excluding loading so the tone glyph and
+ * the destructive loading indicator survive.
+ */
+const disabledIconSelector = `${disabledStateSelector} .buttonIcon__icon` as const;
+
+const disabledChildForeground = "semantic.action.disabled.foreground";
+
 export const buttonIconRecipe = defineSlotRecipe({
     className: "buttonIcon",
     slots: [ "root", "icon", ],
@@ -60,12 +70,10 @@ export const buttonIconRecipe = defineSlotRecipe({
                     [disabledStateSelector]: {
                         backgroundColor: "semantic.action.disabled.background",
                     },
+                    [disabledIconSelector]: { color: disabledChildForeground, },
                 },
                 icon: {
-                    color: {
-                        base: "semantic.action.primary.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.primary.foreground", },
                 },
             },
 
@@ -84,12 +92,10 @@ export const buttonIconRecipe = defineSlotRecipe({
                     [disabledStateSelector]: {
                         backgroundColor: "semantic.action.disabled.background",
                     },
+                    [disabledIconSelector]: { color: disabledChildForeground, },
                 },
                 icon: {
-                    color: {
-                        base: "semantic.action.secondary.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.secondary.foreground", },
                 },
             },
 
@@ -107,6 +113,7 @@ export const buttonIconRecipe = defineSlotRecipe({
                     [disabledStateSelector]: {
                         backgroundColor: "semantic.action.disabled.background",
                     },
+                    [disabledIconSelector]: { color: disabledChildForeground, },
                 },
                 icon: {
                     color: {
@@ -115,7 +122,6 @@ export const buttonIconRecipe = defineSlotRecipe({
                             _hover: "semantic.action.ghost.foreground",
                             _active: "semantic.text.secondary",
                         },
-                        _disabled: "semantic.action.disabled.foreground",
                     },
                 },
             },
@@ -136,12 +142,10 @@ export const buttonIconRecipe = defineSlotRecipe({
                     [disabledStateSelector]: {
                         backgroundColor: "semantic.action.disabled.background",
                     },
+                    [disabledIconSelector]: { color: disabledChildForeground, },
                 },
                 icon: {
-                    color: {
-                        base: "semantic.action.danger.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.danger.foreground", },
                 },
             },
         },

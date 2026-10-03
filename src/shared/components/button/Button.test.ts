@@ -277,14 +277,41 @@ describe("button recipe", () => {
         }
     });
 
-    test("paints disabled foregrounds from the shared disabled role", () => {
+    test("scopes disabled foregrounds from the disabled native root to the child slots", () => {
+        // Only the native root can match `:disabled`; the label and both icon
+        // slots are descendants. The shared disabled foreground is therefore
+        // scoped from the disabled root to each child, and the condition keeps
+        // `:not([data-loading])` so loading retains the tone foreground.
+        for ( const tone of Object.keys(slotColours) ) {
+            const root = buttonRecipe.variants?.["tone"]?.[tone]?.["root"] as
+                | Record<string, unknown>
+                | undefined;
+
+            for ( const slot of [ "label", "prefixIcon", "suffixIcon", ] as const ) {
+                const selector = Object.keys(root ?? {}).find(
+                    (candidate) =>
+                        candidate.includes(`.button__${slot}`)
+                        && candidate.includes(":disabled")
+                        && candidate.includes(":not([data-loading])"),
+                );
+                const rule = selector === undefined
+                    ? undefined
+                    : ( root as Record<string, { color?: unknown; }> )[selector];
+
+                expect(selector).toBeDefined();
+                expect(rule).toMatchObject({ color: "semantic.action.disabled.foreground", });
+            }
+        }
+    });
+
+    test("keeps the disabled condition off the child slots themselves", () => {
+        // A `_disabled` paint on the child resolves to `child:disabled`, which
+        // never matches because only the native root is disabled.
         for ( const tone of Object.keys(slotColours) ) {
             const variant = buttonRecipe.variants?.["tone"]?.[tone];
 
             for ( const slot of [ "label", "prefixIcon", "suffixIcon", ] as const ) {
-                expect(variant?.[slot]).toMatchObject({
-                    color: { _disabled: "semantic.action.disabled.foreground", },
-                });
+                expect(variant?.[slot]?.["color"]).not.toHaveProperty("_disabled");
             }
         }
     });

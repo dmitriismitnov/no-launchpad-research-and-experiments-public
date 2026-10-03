@@ -21,6 +21,18 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  */
 const disabledStateSelector = "&:is(:disabled, [disabled], [data-disabled], [aria-disabled=true]):not([data-loading])";
 
+/**
+ * Disabled child paint. Only the native root can match `:disabled`; the label
+ * and both icon slots are descendants, so the shared disabled foreground is
+ * scoped from the disabled root to each child. The `:not([data-loading])` guard
+ * is shared, so loading keeps the tone foreground.
+ */
+const disabledLabelSelector = `${disabledStateSelector} .button__label` as const;
+const disabledPrefixIconSelector = `${disabledStateSelector} .button__prefixIcon` as const;
+const disabledSuffixIconSelector = `${disabledStateSelector} .button__suffixIcon` as const;
+
+const disabledChildForeground = "semantic.action.disabled.foreground";
+
 export const buttonRecipe = defineSlotRecipe({
     className: "button",
     slots: [ "root", "prefixIcon", "label", "suffixIcon", "spinner", ],
@@ -97,27 +109,21 @@ export const buttonRecipe = defineSlotRecipe({
                     [disabledStateSelector]: {
                         backgroundColor: "semantic.action.disabled.background",
                     },
+                    [disabledLabelSelector]: { color: disabledChildForeground, },
+                    [disabledPrefixIconSelector]: { color: disabledChildForeground, },
+                    [disabledSuffixIconSelector]: { color: disabledChildForeground, },
                 },
                 spinner: {
                     color: { base: "semantic.action.primary.foreground", },
                 },
                 label: {
-                    color: {
-                        base: "semantic.action.primary.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.primary.foreground", },
                 },
                 prefixIcon: {
-                    color: {
-                        base: "semantic.action.primary.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.primary.foreground", },
                 },
                 suffixIcon: {
-                    color: {
-                        base: "semantic.action.primary.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.primary.foreground", },
                 },
             },
 
@@ -136,27 +142,21 @@ export const buttonRecipe = defineSlotRecipe({
                     [disabledStateSelector]: {
                         backgroundColor: "semantic.action.disabled.background",
                     },
+                    [disabledLabelSelector]: { color: disabledChildForeground, },
+                    [disabledPrefixIconSelector]: { color: disabledChildForeground, },
+                    [disabledSuffixIconSelector]: { color: disabledChildForeground, },
                 },
                 spinner: {
                     color: { base: "semantic.action.secondary.foreground", },
                 },
                 label: {
-                    color: {
-                        base: "semantic.action.secondary.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.secondary.foreground", },
                 },
                 prefixIcon: {
-                    color: {
-                        base: "semantic.action.secondary.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.secondary.foreground", },
                 },
                 suffixIcon: {
-                    color: {
-                        base: "semantic.action.secondary.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.secondary.foreground", },
                 },
             },
 
@@ -174,6 +174,9 @@ export const buttonRecipe = defineSlotRecipe({
                     [disabledStateSelector]: {
                         backgroundColor: "semantic.action.disabled.background",
                     },
+                    [disabledLabelSelector]: { color: disabledChildForeground, },
+                    [disabledPrefixIconSelector]: { color: disabledChildForeground, },
+                    [disabledSuffixIconSelector]: { color: disabledChildForeground, },
                 },
                 spinner: {
                     color: { base: "semantic.text.secondary", },
@@ -185,7 +188,6 @@ export const buttonRecipe = defineSlotRecipe({
                             _hover: "semantic.action.ghost.foreground",
                             _active: "semantic.text.secondary",
                         },
-                        _disabled: "semantic.action.disabled.foreground",
                     },
                 },
                 prefixIcon: {
@@ -195,7 +197,6 @@ export const buttonRecipe = defineSlotRecipe({
                             _hover: "semantic.action.ghost.foreground",
                             _active: "semantic.text.secondary",
                         },
-                        _disabled: "semantic.action.disabled.foreground",
                     },
                 },
                 suffixIcon: {
@@ -205,7 +206,6 @@ export const buttonRecipe = defineSlotRecipe({
                             _hover: "semantic.action.ghost.foreground",
                             _active: "semantic.text.secondary",
                         },
-                        _disabled: "semantic.action.disabled.foreground",
                     },
                 },
             },
@@ -228,27 +228,21 @@ export const buttonRecipe = defineSlotRecipe({
                     [disabledStateSelector]: {
                         backgroundColor: "semantic.action.disabled.background",
                     },
+                    [disabledLabelSelector]: { color: disabledChildForeground, },
+                    [disabledPrefixIconSelector]: { color: disabledChildForeground, },
+                    [disabledSuffixIconSelector]: { color: disabledChildForeground, },
                 },
                 spinner: {
                     color: { base: "semantic.action.danger.foreground", },
                 },
                 label: {
-                    color: {
-                        base: "semantic.action.danger.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.danger.foreground", },
                 },
                 prefixIcon: {
-                    color: {
-                        base: "semantic.action.danger.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.danger.foreground", },
                 },
                 suffixIcon: {
-                    color: {
-                        base: "semantic.action.danger.foreground",
-                        _disabled: "semantic.action.disabled.foreground",
-                    },
+                    color: { base: "semantic.action.danger.foreground", },
                 },
             },
         },

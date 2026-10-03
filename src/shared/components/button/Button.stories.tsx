@@ -259,6 +259,60 @@ export const DarkSlotColourRoles: Story = {
     play: assertSlotRoles,
 };
 
+// The disabled foreground belongs to the native root: the label and both icon
+// slots are descendants and cannot match `:disabled` themselves. Expected
+// values are the resolved `semantic.action.disabled.foreground` role: light
+// `palette.neutral.400` (`#94A3B8`), dark `palette.neutral.500` (`#64748B`).
+const disabledForegrounds = {
+    light: "rgb(148, 163, 184)",
+    dark: "rgb(100, 116, 139)",
+} as const;
+
+const DisabledSlotProbe = ({ theme, }: { theme: "light" | "dark"; }) => (
+    <ThemeShell theme={theme}>
+        <div className={row}>
+            {tones.map((tone) => (
+                <Button key={tone} tone={tone} disabled prefixIcon="check" suffixIcon="arrow-right">
+                    {tone}
+                </Button>
+            ))}
+        </div>
+    </ThemeShell>
+);
+
+const assertDisabledSlots = (expected: string) => async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+    const canvas = within(canvasElement);
+
+    for ( const tone of tones ) {
+        const button = canvas.getByRole("button", { name: tone, });
+        await expect(button).toBeDisabled();
+
+        const label = button.querySelector(".button__label") as Element;
+        const prefix = button.querySelector(".button__prefixIcon") as Element;
+        const suffix = button.querySelector(".button__suffixIcon") as Element;
+
+        // The shared disabled paint reaches every child slot through the
+        // disabled root, not through a `child:disabled` rule.
+        await expect(getComputedStyle(label).color).toBe(expected);
+        await expect(getComputedStyle(prefix).color).toBe(expected);
+        await expect(getComputedStyle(suffix).color).toBe(expected);
+
+        for ( const glyph of button.querySelectorAll(".icon") ) {
+            await expect(getComputedStyle(glyph).color).toBe(expected);
+        }
+    }
+};
+
+export const DisabledSlotForegrounds: Story = {
+    render: () => <DisabledSlotProbe theme="light" />,
+    play: assertDisabledSlots(disabledForegrounds.light),
+};
+
+export const DarkDisabledSlotForegrounds: Story = {
+    render: () => <DisabledSlotProbe theme="dark" />,
+    play: assertDisabledSlots(disabledForegrounds.dark),
+};
+
 const destructiveStates = [ "default", "hover", "active", "disabled", ] as const;
 
 // Storybook-only state metadata, mirroring the shared matrix. The `data-*`
@@ -468,10 +522,19 @@ const assertDestructiveLoading = async ({ canvasElement, }: { canvasElement: HTM
     const button = canvas.getByRole("button", { name: "Delete project", });
 
     await expect(button).toBeDisabled();
+    // Loading is disabled but must keep the danger fill: the shared disabled
+    // paint is scoped `:not([data-loading])`.
     await expect(getComputedStyle(button).backgroundColor).toBe("rgb(220, 38, 38)");
 
     const spinner = button.querySelector(".button__spinner .icon") as Element;
     await expect(getComputedStyle(spinner).color).toBe("rgb(255, 255, 255)");
+
+    // The disabled-foreground scoping is excluded while loading, so the label
+    // and prefix keep the danger foreground even though the root is disabled.
+    const label = button.querySelector(".button__label") as Element;
+    const prefix = button.querySelector(".button__prefixIcon") as Element;
+    await expect(getComputedStyle(label).color).toBe("rgb(255, 255, 255)");
+    await expect(getComputedStyle(prefix).color).toBe("rgb(255, 255, 255)");
 };
 
 export const DestructiveLoading: Story = {
