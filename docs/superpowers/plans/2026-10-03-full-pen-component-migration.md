@@ -37,6 +37,20 @@
 
 **Verification:** focused tests; `mise run gen` if styles changed; `mise run icons:check` if icon inputs changed; reviewer checks no component-local theme fork or invented state policy.
 
+## Batch B0 — public-variant enumeration correction
+
+**Rows (already-shipped components with gaps):** `IcuBw` Button, `L72UAx` Icon Button; then extend the same enumeration pass to `QWV5n`, `as3xr`, `Q2PWF`, `a4r4Y`, `UyMqu` inside their batch slices.
+
+**Steps:**
+
+- [ ] Re-read each master's `Public variants` documentation text and specimens; transcribe every axis before coding.
+- [ ] Button `IcuBw`: add the `destructive` tone (fill `action/danger-bg` red.600, hover `action/danger-bg-hover` red.700, forward/foreground white, border `action/danger-border`), full state contract, both themes, with a failing test first. Remove the `alert-dialog/` local danger workaround only if it now composes the public Button tone; otherwise leave it and record `INFO`.
+- [ ] Icon Button `L72UAx`: re-enumerate `tone` including destructive and add any missing state.
+- [ ] Verify `size: sm · md`, `width: hug · full`, `icon: none · prefix · suffix` for Button against Pen; record `BLOCKED` if `width: full` cannot be expressed without a public API change.
+- [ ] Capture both themes for every added tone/state.
+
+**Verification:** focused recipe/composition/browser tests; `mise run gen`; reviewer confirms the full documented variant list, not just the previous API.
+
 ## Batch B — Actions and Forms & selection
 
 **Rows:** Actions `IcuBw`, `L72UAx`, `gkK5e`, `e5ySA`; Forms `dO8tX`, `w6oNZ7`, `EZfrL`, `e2q2z`, `UrFJz`, `BQvnn`, `z57yzW`, `tOLtR`, `GjzX0`, `aXD61`, `f985P`, `ivx6N`, `oKLr9`, `zh2sP`, `E3ZhdP`, `YxCMD`, `Ecy07`, `vUOIa`, `qIRY3`, `zoEMh`, `pHfEy`, `IENTK`, `bpCbJ`.

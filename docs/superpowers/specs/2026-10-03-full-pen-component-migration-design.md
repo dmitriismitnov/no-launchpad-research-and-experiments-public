@@ -143,6 +143,39 @@ The table totals 82 masters (2 + 4 + 23 + 15 + 19 + 9 + 10).
 
 `Components — Forms & selection — Segmented Control` (`yqYp1`) explicitly labels its stable master `Toggle Group` and all anatomy/state/theme specimens are refs to `e5ySA`. It therefore maps to `toggle-group/`, not a missing component. Before implementation, the worker must re-query `yqYp1` and `e5ySA`, compare its named parts and variants, and confirm that the existing public API can express **two/three/four exclusive segments, icon, disabled, selected, hover, focus-visible**. Its documented accessibility is `radiogroup`, arrow-key movement, announced selected segment, and accessible names for icon-only segments. If any of those cannot be expressed without changing ToggleGroup's contract, record a blocking API decision rather than creating a second SegmentedControl implementation.
 
+## Public-variant enumeration gate
+
+Before a master is accepted, the worker must transcribe the **complete** public
+variant list from its documentation frame (the explicit `Public variants` text
+and its specimens), not infer it from the current React API. Every documented
+axis (tone, size, width, icon placement, appearance, selection mode, state) must
+either map to an existing public prop or be recorded as a `BLOCKED` API
+decision. Carrying the existing API over unchanged is not sufficient evidence.
+
+Known enumeration gaps found after Batch A / phase 1 (recorded here so they are
+not lost):
+
+- `IcuBw` Button: documented `tone` is `primary · secondary · ghost · destructive`;
+  code ships only `primary · secondary · ghost`. `semantic.action.danger.*`
+  already exists and matches Pen (`action/danger-bg` = red.600 both themes,
+  `danger-bg-hover` = red.700, `danger-fg` = white, `danger-border` = red.300/500).
+  `alert-dialog/preset.ts:26` works around the missing tone by duplicating the
+  danger confirm styling locally.
+- `L72UAx` Icon Button: `tone` (including destructive) must be re-enumerated.
+- `QWV5n` Link: documented variants include inline · standalone, with icon,
+  external, disabled, current.
+- `as3xr` Badge: `tone × appearance (subtle · solid · outline) × size`.
+- `Q2PWF` Alert: `info · positive · negative · neutral`, with title, with
+  action, dismissible.
+- `a4r4Y` Status Indicator: `positive · warning · negative · neutral · inactive`.
+- `UyMqu` Tag: `static · removable · selectable`, tone, size.
+- `e5ySA` Toggle Group: single vs multiple selection is a named public variant.
+
+Each gap is closed in the owning batch slice with a failing test proven against
+the Pen documentation frame before the recipe change. A master already marked
+"migrated" (Button, ButtonIcon, Card) is not exempt: it returns to its batch for
+the enumeration gap.
+
 ## Acceptance and evidence contract
 
 For each matrix row, acceptance requires: (1) Pen source ID, documentation-frame ID, and exact state/variant list recorded; (2) an owner Storybook story covering every visual state in light and dark; (3) a failing focused test before a proven correction, then passing composition/unit/browser assertions for semantics, accessible name, keyboard/focus behaviour where Pen documents it; (4) computed-style or screenshot evidence for geometry, type, token role, boundaries, icons, and no clipping; and (5) a final row disposition.
