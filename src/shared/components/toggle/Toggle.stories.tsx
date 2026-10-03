@@ -190,3 +190,61 @@ export const Dark: Story = {
     render: renderIn("dark"),
     play: async (context) => assertThemeSurface(context, "rgb(2, 6, 23)"),
 };
+
+// The focus ring must be real: reach the control through the keyboard and read
+// the painted outline. `semantic.brand.500.background` is green.500 in both themes.
+const assertFocusRing = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const user = userEvent.setup();
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole("button", { name: "Bold", });
+
+    await user.tab();
+    await expect(toggle).toHaveFocus();
+
+    const style = getComputedStyle(toggle);
+
+    await expect(style.outlineStyle).toBe("solid");
+    await expect(style.outlineWidth).toBe("2px");
+    await expect(style.outlineColor).toBe("rgb(34, 197, 94)");
+};
+
+export const FocusVisibleLight: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: assertFocusRing,
+};
+
+export const FocusVisibleDark: Story = {
+    args: reference,
+    render: renderIn("dark"),
+    play: assertFocusRing,
+};
+
+const assertDisabledSurface = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    background: string,
+    foreground: string,
+): Promise<void> => {
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole("button", { name: "Disabled toggle", });
+    const style = getComputedStyle(toggle);
+
+    await expect(toggle).toBeDisabled();
+    await expect(style.backgroundColor).toBe(background);
+    await expect(style.color).toBe(foreground);
+    await expect(style.cursor).toBe("not-allowed");
+};
+
+export const DisabledSurfaceLight: Story = {
+    args: { label: "Disabled toggle", disabled: true, },
+    render: renderIn("light"),
+    play: async (context) => assertDisabledSurface(context, "rgb(241, 245, 249)", "rgb(148, 163, 184)"),
+};
+
+export const DisabledSurfaceDark: Story = {
+    args: { label: "Disabled toggle", disabled: true, },
+    render: renderIn("dark"),
+    play: async (context) => assertDisabledSurface(context, "rgb(15, 23, 42)", "rgb(71, 85, 105)"),
+};

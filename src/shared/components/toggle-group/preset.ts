@@ -86,6 +86,16 @@ export const toggleGroupRecipe = defineSlotRecipe({
                     _enabled: {
                         _hover: { backgroundColor: "semantic.common.50.background", },
                     },
+                    // A disabled segment keeps the disabled group surface, never
+                    // the raised selected surface, even when it is the effective
+                    // selection. `_disabled` is more specific than the plain
+                    // pressed selector, so it wins within the same layer.
+                    _disabled: {
+                        backgroundColor: "transparent",
+                        borderColor: "transparent",
+                        color: "semantic.common.400.background",
+                        cursor: "not-allowed",
+                    },
                 },
                 label: { fontWeight: "semibold", },
             },

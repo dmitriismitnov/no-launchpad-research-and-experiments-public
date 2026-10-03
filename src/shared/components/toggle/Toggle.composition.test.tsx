@@ -68,10 +68,36 @@ describe("Toggle composition", () => {
         expect(() => renderToStaticMarkup(<Toggle {...unlabelled} />)).toThrow(/non-empty/);
     });
 
+    test("rejects a label-less toggle without an actual icon", () => {
+        const iconless = { "aria-label": "Bold", } as unknown as ToggleProps;
+
+        expect(() => renderToStaticMarkup(<Toggle {...iconless} />)).toThrow(/icon/);
+    });
+
+    test("rejects a whitespace-only accessible name for the icon-only form", () => {
+        const blank = { icon: "check", "aria-label": "   ", } as unknown as ToggleProps;
+
+        expect(() => renderToStaticMarkup(<Toggle {...blank} />)).toThrow(/non-empty/);
+    });
+
+    test("treats a whitespace-only label as the icon-only form", () => {
+        const markup = renderToStaticMarkup(<Toggle label="   " icon="check" aria-label="Bold" />);
+
+        expect(markup).toContain('aria-label="Bold"');
+        expect(markup).not.toContain("toggle__label");
+    });
+
     test("keeps the button accessible name when the visible label is empty", () => {
         const markup = renderToStaticMarkup(<Toggle label="" icon="check" aria-label="Bold" />);
 
         expect(markup).toContain('aria-label="Bold"');
         expect(markup).not.toContain("toggle__label");
+    });
+
+    test("requires an actual icon for the label-less form at the type level", () => {
+        // @ts-expect-error the icon-only form requires an icon, not only a name
+        const noIcon = <Toggle aria-label="Bold" />;
+
+        expect(noIcon).toBeDefined();
     });
 });

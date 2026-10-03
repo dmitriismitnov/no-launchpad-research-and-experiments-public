@@ -320,3 +320,92 @@ export const DarkSegmentCounts: Story = {
         await expect(canvas.getAllByRole("radio").length).toBe(2 + 4);
     },
 };
+
+// The focus ring must be real: reach the first radio through the keyboard and
+// read the painted outline. `semantic.brand.500.background` is green.500 in
+// both themes.
+const assertFocusRing = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const user = userEvent.setup();
+    const canvas = within(canvasElement);
+    const grid = canvas.getByRole("radio", { name: "Grid", });
+
+    await user.tab();
+    await expect(grid).toHaveFocus();
+
+    const style = getComputedStyle(grid);
+
+    await expect(style.outlineStyle).toBe("solid");
+    await expect(style.outlineWidth).toBe("2px");
+    await expect(style.outlineColor).toBe("rgb(34, 197, 94)");
+};
+
+export const FocusVisibleLight: Story = {
+    args: { options, selectionMode: "single", "aria-label": "View", },
+    render: (args) => (
+        <ThemeShell theme="light">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: assertFocusRing,
+};
+
+export const FocusVisibleDark: Story = {
+    args: { options, selectionMode: "single", "aria-label": "View", },
+    render: (args) => (
+        <ThemeShell theme="dark">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: assertFocusRing,
+};
+
+const disabledSelectedOptions: readonly ToggleGroupOption[] = [
+    { value: "grid", label: "Grid", disabled: true, },
+    { value: "list", label: "List", },
+    { value: "board", label: "Board", disabled: true, },
+];
+
+const assertDisabledSelectedSurface = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    foreground: string,
+): Promise<void> => {
+    const canvas = within(canvasElement);
+    const selected = canvas.getByRole("radio", { name: "Grid", });
+    const unselected = canvas.getByRole("radio", { name: "Board", });
+    const selectedStyle = getComputedStyle(selected);
+    const unselectedStyle = getComputedStyle(unselected);
+
+    // The disabled first option is still the effective selection...
+    await expect(selected).toBeDisabled();
+    await expect(selected).toHaveAttribute("aria-checked", "true");
+    // ...but it paints the disabled group surface, never the raised selected one.
+    await expect(selectedStyle.backgroundColor).toBe("rgba(0, 0, 0, 0)");
+    await expect(selectedStyle.borderColor).toBe("rgba(0, 0, 0, 0)");
+    await expect(selectedStyle.backgroundColor).toBe(unselectedStyle.backgroundColor);
+    await expect(selectedStyle.borderColor).toBe(unselectedStyle.borderColor);
+    await expect(selectedStyle.color).toBe(foreground);
+    await expect(selectedStyle.color).toBe(unselectedStyle.color);
+    await expect(selectedStyle.cursor).toBe("not-allowed");
+};
+
+export const DisabledSelectedSurfaceLight: Story = {
+    args: { options: disabledSelectedOptions, selectionMode: "single", "aria-label": "View", },
+    render: (args) => (
+        <ThemeShell theme="light">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: async (context) => assertDisabledSelectedSurface(context, "rgb(148, 163, 184)"),
+};
+
+export const DisabledSelectedSurfaceDark: Story = {
+    args: { options: disabledSelectedOptions, selectionMode: "single", "aria-label": "View", },
+    render: (args) => (
+        <ThemeShell theme="dark">
+            <ToggleGroup {...args} />
+        </ThemeShell>
+    ),
+    play: async (context) => assertDisabledSelectedSurface(context, "rgb(71, 85, 105)"),
+};

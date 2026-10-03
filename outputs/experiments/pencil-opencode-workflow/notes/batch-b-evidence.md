@@ -227,25 +227,25 @@ Counts moved from the Batch B0 shipped baseline (`b81a080`): unit `671 → 676` 
 **Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` — SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes (unchanged; re-verified after the read-only queries).\
 **Base commit:** `53c9aa76b2ac2f09256ae2cd130bddb750d9f7fb` (`fix(shared): scope Button disabled foreground and static destructive tone`).\
 **Method:** Pencil MCP `execute` read-only `Get`/`Print` (`get_app_state` confirmed `ex_2.pen` as the active editor; no mutation), focused Bun composition tests and Vitest + Playwright Chromium story tests.\
-**Evidence artifacts:** `artifacts/batch-b/actions/{pen-readback.md,red-green.md,composition-green.txt,browser-story-red.txt,browser-story-green.txt,check.txt,check-deps.txt,build.txt}`.
+**Evidence artifacts:** `artifacts/batch-b/actions/{pen-readback.md,red-green.md}`.
 
 ### Pen enumeration gate (B1)
 
 | Owner | Pen node / frame | Documented public variant / state | Disposition |
 | --- | --- | --- | --- |
 | Toggle | `gkK5e` → `MApo8` | `icon or label` anatomy; states `default · hover · active · pressed · focus-visible · disabled` | **PASS** |
-| Toggle | `MApo8` accessibility | "Icon-only toggles require an accessible label."; "Expose pressed state…"; "Keyboard toggles with Enter and Space." | **PASS** — approved public API: optional `label`; icon-only form requires a non-empty `aria-label` |
+| Toggle | `MApo8` accessibility | "Icon-only toggles require an accessible label."; "Expose pressed state…"; "Keyboard toggles with Enter and Space." | **PASS** — approved public API: optional `label`; the icon-only form requires an actual icon **and** a non-empty `aria-label` (compile time and runtime) |
 | Toggle Group | `e5ySA` → `OHpCJ` | "Single vs multiple selection is a public variant and must be named."; states `default · hover · pressed · focus-visible · disabled` | **PASS** — `selectionMode: "single" \| "multiple"` (default `multiple`); multiple keeps `role="group"` + `aria-pressed` |
 | Toggle Group | `OHpCJ` accessibility | "Expose selected and pressed state per item."; "Arrow keys move between items; Enter and Space toggle."; "focus-visible is drawn per item…" | **PASS** — single mode roving focus, arrows skip disabled, Enter/Space select |
 | Segmented Control | `yqYp1` (master ref `e5ySA`) | "two · three · four segments, with icon, disabled"; states `selected · hover · focus-visible · disabled` | **PASS** — exclusive `single` projection of the existing owner; no `SegmentedControl` export/component added |
 | Segmented Control | `yqYp1` accessibility | "Radiogroup semantics with arrow-key movement."; "The selected segment is announced."; "Each segment has an accessible name even when icon-only." | **PASS** — `role="radiogroup"` + `role="radio"`/`aria-checked`; icon-only options carry `aria-label` |
-| Segmented Control | `yqYp1` content rules | "One segment is always selected."; "The control keeps its width when the selection changes." | **INFO** — controlled value displays its first entry; the selected label weight `semibold` matches `OZiXD` (`fw=600`), so the width rule is preserved by the existing recipe |
+| Segmented Control | `yqYp1` content rules | "One segment is always selected."; "The control keeps its width when the selection changes." | **PASS** — the effective selection is the first supplied value that maps to an option, otherwise the first option even when disabled, so exactly one segment is checked; the selected label weight `semibold` matches `OZiXD` (`fw=600`), so the width rule is preserved by the existing recipe |
 | Segmented Control | `yqYp1` named part | "sliding indicator" | **INFO** — no documented motion; animation stays out per the behaviour boundary |
 
 ### Approved public surface (per handoff)
 
-- `Toggle`: `label` is now optional; a non-empty `aria-label` is required for (and only for) the icon-only form. Controlled (`pressed` + `onPressedChange`) and uncontrolled (`defaultPressed`) `aria-pressed` behavior is unchanged; disabled remains a native no-op; the icon stays decorative (`aria-hidden`).
-- `ToggleGroup`: gains `selectionMode?: "single" | "multiple"` (default `multiple`). Options gain `icon?` and a named icon-only form (`aria-label`). The `readonly string[]` `value`/`defaultValue`/`onChange` contract is unchanged. `multiple` keeps `role="group"` + per-item `aria-pressed`. `single` renders `role="radiogroup"` with `role="radio"` + `aria-checked`, exactly one selected entry (the first array entry), a single roving `tabindex`, arrow keys that move focus only and skip disabled items, and Enter/Space selection. An option without a label or accessible name is rejected.
+- `Toggle`: `label` is now optional; the icon-only form requires an actual icon **and** a non-empty `aria-label`, enforced at compile time and rejected at runtime. A whitespace-only label counts as label-less; a whitespace-only accessible name is rejected. Controlled (`pressed` + `onPressedChange`) and uncontrolled (`defaultPressed`) `aria-pressed` behavior is unchanged; disabled remains a native no-op; the icon stays decorative (`aria-hidden`).
+- `ToggleGroup`: gains `selectionMode?: "single" | "multiple"` (default `multiple`). Options gain `icon?` and a named icon-only form (actual icon + non-empty `aria-label`). The `readonly string[]` `value`/`defaultValue`/`onChange` contract is unchanged. `multiple` keeps `role="group"` + per-item `aria-pressed`. `single` renders `role="radiogroup"` with `role="radio"` + `aria-checked`; the effective selection is the first supplied value that maps to an option, otherwise the first option even when disabled, so exactly one segment is checked; the roving `tabindex` is independent of selection (the focused enabled item, otherwise the first enabled item); arrow keys move focus only and skip disabled items; Enter/Space select. A label-less option without an icon or without a non-empty accessible name is rejected.
 - No `SegmentedControl` component, export, tab, persistence, animation, validation or route behaviour was added.
 
 ### Tests-first proof (RED → GREEN)
@@ -284,7 +284,7 @@ Focused browser stories (Vitest + Playwright Chromium), proven test-first by rev
 | ToggleGroup icon-only accessible names | `IconOnly` | `DarkIconOnly` |
 | Two / three / four segments | `SegmentCounts` (2+3+4) | `DarkSegmentCounts` (2+4) |
 
-Hover / active / focus-visible styling is unchanged from the existing recipes (the `toggle` and `toggleGroup` presets are the same for those states); the shared `semantic.focus.ring` / `borderWidths.thick` focus ring and the `pressed` surface are asserted by the composition and browser tests above. Disabled contrast remains **`DISABLED / REVIEW`** in both themes.
+Real keyboard focus-visible styling and the disabled surface are asserted in both themes by the browser stories (see the cycle-2 correction below); hover and active styling are **not** claimed this cycle. Disabled contrast remains **`DISABLED / REVIEW`** in both themes.
 
 ### Command results
 
@@ -315,7 +315,87 @@ Counts moved from the Batch B0 shipped baseline (`53c9aa7`): unit `676 → 687` 
 | Toggle Group exclusive radiogroup + announced selection + roving arrow focus | **PASS** |
 | Toggle Group option icon / icon-only accessible name | **PASS** |
 | Segmented Control 2/3/4 exclusive segments | **PASS** (projection of `e5ySA`, no new component) |
-| Toggle / ToggleGroup hover · active · focus-visible visuals | **PASS** (existing recipe states, unchanged) |
+| Toggle / ToggleGroup focus-visible ring (real keyboard) + disabled surface, both themes | **PASS** (cycle 2 browser assertions) |
+| Label-less icon + non-empty accessible name contract (compile time and runtime) | **PASS** (cycle 2) |
+| ToggleGroup disabled selected segment paints the disabled surface | **PASS** (cycle 2) |
 | Disabled contrast | `DISABLED / REVIEW` (both themes) |
 | `mise run check:deps` pre-existing `@pandacss/node` finding | **BLOCKED (out of scope)** — needs a dependency/Knip-config decision owned by the B0 static-CSS slice, not B1 |
 | **B1 final status** | **PASS** for the action enumeration/API slice; the only blocker is the pre-existing, out-of-scope Knip finding |
+
+## B1 correction — selection, icon contract, disabled surface, browser proof (cycle 2/2)
+
+**Base commit:** `42c0f864` (`feat(shared): add Toggle icon-only label and ToggleGroup selection modes`).\
+**Correction plan:** the reviewer's cycle-1 findings on the B1 slice: (1) single-mode effective selection must be the first valid supplied value, else the first option even when disabled, with exactly one `aria-checked`; (2) the roving tab stop must be independent of selection (first enabled); (3) the label-less contract must require an actual icon as well as a non-empty accessible name, at compile time and runtime, and reject whitespace; (4) a disabled selected single segment must paint the disabled group surface, not the selected one; (5) the browser evidence must assert the real keyboard focus-visible ring and the disabled background/foreground/cursor in both themes, with no unproven hover/active claim.\
+**Status:** **PASS**.
+
+### Fixes implemented
+
+| # | Finding | Fix |
+| --- | --- | --- |
+| 1 | Single mode used the first array entry verbatim, so an unknown or absent value left no segment checked and a disabled first option could never be checked. | The effective selection is now the first supplied value that maps to an option, otherwise `options[0].value`; a disabled first option is still checked when nothing valid is supplied, so exactly one `aria-checked` holds whenever options exist. |
+| 2 | The tab stop fell back to the selected item. | The roving tab stop is the focused enabled item, otherwise the first enabled item, independent of selection. |
+| 3 | The icon-only union branch only required `aria-label`; runtime only checked label/name length and accepted whitespace. | The label-less `Toggle` / option branch now requires `icon: IconName`; runtime requires an actual icon and a non-empty trimmed `aria-label` (or a trimmed label); whitespace-only names are rejected. |
+| 4 | A disabled selected segment kept the `pressed` background/border/foreground. | The `pressed` variant now carries a `_disabled` override (more specific than the plain pressed class in the same cascade layer) that paints the disabled group surface: transparent background/border, disabled foreground, `not-allowed` cursor. |
+| 5 | Evidence claimed hover/active visuals and shared a raw-log list. | The six raw log files were removed; browser stories assert the real keyboard focus-visible outline and the disabled background/foreground/cursor in both themes; hover/active are no longer claimed. |
+
+The cycle-1 public surface is otherwise unchanged: no new prop, component, export or dependency was added, and `panda.config.ts` was not touched.
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun):
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/components/toggle/Toggle.composition.test.tsx src/shared/components/toggle-group/ToggleGroup.composition.test.tsx` |
+| RED result | `9 fail` / `23 pass` (32 total), `65 expect() calls` |
+| RED failures | Toggle — label-less reject without an icon, whitespace-only accessible name reject, whitespace-only label treated as icon-only; ToggleGroup — first valid supplied value, fallback to a disabled first option, tab stop independent of selection, first option/first-enabled tab stop with no supplied value, label-less reject without an icon, whitespace-only accessible name reject |
+| GREEN result | `32 pass` / `0 fail`, `73 expect() calls` |
+
+Focused browser stories (Vitest + Playwright Chromium), proven test-first by reverting only `toggle/toggle.tsx`, `toggle-group/toggle-group.tsx` and `toggle-group/preset.ts`, regenerating, and observing RED:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/toggle/Toggle.stories.tsx src/shared/components/toggle-group/ToggleGroup.stories.tsx` |
+| RED result | `1 failed \| 1 passed` files, `2 failed \| 33 passed (35)` — `Disabled Selected Surface Light`, `Disabled Selected Surface Dark` |
+| GREEN result | `2 passed` files, `35 passed (35)` |
+
+### Both-theme browser captures (computed style, in browser)
+
+| Story (theme) | Assertion | Observed |
+| --- | --- | --- |
+| `FocusVisibleLight` / `FocusVisibleDark` (Toggle) | real keyboard focus (`user.tab()`) paints the focus ring | `outline-style: solid`, `outline-width: 2px`, `outline-color: rgb(34, 197, 94)` |
+| `FocusVisibleLight` / `FocusVisibleDark` (ToggleGroup) | same on the first enabled radio | `outline-style: solid`, `outline-width: 2px`, `outline-color: rgb(34, 197, 94)` |
+| `DisabledSurfaceLight` / `Dark` (Toggle) | disabled background / foreground / cursor | light `rgb(241, 245, 249)` / `rgb(148, 163, 184)` / `not-allowed`; dark `rgb(15, 23, 42)` / `rgb(71, 85, 105)` / `not-allowed` |
+| `DisabledSelectedSurfaceLight` / `Dark` (ToggleGroup) | disabled first option is the effective selection and paints disabled, matching a disabled unselected segment | `aria-checked="true"`, transparent background/border (equal to the disabled unselected segment), light `rgb(148, 163, 184)` / dark `rgb(71, 85, 105)`, `not-allowed` |
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| focused composition RED | `1` | `9 fail` / `23 pass` |
+| focused composition GREEN | `0` | `32 pass` / `0 fail` |
+| focused browser RED | `1` | `2 failed \| 33 passed (35)` |
+| focused browser GREEN | `0` | `35 passed (35)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `696 pass / 0 fail` (90 files); browser `430 passed` (73 files) |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-3PnQWaRR.css 214.01 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the B1 cycle-1 baseline (`42c0f864`): unit `687 → 696` (`+9`), browser `422 → 430` (`+8`). `mise run check:deps` was intentionally not run: it is out of scope for this correction, and the known `@pandacss/node` finding is owned by the B0 static-CSS slice.
+
+### Changed paths
+
+`src/shared/components/toggle/{toggle.tsx,Toggle.composition.test.tsx,Toggle.stories.tsx}`, `src/shared/components/toggle-group/{toggle-group.tsx,preset.ts,ToggleGroup.composition.test.tsx,ToggleGroup.stories.tsx}`, `outputs/experiments/pencil-opencode-workflow/artifacts/batch-b/actions/{red-green.md}` (rewritten), this evidence. Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited).
+
+### Disposition (cycle 2/2)
+
+| Row | Disposition |
+| --- | --- |
+| Single effective selection + exactly one `aria-checked` | **PASS** |
+| Roving tab stop independent of selection | **PASS** |
+| Label-less icon + non-empty accessible name (compile time and runtime) | **PASS** |
+| Disabled selected single segment paints the disabled surface | **PASS** |
+| Real keyboard focus-visible ring + disabled background/foreground/cursor, both themes | **PASS** |
+| Hover / active visuals | **not claimed** this cycle |
+| Disabled contrast | `DISABLED / REVIEW` (both themes) |
+| **B1 correction final status** | **PASS** |

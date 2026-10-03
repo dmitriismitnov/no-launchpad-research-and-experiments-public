@@ -14,6 +14,19 @@ const iconOptions: readonly ToggleGroupOption[] = [
     { value: "list", icon: "menu", "aria-label": "List view", },
 ];
 
+const leadingDisabledOptions: readonly ToggleGroupOption[] = [
+    { value: "grid", label: "Grid", disabled: true, },
+    { value: "list", label: "List", },
+];
+
+/** The button that owns `name` carries this attribute at the given position. */
+const buttonHasAttribute = (markup: string, name: string, attribute: string): boolean => {
+    const labelIndex = markup.indexOf(`>${name}<`);
+    const buttonStart = markup.lastIndexOf("<button", labelIndex);
+
+    return markup.slice(buttonStart, labelIndex).includes(attribute);
+};
+
 describe("ToggleGroup composition", () => {
     test("renders a labelled group of pressed-state buttons", () => {
         const markup = renderToStaticMarkup(
@@ -88,7 +101,7 @@ describe("ToggleGroup composition", () => {
         expect(markup.match(/aria-pressed="true"/g)?.length).toBe(2);
     });
 
-    test("single mode renders only the first value of a malformed controlled array", () => {
+    test("single mode resolves a malformed controlled array to exactly one checked item", () => {
         const markup = renderToStaticMarkup(
             <ToggleGroup
                 selectionMode="single"
@@ -100,25 +113,60 @@ describe("ToggleGroup composition", () => {
         const checked = markup.match(/aria-checked="(?:true|false)"/g);
 
         expect(checked?.length).toBe(options.length);
-        expect(checked?.[0]).toBe('aria-checked="true"');
         expect(markup.match(/aria-checked="true"/g)?.length).toBe(1);
+        expect(buttonHasAttribute(markup, "Grid", 'aria-checked="true"')).toBe(true);
     });
 
-    test("single mode roves a single tab stop onto the selected enabled item", () => {
+    test("single mode resolves the effective selection to the first valid supplied value", () => {
+        const markup = renderToStaticMarkup(
+            <ToggleGroup
+                selectionMode="single"
+                options={options}
+                value={[ "missing", "list", ]}
+                aria-label="View"
+            />,
+        );
+
+        expect(markup.match(/aria-checked="true"/g)?.length).toBe(1);
+        expect(buttonHasAttribute(markup, "List", 'aria-checked="true"')).toBe(true);
+        expect(buttonHasAttribute(markup, "Grid", 'aria-checked="true"')).toBe(false);
+    });
+
+    test("single mode falls back to the first option even when it is disabled", () => {
+        const markup = renderToStaticMarkup(
+            <ToggleGroup
+                selectionMode="single"
+                options={leadingDisabledOptions}
+                value={[ "missing", ]}
+                aria-label="View"
+            />,
+        );
+
+        expect(markup.match(/aria-checked="true"/g)?.length).toBe(1);
+        expect(buttonHasAttribute(markup, "Grid", 'aria-checked="true"')).toBe(true);
+    });
+
+    test("single mode roves the tab stop onto the first enabled option, independently of selection", () => {
         const markup = renderToStaticMarkup(
             <ToggleGroup selectionMode="single" options={options} defaultValue={[ "list", ]} aria-label="View" />,
         );
 
         expect(markup.match(/tabindex="0"/g)?.length).toBe(1);
         expect(markup.match(/tabindex="-1"/g)?.length).toBe(options.length - 1);
+        expect(buttonHasAttribute(markup, "List", 'aria-checked="true"')).toBe(true);
+        expect(buttonHasAttribute(markup, "Grid", 'tabindex="0"')).toBe(true);
+        expect(buttonHasAttribute(markup, "List", 'tabindex="0"')).toBe(false);
     });
 
-    test("single mode falls back to the first enabled item when nothing is selected", () => {
+    test("single mode selects the first option and tabs to the first enabled option when nothing is supplied", () => {
         const markup = renderToStaticMarkup(
-            <ToggleGroup selectionMode="single" options={options} aria-label="View" />,
+            <ToggleGroup selectionMode="single" options={leadingDisabledOptions} aria-label="View" />,
         );
 
-        expect(markup.match(/tabindex="0"/g)?.length).toBe(1);
+        expect(markup.match(/aria-checked="true"/g)?.length).toBe(1);
+        expect(buttonHasAttribute(markup, "Grid", 'aria-checked="true"')).toBe(true);
+        expect(buttonHasAttribute(markup, "List", 'tabindex="0"')).toBe(true);
+        expect(buttonHasAttribute(markup, "Grid", 'tabindex="0"')).toBe(false);
     });
 
     test("renders icon-only options with their accessible names and no label slot", () => {
@@ -154,5 +202,36 @@ describe("ToggleGroup composition", () => {
                 <ToggleGroup options={unnamed} aria-label="View" />,
             )
         ).toThrow(/non-empty/);
+    });
+
+    test("rejects a label-less option without an actual icon", () => {
+        const iconless = [ { value: "grid", "aria-label": "Grid view", }, ] as unknown as readonly ToggleGroupOption[];
+
+        expect(() =>
+            renderToStaticMarkup(
+                <ToggleGroup options={iconless} aria-label="View" />,
+            )
+        ).toThrow(/icon/);
+    });
+
+    test("rejects a whitespace-only accessible name for an icon option", () => {
+        const blank = [ {
+            value: "grid",
+            icon: "check",
+            "aria-label": "   ",
+        }, ] as unknown as readonly ToggleGroupOption[];
+
+        expect(() =>
+            renderToStaticMarkup(
+                <ToggleGroup options={blank} aria-label="View" />,
+            )
+        ).toThrow(/non-empty/);
+    });
+
+    test("requires an actual icon for a label-less option at the type level", () => {
+        // @ts-expect-error a label-less option requires an icon, not only a name
+        const noIcon: ToggleGroupOption = { value: "grid", "aria-label": "Grid view", };
+
+        expect(noIcon).toBeDefined();
     });
 });

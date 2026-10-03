@@ -36,6 +36,8 @@ export type ToggleProps =
         | {
             /** Иконковая форма без видимого текста. */
             label?: undefined;
+            /** Иконковая форма обязана нести реальный глиф. */
+            icon: IconName;
             /** Обязательное непустое доступное имя для иконковой формы. */
             "aria-label": string;
         }
@@ -60,11 +62,12 @@ export const Toggle = ({
     const [ uncontrolledPressed, setUncontrolledPressed, ] = useState(defaultPressed);
     const isControlled = pressed !== undefined;
     const isPressed = isControlled ? pressed : uncontrolledPressed;
-    const hasLabel = label !== undefined && label.length > 0;
+    const hasLabel = label !== undefined && label.trim().length > 0;
+    const hasAccessibleName = ariaLabel !== undefined && ariaLabel.trim().length > 0;
 
-    if ( !hasLabel && ( ariaLabel === undefined || ariaLabel.length === 0 ) ) {
+    if ( !hasLabel && ( icon === undefined || !hasAccessibleName ) ) {
         throw new Error(
-            "Toggle: provide a non-empty `label`, or a non-empty `aria-label` for the icon-only form.",
+            "Toggle: provide a non-empty `label`, or an `icon` and a non-empty `aria-label` for the icon-only form.",
         );
     }
 

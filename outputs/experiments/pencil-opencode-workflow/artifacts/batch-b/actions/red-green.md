@@ -1,54 +1,59 @@
 # B1 RED → GREEN evidence — Toggle / Toggle Group
 
+Correction cycle 2/2 on base `42c0f864`. Scope: `Toggle` / `ToggleGroup` implementation, presets, stories and tests plus the Batch B evidence. No new component, no dependency or foundation change, no `panda.config.ts` change.
+
 ## Focused composition (Bun)
 
 | Field | Value |
 | --- | --- |
 | RED command | `bun test src/shared/components/toggle/Toggle.composition.test.tsx src/shared/components/toggle-group/ToggleGroup.composition.test.tsx` |
-| RED exit | `1` |
-| RED result | `10 fail` / `13 pass` (23 total), `43 expect() calls` |
-| RED failures — Toggle | `names the icon-only form from aria-label and drops the label slot`, `rejects an icon-only toggle without a non-empty accessible label`, `keeps the button accessible name when the visible label is empty` |
-| RED failures — ToggleGroup | `renders the exclusive projection as a radiogroup of radios`, `single mode renders only the first value of a malformed controlled array`, `single mode roves a single tab stop onto the selected enabled item`, `single mode falls back to the first enabled item when nothing is selected`, `renders icon-only options with their accessible names and no label slot`, `renders two, three and four exclusive segments`, `rejects an option without a label or accessible name` |
-| GREEN command | same |
-| GREEN exit | `0` |
-| GREEN result | `23 pass` / `0 fail` (54 expect calls) |
-| GREEN log | `composition-green.txt` |
-
-The RED run also printed the old markup proving the gap: `role="group"` + `aria-pressed` with a `selectionMode="single"` attribute leaking to the DOM, empty `toggleGroup__label` spans for icon options, and a rendered (not rejected) unnamed toggle/option.
+| RED result | `9 fail` / `23 pass` (32 total), `65 expect() calls` |
+| RED failures | Toggle — label-less reject without an icon, whitespace-only accessible name reject, whitespace-only label treated as icon-only; ToggleGroup — first valid supplied value, fallback to a disabled first option, tab stop independent of selection, first option + first-enabled tab stop with no supplied value, label-less reject without an icon, whitespace-only accessible name reject |
+| GREEN result | `32 pass` / `0 fail`, `73 expect() calls` |
 
 ## Focused browser stories (Vitest + Playwright Chromium)
 
-The story layer was proven test-first by temporarily reverting only the three implementation files (`toggle/toggle.tsx`, `toggle-group/toggle-group.tsx`, `toggle-group/preset.ts`) via `git stash push -- <paths>`, regenerating PandaCSS, and running the new stories against the old implementation.
+The story layer was proven test-first by reverting only the three implementation files (`toggle/toggle.tsx`, `toggle-group/toggle-group.tsx`, `toggle-group/preset.ts`) with `git stash push -- <paths>`, regenerating PandaCSS, and running the new stories against the previous implementation.
 
 | Field | Value |
 | --- | --- |
 | RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/toggle/Toggle.stories.tsx src/shared/components/toggle-group/ToggleGroup.stories.tsx` (implementation reverted) |
-| RED exit | `1` |
-| RED result | `2 failed` files, `10 failed \| 17 passed (27)` |
-| RED failures | Toggle `Icon Only`, `Dark Icon Only`; ToggleGroup `Single Exclusive`, `Dark Single Exclusive`, `Single Keyboard`, `Single Disabled No Op`, `Icon Only`, `Dark Icon Only`, `Segment Counts`, `Dark Segment Counts` |
-| RED log | `browser-story-red.txt` |
-| GREEN command | same (implementation restored, `mise run gen`) |
-| GREEN exit | `0` |
-| GREEN result | `2 passed` files, `27 passed (27)` |
-| GREEN log | `browser-story-green.txt` |
+| RED result | `1 failed \| 1 passed` files, `2 failed \| 33 passed (35)` |
+| RED failures | `Disabled Selected Surface Light`, `Disabled Selected Surface Dark` (the disabled first option was not the effective selection, so no `aria-checked="true"` and no disabled surface) |
+| GREEN result | `2 passed` files, `35 passed (35)` |
 
-## Assertions added
+## Corrected behaviour under test
 
-**Toggle (composition + browser):** controlled and uncontrolled `aria-pressed`; disabled no-op (native `HTMLElement.click()` on a disabled button); native `Enter`/`Space` activation via `userEvent.keyboard`; icon-only accessible name from `aria-label` with no label slot; runtime rejection of an icon-only toggle without a non-empty name; both-theme base surface.
+- **Effective single selection.** The effective value is the first supplied value that maps to an option; when none does, it is the first option, even a disabled one. Exactly one option carries `aria-checked="true"` whenever `options` is non-empty.
+- **Roving tab stop.** The tab stop is the focused option when it is enabled, otherwise the first enabled option — independently of which option is selected.
+- **Label-less contract.** A label-less `Toggle` and a label-less `ToggleGroup` option require an actual icon and a non-empty `aria-label`, enforced at compile time (required `icon: IconName`) and rejected at runtime. A whitespace-only label is treated as label-less; a whitespace-only accessible name is rejected.
+- **Disabled selected segment.** A disabled selected single segment paints the disabled group surface (transparent background and border, disabled foreground, `not-allowed` cursor), never the raised selected surface. The `_disabled` condition inside the `pressed` variant is more specific than the plain pressed class, so it wins inside the same cascade layer.
 
-**ToggleGroup (composition + browser):** `single` exclusive projection is `role="radiogroup"` with `role="radio"` + `aria-checked`; exactly one checked item; malformed controlled multivalue (`["grid","list","board"]`) renders only the first; one roving tab stop (`tabindex="0"` on the selected/first-enabled item, `-1` elsewhere); `multiple` stays `role="group"` + `aria-pressed` with independent toggling; arrow keys move focus only and skip a disabled middle item; `Enter` selects the focused item; icon-only options expose `aria-label` names with no label slot; two/three/four exclusive segments; disabled group no-op; both themes.
+## Browser assertions added (light + dark)
+
+**Toggle:** real keyboard `Tab` focus asserts the focus-visible `outline-style: solid`, `outline-width: 2px` and `outline-color: rgb(34, 197, 94)`; disabled asserts `background-color`, foreground `color` and `cursor: not-allowed` (`rgb(241, 245, 249)` / `rgb(148, 163, 184)` light, `rgb(15, 23, 42)` / `rgb(71, 85, 105)` dark).
+
+**ToggleGroup:** real keyboard `Tab` focus asserts the same focus-visible outline on the first enabled radio; the disabled selected segment asserts `aria-checked="true"`, transparent background/border, equal painting to a disabled unselected segment, disabled foreground and `not-allowed` cursor.
+
+No hover or active claim is made: those states were not newly asserted in this cycle.
 
 ## Command results
 
 | Command | Exit | Result |
 | --- | --- | --- |
 | `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
-| focused composition RED | `1` | `10 fail` / `13 pass` |
-| focused composition GREEN | `0` | `23 pass` / `0 fail` |
-| focused browser RED | `1` | `10 failed \| 17 passed (27)` |
-| focused browser GREEN | `0` | `27 passed (27)` |
-| `mise run check` | `0` | unit `687 pass / 0 fail` (90 files); browser `73 passed` files, `422 passed`; `✓ icons up to date (38 icons)`, `✓ web fonts up to date (2 faces)` |
-| `mise run check:deps` | `1` | one **pre-existing** finding: `Unlisted dependencies @pandacss/node src/shared/styles/panda-static-css.test.ts:6:53` (from Batch B0, confirmed at HEAD with the B1 diff stashed). The B1 finding (`ToggleGroupSelectionMode` unused export) was fixed. |
-| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-RgfOP5jp.css 213.78 kB` |
+| focused composition RED | `1` | `9 fail` / `23 pass` |
+| focused composition GREEN | `0` | `32 pass` / `0 fail` |
+| focused browser RED | `1` | `2 failed \| 33 passed (35)` |
+| focused browser GREEN | `0` | `35 passed (35)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `696 pass / 0 fail` (90 files, `3787 expect() calls`); browser `430 passed` (73 files) |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-3PnQWaRR.css 214.01 kB` |
+| `git diff --check` | `0` | clean |
 
-Counts moved from the Batch B0 shipped baseline: unit `676 → 687` (`+11`), browser `408 → 422` (`+14`).
+Counts moved from the B1 cycle-1 baseline (`42c0f864`): unit `687 → 696` (`+9`), browser `422 → 430` (`+8`).
+
+`mise run check:deps` was intentionally not run: it is out of scope for this correction, and the only known finding (`@pandacss/node` unlisted in the Batch B0 static-CSS test) is owned by the B0 slice.
+
+## Evidence hygiene
+
+The six raw log captures were removed. This document and `batch-b-evidence.md` carry the results; no evidence references a raw log file.

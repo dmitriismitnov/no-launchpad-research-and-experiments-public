@@ -30,6 +30,8 @@ export type ToggleGroupOption =
         | {
             /** Иконковая форма без видимого текста. */
             label?: undefined;
+            /** Иконковая форма обязана нести реальный глиф. */
+            icon: IconName;
             /** Обязательное непустое доступное имя для иконковой формы. */
             "aria-label": string;
         }
@@ -84,17 +86,17 @@ export const ToggleGroup = ({
     const isControlled = value !== undefined;
     const isSingle = selectionMode === "single";
     const selectedValues = isControlled ? [ ...value, ] : uncontrolledValue;
-    const selectedValue = isSingle ? selectedValues[0] : undefined;
+    const optionValues = options.map((option) => option.value);
+    // The effective selection is the first supplied value that maps to an option,
+    // otherwise the first option (even a disabled one) so exactly one item is checked.
+    const selectedValue = isSingle
+        ? selectedValues.find((entry) => optionValues.includes(entry)) ?? options[0]?.value
+        : undefined;
     const enabledValues = options
         .filter((option) => !disabled && option.disabled !== true)
         .map((option) => option.value);
-    const selectedIsEnabled = selectedValue !== undefined && enabledValues.includes(selectedValue);
     const focusedIsEnabled = focusedValue !== null && enabledValues.includes(focusedValue);
-    const tabStop = focusedIsEnabled
-        ? focusedValue
-        : selectedIsEnabled
-        ? selectedValue
-        : enabledValues[0];
+    const tabStop = focusedIsEnabled ? focusedValue : enabledValues[0];
     const styles = toggleGroup();
 
     const handleSelect = (optionValue: string) => {
@@ -177,12 +179,13 @@ export const ToggleGroup = ({
         >
             {options.map((option, index) => {
                 const itemDisabled = disabled || option.disabled === true;
-                const hasLabel = option.label !== undefined && option.label.length > 0;
-                const optionName = hasLabel ? option.label : option["aria-label"];
+                const ariaLabel = option["aria-label"];
+                const hasLabel = option.label !== undefined && option.label.trim().length > 0;
+                const hasAccessibleName = ariaLabel !== undefined && ariaLabel.trim().length > 0;
 
-                if ( !hasLabel && ( optionName === undefined || optionName.length === 0 ) ) {
+                if ( !hasLabel && ( option.icon === undefined || !hasAccessibleName ) ) {
                     throw new Error(
-                        "ToggleGroup: every option needs a non-empty `label` or `aria-label`.",
+                        "ToggleGroup: every option needs a non-empty `label`, or an `icon` and a non-empty `aria-label`.",
                     );
                 }
 
@@ -200,7 +203,7 @@ export const ToggleGroup = ({
                         role={isSingle ? "radio" : undefined}
                         aria-checked={isSingle ? isPressed : undefined}
                         aria-pressed={isSingle ? undefined : isPressed}
-                        aria-label={hasLabel ? undefined : optionName}
+                        aria-label={hasLabel ? undefined : ariaLabel}
                         tabIndex={isSingle ? ( isTabStop ? 0 : -1 ) : undefined}
                         className={itemStyles.item}
                         disabled={itemDisabled}
