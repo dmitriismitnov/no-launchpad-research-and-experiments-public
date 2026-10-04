@@ -147,3 +147,14 @@ Counts moved from the HEAD baseline: this slice adds `+11` unit composition chec
 - **INFO — browser hover.** Headless Chromium did not apply `:hover` via `userEvent.hover`; the hover surface (`semantic.common.100.background`) is asserted at the recipe-selector level only. No `FAIL`.
 - **DISABLED / REVIEW — disabled contrast.** Nav Item / Sidebar Item disabled text and Link disabled text are the Pen `DISABLED` rows; ratios are reported, never counted `PASS`.
 - **INFO — Breadcrumbs current-crumb icon.** `icon` renders for any crumb that supplies it, including the current (non-link) crumb, inside the current span; the Pen "with icon" variant is a linked-crumb affordance and is covered by the linked-crumb story.
+
+## C1 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `e3bb1d37ba9875330c2d0742f84b2330cea48628` vs `47e4a5b`.
+**Verdict:** **APPROVED** — no Critical/Important findings.
+
+- Focus rings all switch to `semantic.focus.ring` (link/nav-item/sidebar-item/breadcrumbs); geometry and `aria-current` retained; no routing/nesting added.
+- True RED confirmed: light focus-ring mismatch, missing Link external announcement, ignored Breadcrumbs `item.icon`. Dark focus stories are non-discriminating (both token roles resolve to `green.500` in dark) — the recipe-level composition tests are the true guard.
+- BLOCKED axes recorded and not implemented.
+
+**Minor (recorded, not blocking):** (1) Link announcement wording `"External link"` vs contract phrase "leaves this site" — acceptable conventional phrasing; (2) no explicit `rel` regression assertion in `Link.stories.tsx` (implementation adds neither `target` nor `rel`); (3) dark focus stories non-discriminating; (4) `Breadcrumbs.composition.test.tsx` icon-size assertion is scoped to whole markup. INFO: Breadcrumbs renders `item.icon` on the current crumb too when supplied (aria-hidden; permissive opt-in).
