@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { FloatingPanel, } from "./floating-panel";
+import { floatingPanelRecipe, } from "./preset";
 
 describe("floating panel composition", () => {
     test("renders a panel with a header, icon and body", () => {
@@ -92,5 +93,46 @@ describe("floating panel composition", () => {
         );
 
         expect(markup).toContain(`data-testid="fp"`);
+    });
+
+    // Pen `J3VmmT` / doc `y3lqjy`, token contract `yt0ku`: the trigger, collapse
+    // and close focus indicators resolve `focus/ring`, not the brand fill.
+    test("paints the shared focus ring role on the controls", () => {
+        for ( const slot of [ "trigger", "collapse", "close", ] ) {
+            expect(floatingPanelRecipe.base?.[slot]).toMatchObject({
+                outlineColor: { _focusVisible: "semantic.focus.ring", },
+            });
+        }
+    });
+
+    // Pen `J3VmmT` / doc `y3lqjy`: the panel resolves `surface/overlay` and the
+    // `border/subtle` structural boundary at the `lg` (16px) radius instead of
+    // the common step ramp and the `md` (10px) radius.
+    test("resolves the overlay surface roles and radius", () => {
+        expect(floatingPanelRecipe.base?.["panel"]).toMatchObject({
+            backgroundColor: "semantic.surface.overlay",
+        });
+        expect(floatingPanelRecipe.base?.["panel"]).toMatchObject({
+            borderColor: "semantic.border.subtle",
+        });
+        expect(floatingPanelRecipe.base?.["panel"]).toMatchObject({ borderRadius: "lg", });
+    });
+
+    // Pen `J3VmmT` / doc `y3lqjy`: the header and control roles resolve
+    // `text/primary`, `text/secondary` and `text/tertiary` (value-equivalent to
+    // the previous common step ramp).
+    test("resolves the header and control text roles", () => {
+        expect(floatingPanelRecipe.base?.["icon"]).toMatchObject({
+            color: "semantic.text.secondary",
+        });
+        expect(floatingPanelRecipe.base?.["title"]).toMatchObject({
+            color: "semantic.text.primary",
+        });
+        expect(floatingPanelRecipe.base?.["collapse"]).toMatchObject({
+            color: "semantic.text.tertiary",
+        });
+        expect(floatingPanelRecipe.base?.["close"]).toMatchObject({
+            color: "semantic.text.tertiary",
+        });
     });
 });

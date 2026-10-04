@@ -4,6 +4,7 @@ import { renderToStaticMarkup, } from "react-dom/server";
 import { Button, } from "@shared/components/button";
 
 import { Popover, } from "./popover";
+import { popoverRecipe, } from "./preset";
 
 describe("popover composition", () => {
     test("renders an anchored dialog with a header and content", () => {
@@ -149,5 +150,35 @@ describe("popover composition", () => {
         );
 
         expect(markup).not.toContain("popover__trigger");
+    });
+
+    // Pen `Qwced` / doc `H8KJm`, token contract `q36Cjg`: the trigger focus
+    // indicator resolves `focus/ring`, not the brand fill.
+    test("paints the shared focus ring role on the trigger", () => {
+        expect(popoverRecipe.base?.["trigger"]).toMatchObject({
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
+        });
+    });
+
+    // Pen `Qwced` / doc `H8KJm`: the light overlay surface resolves
+    // `surface/overlay` and the `border/subtle` structural boundary at the `lg`
+    // (16px) radius instead of the common step ramp and the `md` (10px) radius.
+    test("resolves the overlay surface roles and radius", () => {
+        expect(popoverRecipe.base?.["surface"]).toMatchObject({
+            backgroundColor: "semantic.surface.overlay",
+        });
+        expect(popoverRecipe.base?.["surface"]).toMatchObject({
+            borderColor: "semantic.border.subtle",
+        });
+        expect(popoverRecipe.base?.["surface"]).toMatchObject({ borderRadius: "lg", });
+    });
+
+    // Pen `Qwced` / doc `H8KJm`: the header roles resolve `text/primary` and
+    // `text/secondary` (value-equivalent to the previous common step ramp).
+    test("resolves the header text roles", () => {
+        expect(popoverRecipe.base?.["title"]).toMatchObject({ color: "semantic.text.primary", });
+        expect(popoverRecipe.base?.["description"]).toMatchObject({
+            color: "semantic.text.secondary",
+        });
     });
 });

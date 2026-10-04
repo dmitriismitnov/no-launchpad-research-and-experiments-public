@@ -1,11 +1,13 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
+import type { ReactNode, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, userEvent, within, } from "storybook/test";
 
 import { Button, } from "@shared/components/button";
 import { ButtonIcon, } from "@shared/components/button-icon";
+import { css, } from "@shared/styled-system/css";
 
-import { Popover, } from "./popover";
+import { Popover, type PopoverProps, } from "./popover";
 
 const meta = {
     title: "Components/Overlays/Popover",
@@ -138,4 +140,70 @@ export const EscapeClose: Story = {
         });
         await expect(canvas.queryByRole("dialog")).toBeNull();
     },
+};
+
+const shell = css({
+    padding: "x12",
+    backgroundColor: "semantic.common.50.background",
+    color: "semantic.common.50.text",
+});
+
+const ThemeShell = ({ theme, children, }: { theme: "light" | "dark"; children: ReactNode; }) => (
+    <div data-theme={theme}>
+        <div className={shell}>{children}</div>
+    </div>
+);
+
+const renderIn = (theme: "light" | "dark") => (args: PopoverProps) => (
+    <ThemeShell theme={theme}>
+        <Popover {...args} />
+    </ThemeShell>
+);
+
+// Pen `Qwced` / doc `H8KJm` token contract `q36Cjg`: the trigger focus indicator
+// resolves `semantic.focus.ring` — green.600 light (`rgb(22, 163, 74)`) instead
+// of the brand fill. Light discriminates; dark is non-discriminating and is not
+// claimed.
+export const FocusVisibleLight: Story = {
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+        const canvas = within(canvasElement);
+        const trigger = canvas.getByRole("button", { name: "Open popover", });
+
+        await user.tab();
+        await expect(trigger).toHaveFocus();
+
+        const style = getComputedStyle(trigger);
+        await expect(style.outlineStyle).toBe("solid");
+        await expect(style.outlineWidth).toBe("2px");
+        await expect(style.outlineColor).toBe("rgb(22, 163, 74)");
+    },
+};
+
+// Pen `Qwced` / doc `H8KJm`: the light overlay surface resolves
+// `semantic.surface.overlay` + `semantic.border.subtle` at the `lg` (16px)
+// radius. Both discriminate light and dark (old common.50 / common.200.divider +
+// `md`).
+const assertSurface =
+    (background: string, border: string) => async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+        const canvas = within(canvasElement);
+        const surface = canvas.getByRole("dialog");
+        const style = getComputedStyle(surface);
+
+        await expect(style.backgroundColor).toBe(background);
+        await expect(style.borderColor).toBe(border);
+        await expect(style.borderRadius).toBe("16px");
+    };
+
+export const SurfaceLight: Story = {
+    args: { defaultOpen: true, },
+    render: renderIn("light"),
+    play: assertSurface("rgb(255, 255, 255)", "rgb(226, 232, 240)"),
+};
+
+export const SurfaceDark: Story = {
+    args: { defaultOpen: true, },
+    render: renderIn("dark"),
+    play: assertSurface("rgb(30, 41, 59)", "rgb(30, 41, 59)"),
 };

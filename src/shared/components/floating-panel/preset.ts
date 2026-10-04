@@ -10,12 +10,14 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * persistence are out of scope.
  *
  * Pen references the newer role layer (`semantic/surface/*`, `semantic/text/*`,
- * `semantic/border/*`, `semantic/shadow/*`):
- * - surface/overlay -> common.50.background (white near-exact; dark one step)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - text/primary -> common.50.text (exact)
- * - text/secondary -> common.700.background (exact)
- * - text/tertiary -> common.600.background (exact)
+ * `semantic/border/*`, `semantic/focus/*`, `semantic/shadow/*`):
+ * - surface/overlay -> semantic.surface.overlay (white light; neutral.800 dark)
+ * - border/subtle -> semantic.border.subtle (structural boundary)
+ * - radius/lg -> lg (16px; Pen fixes the overlay card at `radius/lg`)
+ * - text/primary -> semantic.text.primary (title)
+ * - text/secondary -> semantic.text.secondary (icon)
+ * - text/tertiary -> semantic.text.tertiary (collapse / close control)
+ * - focus/ring -> semantic.focus.ring (trigger / collapse / close focus indicator)
  * - shadow/500 -> semantic.shadow.500 (Pen offsets 0 12px 32px)
  *
  * Approximations: Pen fixes the panel at 320px, pads 14px and insets it from the
@@ -49,7 +51,7 @@ export const floatingPanelRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         panel: {
@@ -62,9 +64,9 @@ export const floatingPanelRecipe = defineSlotRecipe({
             padding: "14px",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
-            borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
+            borderColor: "semantic.border.subtle",
+            borderRadius: "lg",
+            backgroundColor: "semantic.surface.overlay",
             boxShadow: "0 12px 32px {colors.semantic.shadow.500}",
         },
 
@@ -76,7 +78,7 @@ export const floatingPanelRecipe = defineSlotRecipe({
 
         icon: {
             flexShrink: "0",
-            color: "semantic.common.700.background",
+            color: "semantic.text.secondary",
         },
 
         title: {
@@ -87,7 +89,7 @@ export const floatingPanelRecipe = defineSlotRecipe({
             fontWeight: "semibold",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         },
 
         collapse: {
@@ -100,11 +102,11 @@ export const floatingPanelRecipe = defineSlotRecipe({
             borderStyle: "none",
             backgroundColor: "transparent",
             cursor: "pointer",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         close: {
@@ -117,11 +119,11 @@ export const floatingPanelRecipe = defineSlotRecipe({
             borderStyle: "none",
             backgroundColor: "transparent",
             cursor: "pointer",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         body: {

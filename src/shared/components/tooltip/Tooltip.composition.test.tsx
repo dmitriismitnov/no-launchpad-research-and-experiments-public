@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { tooltipRecipe, } from "./preset";
 import { Tooltip, } from "./tooltip";
 
 describe("tooltip composition", () => {
@@ -63,5 +64,19 @@ describe("tooltip composition", () => {
         const markup = renderToStaticMarkup(<Tooltip label="Duplicate" data-testid="t">Copy</Tooltip>);
 
         expect(markup).toContain(`data-testid="t"`);
+    });
+
+    // Pen `eEhwI` / doc `UO5oQ`, token contract `EOGvS`: the trigger focus
+    // indicator resolves `focus/ring`, not the brand fill. The shared 2px ring
+    // geometry and zero offset are unchanged.
+    test("paints the shared focus ring role on the trigger", () => {
+        expect(tooltipRecipe.base?.["trigger"]).toMatchObject({
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "0", },
+        });
+        expect(tooltipRecipe.base?.["trigger"]).toMatchObject({
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
+        });
     });
 });

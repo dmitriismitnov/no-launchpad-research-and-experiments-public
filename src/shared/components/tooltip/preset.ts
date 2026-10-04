@@ -7,15 +7,19 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * trigger is the positioning root, so the consumer supplies the visible control
  * and the component wraps it; the surface is absolutely placed by `placement`.
  *
- * Pen references the newer role layer (`semantic/tooltip/*`):
+ * Pen references the newer role layer (`semantic/tooltip/*`,
+ * `semantic/focus/*`):
  * - tooltip/bg -> common.900.background (light exact neutral.900; dark inverts)
  * - tooltip/fg -> common.900.text (light exact neutral.50)
+ * - focus/ring -> semantic.focus.ring (trigger focus indicator)
  *
- * Approximations: the code foundation has no theme-invariant dark surface, so
- * the light tooltip is exact (neutral.900 fill, neutral.50 text) while the dark
- * theme inverts to a light surface. Pen's `radius/sm` maps to `sm`. The mono
- * shortcut reads the body family because the code foundation ships no mono
- * token. The optional delay, arrow and collision handling are out of scope.
+ * Approximations: the code foundation has no theme-invariant dark surface and
+ * ships no `semantic.tooltip.bg` / `semantic.tooltip.fg` role, so the tooltip
+ * surface stays on `common.900.*` (light exact neutral.900 fill, neutral.50
+ * text; the dark theme inverts to a light surface — a recorded BLOCKED dark
+ * mismatch, not a PASS). Pen's `radius/sm` maps to `sm`. The mono shortcut reads
+ * the body family because the code foundation ships no mono token. The optional
+ * delay, arrow and collision handling are out of scope.
  */
 export const tooltipRecipe = defineSlotRecipe({
     className: "tooltip",
@@ -33,7 +37,7 @@ export const tooltipRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         surface: {

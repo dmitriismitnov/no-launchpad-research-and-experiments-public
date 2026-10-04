@@ -1,0 +1,171 @@
+[
+    {
+        "name": "tooltip-focus-light",
+        "selector": ".tooltip__trigger",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(15, 23, 42)",
+            "borderRadius": "0px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "tooltip-open-dark",
+        "selector": ".tooltip__surface",
+        "style": {
+            "backgroundColor": "rgb(241, 245, 249)",
+            "borderColor": "rgb(248, 250, 252)",
+            "borderRadius": "6px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "popover-focus-light",
+        "selector": ".popover__trigger",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(15, 23, 42)",
+            "borderRadius": "0px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "popover-surface-light",
+        "selector": ".popover__surface",
+        "style": {
+            "backgroundColor": "rgb(255, 255, 255)",
+            "borderColor": "rgb(226, 232, 240)",
+            "borderRadius": "16px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(15, 23, 42)"
+        }
+    },
+    {
+        "name": "popover-surface-dark",
+        "selector": ".popover__surface",
+        "style": {
+            "backgroundColor": "rgb(30, 41, 59)",
+            "borderColor": "rgb(30, 41, 59)",
+            "borderRadius": "16px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "hover-card-focus-light",
+        "selector": ".hoverCard__trigger",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(15, 23, 42)",
+            "borderRadius": "0px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "hover-card-surface-light",
+        "selector": ".hoverCard__surface",
+        "style": {
+            "backgroundColor": "rgb(255, 255, 255)",
+            "borderColor": "rgb(226, 232, 240)",
+            "borderRadius": "16px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(15, 23, 42)"
+        }
+    },
+    {
+        "name": "hover-card-surface-dark",
+        "selector": ".hoverCard__surface",
+        "style": {
+            "backgroundColor": "rgb(30, 41, 59)",
+            "borderColor": "rgb(30, 41, 59)",
+            "borderRadius": "16px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "floating-panel-surface-light",
+        "selector": ".floatingPanel__panel",
+        "style": {
+            "backgroundColor": "rgb(255, 255, 255)",
+            "borderColor": "rgb(226, 232, 240)",
+            "borderRadius": "16px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(15, 23, 42)"
+        }
+    },
+    {
+        "name": "floating-panel-surface-dark",
+        "selector": ".floatingPanel__panel",
+        "style": {
+            "backgroundColor": "rgb(30, 41, 59)",
+            "borderColor": "rgb(30, 41, 59)",
+            "borderRadius": "16px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "floating-panel-trigger-focus-light",
+        "selector": ".floatingPanel__trigger",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(15, 23, 42)",
+            "borderRadius": "0px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "floating-panel-collapse-focus-light",
+        "selector": ".floatingPanel__collapse",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(71, 85, 105)",
+            "borderRadius": "0px",
+            "color": "rgb(71, 85, 105)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "floating-panel-close-focus-light",
+        "selector": ".floatingPanel__close",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(71, 85, 105)",
+            "borderRadius": "0px",
+            "color": "rgb(71, 85, 105)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    }
+]

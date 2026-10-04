@@ -744,3 +744,165 @@ Slice-local counts: `+4` focused unit composition checks (19 → 23 across the t
 - No autoplay/timers/loop; no new components; BLOCKED rows recorded; disabled ratios real and `DISABLED / REVIEW`.
 
 **Minor:** (1) evidence overstates no-autoplay as "asserted" — carousel merely contains no timer code; (2) `Step.composition.test.tsx` comment says the label resolves `text/secondary` but the recipe keeps value-equivalent `common.700.background`; (3) browser RED is process evidence, not reproducible from the squashed commit; (4) typo "autplay".
+
+## C6 — Tooltip + Popover + HoverCard + FloatingPanel cycle 1/2
+
+**Scope:** approved recipe-only role corrections — the four trigger/focus controls move to `focus/ring`; the Popover/HoverCard/FloatingPanel overlay surfaces move to `surface/overlay` + `border/subtle` at `lg` (16px) radius; the named text roles resolve `text/primary` · `text/secondary` · `text/tertiary`. No `.tsx`, `index.ts`, `panda.config.ts` or new public component changed. No aria/roles/Escape/outside/hover/focus logic/placement/avatar/width/padding/shadow touched.
+
+### Pen source node IDs (read-only)
+
+| Role | Master | Documentation frame | Token contract frame / table |
+| --- | --- | --- | --- |
+| Tooltip | `eEhwI` | `UO5oQ` | `EOGvS` / `j92yv` (contract table) |
+| Popover | `Qwced` | `H8KJm` | `q36Cjg` / `G7LBlJ` |
+| Hover Card | `l7aEf` | `nij7I` | `xHnVP` / `j2sox` |
+| Floating Panel | `J3VmmT` | `y3lqjy` | `yt0ku` / `fAZa3` |
+
+Contract facts applied:
+
+- `EOGvS` (Tooltip): decorative-boundary resolves `surface/raised` → `border/subtle`; the tooltip surface contract pair is `tooltip/bg` → `tooltip/fg`; `focus` row is `focus-indicator` 1/1 PASS both themes; accessibility "Reachable by focus as well as hover", "Described by the trigger, never focusable itself".
+- `q36Cjg` (Popover): decorative-boundary `surface/raised` + `border/subtle`; the overlay specimen resolves `surface/overlay`; named parts "root · trigger · arrow · surface · header · content · close"; public variants "placement, with arrow, with header, modal · non-modal"; rules "Closes on Escape and on outside click", "Focus returns to the trigger on close", "One popover at a time".
+- `xHnVP` (Hover Card): decorative-boundary `surface/raised` + `border/subtle`; the card specimen resolves `surface/overlay`; named parts "root · trigger · surface · header · meta · actions"; variants "with avatar, with actions, placement"; rules "Opens on hover and on keyboard focus", "Never traps focus and never blocks the page", "Adds a short delay".
+- `yt0ku` (Floating Panel): decorative-boundary `surface/raised` + `border/subtle`; the panel specimen resolves `surface/overlay`; named parts "root · header · title · body · drag handle · collapse control · close"; variants "docked · floating, collapsible, resizable"; rules "The panel never steals focus on mount", "Position and collapsed state persist during the session".
+
+All four token-contract tables carry the `focus-indicator 1/1 PASS` row in both themes, which is the `focus/ring` role the approved contract applies to each trigger/collapse/close control.
+
+**Read-only confirmation:** Pencil MCP `get_app_state` confirmed `ex_2.pen` as the active canvas editor; only `Get` / `Print` reads were issued (no `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`). Pen SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes, unchanged (mtime `2026-10-02 08:35`).
+
+### Enumeration and disposition
+
+| Owner | Axis | Pen values / rule | Disposition |
+| --- | --- | --- | --- |
+| Tooltip | trigger focus indicator | `focus/ring` (`EOGvS`) | **PASS** — `trigger.outlineColor._focusVisible` now `semantic.focus.ring`; `solid`, `{borderWidths.thick}` (2px), offset `0` retained |
+| Popover | trigger focus indicator | `focus/ring` (`q36Cjg`) | **PASS** — `trigger.outlineColor._focusVisible` now `semantic.focus.ring` |
+| Hover Card | trigger focus indicator | `focus/ring` (`xHnVP`) | **PASS** — `trigger.outlineColor._focusVisible` now `semantic.focus.ring` |
+| Floating Panel | trigger / collapse / close focus indicator | `focus/ring` (`yt0ku`) | **PASS** — all three `outlineColor._focusVisible` now `semantic.focus.ring` |
+| Popover | overlay surface + boundary + radius | `surface/overlay` + `border/subtle` (`q36Cjg`) | **PASS** — `surface.backgroundColor` → `semantic.surface.overlay`, `borderColor` → `semantic.border.subtle`, `borderRadius` → `lg` (was `md`) |
+| Hover Card | surface + boundary + radius | `surface/overlay` + `border/subtle` (`xHnVP`) | **PASS** — same three corrections |
+| Floating Panel | panel surface + boundary + radius | `surface/overlay` + `border/subtle` (`yt0ku`) | **PASS** — same three corrections |
+| Popover | title / description text | content-role text (`q36Cjg`) | **PASS** — `title` → `semantic.text.primary`, `description` → `semantic.text.secondary` (value-equivalent) |
+| Hover Card | name / role / bio text | content-role text (`xHnVP`) | **PASS** — `name` → `semantic.text.primary`, `role` → `semantic.text.tertiary`, `bio` → `semantic.text.secondary` (value-equivalent) |
+| Floating Panel | icon / title / collapse / close text | content-role text (`yt0ku`) | **PASS** — `icon` → `semantic.text.secondary`, `title` → `semantic.text.primary`, `collapse`/`close` color → `semantic.text.tertiary` (value-equivalent) |
+| All four | ARIA / roles / Escape / outside-click / hover/focus open / placement / avatar / width / padding / shadow | docs above | regression only — unchanged and re-asserted |
+| Tooltip | dark surface (`tooltip/bg` + `tooltip/fg`) | `EOGvS` tooltip pair | **BLOCKED / DISABLED-REVIEW** — Foundation has no `semantic.tooltip.bg`/`fg`; surface stays `common.900.*` and inverts to a light panel in dark. Recorded, never PASS |
+| Floating Panel | disabled state | `yt0ku` audit `DISABLED / REVIEW 6/6` | **DISABLED / REVIEW** — no runtime disabled state in code; `action/disabled-bg` is a Foundation role decision (`BLOCKED` below) |
+| All four | disabled backgrounds `action/disabled-bg` | Pen audit | **DISABLED / REVIEW** — consistent with C3–C5; no PASS |
+| Tooltip | leading surface radius / mono shortcut | Pen `radius/sm`, mono family | **INFO** — left as-is (approved contract) |
+
+### Approved public surface and behaviour
+
+- `tooltip` recipe: `trigger.outlineColor._focusVisible` → `semantic.focus.ring`. Surface (`common.900.background`), label/shortcut (`common.900.text`), `radius/sm` and geometry are unchanged. Tooltip delay/hover-intent/arrow and the dark `tooltip/bg`/`fg` pair are out of scope.
+- `popover` recipe: `trigger.outlineColor._focusVisible` → `semantic.focus.ring`; `surface.backgroundColor` → `semantic.surface.overlay`; `surface.borderColor` → `semantic.border.subtle`; `surface.borderRadius` → `lg`; `title.color` → `semantic.text.primary`; `description.color` → `semantic.text.secondary`. `minWidth`/`maxWidth`, placement variants and `shadow.500` unchanged. No arrow / header / modal / close / focus-return / stacking / portal change.
+- `hoverCard` recipe: `trigger.outlineColor._focusVisible` → `semantic.focus.ring`; `surface.backgroundColor` → `semantic.surface.overlay`; `surface.borderColor` → `semantic.border.subtle`; `surface.borderRadius` → `lg`; `name.color` → `semantic.text.primary`; `role.color` → `semantic.text.tertiary`; `bio.color` → `semantic.text.secondary`. Avatar `brand.100.*`, 300px width, 36px avatar, placement and `shadow.500` unchanged. No delay / with-avatar / trigger composition change.
+- `floatingPanel` recipe: `trigger`/`collapse`/`close` `outlineColor._focusVisible` → `semantic.focus.ring`; `panel.backgroundColor` → `semantic.surface.overlay`; `panel.borderColor` → `semantic.border.subtle`; `panel.borderRadius` → `lg`; `icon.color` → `semantic.text.secondary`; `title.color` → `semantic.text.primary`; `collapse.color`/`close.color` → `semantic.text.tertiary`. 320px width, 14px padding, `x10` corner inset, placement variants and `shadow.500` unchanged. No drag / resize / dragging / persistence / docked / floating / disabled change.
+- Preset doc comments updated to name the resolved role tokens. No component markup changed; all `*.tsx`, both barrel sets and `panda.config.ts` are untouched. No export changed, so `check:deps` was not required. Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited): the overlay classes now read `var(--colors-semantic-surface-overlay)`, `var(--colors-semantic-border-subtle)`, `var(--radii-lg)` and `var(--colors-semantic-focus-ring)`.
+
+Changed paths: `src/shared/components/tooltip/{preset.ts,Tooltip.composition.test.tsx,Tooltip.stories.tsx}`, `src/shared/components/popover/{preset.ts,Popover.composition.test.tsx,Popover.stories.tsx}`, `src/shared/components/hover-card/{preset.ts,HoverCard.composition.test.tsx,HoverCard.stories.tsx}`, `src/shared/components/floating-panel/{preset.ts,FloatingPanel.composition.test.tsx,FloatingPanel.stories.tsx}`, this evidence, `artifacts/batch-c/anchored-overlays/` (new captures).
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun), written before the implementation:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/components/tooltip/Tooltip.composition.test.tsx src/shared/components/popover/Popover.composition.test.tsx src/shared/components/hover-card/HoverCard.composition.test.tsx src/shared/components/floating-panel/FloatingPanel.composition.test.tsx` |
+| RED exit | `1` |
+| RED result | `10 fail` / `37 pass` (47 total, 4 files, `112 expect() calls`) |
+| RED failures | tooltip `paints the shared focus ring role on the trigger`; popover `paints the shared focus ring role on the trigger`, `resolves the overlay surface roles and radius`, `resolves the header text roles`; hover card `paints the shared focus ring role on the trigger`, `resolves the overlay surface roles and radius`, `resolves the identity and bio text roles`; floating panel `paints the shared focus ring role on the controls`, `resolves the overlay surface roles and radius`, `resolves the header and control text roles` |
+| RED cause | trigger `outlineColor._focusVisible` was `semantic.brand.500.background`; surface `backgroundColor` `semantic.common.50.background`, `borderColor` `semantic.common.200.divider`, `borderRadius` `md`; text colors on the common step ramp (`common.50.text`, `common.700.background`, `common.600.background`) |
+| GREEN exit | `0` |
+| GREEN result | `47 pass` / `0 fail` (`126 expect() calls`) |
+
+Focused browser stories (Vitest + Playwright Chromium), run before `mise run gen` so the stale generated CSS provided the RED:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/tooltip/Tooltip.stories.tsx src/shared/components/popover/Popover.stories.tsx src/shared/components/hover-card/HoverCard.stories.tsx src/shared/components/floating-panel/FloatingPanel.stories.tsx` |
+| RED exit | `1` |
+| RED result | `4 failed` files, `12 failed` / `28 passed` (40) |
+| RED failures | tooltip `Focus Visible Light`; popover `Focus Visible Light`, `Surface Light`, `Surface Dark`; hover card `Focus Visible Light`, `Surface Light`, `Surface Dark`; floating panel `Panel Light`, `Panel Dark`, `Trigger Focus Visible Light`, `Collapse Focus Visible Light`, `Close Focus Visible Light` |
+| GREEN exit | `0` |
+| GREEN result | `4 passed` files, `40 passed` (40) |
+
+The light focus-role change and the surface/border/radius corrections are true RED (browser-computed values changed). The dark focus stories are **not** claimed: in dark, `brand.500.background` and `focus.ring` both resolve `green.500`, so dark focus is non-discriminating; no dark focus story is asserted. The text role changes are true at recipe level but **not** browser-discriminating (same RGB), so no browser proof is claimed for them.
+
+### Both-theme evidence (computed style, in browser)
+
+| Contract | Light | Dark |
+| --- | --- | --- |
+| Tooltip trigger focus (`FocusVisibleLight`) | `outline: solid 2px rgb(22, 163, 74)` (`green.600`) — discriminating | not claimed (dark `brand.500.background` = `focus.ring` = `green.500`) |
+| Popover trigger focus | `outline: solid 2px rgb(22, 163, 74)` — discriminating | not claimed (non-discriminating) |
+| Hover Card trigger focus | `outline: solid 2px rgb(22, 163, 74)` — discriminating | not claimed (non-discriminating) |
+| Floating Panel trigger / collapse / close focus | `outline: solid 2px rgb(22, 163, 74)` — discriminating | not claimed (non-discriminating) |
+| Popover surface + radius | bg `rgb(255, 255, 255)` (`surface.overlay` = `base.white`; old `neutral.50` `rgb(248, 250, 252)`), border `rgb(226, 232, 240)` (`border.subtle` = `neutral.200`; old `neutral.300` `rgb(203, 213, 225)`), radius `16px` (old `10px`) | bg `rgb(30, 41, 59)` (`neutral.800`; old `neutral.950` `rgb(2, 6, 23)`), border `rgb(30, 41, 59)` (`neutral.800`; old `neutral.700` `rgb(51, 65, 85)`), radius `16px` |
+| Hover Card surface + radius | same as Popover — discriminating both themes | same as Popover |
+| Floating Panel panel + radius | same as Popover — discriminating both themes | same as Popover |
+| Popover / Hover Card / Floating Panel text roles | `text.primary` = `neutral.900`, `text.secondary` = `neutral.700`, `text.tertiary` = `neutral.600` — **value-equivalent**, not browser-discriminating | `neutral.50` / `neutral.300` / `neutral.400` — **value-equivalent** |
+| Tooltip dark surface (BLOCKED) | light surface: fill `neutral.900` `rgb(15, 23, 42)`, label `neutral.50` `rgb(248, 250, 252)`, ratio `17.06` | dark: the current pair resolves a **light** panel `neutral.100` `rgb(241, 245, 249)` with `neutral.900` `rgb(15, 23, 42)` text, ratio `16.30` — Pen wants a dark `tooltip/bg`/`tooltip/fg` pair that does not exist in Foundation → **BLOCKED / DISABLED-REVIEW**, never PASS |
+| Floating Panel disabled (Pen audit `6/6`) | no runtime disabled state in code; `action/disabled-bg` absent → **DISABLED / REVIEW** | same |
+| Generated `styles.css` | `.popover__surface`, `.hoverCard__surface`, `.floatingPanel__panel` read `var(--colors-semantic-surface-overlay)`, `var(--colors-semantic-border-subtle)`, `var(--radii-lg)`; all four triggers/controls read `var(--colors-semantic-focus-ring)` | theme-independent (same recipe/CSS) |
+| ARIA / Escape / outside-click / hover+focus open / placement / avatar / width / padding / shadow | regression asserted in the focused composition/story runs above; no runtime/ARIA change | theme-independent structure |
+
+Disabled / blocked ratios (reported, never PASS): Tooltip dark current pair `neutral.900` on `neutral.100` = `16.30`; the Pen `tooltip/bg` → `tooltip/fg` pair is unresolvable code-side (`BLOCKED`). `action.disabled.background` → `text.disabled` = `2.34` light (`#94A3B8` on `#F1F5F9`) / `1.93` dark (`#475569` on `#1E293B`), both below 4.5 → `DISABLED / REVIEW`, not implemented. Overlay control text `text.tertiary` on `surface.overlay` = `7.58` light / `5.71` dark (informational, not a blocked row).
+
+### Captures
+
+Code-side Storybook-iframe captures (`deviceScaleFactor: 2`), in `artifacts/batch-c/anchored-overlays/`: `tooltip-focus-light`, `tooltip-open-dark` (BLOCKED dark mismatch evidence), `popover-focus-light`, `popover-surface-{light,dark}`, `hover-card-focus-light`, `hover-card-surface-{light,dark}`, `floating-panel-surface-{light,dark}`, `floating-panel-{trigger,collapse,close}-focus-light` (13 PNGs) plus `computed-styles.json`. The capture script recorded each target's computed style; focus captures show `solid 2px rgb(22, 163, 74)` on `.tooltip__trigger` / `.popover__trigger` / `.hoverCard__trigger` / `.floatingPanel__trigger` / `.floatingPanel__collapse` / `.floatingPanel__close`, and surface captures show `rgb(255, 255, 255)` / `rgb(30, 41, 59)` with `16px` radius.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)`; overlay classes now read `surface-overlay` / `border-subtle` / `radii-lg` / `focus-ring` |
+| focused composition RED | `1` | `10 fail` / `37 pass` (112 expect calls) |
+| focused composition GREEN | `0` | `47 pass` / `0 fail` (126 expect calls) |
+| focused browser RED | `1` | `4 failed` files, `12 failed` / `28 passed` (40) |
+| focused browser GREEN | `0` | `4 passed` files, `40 passed` (40) |
+| `mise run check:lint` | `1` | **blocked** by the pre-existing untracked 0-byte `.zed/debug.json` (`1:1 Parsing error: Unexpected end of input`); **no** lint error in any C6 path. Artifact left in place, not deleted |
+| `mise run check:types` | `0` | clean |
+| `mise run check:format` | `0` | clean after `dprint fmt` on the 12 changed files |
+| `mise run icons:check` | `0` | `✓ icons up to date (38 icons)` |
+| `mise run fonts:check` | `0` | `✓ web fonts up to date (2 faces)` |
+| `mise run test:unit` | `0` | `792 pass` / `0 fail` (90 files, `4076 expect() calls`) |
+| `mise run test:browser` | `0` | `73 passed` files, `651 passed` (651) |
+| `mise run check` (aggregate) | n/a | not reachable as one command because of the pre-existing `.zed/debug.json` lint block; every stage above is green individually |
+| `mise run check:deps` | n/a | not run — no export changed |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-DHUYtwx5.css 223.62 kB` |
+| `git diff --check` | `0` | clean |
+
+Slice-local counts: `+10` focused unit composition checks (37 → 47 across the four files) and `+12` browser story checks (28 → 40 across the four story files). Unit `782 → 792`; browser `639 → 651`.
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| Tooltip / Popover / Hover Card / Floating Panel trigger focus → `semantic.focus.ring` | **PASS** |
+| Floating Panel collapse / close focus → `semantic.focus.ring` | **PASS** |
+| Popover / Hover Card / Floating Panel surface → `semantic.surface.overlay` + `semantic.border.subtle` + `lg` radius | **PASS** (discriminating both themes) |
+| Popover title/description, Hover Card name/role/bio, Floating Panel icon/title/collapse/close text roles | **PASS** (recipe-level; value-equivalent) |
+| ARIA / roles / Escape / outside-click / hover+focus open / placement / avatar / width / padding / shadow | **PASS** (regression, unchanged) |
+| Tooltip dark surface (`tooltip/bg`/`tooltip/fg`) | **BLOCKED / DISABLED-REVIEW** — recorded, never PASS |
+| Floating Panel disabled + `action/disabled-bg` | `DISABLED / REVIEW` (real ratios, not implemented) |
+| **C6 final status** | **PASS with `BLOCKED` / `DISABLED-REVIEW` rows** — no unresolved `FAIL` |
+
+### BLOCKED (recorded, not implemented)
+
+| Item | Pen basis | Reason |
+| --- | --- | --- |
+| Tooltip dark surface (`semantic/tooltip/bg` + `tooltip/fg`) | `EOGvS` tooltip pair | Foundation has no tooltip role tokens; surface stays `common.900.*`, which inverts to a light panel in dark — **DISABLED-REVIEW** |
+| `action/disabled-bg` disabled backgrounds | audit rows | Foundation token-role decision (consistent with C3–C5) |
+| Tooltip delay / hover-intent, tooltip arrow | `EOGvS` rules | interaction/API decision |
+| Popover `with arrow`, `with header`, `modal`/`non-modal`, surface `close`, focus-return-to-trigger, one-at-a-time stacking, portal/positioning/flip/collision, `aria-controls` | `q36Cjg` variants / rules | public-variant/API + positioning decision |
+| Hover Card open delay, `with avatar`, `with actions`, trigger composition | `xHnVP` variants / rules | public-variant/API decision |
+| Floating Panel drag handle, resize, dragging state, session persistence, docked/floating, disabled | `yt0ku` variants / rules | interaction/API + state decision |
+| New public components (TooltipArrow, PopoverHeader, HoverCardAvatar, FloatingPanelDragHandle, …) | — | explicitly excluded by the approved contract |
+
+### Unresolved concerns
+
+- **DISABLED-REVIEW — Tooltip dark surface.** `semantic.tooltip.bg` / `semantic.tooltip.fg` do not exist in Foundation; the dark theme renders a light panel (`neutral.100` fill, ratio `16.30`), which does not match Pen's `tooltip/bg` → `tooltip/fg` pair. Recorded with the capture `tooltip-open-dark`, reported, never PASS.
+- **INFO — dark focus non-discriminating.** In dark, `brand.500.background` and `focus.ring` both resolve `green.500`; no dark focus story is asserted, and the light focus stories plus the recipe-level composition tests are the true guards.
+- **INFO — dark overlay boundary invisible.** In dark, `surface.overlay` and `border.subtle` both resolve `neutral.800` (`rgb(30, 41, 59)`); this follows the Pen roles and matches the C4 Menu observation.
+- **INFO — value-equivalent text roles.** The `text/primary`, `text/secondary` and `text/tertiary` corrections resolve the same RGB as the replaced `common.*` ramp; they are true at recipe level and are not claimed as browser-discriminating.
+- **INFO — `mise run check` blocked at lint.** The pre-existing untracked 0-byte `.zed/debug.json` fails ESLint parsing; per instruction it was left in place (not deleted) and every other stage was run and recorded green individually.
+- **INFO — capture method.** Storybook-iframe Playwright captures (`deviceScaleFactor: 2`, dedicated Storybook on port `6008`), consistent with C1–C5; focus was driven with a CDP `Tab` key event so `:focus-visible` engaged, and the focused element's computed outline was read from the live page.
+- **INFO — Pen read-only.** The Pen was accessed through Pencil MCP `Get`/`Print` only; no mutation call was issued and the file hash is unchanged.

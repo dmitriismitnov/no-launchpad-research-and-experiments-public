@@ -9,16 +9,19 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * the optional header, and any remaining content is rendered after them.
  *
  * Pen references the newer role layer (`semantic/surface/*`, `semantic/text/*`,
- * `semantic/border/*`, `semantic/shadow/*`):
- * - surface/overlay -> common.50.background (white near-exact; dark one step)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - text/primary -> common.50.text (exact)
- * - text/secondary -> common.700.background (exact)
+ * `semantic/border/*`, `semantic/focus/*`, `semantic/shadow/*`):
+ * - surface/overlay -> semantic.surface.overlay (white light; neutral.800 dark)
+ * - border/subtle -> semantic.border.subtle (structural boundary)
+ * - radius/lg -> lg (16px; Pen fixes the overlay card at `radius/lg`)
+ * - text/primary -> semantic.text.primary (title)
+ * - text/secondary -> semantic.text.secondary (description)
+ * - focus/ring -> semantic.focus.ring (trigger focus indicator)
  * - shadow/500 -> semantic.shadow.500 (Pen offsets 0 12px 32px)
  *
  * Approximations: Pen fixes the surface at 280px; the component exposes it as a
- * literal `minWidth`. The arrow, modal/non-modal modes and menu-content variant
- * are out of scope; a consumer composes menu or form content through `children`.
+ * literal `minWidth`. The arrow, with header, modal/non-modal modes and
+ * close-control variant are out of scope; a consumer composes menu or form
+ * content through `children`.
  */
 export const popoverRecipe = defineSlotRecipe({
     className: "popover",
@@ -44,7 +47,7 @@ export const popoverRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         surface: {
@@ -56,9 +59,9 @@ export const popoverRecipe = defineSlotRecipe({
             maxWidth: "320px",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
-            borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
+            borderColor: "semantic.border.subtle",
+            borderRadius: "lg",
+            backgroundColor: "semantic.surface.overlay",
             boxShadow: "0 12px 32px {colors.semantic.shadow.500}",
         },
 
@@ -75,7 +78,7 @@ export const popoverRecipe = defineSlotRecipe({
             fontWeight: "semibold",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         },
 
         description: {
@@ -83,7 +86,7 @@ export const popoverRecipe = defineSlotRecipe({
             fontSize: "sm",
             fontWeight: "regular",
             lineHeight: "normal",
-            color: "semantic.common.700.background",
+            color: "semantic.text.secondary",
         },
     },
 
