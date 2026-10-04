@@ -1,6 +1,11 @@
 # Design: full Pen component migration
 
-**Status:** planned\
+**Status:** completed (bounded acceptance, 2026-10-05) — corrected from the
+original `planned`; see
+`outputs/experiments/pencil-opencode-workflow/notes/retrospective.md` and
+`batch-e-evidence.md` §10. Bounded means 82 masters map to 72 owner directories
+with the documented commands passing, but many documented public axes remain
+`BLOCKED`; this is not full behavioral/visual parity.\
 **Pen authority:** read-only `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` (82 reusable masters; inspected 2026-10-03).
 
 ## Goal and scope

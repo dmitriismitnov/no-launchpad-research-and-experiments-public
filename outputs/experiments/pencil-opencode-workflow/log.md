@@ -79,3 +79,16 @@ plan file was modified.
 | 20 | Verified brand-swap contrast | audit | `deepseek/deepseek-flash` | 0 failures (brand+positive, text/icon/borderStrong, light/dark); no `palette/blue` refs; `mise run check` green. |
 
 | 21 | Regrouped canvas: system vs designs | implementation | `deepseek/deepseek-flash` | Design System / Finished designs / Create Project sections; headers added; no overlaps; components untouched. |
+
+## 2026-10-05 — final documentary closure (extended experiment)
+
+| # | Action | Role | Model/variant | Evidence / disposition |
+| - | ------ | ---- | ------------- | ---------------------- |
+| 22 | Wrote final retrospective over the whole extended experiment | audit | `deepseek/deepseek-flash` | `notes/retrospective.md`; covers workflow + `design-system-to-code` + full migration; supersedes `notes/results.md` for final closure. |
+| 23 | Corrected the 63-char Pen SHA in the migration plan closure | audit | `deepseek/deepseek-flash` | Was `…421daf7fa`; corrected to `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` (retrospective §7.1); Pen unchanged. |
+| 24 | Marked `test:visual` post-fix rows and baseline-refresh justification as partially evidenced | audit | `deepseek/deepseek-flash` | §9 label corrected; post-change `check`/`test:visual` supported by conversation evidence, durable post-fix logs absent; post-fix `check:deps`/`build` not evidenced; refresh justified by file size only (retrospective §7.2–7.3). |
+| 25 | Recorded source-isolation and same-model-review corrections | audit | `deepseek/deepseek-flash` | On-disk hash unchanged ≠ never mutated; B/C/D review is same-model session/context, not cross-model (retrospective §7.5–7.6). |
+| 26 | Closed linked `design-system-to-code` workstream docs | audit | `deepseek/deepseek-flash` | README/history updated to separate-workstream closure; references retrospective. |
+| 27 | Corrected the retrospective's planner/reviewer (correction-plan) interpretation | audit | `deepseek/deepseek-flash` | Same smart model reviewer writes a bounded correction plan **after** review, not the overall task plan; expected cycle Builder → Reviewer (findings + bounded correction plan) → Builder → Reviewer. Prior `planner-review anchoring` critique retracted as agent misinterpretation; cheap mechanical orchestrator proposal separate/unchanged; builder model unchanged. Retrospective §5.4; §5.1 п.5, §5.2, §6.3, §8.2, §9 п.10 updated to reference it. |
+
+No production, `.pen`, skill, generated or `outputs/shared/notes` file was changed. This closure did not itself commit, merge or push; committing the authorized documentation is left to the user.

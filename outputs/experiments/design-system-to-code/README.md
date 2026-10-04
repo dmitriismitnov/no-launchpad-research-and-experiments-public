@@ -1,6 +1,28 @@
 # Experiment: Design system → code port
 
-**Status:** active (2026-10-02).
+**Status:** closed (2026-10-05) as a separate workstream of the extended
+Pencil × OpenCode experiment.
+
+**Final assessment:** the authoritative final report is
+[`../pencil-opencode-workflow/notes/retrospective.md`](../pencil-opencode-workflow/notes/retrospective.md).
+This file keeps its original wording; the closure note below records how the
+scope extended and what the bounded code acceptance means.
+
+> **Closure note (2026-10-05).** Original question and scope (below) covered the
+> foundation token port and a landing screen as verification, with "all ~70
+> documented Pen components … over multiple increments" and "porting all ~70 …
+> not in this pass" both stated — a scope wording conflict. In practice the work
+> extended into the full Pen component migration
+> (`docs/superpowers/plans/2026-10-03-full-pen-component-migration.md`, spec
+> `docs/superpowers/specs/2026-10-03-full-pen-component-migration-design.md`),
+> whose Pen authority and evidence live under
+> `../pencil-opencode-workflow/artifacts/ex_2.pen` and
+> `../pencil-opencode-workflow/notes/batch-*-evidence.md`. Final outcome:
+> **bounded code acceptance** — 82 Pen masters reconciled to 72 owner
+> directories, but many documented public axes remain `BLOCKED`, so this is not
+> full behavioral/visual parity. See the retrospective §4.3, §4.4 and §10. This
+> closure did not itself commit the documentation; committing it is left to the
+> user.
 
 ## Question
 

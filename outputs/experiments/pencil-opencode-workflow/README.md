@@ -1,6 +1,13 @@
 # Experiment: Pencil × OpenCode workflow
 
-**Status:** completed (2026-10-02).
+**Status:** closed (final closure 2026-10-05; workflow phase completed 2026-10-02).
+
+**Final retrospective:** [`notes/retrospective.md`](notes/retrospective.md) — the
+authoritative final assessment. This experiment was extended by the linked
+`design-system-to-code` workstream and the full Pen component migration (82
+masters → 72 owners, bounded acceptance); the retrospective covers the whole
+extended process, corrects documentary errors and records the deferred/unmet
+criteria.
 
 **Spec:** [`docs/superpowers/specs/2026-10-02-pencil-opencode-workflow-design.md`](../../../docs/superpowers/specs/2026-10-02-pencil-opencode-workflow-design.md)
 
@@ -109,7 +116,10 @@ outputs/experiments/pencil-opencode-workflow/
 │   ├── design-brief.md       # Create Project fields, states and acceptance
 │   ├── benchmark-protocol.md # Gates A–D, evidence, model contract, human review
 │   ├── review-report.md      # created in a later task
-│   └── results.md            # created in a later task
+│   ├── results.md            # mid-experiment results (superseded by retrospective)
+│   ├── retrospective.md      # final closure report (2026-10-05)
+│   └── batch-*-evidence.md   # migration evidence ledgers (extended phase)
 └── artifacts/
-    └── create-project.pen    # isolated writable benchmark (later task)
+    ├── create-project.pen    # initial isolated copy
+    └── ex_2.pen              # active writable benchmark (5 composed frames)
 ```

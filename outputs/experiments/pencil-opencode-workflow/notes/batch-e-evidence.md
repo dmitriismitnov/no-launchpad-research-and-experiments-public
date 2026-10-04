@@ -8,6 +8,37 @@
 **Artifact identity:** SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes — re-hashed before and after all inspection and command runs: **byte-identical**, no working-tree change (`git status --short -- …/ex_2.pen` empty).\
 **Method:** Pencil MCP `get_app_state` + `execute` (`Get`, depth 0; read-only, no mutation) to enumerate the reusable masters; codebase inspection of `src/shared/components/**`; the five verification commands; the Playwright visual harness. Statuses follow the spec: `PASS`, `FAIL`, `INFO`, `HUMAN REVIEW`, `BLOCKED`, `DISABLED / REVIEW`.
 
+> **Correction notice (2026-10-05; preserves the record below).**
+>
+> 1. **Bounded acceptance.** §8/§10 "COMPLETE and ACCEPTED" / "Migration status:
+>    COMPLETE" mean *bounded* acceptance: 82 masters reconcile to 72 owner
+>    directories with the documented commands passing, but many documented
+>    public axes remain `BLOCKED` (§3, §10) — not full behavioral/visual parity.
+> 2. **Fresh exhaustive screenshots: partial/deferred, not done.** §7 item 5
+>    already states no new per-owner captures were produced; the program plan's
+>    Batch E screenshot step is therefore marked partial/deferred.
+> 3. **§9 post-fix evidence: durable logs missing, runs supported by
+>    conversation evidence.** The `test:visual` row labeled "(pre-fix)" describes
+>    a post-code-change run (mislabel): the stored `test-visual.log` /
+>    `test-visual-fresh.log` (2026-10-05 01:01) still contain the mobile geometry
+>    failure, while the fix commit `0633e4c` is dated `01:10:12`; the stored
+>    `check-run1.log` (01:00), `check-deps.log` (01:00:39) and `build.log`
+>    (01:00:45) are also pre-fix. The post-change `check` (840 unit / 724
+>    browser) and `test:visual` (screenshots-only fail → update → rerun 7 pass)
+>    are shown by conversation evidence, not saved durable logs; post-fix
+>    `check:deps`/`build` are not evidenced at all. **A missing raw log is not
+>    proof a test did not run.** §9 is therefore partially evidenced at the
+>    durable-log level.
+> 4. **§9 baseline refresh justification is size-only.** "hundreds of bytes per
+>    image" is a file-size observation, not per-cluster visual attribution; §6.2
+>    already says clusters were not pixel-attributed. Residual → `HUMAN REVIEW`.
+> 5. **Hash.** The true 64-character Pen digest is used here
+>    (`45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`); the
+>    migration plan closure had quoted a 63-character value, now corrected.
+>
+> Final authoritative assessment:
+> `outputs/experiments/pencil-opencode-workflow/notes/retrospective.md`.
+
 ## 1. Pen authority verification
 
 - `get_app_state` reports the active editor as `ex_2.pen` and lists exactly **82 reusable components**.

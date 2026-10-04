@@ -1,5 +1,18 @@
 # Results — Pencil × OpenCode workflow
 
+> **SUPERSEDED for final closure (2026-10-05).** This file is a preserved
+> mid-experiment record. The authoritative, final assessment — including the
+> extended Pen→code migration, corrected documentary errors, unmet criteria and
+> the closure disposition matrix — is
+> [`notes/retrospective.md`](retrospective.md). Read the retrospective first;
+> the claims below are kept unchanged as history.
+>
+> Two claims below are explicitly corrected in the retrospective §7:
+> `Evidence for` bullet "the source was never mutated" (source was transiently
+> mutated in the editor, then cleaned; the on-disk hash was unchanged) and the
+> "MCP does not persist" thread (already corrected in-place under
+> 「Персистентность: работает (уточнение)」).
+
 **Status:** success with deferred items (2026-10-02). **Model:** `deepseek/deepseek-flash` (single model, all roles).
 
 ## Hypothesis

@@ -4,7 +4,24 @@
 **Authority:** read-only `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen`\
 **Goal:** complete all 82 mapped masters without changing Pen, screens/dashboard, or the completed Landing implementation.
 
-> **Closure (2026-10-05): COMPLETE and ACCEPTED.** Every step below is done; the authoritative record is `outputs/experiments/pencil-opencode-workflow/notes/batch-{a,b,b0,c,d,e}-evidence.md`. Final gates: `mise run gen`, `mise run icons:check`, `mise run check` (unit 840 pass / browser 724 passed), `mise run check:deps`, `mise run build`, `mise run test:visual` (7/7). The single program-level regression (Landing mobile-menu CTA width, caused by Batch B0 `Button width:"hug"` → `fit-content`) was resolved in `0633e4c`: explicit `width="full"` on the Landing mobile-menu CTA plus refreshed Landing visual baselines; acceptance recorded in `batch-e-evidence.md` §9–§10. Residuals are documented `BLOCKED` design-decision/Foundation axes, `INFO` approximations, `DISABLED / REVIEW` contrast, and `HUMAN REVIEW` items — no unresolved `FAIL`, Critical, or Important finding. From mid-B5 the GPT provider hit its usage limit, so per user instruction planning/building/reviewing continued on DeepSeek V4.1 Flash (noted per ledger). Pen authority unchanged: SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde787421daf7fa`.
+> **Closure (2026-10-05): COMPLETE and ACCEPTED.** Every step below is done; the authoritative record is `outputs/experiments/pencil-opencode-workflow/notes/batch-{a,b,b0,c,d,e}-evidence.md`. Final gates: `mise run gen`, `mise run icons:check`, `mise run check` (unit 840 pass / browser 724 passed), `mise run check:deps`, `mise run build`, `mise run test:visual` (7/7). The single program-level regression (Landing mobile-menu CTA width, caused by Batch B0 `Button width:"hug"` → `fit-content`) was resolved in `0633e4c`: explicit `width="full"` on the Landing mobile-menu CTA plus refreshed Landing visual baselines; acceptance recorded in `batch-e-evidence.md` §9–§10. Residuals are documented `BLOCKED` design-decision/Foundation axes, `INFO` approximations, `DISABLED / REVIEW` contrast, and `HUMAN REVIEW` items — no unresolved `FAIL`, Critical, or Important finding. From mid-B5 the GPT provider hit its usage limit, so per user instruction planning/building/reviewing continued on DeepSeek V4.1 Flash (noted per ledger). Pen authority unchanged: SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`.
+
+> **Correction notice (2026-10-05; preserves the closure above).** (1) The closure
+> text originally quoted a 63-character SHA (`…dde787421daf7fa`, one `7`
+> missing); it is corrected in place to the true 64-character digest. (2)
+> "COMPLETE and ACCEPTED" means **bounded acceptance**: all 82 masters map to one
+> of 72 owner directories and the documented commands pass, but many documented
+> public axes remain `BLOCKED` (`batch-e-evidence.md` §2/§3) — this is not full
+> behavioral or visual parity, and the checkboxes below are ticked on that
+> bounded basis. (3) Batch E's fresh exhaustive screenshot step is
+> **partial/deferred** (not "done"; see the Batch E step 2 note below and
+> `batch-e-evidence.md` §7 item 5). (4) The `test:visual` row in
+> `batch-e-evidence.md` §9 labeled "(pre-fix)" is mislabeled, and durable
+> post-fix logs for `check`/`test:visual` are missing; those runs are, however,
+> shown by conversation evidence (post-change `check` 840/724; visual
+> update + rerun 7 pass). Post-fix `check:deps`/`build` are not evidenced at all.
+> A missing raw log is not proof a test did not run. Final authoritative
+> assessment: `outputs/experiments/pencil-opencode-workflow/notes/retrospective.md`.
 
 ## Program-wide rules
 
@@ -108,7 +125,7 @@
 **Steps:**
 
 - [x] Reconcile the 82-row matrix against the Pen reusable-master query; every row must point to an owner, state list, test, story, and evidence capture.
-- [x] Run representative screenshots for every variant/state/theme owner and aggregate master. Classify each evidence row PASS, FAIL, INFO, HUMAN REVIEW, BLOCKED, or DISABLED / REVIEW under the spec semantics.
+- [ ] Run representative screenshots for every variant/state/theme owner and aggregate master. Classify each evidence row PASS, FAIL, INFO, HUMAN REVIEW, BLOCKED, or DISABLED / REVIEW under the spec semantics. **PARTIAL / DEFERRED (2026-10-05):** no new exhaustive per-owner captures were produced; the per-batch computed-style and PNG evidence remains the authoritative per-master record (`batch-e-evidence.md` §7 item 5). Reconciliation/classification was done on that existing evidence.
 - [x] Run landing desktop/tablet/mobile light/dark regression captures only; do not change Landing unless a change in shared components produces a regression that must be reverted within component scope.
 - [x] Resolve only verified migration regressions through the two-cycle orchestration limit; otherwise report the blocker with Pen/code evidence.
 

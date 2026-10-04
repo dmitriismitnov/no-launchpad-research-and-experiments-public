@@ -111,3 +111,19 @@
   пересобраны font/manifest. Ключ `sun` и codepoint сохранены.
 - Проверено визуально: `notes/icon-inventory.png`.
 - Проверки: `mise run icons:check`, `mise run check` — зелёные.
+
+## 2026-10-05 — закрытие как отдельного потока (bounded acceptance)
+
+- Поток `design-system-to-code` закрыт документально как отдельный workstream
+  расширенного эксперимента. Итоговый отчёт —
+  [`../pencil-opencode-workflow/notes/retrospective.md`](../pencil-opencode-workflow/notes/retrospective.md).
+- Исходный scope (foundation + лендинг) расширился до полной миграции Pen →
+  код: 82 masters → 72 owner-каталога, Pen-источник
+  `../pencil-opencode-workflow/artifacts/ex_2.pen`.
+- Приёмка ограниченная: многие публичные оси `BLOCKED`; полного
+  поведенческого/визуального паритета нет (retrospective §4.3, §4.4, §10).
+- Документальные расхождения (статус `active` в README при фактически
+  завершённой работе; конфликт формулировок scope «все ~70» / «не в этом
+  проходе») зафиксированы в README closure-note, а не переписаны молча.
+- Коммит не выполнялся этим закрытием; решение о коммите авторизованной
+  документации — за пользователем.

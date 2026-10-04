@@ -6,6 +6,18 @@
 
 > **Closure (2026-10-05): COMPLETE and ACCEPTED.** The measured Landing feature/hero divergences were corrected in `8120b31` (`mise run test:visual` 7/7 at that commit). A later program-level regression — Batch B0 `Button width:"hug"` collapsing the mobile-menu CTA — was resolved in `0633e4c` (explicit `width="full"` on the Landing mobile-menu CTA) with refreshed visual baselines, leaving `mise run test:visual` 7/7. Final Landing regression evidence and acceptance: `notes/landing-parity-evidence.md` and `notes/batch-e-evidence.md` §9–§10. Residual Landing-wide section deltas/mobile clipping remain recorded as `HUMAN REVIEW`, not failures.
 
+> **Correction notice (2026-10-05; preserves the closure above).** The `0633e4c`
+> baseline refresh is justified in `batch-e-evidence.md` §9 by binary file size
+> ("hundreds of bytes per image"), not by per-cluster visual diff attribution
+> (which §6.2 says was not done). The §9 `test:visual` row labeled "(pre-fix)"
+> is mislabeled. The post-change `check` and `test:visual` runs are supported by
+> **conversation evidence** (840/724; visual screenshots-only fail then
+> update + rerun 7 pass) but their durable logs were not saved; post-fix
+> `check:deps`/`build` are not evidenced. A missing raw log is not proof a test
+> did not run. Treat §9 as partially evidenced at the durable-log level. Final
+> assessment:
+> `outputs/experiments/pencil-opencode-workflow/notes/retrospective.md`.
+
 **Architecture:** Landing composes existing public components through app-local Panda CSS in `src/app/Landing.tsx`. All corrections stay in the app component: local layout tokens and literals only, no shared Button/Card recipe or public API change. `data-theme` remains the only light/dark axis.
 
 **Tech Stack:** React, TypeScript, PandaCSS, Playwright visual tests, Pencil MCP (read-only), Bun/mise tasks.

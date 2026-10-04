@@ -6,6 +6,14 @@
 
 > **Closure (2026-10-05): COMPLETE and ACCEPTED.** All Batch B slices (B0–B6) are done and reviewed; see `outputs/experiments/pencil-opencode-workflow/notes/batch-b0-evidence.md` and `batch-b-evidence.md` (plus the Batch B final-verification section). Every step below is satisfied; the checkboxes are marked to match reality. The one program-level regression traced to this batch (B0 `Button width:"hug"` collapsing the Landing mobile-menu CTA) was resolved in `0633e4c` (Landing explicit `width="full"` + refreshed baselines), accepted in `batch-e-evidence.md` §9–§10. Residuals are the documented `BLOCKED`/`INFO`/`DISABLED / REVIEW` rows, not unresolved failures.
 
+> **Correction notice (2026-10-05; preserves the closure above).** "COMPLETE and
+> ACCEPTED" is a **bounded acceptance**: the documented public axes remain
+> `BLOCKED` by user/Foundation decision (e.g. Input `size`, Textarea `auto-grow`,
+> Slider `range`), so this is not full behavioral/visual parity. The reviews were
+> performed by the same model as the builder (DeepSeek V4.1 Flash), i.e. separate
+> self-audit sessions, not independent cross-model review. Final authoritative
+> assessment: `outputs/experiments/pencil-opencode-workflow/notes/retrospective.md`.
+
 **Architecture:** Each slice owns complete component directories—implementation, Panda preset, public barrel, stories, focused tests, and evidence—so it can ship and be reviewed independently. Pen is read-only authority; the public-variant enumeration gate is performed from each documentation frame before the existing React API can be retained. Aggregate masters remain internal to their designated owner: Option/Select Popup → Select, Calendar Day/Calendar → Calendar/DatePicker, Color Popup → ColorPicker, and Radio → RadioGroup.
 
 **Tech Stack:** React, TypeScript, PandaCSS, Bun, Vitest, Storybook interaction tests, Playwright/Chromium, Pencil MCP (read-only), mise.
