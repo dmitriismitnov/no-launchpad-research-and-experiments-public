@@ -744,7 +744,7 @@ const MobileMenu = () => (
     <nav data-testid="landing-mobile-menu" aria-label="Mobile" className={mobileMenu}>
         {mobileMenuLinks.map((label) => <NavItem key={label} label={label} href="#" />)}
         <div aria-hidden="true" className={mobileMenuSpacer} />
-        <Button>Get the tokens</Button>
+        <Button width="full">Get the tokens</Button>
         <span className={mobileMenuStatus}>
             <Badge label="expanded mobile menu" />
         </span>
