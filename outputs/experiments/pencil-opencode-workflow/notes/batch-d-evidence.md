@@ -656,7 +656,7 @@ Master role bindings confirmed read-only: List `fgxmm` fill `$semantic/surface/r
 | item title | `text/primary` | **PASS (regression)** — `semantic.text.primary`; value-equal to prior `common/50/text`, asserted not claimed RED |
 | item metadata | `text/tertiary` | **PASS (regression)** — `semantic.text.tertiary`; value-equal to prior `common/600/background`, asserted |
 | item trailing | `text/tertiary` | **PASS (regression)** — `semantic.text.tertiary`; value-equal, asserted |
-| row focus ring | `semantic/focus/ring` on the row (prose) | **INFO (conditional projection)** — no ring is projected: the audit is `focus-indicator 0/0` and the resting `<li>` is not focusable; the ring belongs to the BLOCKED selectable/interactive row |
+| row focus ring | `semantic/focus/ring` on the row (prose) | **INFO** — no ring is projected: the audit is `focus-indicator 0/0` and the resting `<li>` is not focusable; the ring belongs to the BLOCKED selectable/interactive row |
 | selectable · compact · with avatar · with trailing action · hover · selected · disabled | `dm7Dn` variants/state contract | **BLOCKED** (ledger below) |
 
 ### Timeline
@@ -664,7 +664,7 @@ Master role bindings confirmed read-only: List `fgxmm` fill `$semantic/surface/r
 | Axis / slot | Pen role | Disposition |
 | --- | --- | --- |
 | marker surface | `surface/raised` | **PASS** — `semantic.surface.raised`; **discriminates in both themes** (white vs prior `common/50/background` `neutral.50` light; `neutral.900` vs `neutral.950` dark) |
-| marker boundary | `border/strong` (2px) | **PASS (dark RED)** — `semantic.border.strong`; light `neutral.500` value-equal to prior `common/50/border.strong`, **discriminates in dark** (`neutral.500` vs prior `neutral.500` both themes ⇒ prior dark was one step lighter than Pen) |
+| marker boundary | `border/strong` (2px) | **PASS (dark RED)** — `semantic.border.strong`; light `neutral.500` value-equal to prior `common/50/border.strong`, **discriminates in dark** (Pen dark `neutral.400` is one step lighter than the prior `common/50/border.strong` `neutral.500`) |
 | connector | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs prior `common/200/divider` `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
 | title | `text/primary` | **PASS (regression)** — `semantic.text.primary`; value-equal to prior `common/50/text`, asserted |
 | metadata | `text/secondary` | **PASS (regression)** — `semantic.text.secondary`; value-equal to prior `common/700/background`, asserted |
@@ -819,3 +819,14 @@ Only List reports disabled specimens (`DISABLED / REVIEW 6`); all six reproduce 
 - **INFO — DataTable separators unchanged.** Pen's header and row separators bind `$semantic/common/200/divider`, which the recipe already used; no change.
 - **INFO — `feedback/positive-fg` status cell.** Pen's Table Row colours the Status cell with `feedback/positive-fg`; the code renders cells as plain text (no per-cell tone), so this is a BLOCKED axis, not a token rename.
 - The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.
+
+## D4 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `cb377c8920a4dc5b7dfab2aa5587b9f2cc60ac9b` vs parent `12b3113`.
+**Verdict:** **APPROVED** — no Critical/Important findings.
+
+- List/Timeline/DataTable role corrections verified exactly; separators unchanged; no focus ring projected (audits 0/0, resting elements not focusable); no API/slot/component/`index.ts`/`panda.config.ts`/foundation/generated change; List Item/Timeline Item/Table Row stay internal.
+- Scope clean; D1–D3 evidence preserved. Focused composition `17 pass / 76 expect`; browser `3 files / 15 passed` reproduced. True RED vs regression classifications verified against the token matrix; List `DISABLED / REVIEW` ratios (6) reproduce.
+- No overclaimed PASS: every PASS row is observable through the public markup.
+
+**Minor (corrected):** (1) Timeline marker-boundary note inverted the dark comparison — corrected to "Pen dark `neutral.400` is one step lighter than the prior `common/50/border.strong` `neutral.500`"; (2) List focus row relabelled from `INFO (conditional projection)` to plain `INFO` (nothing is projected).
