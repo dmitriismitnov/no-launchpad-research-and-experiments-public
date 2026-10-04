@@ -1,21 +1,25 @@
 import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
- * Splitter visual projection. Slots: root / pane / paneStart / paneEnd /
- * handle / grip.
+ * Splitter visual projection (Pen master `U4KfQj`, documentation `ZVJu8`).
+ * Slots: root / pane / paneStart / paneEnd / handle / grip.
  *
- * A two-pane layout with a divider. The divider is static: it carries
- * `role="separator"` and the correct `aria-orientation`, but there is no drag
+ * A two-pane layout with a static `role="separator"` divider; there is no drag
  * behaviour. `orientation` only swaps the axis; `horizontal` places panes side
- * by side, `vertical` stacks them.
+ * by side, `vertical` stacks them. Pen's "keyboard-operable separator", size
+ * persistence, `with minimums`/`collapsible` and hover/dragging/disabled states
+ * are BLOCKED (they need new props, drag/resize behaviour or ARIA work).
  *
- * Pen references the newer role layer (`semantic/surface/*`, `semantic/border/*`,
- * `semantic/text/*`):
- * - surface/raised -> common.50.background (white exact; dark one step)
- * - surface/sunken -> common.100.background (light exact; dark one step)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - border/strong -> common.50.border.strong (the Pen grip colour)
- * - text/tertiary -> common.600.background (exact)
+ * Resolved Pen roles:
+ * - root surface/raised -> `semantic.surface.raised`
+ * - root boundary border/subtle -> `semantic.border.subtle`
+ * - paneStart surface/sunken -> `semantic.surface.sunken`
+ * - paneEnd / handle surface/raised -> `semantic.surface.raised`
+ * - grip border/strong -> `semantic.border.strong`
+ * - pane copy text/tertiary -> `semantic.text.tertiary`
+ *
+ * Pen's focus specimen `GydgT` draws `focus/ring` on the (not focusable) root;
+ * the code renders no focusable slot, so the focus role is not projected.
  *
  * Approximations: Pen's 10px handle and 2px grip are literals (the `xN` scale has
  * no such steps); the pane text reads the tertiary role but the panes are
@@ -32,9 +36,9 @@ export const splitterRecipe = defineSlotRecipe({
             overflow: "hidden",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
+            borderColor: "semantic.border.subtle",
             borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
+            backgroundColor: "semantic.surface.raised",
         },
 
         pane: {
@@ -47,15 +51,15 @@ export const splitterRecipe = defineSlotRecipe({
             fontWeight: "regular",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
         },
 
         paneStart: {
-            backgroundColor: "semantic.common.100.background",
+            backgroundColor: "semantic.surface.sunken",
         },
 
         paneEnd: {
-            backgroundColor: "semantic.common.50.background",
+            backgroundColor: "semantic.surface.raised",
         },
 
         handle: {
@@ -63,13 +67,13 @@ export const splitterRecipe = defineSlotRecipe({
             flexShrink: "0",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "semantic.common.50.background",
+            backgroundColor: "semantic.surface.raised",
         },
 
         grip: {
             flexShrink: "0",
             borderRadius: "9999px",
-            backgroundColor: "semantic.common.50.border.strong",
+            backgroundColor: "semantic.border.strong",
         },
     },
 

@@ -1,17 +1,22 @@
 import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
- * QR Code visual projection. Slots: root / grid / cell / cellFilled.
+ * QR Code visual projection (Pen master `kQTMg`, documentation `dF7N0`). Slots:
+ * root / grid / cell / cellFilled.
  *
  * A deterministic placeholder code: a fixed 7x7 module grid painted as a CSS
  * grid of cells. The component does not encode data and ships no QR dependency;
  * the pattern is a visual stand-in, not a scannable code (see the component).
+ * Pen's `size: sm · md · lg`, `with caption` and `with logo` variants, the extra
+ * `caption` part and the "encodes a short value" generation policy are BLOCKED
+ * (new props, an encoder dependency and a generation policy).
  *
- * Pen references the newer role layer (`semantic/surface/raised`,
- * `semantic/border/subtle`, `semantic/text/primary`):
- * - surface/raised -> common.50.background (white exact; dark one step)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - text/primary -> common.50.text (the Pen module colour)
+ * Resolved Pen roles:
+ * - root surface/raised -> `semantic.surface.raised`
+ * - root boundary border/subtle -> `semantic.border.subtle`
+ * - modules text/primary -> `semantic.text.primary`
+ *
+ * Pen's audit reports `focus-indicator 0/0`, so no focus role is projected.
  *
  * Approximations: Pen spaces modules 3px and pads the surface 8px; the scale has
  * no `x1.5`, so the grid gap is `x1` (2px) and the padding is `x4` (8px, exact).
@@ -29,9 +34,9 @@ export const qrCodeRecipe = defineSlotRecipe({
             padding: "x4",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
+            borderColor: "semantic.border.subtle",
             borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
+            backgroundColor: "semantic.surface.raised",
         },
 
         grid: {
@@ -48,7 +53,7 @@ export const qrCodeRecipe = defineSlotRecipe({
         },
 
         cellFilled: {
-            backgroundColor: "semantic.common.50.text",
+            backgroundColor: "semantic.text.primary",
         },
     },
 });

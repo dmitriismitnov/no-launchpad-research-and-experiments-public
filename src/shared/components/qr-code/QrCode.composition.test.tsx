@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { qrCodeRecipe, } from "./preset";
 import { QrCode, } from "./qr-code";
 
 describe("qr code composition", () => {
@@ -38,5 +39,21 @@ describe("qr code composition", () => {
         const withChildren = <QrCode>child</QrCode>;
 
         expect(withChildren).toBeDefined();
+    });
+
+    // Pen `kQTMg` master / `dF7N0` documentation: root fill `surface/raised` with
+    // a `border/subtle` boundary and `text/primary` modules. The `size: sm · md ·
+    // lg`, `with caption` and `with logo` variants, the extra `caption` part and
+    // the "encodes a short value" generation policy are BLOCKED (new props,
+    // encoder dependency and generation policy).
+    test("paints the raised surface, subtle boundary and primary module roles", () => {
+        const root = qrCodeRecipe.base?.["root"] as Record<string, unknown> | undefined;
+        const cellFilled = qrCodeRecipe.base?.["cellFilled"] as Record<string, unknown> | undefined;
+
+        expect(root).toMatchObject({
+            backgroundColor: "semantic.surface.raised",
+            borderColor: "semantic.border.subtle",
+        });
+        expect(cellFilled?.["backgroundColor"]).toBe("semantic.text.primary");
     });
 });

@@ -1017,3 +1017,189 @@ All three component-role audits report `DISABLED / REVIEW 0` and `No FAIL or DIS
 - Focused composition `18 pass / 57 expect`, browser `3 files / 19 passed`, full unit `837 pass` reproduced; light focus discriminates, dark value-equal not claimed; value-equal renames regression; all cited ratios reproduce; CodeBlock dark focus `2.08` is `INFO / REVIEW`, never PASS.
 
 **Minor (recorded):** (1) preset comments attribute the ring to the code slot without noting Pen draws it on field/block/root; (2) ScrollArea uses `outlineOffset: -2px` (inset) vs Pen `outer` — width preserved, offset pre-existing and disclosed; (3) evidence "Component `.tsx` files … not touched" should read "implementation `.tsx`" (story/test `.tsx` did change).
+
+---
+
+# Batch D evidence — D6 Splitter · MediaPlaceholder · QRCode
+
+**Date:** 2026-10-05\
+**Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen`\
+**Pen identity:** `9294654` bytes, SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` (verified before and after inspection; unchanged).\
+**Base commit:** `7360e0edf6227309b2e1883829f6ea49f7f5eb40` (`docs(shared): record Batch D5 review disposition`).\
+**Method:** Pencil MCP read-only `Get`/`Print`/`GetVariables` (`get_app_state` confirmed `ex_2.pen` as the active editor; only `Get`/`Print` were executed, no `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`), code reads, focused Bun composition tests and Vitest + Playwright Chromium story tests. Statuses follow the migration spec: `PASS`, `FAIL`, `INFO`, `HUMAN REVIEW`, `BLOCKED`, `DISABLED / REVIEW`.\
+**Cycle:** D6 cycle 1/2.
+
+> **Hash note (honest):** the handoff again quoted the Pen SHA-256 as a 63-character string (`…dde787421daf7fa`, one digit short). The file's true digest is the 64-character `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` above, matching the D1–D5 headers. The Pen was not modified.
+
+## D6 scope
+
+Token/focus-role corrections on existing slots for three content & data owners, plus both-theme computed-style stories. Public component `.tsx` files, `index.ts` barrels, `panda.config.ts`, the Foundation/token layer and generated `src/shared/styled-system/**` were **not** hand-edited. No new public components, props, variants or slots.
+
+## Pen source node IDs (read-only)
+
+| Owner | Master | Documentation frame | Verbatim Pen facts used |
+| --- | --- | --- | --- |
+| Splitter | `U4KfQj` | `ZVJu8` | Purpose "divisions a region into resizable panes along a draggable handle"; named parts `root · pane · handle · grip`; public variants `vertical · horizontal, with minimums, collapsible`; state contract `default · disabled · hover · dragging · focus-visible`; content rules `Both panes keep a minimum size.` / `The handle is a keyboard-operable separator.` / `Sizes persist for the session.`; accessibility `The separator exposes its orientation and value.` / `Arrow keys adjust the split; Home and End jump to the limits.` / `The handle is at least 8px wide with a larger hit area.`; audit `text 4/4 PASS`, `focus-indicator 1/1 PASS`, `FAIL rows 0`, `DISABLED / REVIEW 3`. |
+| Media Placeholder | `SX6Gf` | `vUaGv` | Purpose "reserves space for an image or video that is missing or still loading"; named parts `root · frame · icon · label`; public variants `image · video · avatar, with ratio, with label`; passive (no state contract); content rules `aspect ratio matches the final media` / `visually quiet but clearly not content` / `replaced, never nested`; accessibility `Hidden from assistive technology; the media carries its own name.` / `Alternative text is supplied when the media loads.` / `Labelled placeholders are readable in both themes.`; audit `text 4/4 PASS`, `icon 1/1 PASS`, `focus-indicator 0/0`, `FAIL rows 0`, `DISABLED / REVIEW 0`. |
+| QR Code | `kQTMg` | `dF7N0` | Purpose "encodes a short value for a device camera to scan"; named parts `root · modules · quiet zone · caption`; public variants `size: sm · md · lg, with caption, with logo`; passive (no state contract); content rules `Keep the quiet zone clear of surrounding elements.` / `Never scale below the minimum scannable size.` / `The caption states what the code does.`; accessibility `The encoded value is available as text for assistive technology.` / `Contrast between modules and background is sufficient in both themes.` / `A text alternative of the link is provided.`; audit `text 3/3 PASS`, `focus-indicator 0/0`, `FAIL rows 0`, `DISABLED / REVIEW 0`. |
+
+Master role bindings confirmed read-only: Splitter `U4KfQj` root fill `$semantic/surface/raised` + stroke `$semantic/border/subtle` (1px, `$radius/md`); Left pane `$semantic/surface/sunken`; Handle `$semantic/surface/raised`; Grip `$semantic/border/strong` (2x40, `$radius/pill`); pane copy `$semantic/text/tertiary` (`$font/mono`, `$font-size/xs`). Media Placeholder `SX6Gf` root fill `$semantic/surface/sunken` + stroke `$semantic/border/subtle` (`$radius/md`, gap 8); icon `$semantic/text/tertiary` (28px, `image`); label `$semantic/text/tertiary`. QR Code `kQTMg` root fill `$semantic/surface/raised` + stroke `$semantic/border/subtle` (`$radius/md`, gap 3, padding 8); modules `$semantic/text/primary`; empty modules transparent. Splitter focus specimen `GydgT` is a ref to `U4KfQj` with `stroke: $semantic/focus/ring`, `strokeWidth: 2`; the ring node is the master root (the keyboard separator is the `Wh9cO` handle). Named roles resolved via `GetVariables` (identical to the code foundation): `surface/raised` white/neutral.900, `surface/sunken` neutral.100/neutral.950, `border/subtle` neutral.200/neutral.800, `border/strong` neutral.500/neutral.400, `text/primary` neutral.900/neutral.50, `text/tertiary` neutral.600/neutral.400.
+
+## Enumeration and disposition
+
+### Splitter
+
+| Axis / slot | Pen role | Disposition |
+| --- | --- | --- |
+| root surface | `surface/raised` | **PASS** — `semantic.surface.raised`; **discriminates in both themes** (white vs prior `common.50.background` `neutral.50` light; `neutral.900` vs `neutral.950` dark) |
+| root boundary | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs prior `common.200.divider` `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
+| paneStart surface | `surface/sunken` | **PASS (dark RED)** — `semantic.surface.sunken`; light `neutral.100` value-equal to prior `common.100.background`, dark `neutral.950` `rgb(2, 6, 23)` vs prior `neutral.900` `rgb(15, 23, 42)` |
+| paneEnd surface | `surface/raised` | **PASS** — `semantic.surface.raised`; **discriminates in both themes** |
+| handle surface | `surface/raised` | **PASS** — `semantic.surface.raised`; **discriminates in both themes** |
+| grip | `border/strong` | **PASS (dark RED)** — `semantic.border.strong`; light `neutral.500` value-equal to prior `common.50.border.strong`, dark `neutral.400` `rgb(148, 163, 184)` vs prior `neutral.500` `rgb(100, 116, 139)` |
+| pane copy | `text/tertiary` | **PASS (regression)** — `semantic.text.tertiary`; value-equal to prior `common.600.background`, asserted not claimed RED |
+| handle focus ring | `focus/ring` (specimen `GydgT`, 2px) | **BLOCKED** — the ring belongs to the keyboard-operable separator/root; the code renders no focusable slot (no `tabIndex` added) |
+| `with minimums` · `collapsible`, `hover` · `dragging` · `disabled` · `focus-visible`, drag/resize/persistence, separator orientation/value ARIA, arrow/Home/End keys | `ZVJu8` variants + state contract + rules | **BLOCKED** (ledger below) |
+
+### Media Placeholder
+
+| Axis / slot | Pen role | Disposition |
+| --- | --- | --- |
+| root surface | `surface/sunken` | **PASS (dark RED)** — `semantic.surface.sunken`; light `neutral.100` value-equal to prior `common.100.background`, dark `neutral.950` vs `neutral.900` |
+| root boundary | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs prior `common.200.divider` `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
+| icon | `text/tertiary` | **PASS (regression)** — `semantic.text.tertiary`; value-equal to prior `common.600.background`, asserted |
+| label | `text/tertiary` | **PASS (regression)** — `semantic.text.tertiary`; value-equal, asserted |
+| focus ring | — | **INFO** — Pen audit `focus-indicator 0/0`; no focus role projected |
+| `image · video · avatar` / `with ratio` / `with label`, extra `frame` part, non-content ARIA | `vUaGv` variants + named parts + accessibility | **BLOCKED** (ledger below) |
+
+### QR Code
+
+| Axis / slot | Pen role | Disposition |
+| --- | --- | --- |
+| root surface | `surface/raised` | **PASS** — `semantic.surface.raised`; **discriminates in both themes** (`white` vs prior `common.50.background` `neutral.50` light; `neutral.900` vs `neutral.950` dark) |
+| root boundary | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs prior `common.200.divider` `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
+| modules | `text/primary` | **PASS (regression)** — `semantic.text.primary`; value-equal to prior `common.50.text`, asserted not claimed RED |
+| module pattern | 7x7, 41 filled | **PASS (regression)** — the committed `QR_PATTERN` matches the master module-for-module and stays decorative |
+| focus ring | — | **INFO** — Pen audit `focus-indicator 0/0`; no focus role projected |
+| `size: sm · md · lg` / `with caption` / `with logo`, `caption` part, quiet-zone/min-size policy, encode-a-value policy | `dF7N0` variants + named parts + accessibility/rules | **BLOCKED** (ledger below) |
+
+## Approved contract and changed paths
+
+- **Splitter:** root `semantic.surface.raised` + `semantic.border.subtle`; `paneStart` `semantic.surface.sunken`; `paneEnd` and `handle` `semantic.surface.raised`; `grip` `semantic.border.strong`; pane copy `semantic.text.tertiary`. No focus ring (the handle/root are not focusable).
+- **MediaPlaceholder:** root `semantic.surface.sunken` + `semantic.border.subtle`; icon and label `semantic.text.tertiary`.
+- **QRCode:** root `semantic.surface.raised` + `semantic.border.subtle`; `cellFilled` `semantic.text.primary`. No focus ring.
+- Each preset doc comment now names the resolved roles and the Pen master/doc IDs.
+
+Changed paths: `src/shared/components/{splitter,media-placeholder,qr-code}/{preset.ts,<Owner>.composition.test.tsx,<Owner>.stories.tsx}` (9 files), this evidence, `artifacts/batch-d/placeholders/` (new: 6 PNGs + `computed-styles.json` + `capture.mjs`). Implementation `.tsx` files, `index.ts`, `panda.config.ts` and the token layer were not touched; generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited). No export changed, so `check:deps` was not required.
+
+## Tests-first proof (RED → GREEN)
+
+### Composition (Bun)
+
+RED was observed by running the new focused assertions against the pre-change presets, then re-running after the recipe edits and `mise run gen`:
+
+| Step | Exit | Result |
+| --- | --- | --- |
+| RED command | `bun test src/shared/components/splitter/Splitter.composition.test.tsx src/shared/components/media-placeholder/MediaPlaceholder.composition.test.tsx src/shared/components/qr-code/QrCode.composition.test.tsx` | — |
+| RED | `1` | `3 fail` / `15 pass` (18 tests, 3 files, 39 expect calls) |
+| RED failures | splitter `paints the raised surface, subtle boundary, pane surfaces and grip roles`; media placeholder `paints the sunken surface, subtle boundary and tertiary glyph and caption`; qr code `paints the raised surface, subtle boundary and primary module roles` |
+| GREEN | `0` | `18 pass` / `0 fail` (18 tests, 3 files, 47 expect calls) |
+
+Composition RED is **role-name-level**: every renamed role fails the recipe assertion even when its value is equal. The value-level discriminator is the browser table below.
+
+### Browser stories (Vitest + Playwright Chromium)
+
+| Step | Exit | Result |
+| --- | --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/{splitter/Splitter,media-placeholder/MediaPlaceholder,qr-code/QrCode}.stories.tsx` (pre-change presets stashed + `mise run gen`) | — |
+| RED | `1` | `3 failed` files, `6 failed` / `8 passed` (14) |
+| RED failures | splitter `Token Surface Light`, `Token Surface Dark`; media-placeholder `Token Surface Light`, `Token Surface Dark`; qr-code `Token Surface Light`, `Token Surface Dark` |
+| GREEN | `0` | `3 passed` files, `14 passed` (14) |
+
+**True RED** (rendered value discriminates): Splitter surface + boundary + `paneEnd` + handle (both themes), `paneStart` + grip (dark); MediaPlaceholder boundary (both) + surface (dark); QRCode surface + boundary (both). **Regressions** (value-equal, asserted not claimed RED): Splitter pane copy `text/tertiary`; MediaPlaceholder icon/label; QRCode `cellFilled` `text/primary`. Focused coverage moved `15 → 18` composition tests (`+3`, 3 files) and `8 → 14` browser tests (`+6`).
+
+## Both-theme evidence (computed style, in browser)
+
+Code-side Storybook-iframe captures (`deviceScaleFactor: 2`), in `artifacts/batch-d/placeholders/`: `splitter-surface-tokens-{light,dark}`, `media-placeholder-surface-tokens-{light,dark}`, `qr-code-surface-tokens-{light,dark}` (6 PNGs) plus `computed-styles.json` and `capture.mjs`.
+
+| Surface / role | Light (computed) | Dark (computed) |
+| --- | --- | --- |
+| Splitter root `surface/raised` / `border/subtle` (10px) | `rgb(255, 255, 255)` / `rgb(226, 232, 240)` | `rgb(15, 23, 42)` / `rgb(30, 41, 59)` |
+| Splitter `paneStart` `surface/sunken` | `rgb(241, 245, 249)` | `rgb(2, 6, 23)` |
+| Splitter `paneEnd` / `handle` `surface/raised` | `rgb(255, 255, 255)` | `rgb(15, 23, 42)` |
+| Splitter grip `border/strong` (pill) | `rgb(100, 116, 139)` | `rgb(148, 163, 184)` |
+| Splitter pane copy `text/tertiary` | `rgb(71, 85, 105)` | `rgb(148, 163, 184)` |
+| MediaPlaceholder root `surface/sunken` / `border/subtle` (10px) | `rgb(241, 245, 249)` / `rgb(226, 232, 240)` | `rgb(2, 6, 23)` / `rgb(30, 41, 59)` |
+| MediaPlaceholder icon / label `text/tertiary` | `rgb(71, 85, 105)` | `rgb(148, 163, 184)` |
+| QRCode root `surface/raised` / `border/subtle` (10px) | `rgb(255, 255, 255)` / `rgb(226, 232, 240)` | `rgb(15, 23, 42)` / `rgb(30, 41, 59)` |
+| QRCode filled module `text/primary` | `rgb(15, 23, 42)` | `rgb(248, 250, 252)` |
+
+### Contrast (real WCAG ratios)
+
+Content against its resolved surface; thresholds text `≥ 4.5`, icon/boundary `≥ 3`.
+
+| Pair | Light | Dark | Verdict |
+| --- | --- | --- | --- |
+| Splitter pane copy `text/tertiary` / `surface/sunken` | 6.92 | 7.87 | PASS (text) |
+| Splitter pane copy `text/tertiary` / `surface/raised` | 7.58 | 6.96 | PASS (text) |
+| Splitter grip `border/strong` / `surface/raised` | 4.76 | 6.96 | PASS (functional boundary ≥ 3) |
+| Splitter root boundary `border/subtle` / `surface/raised` | 1.23 | 1.22 | **INFO** — decorative boundary |
+| MediaPlaceholder icon/label `text/tertiary` / `surface/sunken` | 6.92 | 7.87 | PASS (icon + text) |
+| MediaPlaceholder boundary `border/subtle` / `surface/sunken` | 1.13 | 1.38 | **INFO** — decorative boundary |
+| QRCode modules `text/primary` / `surface/raised` | 17.85 | 17.06 | PASS (text) |
+| QRCode boundary `border/subtle` / `surface/raised` | 1.23 | 1.22 | **INFO** — decorative boundary |
+| QRCode `surface/raised` / `surface/base` | 1.05 | 1.13 | **INFO** — surface step, no WCAG verdict |
+| MediaPlaceholder `surface/sunken` / `surface/base` | 1.05 | 1.00 | **INFO** — surface step, no WCAG verdict |
+| Splitter `surface/raised` / `surface/base` | 1.05 | 1.13 | **INFO** — surface step, no WCAG verdict |
+
+### DISABLED / REVIEW (Pen audit ratios, never counted PASS)
+
+Only Splitter reports disabled specimens (`DISABLED / REVIEW 3`); all three reproduce exactly against the code foundation. Media Placeholder (`focus-indicator 0/0`, `DISABLED / REVIEW 0`) and QR Code (`DISABLED / REVIEW 0`) report `No FAIL or DISABLED rows`.
+
+| Owner | Pen failure-list row | Light | Dark |
+| --- | --- | --- | --- |
+| Splitter | `st-disabled disabled-boundary surface/raised → border/subtle` | 1.23 DISABLED | 1.22 DISABLED |
+| Splitter | `st-disabled disabled-text surface/sunken → text/tertiary` | 6.92 DISABLED | 7.87 DISABLED |
+| Splitter | `st-disabled disabled-text surface/raised → text/tertiary` | 7.58 DISABLED | 6.96 DISABLED |
+
+## BLOCKED ledger (recorded, not implemented)
+
+| Item | Pen authority | Reason |
+| --- | --- | --- |
+| Splitter focus ring on the separator/root | `ZVJu8` focus specimen `GydgT` (ref `U4KfQj`, `focus/ring` 2px); master handle `Wh9cO` | The code renders no focusable slot; adding `tabIndex` would be a behaviour/API change |
+| Splitter `with minimums` / `collapsible` variants | `ZVJu8` variant names; content rule "Both panes keep a minimum size." | New public props + resize geometry + persistence |
+| Splitter `hover` · `dragging` · `disabled` · `focus-visible` states | `ZVJu8` state contract | New interaction/state semantics (drag exists only in Pen) |
+| Splitter drag/resize + "sizes persist for the session" | `ZVJu8` purpose + content rule | Drag/drop and session persistence are explicitly out of the token contract |
+| Splitter keyboard split (arrows / Home / End) + separator orientation/value exposure | `ZVJu8` accessibility contract | ARIA/behaviour contract change; current static `role="separator"` + `aria-orientation` retained |
+| Media Placeholder `frame` named part | `vUaGv` named parts | No separate ratio frame in the API; the root owns the ratio |
+| Media Placeholder `image · video · avatar` / `with ratio` / `with label` | `vUaGv` variant names | New visual/content axes; `icon` prop + `label` already cover the current API |
+| Media Placeholder non-content ARIA policy | `vUaGv` accessibility ("Hidden from assistive technology") | ARIA contract change; the root is an ordinary div today |
+| QR Code `size: sm · md · lg` / `with caption` / `with logo` | `dF7N0` variant names + named parts | New props/content parts (caption/logo) |
+| QR Code "encodes a short value" generation policy | `dF7N0` purpose + accessibility ("The encoded value is available as text") | New encoder dependency + data/ASR contract; the component is a decorative placeholder |
+| QR Code quiet-zone / minimum-scannable-size rules | `dF7N0` content rules | Scannability/size policy, not a token role |
+| Foundation named roles | — | None required; every resolved role exists in the code layer |
+| New public components / props / slots | — | Explicitly excluded |
+
+## Verification
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| focused composition RED | `1` | `3 fail` / `15 pass` (18, 39 expect calls) |
+| focused composition GREEN | `0` | `18 pass` / `0 fail` (18, 47 expect calls) |
+| focused browser RED | `1` | `3 failed` files, `6 failed` / `8 passed` (14) |
+| focused browser GREEN | `0` | `3 passed` files, `14 passed` (14) |
+| `mise run check` | `0` | lint + types + format; `✓ icons up to date (38 icons)`; `✓ web fonts up to date (2 faces)`; unit `840 pass / 0 fail`; browser `724 passed` (73 files) |
+| `mise run build` | `0` | Vite production build, `✓ built in 82ms` |
+| `git diff --check` | `0` | no whitespace errors |
+| `check:deps` | n/a | no exports or dependencies changed |
+
+## Concerns / INFO
+
+- **INFO — Splitter focus ring is BLOCKED, not projected.** Pen's `focus-indicator 1/1 PASS` is a 2px `focus/ring` on specimen `GydgT` (ref of the `U4KfQj` root); the accessible keyboard target is the `Wh9cO` handle. The code's root is a plain `<div>` and the handle is a non-focusable `role="separator"`, so no slot qualifies; per the approved contract no `tabIndex` was added and no ring is projected.
+- **INFO — Splitter pane copy is a value-equal role rename.** `common.600.background` and `text/tertiary` both resolve `neutral.600` light / `neutral.400` dark; the browser `Token Surface` story asserts it but the failed RED row is owned by the surface/boundary roles.
+- **INFO — Splitter `paneStart` and grip are dark-only RED.** `common.100.background` and `surface/sunken` are both `neutral.100` light; `common.50.border.strong` and `border/strong` are both `neutral.500` light. Dark steps differ (`neutral.900`→`neutral.950`; `neutral.500`→`neutral.400`). The light story fails on the root surface/boundary roles, which do discriminate.
+- **INFO — MediaPlaceholder surface is dark-only RED.** `common.100.background` and `surface/sunken` are both `neutral.100` light; only dark differs (`neutral.900`→`neutral.950`). Its `border/subtle` boundary discriminates in both themes.
+- **INFO — MediaPlaceholder glyph approximation retained.** Pen draws a 28px glyph; Icon tops out at `lg` (24px), so the glyph steps down one size (pre-existing, recorded in the preset).
+- **INFO — QRCode module pattern matches Pen.** The committed 7x7 `QR_PATTERN` (41 filled modules) matches the `kQTMg` master module-for-module; it stays decorative and non-scannable (the encode-a-value policy is BLOCKED).
+- **INFO — QRCode grid gap approximation retained.** Pen spaces modules 3px; the scale has no `x1.5`, so the grid gap stays `x1` (2px), padding `x4` (8px exact).
+- The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.
