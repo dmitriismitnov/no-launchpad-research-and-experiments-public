@@ -53,7 +53,8 @@ describe("statistic composition", () => {
             <Statistic label="Revenue" value="48.2K" delta="+12%" trend="up" />,
         );
 
-        expect(markup).toContain("statistic__delta--trend_up");
+        // The trend paints the copy slot (the glyph slot only renders with a deltaIcon).
+        expect(markup).toContain("statistic__deltaText--trend_up");
     });
 
     test("forwards native attributes", () => {

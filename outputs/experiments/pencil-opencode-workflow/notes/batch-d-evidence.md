@@ -463,7 +463,7 @@ Master/doc role bindings confirmed with `GetVariables` + `Get` (read-only). Pen 
 | Card | root boundary | `border/subtle` | **PASS (regression)** — already `semantic.border.subtle`; light `rgb(226, 232, 240)` / dark `rgb(30, 41, 59)`, INFO decorative |
 | Card | media surface + glyph | `surface/sunken` + `text/tertiary` | **PASS (regression)** — already `semantic.surface.sunken` / `semantic.text.tertiary`; light `rgb(241, 245, 249)` / `rgb(71, 85, 105)`, asserted |
 | Card | title / description / meta / link | `text/primary` / `text/secondary` / `text/tertiary` / `text/link` | **PASS (regression)** — already the named roles, both themes asserted |
-| Card | focus-visible ring | `focus/ring` (2px outer) | **PASS** — root `:focus-visible` outline added; **discriminates in both themes** (no ring → `green.600` `rgb(22, 163, 74)` light / `green.500` `rgb(34, 197, 94)` dark) |
+| Card | focus-visible ring | `focus/ring` (2px outer) | **INFO (conditional projection)** — root `:focus-visible` outline added and matches the token/geometry (no ring → `green.600` `rgb(22, 163, 74)` light / `green.500` `rgb(34, 197, 94)` dark), **but the public `Card` root is not focusable** (no `tabIndex`/interactive role); the rule only fires on a consumer-supplied focus target (the story injects `tabIndex={0}`). Pen's focus indicator belongs to the BLOCKED interactive variant `fz3DO`; not counted as a component-level PASS |
 | Card | hover / selected / disabled / interactive | `surface/hover` / `surface/selected` + `action/primary-bg` border / `action/disabled-bg` + `text/disabled` | **BLOCKED** (ledger below) — new public variant/state |
 | Statistic | label | `text/tertiary` | **PASS (regression)** — `semantic.text.tertiary`, value-equal to prior `common.600.background` in both themes |
 | Statistic | value | `text/primary` | **PASS (regression)** — `semantic.text.primary`, value-equal to prior `common.50.text` in both themes |
@@ -604,3 +604,15 @@ Card reports `FAIL rows 0` and `DISABLED / REVIEW 11` (6 rows listed + 5 grouped
 - **INFO — Statistic delta specimen split.** The Pen `default` state and `FMXaz` anatomy give the delta glyph `text/secondary` and the copy `text/primary`; the abstract `CjnzL` master and the positive/negative state specimens paint both with `feedback/*-fg`. The anatomy/default (neutral) roles are used as the base; the state roles drive the trend variants.
 - **INFO — Card disabled text/link ratio.** Pen's `6.12/5.75` did not reproduce against the code foundation (`4.58/8.40`); the row stays `DISABLED / REVIEW` and is never counted PASS.
 - The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.
+
+## D3 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `7dd8b896926e2002f857fff36cdbd68622d09857` vs parent `a76ec20`.
+**Verdict:** **APPROVED** — no Critical findings; one Important classification correction (docs) plus minors.
+
+- Production diff is exactly the Card root 2px `semantic.focus.ring` plus the Pen-proven Statistic role retargets (label `text.tertiary`; value/tone.neutral `text.primary`; deltaIcon `text.secondary`; deltaText `text.primary`; trend up/down `positive|negative.700.background`). No API/structure/scope drift; focused tests and generated CSS confirm values; D1/D2 evidence preserved.
+- TDD RED/GREEN and blocked/disabled accounting credible; the non-reproducing `action/disabled-bg → text/link` ratio is REVIEW, not PASS.
+
+**Important (corrected):** the Card focus row was marked `PASS`, but the public `Card` root is not focusable (no `tabIndex`/interactive role); the rule only fires on a consumer-supplied focus target (the story injects `tabIndex={0}`), and Pen's focus indicator belongs to the BLOCKED interactive variant `fz3DO`. Downgraded to **INFO (conditional projection)**; CSS and test retained.
+**Minor (corrected):** `Statistic.composition.test.tsx` asserted the CSS-less `statistic__delta--trend_up` class; now asserts the emitted `statistic__deltaText--trend_up` copy slot. (The glyph slot class only renders with a `deltaIcon`.)
+**Minor:** `positive|negative.700.background` is used as a foreground role (value-equal to Pen `feedback/*-fg`; Foundation naming stays BLOCKED).
