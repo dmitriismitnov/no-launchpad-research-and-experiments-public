@@ -157,3 +157,72 @@ Counts moved from the B5 shipped baseline (`695f755`): browser `543 → 550` (`+
 ### No new API / policy
 
 No public export, prop, type, barrel, recipe or behavior outside the Calendar keyboard-focus defect was changed.
+
+## Correction cycle 3/3 — prop-driven focus reconciliation (rerender)
+
+**Date:** 2026-10-04\
+**Base commit:** `b6127cc` (`fix(shared): keep Calendar roving focus on enabled days`).\
+**Scope:** `src/shared/components/calendar/{calendar.tsx,Calendar.stories.tsx}`, this artifact and `notes/batch-b-evidence.md`. No public API/type/barrel, `CalendarDay` visibility, DatePicker/DateInput, preset, token, generated, dependency, Pen or untracked-file change.
+
+**Planner note.** The planned systematic-debugging pass was produced by the coordinator's own code investigation, not by the GPT planner: the GPT provider hit its usage limit and was unavailable for this pass. The coordinator read `calendar.tsx` directly and derived the lifecycle defect below.
+
+### Root cause (rerender / prop update)
+
+`focusedDate` is initialized once via `resolveInitialFocus()` and was never reconciled when the `min` / `max` / `isDateDisabled` props changed. The render guard `tabIndex={focusedDate !== null && isSameDay(date, focusedDate) ? 0 : -1}` did not consult `isDisabled(date)` either. So when a focused, enabled day later became disabled through a prop update, the native-disabled `<button>` kept `tabIndex={0}` and remained the sole roving tab stop — a focus target the browser refuses to focus. This is a different trigger from cycle 2/2: the keyboard resolvers were already safe; the defect is the *lifecycle* of the `focusedDate` state across prop changes.
+
+### Fix (minimal, single disabled source)
+
+| # | Change |
+| --- | --- |
+| 1 | The render guard now also requires `!isDisabled(date)`: `focusedDate !== null && isSameDay(date, focusedDate) && !isDisabled(date) ? 0 : -1`. |
+| 2 | A reconciliation `useEffect` (after the state / grid derivations) runs when `focusedDate` is disabled and resolves a replacement with the same finite resolver used by `resolveInitialFocus` over the current displayed grid: `findEnabled(gridStart, 1, totalCells)` (`null` when none). |
+| 3 | The effect is loop-guarded: it calls `setFocusedDate` only when the resolved replacement actually differs, so no render loop; when `focusedDate` is `null` it adopts the first enabled day only if one exists (loop-free). |
+| 4 | `displayMonth` / `month` is never changed by reconciliation; keyboard resolvers and `moveFocus` are untouched; `isDisabled` stays the single disabled source. |
+
+No prop, type, barrel, recipe or other component changed; `CalendarDay` stays internal. `mise run gen` was not required (no preset / generated source changed).
+
+### Tests-first proof (RED → GREEN)
+
+Focused browser stories (Vitest + Playwright Chromium), new stories run test-first against the base `calendar.tsx`:
+
+Command: `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/calendar/Calendar.stories.tsx`
+
+| Field | Value |
+| --- | --- |
+| RED exit | `1` |
+| RED result | `2 failed \| 26 passed (28)` |
+| RED failures | `Focus Reconciles When Min Changes`, `Focus Reconciles When Predicate Changes` (the disabled `2025-03-16` kept `tabIndex` received `"0"` instead of expected `"-1"`) |
+| GREEN exit | `0` |
+| GREEN result | `28 passed (28)` |
+
+Focused composition (Bun): `bun test src/shared/components/calendar/Calendar.composition.test.tsx` → `9 pass` / `0 fail`, `24 expect() calls`.
+
+### New test matrix (browser)
+
+| Story | Setup | Post-rerender assertion |
+| --- | --- | --- |
+| `Focus Reconciles When Min Changes` | controlled wrapper, `defaultValue` `16`, then `min={day(17)}` via a button click | `16` native `disabled` + `tabIndex -1`; zero `[data-date][disabled][tabindex="0"]`; exactly one tab stop, enabled, `data-date="2025-03-17"` |
+| `Focus Reconciles When Predicate Changes` | controlled wrapper, `defaultValue` `16`, then `isDateDisabled={disabledDates(16)}` via a button click | `16` native `disabled` + `tabIndex -1`; zero `[data-date][disabled][tabindex="0"]`; exactly one tab stop, enabled, `data-date="2025-02-24"` (first enabled day of the grid) |
+
+Both stories first assert the pre-rerender state (`2025-03-16` holds `tabIndex 0`), then toggle the wrapper control, proving the change is prop-driven rather than a fresh mount.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| focused browser RED | `1` | `2 failed \| 26 passed (28)` |
+| focused browser GREEN | `0` | `28 passed (28)` |
+| focused composition | `0` | `9 pass` / `0 fail`, `24 expect() calls` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `742 pass / 0 fail` (90 files); browser `552 passed` (73 files) |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-_kX2xiic.css 219.62 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the cycle-2 shipped baseline (`b6127cc`): browser `550 → 552` (`+2`, the two new stories); unit unchanged at `742`. `mise run check:deps` was intentionally **not** run: no dependency, export or barrel changed.
+
+### Changed paths
+
+`src/shared/components/calendar/{calendar.tsx,Calendar.stories.tsx}`, this artifact and `notes/batch-b-evidence.md`. No other file, generated source, dependency, token, Pen artifact or untracked file was touched.
+
+### No new API / policy
+
+No public export, prop, type, barrel, recipe or behavior outside the prop-driven Calendar focus reconciliation was changed. The replacement target is the first enabled day of the displayed grid, matching the existing `resolveInitialFocus` fallback.

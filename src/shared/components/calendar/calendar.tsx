@@ -302,6 +302,35 @@ export const Calendar = (props: CalendarProps) => {
         return { short: WEEKDAY_LABELS[day], long: WEEKDAY_LONG_LABELS[day], };
     });
 
+    /**
+     * Согласование фокуса при изменении пропсов (`min` / `max` /
+     * `isDateDisabled`): если сфокусированный день стал недоступен, переносим
+     * остановку табуляции на первый доступный день текущей сетки; если фокуса
+     * нет, но доступные дни появились, — наоборот. Отображаемый месяц не
+     * меняется, а повторный `setState` не вызывается, чтобы не зациклить рендер.
+     */
+    useEffect(() => {
+        if ( focusedDate !== null && isDisabled(focusedDate) ) {
+            const replacement = findEnabled(gridStart, 1, totalCells);
+
+            setFocusedDate((current) =>
+                current !== null && replacement !== null && isSameDay(current, replacement)
+                    ? current
+                    : replacement
+            );
+
+            return;
+        }
+
+        if ( focusedDate === null ) {
+            const fallback = findEnabled(gridStart, 1, totalCells);
+
+            if ( fallback !== null ) {
+                setFocusedDate(fallback);
+            }
+        }
+    }, [ focusedDate, gridStart, totalCells, isDisabled, findEnabled, ]);
+
     useEffect(() => {
         if ( !pendingFocusRef.current ) {
             return;
@@ -513,7 +542,10 @@ export const Calendar = (props: CalendarProps) => {
                                 inRange={isInRange(date)}
                                 outsideMonth={!isSameMonth(date, displayMonth)}
                                 disabled={isDisabled(date)}
-                                tabIndex={focusedDate !== null && isSameDay(date, focusedDate) ? 0 : -1}
+                                tabIndex={focusedDate !== null && isSameDay(date, focusedDate)
+                                        && !isDisabled(date)
+                                    ? 0
+                                    : -1}
                                 onSelect={selectDate}
                                 onFocus={() => {
                                     if ( !isDisabled(date) ) {

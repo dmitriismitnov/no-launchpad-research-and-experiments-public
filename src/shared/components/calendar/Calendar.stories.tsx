@@ -534,3 +534,90 @@ export const InitialDisabledValue: Story = {
         await expect(stops[0]?.getAttribute("data-date")).toBe("2025-02-24");
     },
 };
+
+// --- Prop-driven focus reconciliation (B5 correction cycle 3/3) ---
+
+const disabledTabStops = (canvasElement: HTMLElement): HTMLButtonElement[] =>
+    Array.from(canvasElement.querySelectorAll<HTMLButtonElement>(`[data-date][disabled][tabindex="0"]`));
+
+/** Starts with the enabled 2025-03-16 focused, then raises `min` so it becomes disabled. */
+const MinChangeFocus = () => {
+    const [ bounded, setBounded, ] = useState(false);
+
+    return (
+        <ThemeShell theme="light">
+            <button type="button" onClick={() => setBounded(true)}>
+                Apply minimum
+            </button>
+            <Calendar
+                month={march}
+                defaultValue={day(16)}
+                today={today}
+                weekStartsOn={1}
+                min={bounded ? day(17) : undefined}
+            />
+        </ThemeShell>
+    );
+};
+
+export const FocusReconcilesWhenMinChanges: Story = {
+    render: () => <MinChangeFocus />,
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(cell(canvasElement, "2025-03-16").tabIndex).toBe(0);
+
+        await fireEvent.click(canvas.getByRole("button", { name: "Apply minimum", }));
+
+        const disabled = cell(canvasElement, "2025-03-16");
+        const stops = tabStops(canvasElement);
+
+        await expect(disabled.disabled).toBe(true);
+        await expect(disabled.tabIndex).toBe(-1);
+        await expect(disabledTabStops(canvasElement).length).toBe(0);
+        await expect(stops.length).toBe(1);
+        await expect(stops[0]?.disabled).toBe(false);
+        await expect(stops[0]?.getAttribute("data-date")).toBe("2025-03-17");
+    },
+};
+
+/** Starts with the enabled 2025-03-16 focused, then adds a predicate that disables it. */
+const PredicateChangeFocus = () => {
+    const [ blocked, setBlocked, ] = useState(false);
+
+    return (
+        <ThemeShell theme="light">
+            <button type="button" onClick={() => setBlocked(true)}>
+                Block the sixteenth
+            </button>
+            <Calendar
+                month={march}
+                defaultValue={day(16)}
+                today={today}
+                weekStartsOn={1}
+                isDateDisabled={blocked ? disabledDates(16) : undefined}
+            />
+        </ThemeShell>
+    );
+};
+
+export const FocusReconcilesWhenPredicateChanges: Story = {
+    render: () => <PredicateChangeFocus />,
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(cell(canvasElement, "2025-03-16").tabIndex).toBe(0);
+
+        await fireEvent.click(canvas.getByRole("button", { name: "Block the sixteenth", }));
+
+        const disabled = cell(canvasElement, "2025-03-16");
+        const stops = tabStops(canvasElement);
+
+        await expect(disabled.disabled).toBe(true);
+        await expect(disabled.tabIndex).toBe(-1);
+        await expect(disabledTabStops(canvasElement).length).toBe(0);
+        await expect(stops.length).toBe(1);
+        await expect(stops[0]?.disabled).toBe(false);
+        await expect(stops[0]?.getAttribute("data-date")).toBe("2025-02-24");
+    },
+};
