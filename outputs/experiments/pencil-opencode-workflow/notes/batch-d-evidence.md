@@ -1214,3 +1214,41 @@ Only Splitter reports disabled specimens (`DISABLED / REVIEW 3`); all three repr
 - Focused composition `18 pass / 47 expect`, browser `3 files / 14 passed` reproduced; true RED only where discriminating; value-equal renames regression; blocked axes not asserted; Splitter `DISABLED / REVIEW` ratios reproduce; no overclaimed PASS; no false focus-slot parity.
 
 **Minor (recorded):** (1) evidence annotates root `border/subtle` with `(10px)` where `10px` is the radius, not boundary width — suggest `(radius 10px)`; (2) per-file `ThemeShell`/`tokenFrame` scaffolding duplicated (established pattern).
+
+## Batch D final verification (verifier: DeepSeek v4.1 Flash)
+
+**Verified at:** `c580853` (`docs(shared): record Batch D6 review disposition`).
+**Commit range:** D1 `0d40feb` (review docs `a029aab`) → D6 `af107e3` (review docs `c580853`).
+**Pen read-only:** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes — unchanged.
+
+### Slices
+
+| Slice | Owners | Commit | Review |
+| --- | --- | --- | --- |
+| D1 | Avatar, Badge, Tag, StatusIndicator, Divider | `0d40feb` | APPROVED (1 Important evidence correction applied) |
+| D2 | Alert, Toast, EmptyState, Skeleton, Spinner, Progress, ProgressRing | `2b19d4e` | APPROVED (1 Minor applied) |
+| D3 | Card, Statistic | `7dd8b89` | APPROVED (1 Important classification + 1 Minor applied) |
+| D4 | List, Timeline, DataTable | `cb377c8` | APPROVED (2 Minor applied) |
+| D5 | Clipboard, CodeBlock, ScrollArea | `28f5e8c` | APPROVED (3 Minor recorded) |
+| D6 | Splitter, MediaPlaceholder, QrCode | `af107e3` | APPROVED (2 Minor recorded) |
+
+### Command results (exact)
+
+| # | Command | Exit | Result |
+| --- | --- | --- | --- |
+| 1 | `mise run check` (run 2) | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `840 pass / 0 fail` (90 files); browser `724 passed` (73 files) |
+| 2 | `mise run check:deps` | `0` | Knip, no findings |
+| 3 | `mise run build` | `0` | `✓ 141 modules transformed`, `✓ built in 83ms` |
+| 4 | `git diff --check` | `0` | clean |
+
+**Flake note:** run 1 of `mise run check` failed one browser test (`Card.stories.tsx > Media`, `expected false to be true`). `Card.stories.tsx` passes 12/12 in isolation, and run 2 fully passed `724/724`. This is the pre-existing async-media flake observed in Batch C, not attributable to any Batch D change.
+
+### Dispositions
+
+- **PASS / PASS (regression):** all Pen-proven token/focus-role corrections across the 23 Batch D owners (surfaces, borders, text/action roles, focus rings where a Pen focus-indicator row exists).
+- **INFO / INFO (conditional):** Card focus ring projected onto the non-focusable public root (not counted PASS); D5 focus-slot projection (Pen field/block/root vs code copy-control/viewport) — disclosed, not parity; value-equal role renames recorded as regressions.
+- **REVIEW:** non-reproducing Pen disabled ratios, CodeBlock dark focus `2.08`, and the pre-existing Foundation naming gaps — never counted PASS.
+- **BLOCKED / DISABLED-REVIEW:** enumerated per slice (Badge appearance/size; Tag selectable; Statistic loading/compact; Card interactive/selected; List/Timeline/DataTable selectable/sortable/virtualization/density; Clipboard fallback; CodeBlock diff/wrapped; ScrollArea drag/inset/visibility; Splitter resize/persistence/focusable-handle; MediaPlaceholder ratios; QRCode size/caption/logo/generation; Foundation `feedback.*`/`tooltip.*` roles). Disabled contrast is `DISABLED / REVIEW` everywhere.
+- **No** unresolved `FAIL`, Critical, or Important review finding across Batch D.
+
+**Batch D: COMPLETE.** Next: Batch E (full evidence reconciliation and final regression).
