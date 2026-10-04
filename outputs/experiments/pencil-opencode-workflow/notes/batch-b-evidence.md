@@ -1444,7 +1444,7 @@ Counts moved from the B5 shipped baseline (`3ac4a70`): unit `742 → 753` (`+11`
 
 **Date:** 2026-10-05\
 **Base commit:** `976d7da97c31dd12aff777093b0ecb5b83566e40` (`feat(shared): add PinInput single input, FileUpload status, and Editable saving`).\
-**Correction plan:** the reviewer's cycle-1 findings on the B6 slice: (I1) ArrowLeft/ArrowRight moved only the decorative marker, so the native caret stayed and the next typed character was appended; (I2) the Editable blur-commit removal needs an explicit consumer-facing breaking-change note (there is no CHANGELOG); (M1) a FileUpload `status="error"` reason rendered twice; (M2) the FileUpload "geometry preserved" claim was unproven; (M3) the PinInput root was not positioned for its absolutely positioned hidden input/live region; (M4) the B6 FileUpload unit RED count was wrong.\
+**Correction plan:** the reviewer's cycle-1 findings on the B6 slice: (I1) ArrowLeft/ArrowRight moved only the decorative marker, so the native caret stayed and the next typed character was appended; (I2) the Editable blur-commit removal needs an explicit consumer-facing breaking-change note (there is no CHANGELOG); (M1) a FileUpload `status="error"` reason rendered twice; (M2) the FileUpload "geometry preserved" claim was unproven; (M3) the PinInput root was not positioned for its absolutely positioned hidden input/live region; (M4) *alleged* wrong FileUpload unit RED count — **retracted**, see the M4 row below: the original `3 fail` / `9 pass` was correct, and the cycle-1 reviewer's recomputation was wrong.\
 **Status:** **PASS**.\
 **Artifact:** `artifacts/batch-b/compact/b6-red-green.md` (cycle 2/2 section).
 
@@ -1467,7 +1467,7 @@ Counts moved from the B5 shipped baseline (`3ac4a70`): unit `742 → 753` (`+11`
 | M1 | `status="error"` + `fileName` rendered the reason twice (inner status span + error paragraph). | The inner status message renders only for `uploading`/`complete`. A composition test asserts the reason appears exactly once for the error state. |
 | M2 | The external-state "geometry preserved" claim had no computed-style proof. | `GeometryPreserved` / `DarkGeometryPreserved` stories assert every root keeps the same width and a `150px` `min-height` across idle / uploading / complete / error. |
 | M3 | The PinInput root was not positioned, so the absolutely positioned visually-hidden input/live region escaped the component box. | Root preset gains `position: "relative"` (matching FileUpload); `mise run gen` regenerated the stylesheet. |
-| M4 | The B6 evidence recorded FileUpload unit RED as `3 fail` / `9 pass`. | Reconciled to **`4 fail` / `8 pass`**: the error reason rendered twice, so the reason-duplication assertion failed in addition to the three external-status facts. |
+| M4 (retracted) | The cycle-1 reviewer alleged the FileUpload unit RED `3 fail` / `9 pass` was wrong and recomputed `4 fail` / `8 pass`. | **No change required — the original `3 fail` / `9 pass` was correct.** The final cycle-2 reviewer reproduced the pre-implementation failure on the parent component code with the cycle-1 tests: `9 pass / 3 fail` over 12 tests, the three failures being *external uploading with labelled progressbar*, *clamps external progress into 0..100*, and *renders an error status as a negative border with the text reason*. The `4 fail` / `8 pass` recomputation, and the claimed duplicate-reason fourth failure, were incorrect; the reason-duplication assertion did not exist in the cycle-1 suite (it is added in cycle 2 as test 13) and is not part of that RED. The cycle-2 evidence text previously recording `4 fail` / `8 pass` is corrected back to `3 fail` / `9 pass`. |
 
 No public API, prop, token, foundation, dependency, barrel, `panda.config.ts`, other-component, screen, Pen or untracked file was touched. Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited).
 
@@ -1514,6 +1514,6 @@ Counts moved from the cycle-1 B6 baseline (`976d7da`): unit `753 → 754` (`+1`)
 | FileUpload external-state geometry preserved (computed, both themes) | **PASS** |
 | PinInput root contains its absolutely positioned hidden input/live region | **PASS** |
 | Editable blur does not save (explicit consumer-facing migration note) | **PASS** |
-| FileUpload unit RED reconciled to `4 fail` / `8 pass` | **PASS** |
+| FileUpload unit RED count verified as the original `3 fail` / `9 pass` (M4 recomputation retracted) | **PASS** |
 | Disabled contrast (all five owners) | `DISABLED / REVIEW` (both themes) |
 | **B6 correction final status** | **PASS** |

@@ -45,13 +45,13 @@ Command: `bun test src/shared/components/pin-input/PinInput.composition.test.tsx
 
 | Field | Value |
 | --- | --- |
-| RED (per-owner, before implementation) | PinInput `8 fail` / `4 pass`; FileUpload `4 fail` / `8 pass`; Editable `3 fail` / `7 pass`; ColorPicker and Rating unchanged (regression) |
+| RED (per-owner, before implementation) | PinInput `8 fail` / `4 pass`; FileUpload `3 fail` / `9 pass`; Editable `3 fail` / `7 pass`; ColorPicker and Rating unchanged (regression) |
 | GREEN exit | `0` |
 | GREEN result | `51 pass` / `0 fail` (5 files), `162 expect() calls` |
 
 The ColorPicker composition suite is unchanged and passes as regression; the genuinely missing PinInput/FileUpload/Editable facts failed against the pre-change code.
 
-> **FileUpload RED reconciliation (M4).** The originally recorded cycle-1 per-owner split `3 fail` / `9 pass` undercounted one genuinely failing assertion. The reconciled FileUpload cycle-1 RED over the same 12 tests is **`4 fail` / `8 pass`**: besides the three external-status facts, the error-state reason was rendered twice (inner status span **and** the error paragraph), so the reason-duplication assertion failed as well. This cycle adds the explicit single-instance assertion and gates the inner message (M1).
+> **FileUpload RED reconciliation (M4) — retracted.** The cycle-1 per-owner split `3 fail` / `9 pass` was **correct**; a later recomputation to `4 fail` / `8 pass` was wrong and has been reverted. The final cycle-2 reviewer reproduced the true pre-implementation RED on the parent component code with the cycle-1 tests: `9 pass` / `3 fail` over 12 tests — *external uploading with labelled progressbar*, *clamps external progress into 0..100*, and *renders an error status as a negative border with the text reason*. The claim of a fourth "duplicate reason" failure was invalid: that assertion did not exist in the cycle-1 suite (it is added in cycle 2 as test 13) and is not part of that RED. Cycle 2 adds the explicit single-instance assertion and gates the inner message (M1).
 
 ### Focused browser stories (Vitest + Playwright Chromium)
 
