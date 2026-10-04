@@ -69,6 +69,65 @@ describe("FileUpload composition", () => {
         expect(markup).not.toContain("fileUpload__count");
     });
 
+    test("renders an external uploading state with a labelled progressbar", () => {
+        const markup = renderToStaticMarkup(
+            <FileUpload
+                status="uploading"
+                progress={42}
+                fileName="logo.png"
+                statusMessage="Загрузка…"
+            />,
+        );
+
+        expect(markup).toContain('role="progressbar"');
+        expect(markup).toContain('aria-valuenow="42"');
+        expect(markup).toContain('aria-valuemin="0"');
+        expect(markup).toContain('aria-valuemax="100"');
+        expect(markup).toContain('role="status"');
+        expect(markup).toContain("logo.png");
+        expect(markup).toContain("Загрузка…");
+    });
+
+    test("clamps the external progress into 0..100", () => {
+        const high = renderToStaticMarkup(<FileUpload status="uploading" progress={140} />);
+        const low = renderToStaticMarkup(<FileUpload status="uploading" progress={-5} />);
+        const none = renderToStaticMarkup(<FileUpload status="uploading" />);
+
+        expect(high).toContain('aria-valuenow="100"');
+        expect(low).toContain('aria-valuenow="0"');
+        expect(none).toContain('aria-valuenow="0"');
+    });
+
+    test("renders a complete state with the file name and no progressbar", () => {
+        const markup = renderToStaticMarkup(
+            <FileUpload status="complete" fileName="logo.png" statusMessage="Готово" />,
+        );
+
+        expect(markup).toContain("logo.png");
+        expect(markup).toContain("Готово");
+        expect(markup).not.toContain('role="progressbar"');
+    });
+
+    test("renders an error status as a negative border with the text reason", () => {
+        const markup = renderToStaticMarkup(
+            <FileUpload id="assets" status="error" statusMessage="Файл слишком большой." />,
+        );
+
+        expect(markup).toContain("fileUpload__root--invalid_true");
+        expect(markup).toContain("Файл слишком большой.");
+        expect(markup).toContain('aria-describedby="assets-error"');
+        expect(markup).toContain('id="assets-error"');
+    });
+
+    test("keeps the dropzone root across every external status", () => {
+        for ( const status of [ "idle", "uploading", "complete", "error", ] as const ) {
+            const markup = renderToStaticMarkup(<FileUpload status={status} />);
+
+            expect(markup).toContain("fileUpload__root");
+            expect(markup).toContain('type="file"');
+        }
+    });
+
     test("merges className with the dropzone class, not replacing it", () => {
         const markup = renderToStaticMarkup(<FileUpload className="my-dropzone" />);
 

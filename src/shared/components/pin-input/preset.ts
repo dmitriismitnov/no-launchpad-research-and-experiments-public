@@ -2,12 +2,12 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
  * Pin Input visual projection. Slots: root / label / cells / cell / input /
- * hint / error.
+ * live / hint / error.
  *
- * A row of single-character cells. Each cell is a bordered box that shows the
- * focus ring through `:focus-within`, so the visible ring tracks the native
- * input that owns focus. The component is declarative: it renders N inputs and
- * the caller owns the string value.
+ * A row of presentational cells over one visually hidden native input that
+ * owns the whole code. The active cell (`[data-active='true']`) draws the focus
+ * ring, so the visible marker tracks the single accessible control. Pen
+ * `K8gNTw` (`znfZu`) requires one accessible input for the whole code.
  *
  * Pen references the newer role layer:
  * - surface/raised -> common.50.background (light near-exact; dark one step)
@@ -28,7 +28,7 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  */
 export const pinInputRecipe = defineSlotRecipe({
     className: "pinInput",
-    slots: [ "root", "label", "cells", "cell", "input", "hint", "error", ],
+    slots: [ "root", "label", "cells", "cell", "input", "live", "hint", "error", ],
 
     base: {
         root: {
@@ -64,7 +64,12 @@ export const pinInputRecipe = defineSlotRecipe({
             borderStyle: "solid",
             borderColor: "semantic.common.50.border.strong",
             backgroundColor: "semantic.common.50.background",
-            _focusWithin: {
+            color: "semantic.common.50.text",
+            fontFamily: "body",
+            fontSize: "md",
+            fontWeight: "regular",
+            lineHeight: "normal",
+            "&[data-active='true']": {
                 outlineStyle: "solid",
                 outlineWidth: "{borderWidths.thick}",
                 outlineOffset: "0",
@@ -72,24 +77,31 @@ export const pinInputRecipe = defineSlotRecipe({
             },
         },
 
+        // The single native input owns the value but is visually hidden; the
+        // cells carry the presentation (Pen `K8gNTw` `znfZu`).
         input: {
-            width: "100%",
-            height: "100%",
+            position: "absolute",
+            width: "1px",
+            height: "1px",
             padding: "0",
-            borderWidth: "none",
-            borderStyle: "none",
-            backgroundColor: "transparent",
-            color: "semantic.common.50.text",
-            fontFamily: "body",
-            fontSize: "md",
-            fontWeight: "regular",
-            lineHeight: "normal",
-            textAlign: "center",
-            outline: "none",
-            cursor: { _disabled: "not-allowed", },
-            "&::placeholder": {
-                color: "semantic.common.500.background",
-            },
+            margin: "-1px",
+            overflow: "hidden",
+            borderWidth: "0",
+            clip: "rect(0 0 0 0)",
+            whiteSpace: "nowrap",
+        },
+
+        // Remaining-character announcement (Pen `K8gNTw` `X856Z2`).
+        live: {
+            position: "absolute",
+            width: "1px",
+            height: "1px",
+            padding: "0",
+            margin: "-1px",
+            overflow: "hidden",
+            clip: "rect(0 0 0 0)",
+            whiteSpace: "nowrap",
+            borderWidth: "0",
         },
 
         hint: {
@@ -118,8 +130,10 @@ export const pinInputRecipe = defineSlotRecipe({
 
         disabled: {
             true: {
-                cell: { backgroundColor: "semantic.common.100.background", },
-                input: { color: "semantic.common.400.background", },
+                cell: {
+                    backgroundColor: "semantic.common.100.background",
+                    color: "semantic.common.400.background",
+                },
                 label: { color: "semantic.common.400.background", },
                 hint: { color: "semantic.common.400.background", },
                 error: { color: "semantic.common.400.background", },

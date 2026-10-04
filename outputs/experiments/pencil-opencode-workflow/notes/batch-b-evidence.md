@@ -1335,3 +1335,107 @@ Counts moved from the cycle-2 shipped baseline (`b6127cc`): browser `550 → 552
 | Reconciliation is loop-free and never changes the displayed month | **PASS** |
 | Existing selection / range / keyboard / disabled stories green | **PASS** |
 | **B5 correction cycle 3/3 status** | **PASS** |
+
+## B6 — PinInput single accessible input, FileUpload external status, ColorPicker indicator, Rating semantics, Editable confirm/saving (cycle 1/2)
+
+**Date:** 2026-10-04\
+**Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` — SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes (unchanged; re-verified after the read-only queries).\
+**Base commit:** `3ac4a70` (`fix(shared): reconcile Calendar focus when disabled props change`).\
+**Method:** Pencil MCP read-only `Get`/`Print` (`get_app_state` confirmed `ex_2.pen` as the active editor; no mutation), focused Bun composition tests and Vitest + Playwright Chromium story tests, with the browser RED captured in one consolidated run by `git stash push` of only the five owners' implementation/preset files and `mise run gen`.\
+**Evidence artifact:** `artifacts/batch-b/compact/b6-red-green.md`.\
+**Owner paths:** `src/shared/components/{pin-input,file-upload,color-picker,rating,editable}/`.
+
+### Pen enumeration gate (B6)
+
+| Owner | Pen master → documentation frame | Documented public variant / state | Disposition |
+| --- | --- | --- | --- |
+| Pin Input | `E3ZhdP` → `K8gNTw` | named parts `root · cell · focused cell · filled cell · error row`; `4 · 6 cells, masked, invalid, disabled`; `empty · filled · focus-visible · invalid · disabled` | **PASS** — one accessible input, presentational cells, `4`/`6`/`masked`/`invalid`/`disabled` retained |
+| Pin Input | `K8gNTw` content + accessibility | typing advances / Backspace steps back; full-code paste; `znfZu` "One accessible input for the whole code where possible."; `X856Z2` "Announce how many characters remain."; "Never rely on colour alone for the filled state." | **PASS** — single input + active-cell marker; polite remaining region; the digit is the non-colour filled state. `znfZu` is **PASS**, not `BLOCKED` |
+| File Upload | `YxCMD` → `pikCU` | named parts `root · dropzone · icon · instruction · accepted types · file row · progress · remove`; `single · multiple, drag active, uploading, error`; `default · drag active · uploading · complete · error · disabled` | **PASS for the visual projection** — external `status`/`progress`/`fileName`/`statusMessage`; no transport/retry/parsing/files-array/remove API |
+| File Upload | `pikCU` accessibility | `m0JpkI` keyboard reachable/activatable; `ZorBH` "Progress changes are announced."; `S6563z` "Error rows explain the reason in text." | **PASS** — native input focus ring; `role="progressbar"` with `aria-valuenow/min/max`; negative border + text reason |
+| Color Picker | `Ecy07` + `vUOIa` → `RLmkc` | named parts `root · swatch · trigger · popup · palette grid · value field · opacity`; `swatch · trigger, with palette, with value field, invalid`; `default · focus-visible · invalid · disabled` | **PASS** — no public API change; `Color Popup` stays private |
+| Color Picker | `RLmkc` selected/open | selected indicator stroke 2 + `text/primary` (`WHWWK`); open specimen `Al6Ac` (`cp2`) resolves `E8X0Qf` `Chevron rot=180` | **PASS** — 2px `text/primary` selected stroke; 180° chevron while open |
+| Rating | `qIRY3` → `PxfEf` | named parts `root · icon row · filled icon · empty icon · value label`; `interactive · read-only, sizes, with value label` | **PASS (regression only)** — untouched |
+| Rating | `PxfEf` accessibility | `IVyo2` score + maximum; `uCV9n` arrow keys; `z94Ii` read-only is text, not controls | **PASS (regression only)** |
+| Editable | `zoEMh` → `RN3EO` | named parts `root · read view · edit view · affordance icon · confirm and cancel`; `text, with affordance, multiline, saving`; `read · hover · edit · focus-visible · saving · disabled` | **PASS** — Confirm/Cancel + `saving`; `multiline` out of scope |
+| Editable | `RN3EO` content + accessibility | `Uo19r` Enter confirms / Escape cancels; `LiBiT` affordance on hover and focus; `y6mZ4` saving keeps the field + progress; `WLTIp`/`DRJ0l`/`XrUb6` read view focusable, edit view labelled, Confirm/Cancel keyboard reachable | **PASS** |
+
+Verbatim Pen facts: `K8gNTw` `znfZu` "· One accessible input for the whole code where possible." · `X856Z2` "· Announce how many characters remain." · `pikCU` "Named parts: root · dropzone · icon · instruction · accepted types · file row · progress · remove"; `m0JpkI` "· The dropzone is reachable and activatable by keyboard."; `ZorBH` "· Progress changes are announced."; `S6563z` "· Error rows explain the reason in text." · `RLmkc` `wOCyQ` "open · selected swatch" · `PxfEf` `IVyo2` "· Expose the score and the maximum."; `uCV9n` "· Arrow keys adjust the score when interactive."; `z94Ii` "· Read-only ratings are text, not controls." · `RN3EO` `Uo19r` "· Enter confirms, Escape cancels and restores the previous value."; `LiBiT` "· Show the edit affordance on hover and on focus."; `y6mZ4` "· While saving, keep the field in place and show progress."; `XrUb6` "· Confirm and cancel are reachable by keyboard."
+
+### Approved public surface and behaviour
+
+- **PinInput** — one visually hidden `<input>` owns the code (`autocomplete="one-time-code"`, `inputMode="numeric"`, `maxLength=length`); the cells are `aria-hidden` presentational spans and the active cell carries `data-active="true"` with the shared focus ring. Auto-advance, Backspace, Arrow keys and full-code paste are preserved through the single input and the marker. A visually hidden `role="status" aria-live="polite"` region announces `${remaining} characters remaining`. No public prop changed.
+- **FileUpload** — new external-state props `status`, `progress`, `fileName`, `statusMessage`. `uploading` renders `role="progressbar"` with `aria-valuenow/min/max` and a width-proportional fill; `complete` renders the file name and success text; `error` paints the negative border and the text reason (wired through `aria-describedby`). Dropzone box styles are unchanged; no transport, retry, parsing, files-array or remove API was added.
+- **ColorPicker** — no public API change; selected swatch `borderWidth: thick` (2px) + `text/primary`; chevron `rotate(180deg)` while open.
+- **Rating** — no implementation change; documented-semantics browser coverage added.
+- **Editable** — new `saving?: boolean`. The edit view gains named Confirm/Cancel buttons (`XrUb6`); while `saving` the field stays and a rotating indicator shows progress (`y6mZ4`); the affordance is hidden until hover / focus-visible (`LiBiT`); Enter confirms, Escape cancels and restores. The blur-commit was dropped because it conflicts with the explicit Cancel control (no blur test existed).
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun): `bun test src/shared/components/{pin-input/PinInput,file-upload/FileUpload,color-picker/ColorPicker,rating/Rating,editable/Editable}.composition.test.tsx`
+
+| Field | Value |
+| --- | --- |
+| RED (per-owner, before implementation) | PinInput `8 fail` / `4 pass`; FileUpload `3 fail` / `9 pass`; Editable `3 fail` / `7 pass`; ColorPicker/Rating regression unchanged |
+| GREEN exit / result | `0` — `51 pass` / `0 fail` (5 files), `162 expect() calls` |
+
+Focused browser stories (Vitest + Playwright Chromium): `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/{pin-input/PinInput,file-upload/FileUpload,color-picker/ColorPicker,rating/Rating,editable/Editable}.stories.tsx`
+
+| Field | Value |
+| --- | --- |
+| RED exit / result | `1` — `4 failed \| 1 passed` files, `30 failed \| 37 passed (67)` |
+| RED failures | PinInput 13 (`Reference`, `Single Accessible Input`, `Typing Advances`, `Backspace Steps Back`, `Arrow Keys Move Marker`, `Paste Fills Code`, `Live Remaining`, `Six Cells`, `Masked`, `Active Cell Ring`, `Dark Active Cell Ring`, `Invalid`, `Disabled`); FileUpload 7 (`External Uploading`, `Dark External Uploading`, `Progress Clamp`, `External Complete`, `Dark External Complete`, `External Error`, `Dark External Error`); ColorPicker 4 (`Selected Indicator`, `Dark Selected Indicator`, `Chevron Rotates`, `Dark Chevron Rotates`); Editable 6 (`Confirm Cancel Controls`, `Cancel Control`, `Saving Keeps Field`, `Dark Saving Keeps Field`, `Affordance Reveal`, `Dark Affordance Reveal`) |
+| GREEN exit / result | `0` — `5 passed` files, `67 passed (67)` |
+
+Regression-only (passed on the RED run): all 11 Rating stories; FileUpload `Keyboard Activation`; the retained PinInput/FileUpload/ColorPicker/Editable theme, validation and error stories.
+
+### Both-theme computed-style captures (in browser)
+
+| Owner | Light | Dark |
+| --- | --- | --- |
+| PinInput active-cell ring | `outline-style: solid`, `outline-width: 2px`, `outline-color: rgb(34, 197, 94)` | same |
+| PinInput remaining announcement | `6 characters remaining` → `4 characters remaining` | — (logic) |
+| FileUpload error border | `rgb(220, 38, 38)` + `Файл слишком большой.` | `rgb(248, 113, 113)` + reason |
+| FileUpload progress | `aria-valuenow="42"`, bar `width: 42%` | same |
+| ColorPicker selected swatch | `border-top-width: 2px`, `rgb(15, 23, 42)` | `2px`, `rgb(248, 250, 252)` |
+| ColorPicker chevron | closed `none` → open `180°` | open `180°` |
+| Rating semantics | `4 of 5` checked, `4 / 5`, Arrow → `5 of 5` | `4 of 5` checked, `4 / 5` |
+| Editable saving | field in place, `aria-busy="true"`, `Saving` glyph `animation-name: spin`, Confirm/Cancel disabled | same |
+| Editable affordance | `0` idle → `1` `[data-hover]` → `0` → `1` `:focus-visible` | `0` → `1` `[data-hover]` |
+
+Disabled contrast remains `DISABLED / REVIEW` in both themes.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| focused composition GREEN | `0` | `51 pass` / `0 fail` |
+| focused browser RED | `1` | `4 failed \| 1 passed` files, `30 failed \| 37 passed (67)` |
+| focused browser GREEN | `0` | `5 passed` files, `67 passed (67)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `753 pass / 0 fail` (90 files, `4010 expect() calls`); browser `579 passed` (73 files) |
+| `mise run check:deps` | `0` | Knip, no findings |
+| `mise run build` | `0` | `✓ built in 80ms`; `dist/assets/index-BRqmZDGS.css 223.51 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the B5 shipped baseline (`3ac4a70`): unit `742 → 753` (`+11`), browser `552 → 579` (`+27`).
+
+### Changed paths
+
+`src/shared/components/pin-input/{pin-input.tsx,preset.ts,PinInput.composition.test.tsx,PinInput.stories.tsx}`, `src/shared/components/file-upload/{file-upload.tsx,preset.ts,FileUpload.composition.test.tsx,FileUpload.stories.tsx}`, `src/shared/components/color-picker/{preset.ts,ColorPicker.stories.tsx}`, `src/shared/components/rating/{Rating.stories.tsx}`, `src/shared/components/editable/{editable.tsx,preset.ts,Editable.composition.test.tsx,Editable.stories.tsx}`, `artifacts/batch-b/compact/b6-red-green.md`, this evidence. No `index.ts` barrel, `panda.config.ts`, token, foundation, icon, font, dependency, other component, screen or Pen file was changed; generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored, never hand-edited).
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| PinInput one accessible code input + active-cell marker (`znfZu`) | **PASS** |
+| PinInput auto-advance / Backspace / arrows / full-code paste | **PASS** |
+| PinInput remaining-character announcement (`X856Z2`) | **PASS** |
+| FileUpload external uploading/complete/error + progressbar | **PASS** |
+| FileUpload keyboard activation (`m0JpkI`) | **PASS** (regression) |
+| ColorPicker selected 2px `text/primary` (`WHWWK`) + chevron 180° (`E8X0Qf`) | **PASS** |
+| ColorPicker `Color Popup` stays private, no API change | **PASS** |
+| Rating documented semantics | **PASS** (regression only) |
+| Editable Confirm/Cancel (`XrUb6`) + `saving` (`y6mZ4`) + affordance (`LiBiT`) | **PASS** |
+| Disabled contrast (all five owners) | `DISABLED / REVIEW` (both themes) |
+| **B6 final status** | **PASS** — no unresolved `FAIL` / `BLOCKED` / Critical / Important finding; `znfZu` is resolved as the approved single-input projection |

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, userEvent, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -141,6 +141,44 @@ export const Disabled: Story = {
         const canvas = within(canvasElement);
 
         await expect(canvas.getByRole("img", { name: "4 out of 5", })).toBeTruthy();
+    },
+};
+
+// Regression coverage of the documented semantics (Pen `PxfEf`): score and
+// maximum, arrow keys, value label and the read-only text projection. The
+// Rating implementation is untouched this cycle.
+export const Semantics: Story = {
+    args: { defaultValue: 4, max: 5, showValue: true, label: "Оценка", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const user = userEvent.setup();
+        const fourth = canvas.getByRole("radio", { name: "4 of 5", });
+
+        await expect(fourth).toHaveAttribute("aria-checked", "true");
+        await expect(canvasElement.textContent).toContain("4 / 5");
+
+        fourth.focus();
+        await user.keyboard("{ArrowRight}");
+        await expect(canvas.getByRole("radio", { name: "5 of 5", })).toHaveAttribute(
+            "aria-checked",
+            "true",
+        );
+        await expect(canvasElement.textContent).toContain("5 / 5");
+    },
+};
+
+export const DarkSemantics: Story = {
+    args: { defaultValue: 4, max: 5, showValue: true, },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await expect(canvas.getByRole("radio", { name: "4 of 5", })).toHaveAttribute(
+            "aria-checked",
+            "true",
+        );
+        await expect(canvasElement.textContent).toContain("4 / 5");
     },
 };
 

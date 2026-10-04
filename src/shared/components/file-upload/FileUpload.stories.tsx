@@ -128,6 +128,101 @@ export const Disabled: Story = {
     },
 };
 
+export const KeyboardActivation: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement;
+        const root = canvasElement.querySelector(".fileUpload__root") as Element;
+
+        input.focus();
+        await expect(document.activeElement).toBe(input);
+        await expect(getComputedStyle(root).outlineStyle).toBe("solid");
+        await expect(getComputedStyle(root).outlineWidth).toBe("2px");
+    },
+};
+
+const assertExternalUploading = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const progress = canvasElement.querySelector('[role="progressbar"]') as Element;
+    const root = canvasElement.querySelector(".fileUpload__root") as Element;
+    const bar = canvasElement.querySelector(".fileUpload__progressBar") as HTMLElement;
+
+    await expect(progress.getAttribute("aria-valuenow")).toBe("42");
+    await expect(progress.getAttribute("aria-valuemin")).toBe("0");
+    await expect(progress.getAttribute("aria-valuemax")).toBe("100");
+    await expect(bar.style.width).toBe("42%");
+    await expect(canvasElement.textContent).toContain("logo.png");
+    await expect(canvasElement.textContent).toContain("Загрузка…");
+    await expect(getComputedStyle(root).borderTopColor).not.toBe("rgb(220, 38, 38)");
+};
+
+export const ExternalUploading: Story = {
+    args: { ...reference, status: "uploading", progress: 42, fileName: "logo.png", statusMessage: "Загрузка…", },
+    render: renderIn("light"),
+    play: assertExternalUploading,
+};
+
+export const DarkExternalUploading: Story = {
+    args: { ...reference, status: "uploading", progress: 42, fileName: "logo.png", statusMessage: "Загрузка…", },
+    render: renderIn("dark"),
+    play: assertExternalUploading,
+};
+
+export const ProgressClamp: Story = {
+    args: { ...reference, status: "uploading", progress: 140, },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const progress = canvasElement.querySelector('[role="progressbar"]') as Element;
+
+        await expect(progress.getAttribute("aria-valuenow")).toBe("100");
+    },
+};
+
+export const ExternalComplete: Story = {
+    args: { ...reference, status: "complete", fileName: "logo.png", statusMessage: "Готово", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        await expect(canvasElement.querySelector('[role="progressbar"]')).toBeNull();
+        await expect(canvasElement.textContent).toContain("logo.png");
+        await expect(canvasElement.textContent).toContain("Готово");
+    },
+};
+
+export const DarkExternalComplete: Story = {
+    args: { ...reference, status: "complete", fileName: "logo.png", statusMessage: "Готово", },
+    render: renderIn("dark"),
+    play: async ({ canvasElement, }) => {
+        await expect(canvasElement.textContent).toContain("logo.png");
+        await expect(canvasElement.textContent).toContain("Готово");
+    },
+};
+
+const assertExternalError = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    border: string,
+): Promise<void> => {
+    const root = canvasElement.querySelector(".fileUpload__root") as Element;
+    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement;
+
+    await expect(canvasElement.textContent).toContain("Файл слишком большой.");
+    await expect(getComputedStyle(root).borderTopColor).toBe(border);
+    await expect(input.getAttribute("aria-describedby")).toBeTruthy();
+};
+
+export const ExternalError: Story = {
+    args: { ...reference, status: "error", statusMessage: "Файл слишком большой.", },
+    render: renderIn("light"),
+    play: async (context) => assertExternalError(context, "rgb(220, 38, 38)"),
+};
+
+export const DarkExternalError: Story = {
+    args: { ...reference, status: "error", statusMessage: "Файл слишком большой.", },
+    render: renderIn("dark"),
+    play: async (context) => assertExternalError(context, "rgb(248, 113, 113)"),
+};
+
 const assertThemeRoot = async (
     { canvasElement, }: { canvasElement: HTMLElement; },
     background: string,

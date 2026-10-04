@@ -6,8 +6,9 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  *
  * A swatch trigger that opens a palette inside the shared `Popover`. The
  * palette is a fixed 6-column grid of small swatches; the selected one gets a
- * `text/primary` ring. Colour values themselves are data, so they are painted
- * with an inline `background-color`, while the chrome reads semantic tokens.
+ * 2px `text/primary` ring (`WHWWK`) and the chevron rotates 180° while open
+ * (`E8X0Qf`). Colour values themselves are data, so they are painted with an
+ * inline `background-color`, while the chrome reads semantic tokens.
  *
  * Pen references the newer role layer:
  * - surface/raised -> common.50.background (light near-exact; dark one step)
@@ -97,6 +98,9 @@ export const colorPickerRecipe = defineSlotRecipe({
         chevron: {
             flexShrink: "0",
             color: "semantic.common.600.background",
+            transitionProperty: "transform",
+            transitionDuration: "150ms",
+            transitionTimingFunction: "ease",
         },
 
         palette: {
@@ -141,6 +145,7 @@ export const colorPickerRecipe = defineSlotRecipe({
         open: {
             true: {
                 field: { borderColor: "semantic.brand.500.background", },
+                chevron: { transform: "rotate(180deg)", },
             },
         },
 
@@ -162,7 +167,10 @@ export const colorPickerRecipe = defineSlotRecipe({
 
         selected: {
             true: {
-                swatchButton: { borderColor: "semantic.common.50.text", },
+                swatchButton: {
+                    borderColor: "semantic.common.50.text",
+                    borderWidth: "{borderWidths.thick}",
+                },
             },
         },
     },

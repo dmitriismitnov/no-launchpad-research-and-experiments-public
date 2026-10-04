@@ -1,7 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, fireEvent, within, } from "storybook/test";
+import { expect, fireEvent, waitFor, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -101,6 +101,71 @@ export const Disabled: Story = {
         await fireEvent.click(trigger);
         await expect(canvas.queryByRole("listbox")).toBeNull();
     },
+};
+
+const assertSelectedIndicator = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    border: string,
+): Promise<void> => {
+    const selected = canvasElement.querySelector(
+        ".colorPicker__swatchButton--selected_true",
+    ) as Element;
+
+    await expect(getComputedStyle(selected).borderTopWidth).toBe("2px");
+    await expect(getComputedStyle(selected).borderTopColor).toBe(border);
+};
+
+export const SelectedIndicator: Story = {
+    args: { ...reference, defaultOpen: true, },
+    render: renderIn("light"),
+    play: async (context) => assertSelectedIndicator(context, "rgb(15, 23, 42)"),
+};
+
+export const DarkSelectedIndicator: Story = {
+    args: { ...reference, defaultOpen: true, },
+    render: renderIn("dark"),
+    play: async (context) => assertSelectedIndicator(context, "rgb(248, 250, 252)"),
+};
+
+const assertChevron = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    open: boolean,
+): Promise<void> => {
+    const chevron = canvasElement.querySelector(".colorPicker__chevron") as Element;
+
+    if ( open ) {
+        await waitFor(() => {
+            const transform = getComputedStyle(chevron).transform;
+            const values = ( transform.match(/matrix\(([^)]+)\)/)?.[1] ?? "" )
+                .split(",")
+                .map(Number);
+            const angle = Math.round(
+                ( Math.atan2(values[1] ?? 0, values[0] ?? 1) * 180 ) / Math.PI,
+            );
+
+            return expect(Math.abs(angle)).toBe(180);
+        });
+    } else {
+        await expect(getComputedStyle(chevron).transform).toBe("none");
+    }
+};
+
+export const ChevronRotates: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+
+        await assertChevron({ canvasElement, }, false);
+        await fireEvent.click(canvas.getByRole("button", { name: "#2563EB", }));
+        await assertChevron({ canvasElement, }, true);
+    },
+};
+
+export const DarkChevronRotates: Story = {
+    args: { ...reference, defaultOpen: true, },
+    render: renderIn("dark"),
+    play: async (context) => assertChevron(context, true),
 };
 
 const assertThemeField = async (

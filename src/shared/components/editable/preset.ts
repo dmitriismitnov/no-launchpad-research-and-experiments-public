@@ -2,12 +2,13 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
  * Editable visual projection. Slots: root / control / value / icon / editor /
- * input / error.
+ * input / actions / confirm / cancel / saving / error.
  *
  * Inline text that switches to an input in place. The read view is a focusable
- * button; the edit view is a single labelled input. The value reads
- * `text/primary` at `sm` / `medium`, the affordance glyph `text/tertiary`, and
- * the edit field adopts the shared focus ring.
+ * button whose affordance glyph only appears on hover and focus (`LiBiT`); the
+ * edit view is a single labelled input with keyboard-reachable Confirm and
+ * Cancel controls (`XrUb6`). While `saving` the field stays and a rotating
+ * indicator reports progress (`y6mZ4`).
  *
  * Pen references the newer role layer:
  * - surface/raised -> common.50.background (light near-exact; dark one step)
@@ -19,14 +20,25 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * - feedback/negative-border -> negative.600.background (light one step)
  *
  * Approximations: Pen's root pads 6px / 8px (`x4`) with a `sm` radius; the port
- * keeps both as `6px` / `x4`. Pen's saving state, confirm/cancel buttons and
- * multiline variant are out of scope: Enter confirms, Escape cancels and blur
- * confirms. Pen draws the pencil at 14px in `text/tertiary`; the foundation
- * ships the `sm` icon (16px) in `text/tertiary`.
+ * keeps both as `6px` / `x4`. Pen's multiline variant stays out of scope. Pen
+ * draws the pencil at 14px in `text/tertiary`; the foundation ships the `sm`
+ * icon (16px) in `text/tertiary`.
  */
 export const editableRecipe = defineSlotRecipe({
     className: "editable",
-    slots: [ "root", "control", "value", "icon", "editor", "input", "error", ],
+    slots: [
+        "root",
+        "control",
+        "value",
+        "icon",
+        "editor",
+        "input",
+        "actions",
+        "confirm",
+        "cancel",
+        "saving",
+        "error",
+    ],
 
     base: {
         root: {
@@ -55,7 +67,11 @@ export const editableRecipe = defineSlotRecipe({
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
             outlineColor: { _focusVisible: "semantic.brand.500.background", },
-            _hover: { backgroundColor: "semantic.common.100.background", },
+            _hover: {
+                backgroundColor: "semantic.common.100.background",
+                "& .editable__icon": { opacity: "1", },
+            },
+            _focusVisible: { "& .editable__icon": { opacity: "1", }, },
         },
 
         value: {
@@ -71,17 +87,27 @@ export const editableRecipe = defineSlotRecipe({
             color: "semantic.common.50.text",
         },
 
+        // Pen `zoEMh` `LiBiT`: the affordance shows on hover and focus, never
+        // permanently.
         icon: {
             flexShrink: "0",
             color: "semantic.common.600.background",
+            opacity: "0",
+            transitionProperty: "opacity",
+            transitionDuration: "150ms",
+            transitionTimingFunction: "ease",
         },
 
         editor: {
+            display: "flex",
+            alignItems: "center",
+            gap: "x2",
             width: "100%",
         },
 
         input: {
-            width: "100%",
+            flex: "1",
+            minWidth: "0",
             paddingBlock: "6px",
             paddingInline: "x4",
             borderRadius: "sm",
@@ -97,6 +123,73 @@ export const editableRecipe = defineSlotRecipe({
             outline: "none",
             "&::placeholder": {
                 color: "semantic.common.500.background",
+            },
+        },
+
+        actions: {
+            display: "flex",
+            alignItems: "center",
+            gap: "x1",
+            flexShrink: "0",
+        },
+
+        confirm: {
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "x10",
+            height: "x10",
+            padding: "0",
+            borderWidth: "none",
+            borderStyle: "none",
+            backgroundColor: "transparent",
+            borderRadius: "sm",
+            cursor: "pointer",
+            color: "semantic.common.600.background",
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "0", },
+            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            _hover: { backgroundColor: "semantic.common.100.background", },
+            _disabled: {
+                color: "semantic.common.400.background",
+                cursor: "not-allowed",
+                _hover: { backgroundColor: "transparent", },
+            },
+        },
+
+        cancel: {
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "x10",
+            height: "x10",
+            padding: "0",
+            borderWidth: "none",
+            borderStyle: "none",
+            backgroundColor: "transparent",
+            borderRadius: "sm",
+            cursor: "pointer",
+            color: "semantic.common.600.background",
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "0", },
+            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            _hover: { backgroundColor: "semantic.common.100.background", },
+            _disabled: {
+                color: "semantic.common.400.background",
+                cursor: "not-allowed",
+                _hover: { backgroundColor: "transparent", },
+            },
+        },
+
+        // Pen `zoEMh` `y6mZ4`: keep the field in place and show progress.
+        saving: {
+            flexShrink: "0",
+            color: "semantic.common.600.background",
+            animation: "spin 1s linear infinite",
+            "@media (prefers-reduced-motion: reduce)": {
+                animation: "none",
             },
         },
 
@@ -121,7 +214,10 @@ export const editableRecipe = defineSlotRecipe({
             true: {
                 control: {
                     cursor: "not-allowed",
-                    _hover: { backgroundColor: "transparent", },
+                    _hover: {
+                        backgroundColor: "transparent",
+                        "& .editable__icon": { opacity: "0", },
+                    },
                 },
                 value: { color: "semantic.common.400.background", },
                 icon: { color: "semantic.common.400.background", },

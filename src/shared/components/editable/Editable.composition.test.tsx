@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { Editable, } from "./editable";
+import { editableRecipe, } from "./preset";
 
 describe("Editable composition", () => {
     test("renders a focusable read view with the value and affordance", () => {
@@ -56,5 +57,34 @@ describe("Editable composition", () => {
         );
 
         expect(markup).toContain('aria-label="Переименовать"');
+    });
+
+    test("the editor exposes keyboard-reachable confirm and cancel controls", () => {
+        const markup = renderToStaticMarkup(<Editable value="Workspace name" saving />);
+
+        expect(markup).toContain('aria-label="Confirm"');
+        expect(markup).toContain('aria-label="Cancel"');
+        expect(markup).toContain("editable__confirm");
+        expect(markup).toContain("editable__cancel");
+        expect(markup.match(/<button/g)?.length).toBe(2);
+    });
+
+    test("saving keeps the edit field in place and shows a progress indicator", () => {
+        const markup = renderToStaticMarkup(<Editable value="Workspace name" saving />);
+
+        expect(markup).toContain("editable__input");
+        expect(markup).toContain('aria-busy="true"');
+        expect(markup).toContain('aria-label="Saving"');
+        expect(markup).not.toContain('aria-label="Edit Workspace name"');
+    });
+
+    test("the saving indicator rotates and stops under reduced motion", () => {
+        const saving = editableRecipe.base?.["saving"] as Record<string, unknown> | undefined;
+        const reduced = saving?.["@media (prefers-reduced-motion: reduce)"] as
+            | Record<string, unknown>
+            | undefined;
+
+        expect(saving?.["animation"]).toBe("spin 1s linear infinite");
+        expect(reduced?.["animation"]).toBe("none");
     });
 });

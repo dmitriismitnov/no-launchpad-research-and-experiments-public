@@ -30,7 +30,23 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  */
 export const fileUploadRecipe = defineSlotRecipe({
     className: "fileUpload",
-    slots: [ "wrapper", "root", "input", "icon", "title", "description", "count", "hint", "error", ],
+    slots: [
+        "wrapper",
+        "root",
+        "input",
+        "icon",
+        "title",
+        "description",
+        "status",
+        "statusIcon",
+        "fileName",
+        "progressTrack",
+        "progressBar",
+        "statusMessage",
+        "count",
+        "hint",
+        "error",
+    ],
 
     base: {
         wrapper: {
@@ -109,6 +125,60 @@ export const fileUploadRecipe = defineSlotRecipe({
             color: "semantic.common.50.text",
         },
 
+        // External upload status (Pen `YxCMD` `pikCU`): progress, success and
+        // failure are rendered inside the dropzone without changing its box.
+        status: {
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "x2",
+            width: "100%",
+            fontFamily: "body",
+            fontSize: "sm",
+            fontWeight: "regular",
+            lineHeight: "normal",
+            textAlign: "center",
+            color: "semantic.common.700.background",
+        },
+
+        statusIcon: {
+            flexShrink: "0",
+            color: "semantic.common.600.background",
+        },
+
+        fileName: {
+            maxWidth: "100%",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            fontWeight: "medium",
+            color: "semantic.common.50.text",
+        },
+
+        progressTrack: {
+            display: "block",
+            position: "relative",
+            width: "100%",
+            height: "x2",
+            borderRadius: "full",
+            backgroundColor: "semantic.common.200.divider",
+            overflow: "hidden",
+        },
+
+        progressBar: {
+            display: "block",
+            height: "100%",
+            borderRadius: "full",
+            backgroundColor: "semantic.brand.500.background",
+            transitionProperty: "width",
+            transitionDuration: "150ms",
+            transitionTimingFunction: "ease",
+        },
+
+        statusMessage: {
+            maxWidth: "100%",
+        },
+
         hint: {
             fontFamily: "body",
             fontSize: "xs",
@@ -152,6 +222,11 @@ export const fileUploadRecipe = defineSlotRecipe({
                 icon: { color: "semantic.common.400.background", },
                 title: { color: "semantic.common.400.background", },
                 description: { color: "semantic.common.400.background", },
+                status: { color: "semantic.common.400.background", },
+                statusIcon: { color: "semantic.common.400.background", },
+                fileName: { color: "semantic.common.400.background", },
+                statusMessage: { color: "semantic.common.400.background", },
+                progressBar: { backgroundColor: "semantic.common.400.background", },
                 count: { color: "semantic.common.400.background", },
                 hint: { color: "semantic.common.400.background", },
                 error: { color: "semantic.common.400.background", },

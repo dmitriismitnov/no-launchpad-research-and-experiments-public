@@ -7,7 +7,9 @@ import { editable, } from "@shared/styled-system/recipes";
 
 /**
  * Публичные пропсы Editable. Значение контролируется `value`; правка
- * подтверждается `onSave` (Enter или потеря фокуса) и отменяется Escape.
+ * подтверждается `onSave` (Enter или кнопка Confirm) и отменяется Escape или
+ * кнопкой Cancel. `saving` удерживает поле правки на месте и показывает
+ * внешний индикатор прогресса; собственного асинхронного цикла здесь нет.
  */
 export type EditableProps =
     & Omit<
@@ -19,7 +21,7 @@ export type EditableProps =
         value: string;
         /** Вызывается с подтверждённым значением. */
         onSave?: (value: string) => void;
-        /** Вызывается при отмене правки через Escape. */
+        /** Вызывается при отмене правки. */
         onCancel?: () => void;
         /** Текст пустого значения в режиме чтения. */
         placeholder?: string;
@@ -35,13 +37,17 @@ export type EditableProps =
         error?: string;
         /** Показывает карандаш рядом со значением. */
         affordance?: boolean;
+        /** Внешнее состояние сохранения; удерживает поле и показывает прогресс. */
+        saving?: boolean;
     };
 
 /**
  * Редактирование значения на месте. В режиме чтения — фокусируемая кнопка с
- * значением и карандашом; по клику, Enter или Space она сменяется
- * контролируемым полем. Enter и потеря фокуса сохраняют через `onSave`,
- * Escape отменяет и возвращает прежнее значение.
+ * значением и карандашом (карандаш виден при наведении и фокусе, Pen `LiBiT`);
+ * по клику, Enter или Space она сменяется контролируемым полем с кнопками
+ * Confirm и Cancel (`XrUb6`). Enter и Confirm сохраняют через `onSave`,
+ * Escape и Cancel отменяют и возвращают прежнее значение. `saving` удерживает
+ * поле правки на месте и показывает индикатор прогресса (Pen `y6mZ4`).
  */
 export const Editable = ({
     value,
@@ -54,6 +60,7 @@ export const Editable = ({
     invalid = false,
     error,
     affordance = true,
+    saving = false,
     className,
     ...props
 }: EditableProps) => {
@@ -63,13 +70,14 @@ export const Editable = ({
     const errorId = useId();
     const showError = hasText(error);
     const styles = editable({ invalid, disabled, });
+    const showEditor = isEditing || saving;
 
     useEffect(() => {
-        if ( isEditing ) {
+        if ( showEditor ) {
             inputRef.current?.focus();
             inputRef.current?.select();
         }
-    }, [ isEditing, ]);
+    }, [ showEditor, ]);
 
     const startEdit = () => {
         if ( disabled ) {
@@ -81,11 +89,19 @@ export const Editable = ({
     };
 
     const commit = () => {
+        if ( saving ) {
+            return;
+        }
+
         setIsEditing(false);
         onSave?.(draft);
     };
 
     const cancel = () => {
+        if ( saving ) {
+            return;
+        }
+
         setDraft(value);
         setIsEditing(false);
         onCancel?.();
@@ -103,9 +119,9 @@ export const Editable = ({
 
     return (
         <div className={cx(styles.root, className)}>
-            {isEditing
+            {showEditor
                 ? (
-                    <div className={styles.editor}>
+                    <div className={styles.editor} aria-busy={saving || undefined}>
                         <input
                             {...props}
                             ref={inputRef}
@@ -113,13 +129,34 @@ export const Editable = ({
                             value={draft}
                             placeholder={placeholder}
                             disabled={disabled}
+                            readOnly={saving}
                             aria-label={inputLabel ?? "Edit value"}
                             aria-invalid={invalid || undefined}
                             aria-describedby={showError ? errorId : undefined}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => setDraft(event.target.value)}
                             onKeyDown={handleKeyDown}
-                            onBlur={commit}
                         />
+                        <div className={styles.actions}>
+                            {saving && <Icon name="loader" size="sm" label="Saving" className={styles.saving} />}
+                            <button
+                                type="button"
+                                className={styles.confirm}
+                                aria-label="Confirm"
+                                disabled={disabled || saving}
+                                onClick={commit}
+                            >
+                                <Icon name="check" size="sm" />
+                            </button>
+                            <button
+                                type="button"
+                                className={styles.cancel}
+                                aria-label="Cancel"
+                                disabled={disabled || saving}
+                                onClick={cancel}
+                            >
+                                <Icon name="x" size="sm" />
+                            </button>
+                        </div>
                     </div>
                 )
                 : (

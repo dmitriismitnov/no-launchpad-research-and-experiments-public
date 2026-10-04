@@ -1,4 +1,4 @@
-import type { ChangeEvent, ClipboardEvent, ComponentProps, KeyboardEvent, } from "react";
+import type { ChangeEvent, ClipboardEvent, ComponentProps, FocusEvent, KeyboardEvent, } from "react";
 import { useId, useRef, useState, } from "react";
 
 import { cx, } from "@shared/styled-system/css";
@@ -6,11 +6,12 @@ import { pinInput, } from "@shared/styled-system/recipes";
 
 /**
  * Публичные пропсы Pin Input. Значение — строка: контролируемое (`value` +
- * `onChange`) или неконтролируемое (`defaultValue`). Компонент владеет
- * `aria-invalid` и `aria-describedby` на каждой ячейке.
+ * `onChange`) или неконтролируемое (`defaultValue`). Один input владеет всем
+ * кодом: ячейки — презентационные, а `aria-invalid` / `aria-describedby`
+ * принадлежат единственному контролу.
  */
 export type PinInputProps = Omit<ComponentProps<"div">, "onChange" | "defaultValue"> & {
-    /** Видимый лейбл над ячейками; связывается с группой через aria-labelledby. */
+    /** Видимый лейбл над ячейками; связывается с контролом через aria-labelledby. */
     label?: string;
     /** Число ячеек кода. */
     length?: number;
@@ -37,10 +38,11 @@ export type PinInputProps = Omit<ComponentProps<"div">, "onChange" | "defaultVal
 };
 
 /**
- * Код из N односимвольных ячеек. Ввод продвигает фокус вперёд, Backspace
- * очищает и возвращает назад, стрелки двигают фокус, вставка заполняет ячейки
- * целиком. Ячейки несут одну общую группу с `aria-labelledby` и собственные
- * `aria-label`, поэтому весь код озвучивается как одно поле.
+ * Код из N ячеек. Pen `K8gNTw` (`znfZu`): один доступный input владеет кодом
+ * (`autocomplete="one-time-code"`), а ячейки — презентационными; активная
+ * ячейка отмечается рамкой. Ввод продвигает маркер, Backspace возвращает на
+ * шаг назад, стрелки двигают маркер, вставка заполняет весь код. Живой регион
+ * `polite` объявляет, сколько символов осталось (`X856Z2`).
  */
 export const PinInput = ({
     label,
@@ -60,12 +62,15 @@ export const PinInput = ({
 }: PinInputProps) => {
     const { "aria-label": ariaLabel, ...divProps } = props;
     const [ uncontrolledValue, setUncontrolledValue, ] = useState(defaultValue ?? "");
-    const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
+    const [ focused, setFocused, ] = useState(false);
+    const [ caret, setCaret, ] = useState(() => clampCaret(( defaultValue ?? value ?? "" ).length, length));
+    const inputRef = useRef<HTMLInputElement>(null);
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : uncontrolledValue;
     const digits = Array.from({ length, }, (_, index) => currentValue[index] ?? "");
     const generatedId = useId();
     const baseId = id ?? generatedId;
+    const inputId = `${baseId}-input`;
     const labelId = `${baseId}-label`;
     const hintId = `${baseId}-hint`;
     const errorId = `${baseId}-error`;
@@ -74,6 +79,8 @@ export const PinInput = ({
     const describedBy = showError ? errorId : ( showHint ? hintId : undefined );
     const styles = pinInput({ invalid, disabled, });
     const accessibleName = ariaLabel ?? ( hasText(label) ? label : "Verification code" );
+    const activeIndex = Math.min(caret, length - 1);
+    const remaining = Math.max(length - currentValue.length, 0);
 
     const commit = (next: string) => {
         if ( !isControlled ) {
@@ -83,111 +90,84 @@ export const PinInput = ({
         onChange?.(next);
     };
 
-    const focusCell = (index: number) => {
-        const target = inputsRef.current[index];
+    const syncCaret = (position: number) => setCaret(clampCaret(position, length));
 
-        target?.focus();
-        target?.select();
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const next = sanitize(event.target.value).slice(0, length);
+
+        commit(next);
+        syncCaret(event.target.selectionStart ?? next.length);
     };
 
-    const setCharAt = (index: number, char: string): string => {
-        const chars = Array.from({ length, }, (_, position) => currentValue[position] ?? "");
-        chars[index] = char;
-
-        return chars.join("");
-    };
-
-    const handleChange = (index: number) => (event: ChangeEvent<HTMLInputElement>) => {
-        const char = event.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(-1);
-
-        if ( char !== "" && index > currentValue.length ) {
-            focusCell(currentValue.length);
-
-            return;
-        }
-
-        commit(setCharAt(index, char));
-
-        if ( char !== "" && index < length - 1 ) {
-            focusCell(index + 1);
-        }
-    };
-
-    const handleKeyDown = (index: number) => (event: KeyboardEvent<HTMLInputElement>) => {
-        if ( event.key === "Backspace" && ( currentValue[index] ?? "" ) === "" && index > 0 ) {
+    const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+        if ( event.key === "ArrowLeft" ) {
             event.preventDefault();
-            commit(setCharAt(index - 1, ""));
-            focusCell(index - 1);
-
-            return;
-        }
-
-        if ( event.key === "ArrowLeft" && index > 0 ) {
+            syncCaret(activeIndex - 1);
+        } else if ( event.key === "ArrowRight" ) {
             event.preventDefault();
-            focusCell(index - 1);
-
-            return;
-        }
-
-        if ( event.key === "ArrowRight" && index < length - 1 ) {
-            event.preventDefault();
-            focusCell(index + 1);
+            syncCaret(activeIndex + 1);
         }
     };
 
-    const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
-        const pasted = event.clipboardData
-            .getData("text")
-            .replace(/[^a-zA-Z0-9]/g, "")
-            .slice(0, length);
+    const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {
+        const pasted = sanitize(event.clipboardData.getData("text")).slice(0, length);
 
         if ( pasted === "" ) {
             return;
         }
 
         event.preventDefault();
-        commit(Array.from({ length, }, (_, index) => pasted[index] ?? "").join(""));
-        focusCell(Math.min(pasted.length, length - 1));
+        commit(pasted);
+        syncCaret(pasted.length);
+    };
+
+    const handleFocus = (event: FocusEvent<HTMLInputElement>) => {
+        setFocused(true);
+        syncCaret(event.target.selectionStart ?? currentValue.length);
     };
 
     return (
-        <div
-            {...divProps}
-            role="group"
-            aria-label={hasText(label) ? undefined : accessibleName}
-            aria-labelledby={hasText(label) ? labelId : undefined}
-            className={cx(styles.root, className)}
-        >
+        <div {...divProps} className={cx(styles.root, className)}>
             {hasText(label) && (
-                <label className={styles.label} id={labelId} htmlFor={`${baseId}-0`}>
+                <label className={styles.label} id={labelId} htmlFor={inputId}>
                     {label}
                 </label>
             )}
-            <div className={styles.cells} onPaste={handlePaste}>
+            <div className={styles.cells} onClick={() => inputRef.current?.focus()}>
                 {digits.map((digit, index) => (
-                    <span key={index} className={styles.cell}>
-                        <input
-                            ref={(element) => {
-                                inputsRef.current[index] = element;
-                            }}
-                            id={`${baseId}-${index}`}
-                            type={masked ? "password" : "text"}
-                            inputMode="numeric"
-                            autoComplete={index === 0 ? "one-time-code" : "off"}
-                            maxLength={1}
-                            value={digit}
-                            disabled={disabled}
-                            aria-label={`${accessibleName} character ${index + 1}`}
-                            aria-invalid={invalid || undefined}
-                            aria-describedby={describedBy}
-                            className={styles.input}
-                            onChange={handleChange(index)}
-                            onKeyDown={handleKeyDown(index)}
-                            onFocus={(event) => event.target.select()}
-                        />
+                    <span
+                        key={index}
+                        className={styles.cell}
+                        aria-hidden="true"
+                        data-active={focused && index === activeIndex ? "true" : undefined}
+                    >
+                        {masked && digit !== "" ? "•" : digit}
                     </span>
                 ))}
             </div>
+            <input
+                ref={inputRef}
+                id={inputId}
+                type={masked ? "password" : "text"}
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={length}
+                value={currentValue}
+                disabled={disabled}
+                aria-label={hasText(label) ? undefined : accessibleName}
+                aria-labelledby={hasText(label) ? labelId : undefined}
+                aria-invalid={invalid || undefined}
+                aria-describedby={describedBy}
+                className={styles.input}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                onPaste={handlePaste}
+                onFocus={handleFocus}
+                onBlur={() => setFocused(false)}
+            />
+            <span className={styles.live} role="status" aria-live="polite">
+                {remainingLabel(remaining)}
+            </span>
             {hasText(name) && <input type="hidden" name={name} value={currentValue} />}
             {showHint && (
                 <p className={styles.hint} id={hintId}>
@@ -202,6 +182,25 @@ export const PinInput = ({
         </div>
     );
 };
+
+/** Оставляет только допустимые символы кода. */
+function sanitize(value: string): string {
+    return value.replace(/[^a-zA-Z0-9]/g, "");
+}
+
+/** Держит позицию каретки в диапазоне `0..length`. */
+function clampCaret(position: number, length: number): number {
+    if ( !Number.isFinite(position) ) {
+        return 0;
+    }
+
+    return Math.min(Math.max(Math.trunc(position), 0), length);
+}
+
+/** Объявление оставшихся символов для живого региона. */
+function remainingLabel(remaining: number): string {
+    return remaining === 1 ? "1 character remaining" : `${remaining} characters remaining`;
+}
 
 /** Пустая или пробельная строка считается отсутствующей и не рендерит область. */
 function hasText(value: string | undefined): boolean {
