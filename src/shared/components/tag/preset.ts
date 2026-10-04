@@ -3,8 +3,13 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 /**
  * Tag visual projection. Slots: root / label / close.
  *
- * A bordered chip. The fill is the raised surface, the border the strong
- * boundary, and the label the muted foreground role.
+ * Pen `UyMqu` master / `QIUyy` documentation: a bordered chip whose fill is the
+ * raised surface `surface/raised`, whose functional boundary is `border/strong`
+ * and whose hover surface is `surface/hover`; the label reads
+ * `text/secondary` and the remove control `text/tertiary`. The remove focus ring
+ * is left unchanged (not Pen-proven). Pen documents `selectable` / `selected`,
+ * tone, size, a leading dot-icon and `disabled`; those are recorded BLOCKED, not
+ * implemented here.
  */
 export const tagRecipe = defineSlotRecipe({
     className: "tag",
@@ -20,8 +25,9 @@ export const tagRecipe = defineSlotRecipe({
             borderRadius: "sm",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.50.border.strong",
-            backgroundColor: "semantic.common.50.background",
+            borderColor: "semantic.border.strong",
+            backgroundColor: "semantic.surface.raised",
+            _hover: { backgroundColor: "semantic.surface.hover", },
         },
 
         label: {
@@ -29,7 +35,7 @@ export const tagRecipe = defineSlotRecipe({
             fontSize: "sm",
             fontWeight: "medium",
             lineHeight: "normal",
-            color: "semantic.common.700.background",
+            color: "semantic.text.secondary",
         },
 
         close: {
@@ -42,7 +48,7 @@ export const tagRecipe = defineSlotRecipe({
             borderStyle: "none",
             backgroundColor: "transparent",
             cursor: "pointer",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },

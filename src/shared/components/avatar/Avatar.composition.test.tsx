@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { Avatar, } from "./avatar";
+import { avatarRecipe, } from "./preset";
 
 describe("avatar composition", () => {
     test("falls back to initials derived from the name", () => {
@@ -46,5 +47,31 @@ describe("avatar composition", () => {
         const markup = renderToStaticMarkup(<Avatar name="Alice" data-testid="a" />);
 
         expect(markup).toContain(`data-testid="a"`);
+    });
+
+    // Pen `q9qgrL` / `YoSlU` token contract: the presence outline is the raised
+    // surface role and the online presence dot is the feedback positive step
+    // 700 role. Both are discriminating light values.
+    test("paints the presence dot and its outline from the role tokens", () => {
+        expect(avatarRecipe.base?.["presence"]).toMatchObject({
+            borderColor: "semantic.surface.raised",
+        });
+        expect(avatarRecipe.variants?.["presence"]?.["online"]?.["presence"]).toMatchObject({
+            backgroundColor: "semantic.positive.700.background",
+        });
+    });
+
+    // Pen `q9qgrL` public variants list `presence`; the away/busy/offline tones
+    // are retained unchanged (INFO) in this slice.
+    test("keeps the secondary presence tones", () => {
+        expect(avatarRecipe.variants?.["presence"]?.["away"]?.["presence"]).toMatchObject({
+            backgroundColor: "semantic.occasional.600.background",
+        });
+        expect(avatarRecipe.variants?.["presence"]?.["busy"]?.["presence"]).toMatchObject({
+            backgroundColor: "semantic.negative.600.background",
+        });
+        expect(avatarRecipe.variants?.["presence"]?.["offline"]?.["presence"]).toMatchObject({
+            backgroundColor: "semantic.common.600.background",
+        });
     });
 });

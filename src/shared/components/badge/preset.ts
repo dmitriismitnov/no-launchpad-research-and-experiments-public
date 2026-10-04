@@ -2,7 +2,14 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 
 /**
  * Badge visual projection. Slots: root / dot / label.
- * Colours come from the semantic layer; the recipe never branches on theme.
+ *
+ * Pen `as3xr` master / `NT57b` documentation: the dot reads the documented tone
+ * roles — neutral `common/600/background`, positive `positive/600/background`,
+ * negative `negative/600/background`, brand `brand/600/background` — and the
+ * label the inverse text role `common/50/text`. Colours come from the semantic
+ * layer; the recipe never branches on theme. Pen documents appearance
+ * (subtle/solid/outline), size, count/leading icon and an `info` tone; those are
+ * recorded BLOCKED, not implemented here.
  */
 export const badgeRecipe = defineSlotRecipe({
     className: "badge",

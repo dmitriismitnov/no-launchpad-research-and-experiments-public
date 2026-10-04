@@ -3,8 +3,13 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 /**
  * Avatar visual projection. Slots: root / image / fallback / initials / presence.
  *
- * The round surface paints from the brand role; an optional presence dot reads
- * the same tone roles as Badge.
+ * Pen `q9qgrL` master / `YoSlU` documentation: the round surface paints from the
+ * brand role; the optional presence outline reads the raised surface role
+ * `surface/raised` and the online presence dot reads `positive/700/background`.
+ * The away / busy / offline tones are retained from the prior slice (INFO:
+ * `occasional/600`, `negative/600`, `common/600`); the icon fallback, stacked
+ * group and disabled/hover/focus semantics documented by Pen are recorded
+ * BLOCKED, not implemented here.
  */
 export const avatarRecipe = defineSlotRecipe({
     className: "avatar",
@@ -54,7 +59,7 @@ export const avatarRecipe = defineSlotRecipe({
             borderRadius: "full",
             borderWidth: "thick",
             borderStyle: "solid",
-            borderColor: "semantic.common.50.background",
+            borderColor: "semantic.surface.raised",
         },
     },
 
@@ -66,7 +71,7 @@ export const avatarRecipe = defineSlotRecipe({
         },
 
         presence: {
-            online: { presence: { backgroundColor: "semantic.positive.600.background", }, },
+            online: { presence: { backgroundColor: "semantic.positive.700.background", }, },
             away: { presence: { backgroundColor: "semantic.occasional.600.background", }, },
             busy: { presence: { backgroundColor: "semantic.negative.600.background", }, },
             offline: { presence: { backgroundColor: "semantic.common.600.background", }, },

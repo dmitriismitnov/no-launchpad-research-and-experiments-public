@@ -3,8 +3,12 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 /**
  * Status Indicator visual projection. Slots: root / dot / label.
  *
- * The dot paints from the same tone roles as Badge; the label reads the muted
- * foreground role.
+ * Pen `a4r4Y` master / `x8pveA` documentation: the neutral dot reads the
+ * functional boundary role `border/strong`; the positive and negative dots read
+ * `positive/700/background` and `negative/700/background`; the label reads
+ * `text/secondary`. The `brand` tone is an INFO extension kept from the prior
+ * slice (`brand/600/background`); Pen documents `warning` / `inactive` tones
+ * that are recorded BLOCKED, not implemented here.
  */
 export const statusIndicatorRecipe = defineSlotRecipe({
     className: "statusIndicator",
@@ -22,7 +26,7 @@ export const statusIndicatorRecipe = defineSlotRecipe({
             width: "x4",
             height: "x4",
             borderRadius: "full",
-            backgroundColor: "semantic.common.600.background",
+            backgroundColor: "semantic.border.strong",
         },
 
         label: {
@@ -30,15 +34,15 @@ export const statusIndicatorRecipe = defineSlotRecipe({
             fontSize: "xs",
             fontWeight: "regular",
             lineHeight: "normal",
-            color: "semantic.common.700.background",
+            color: "semantic.text.secondary",
         },
     },
 
     variants: {
         tone: {
             neutral: {},
-            positive: { dot: { backgroundColor: "semantic.positive.600.background", }, },
-            negative: { dot: { backgroundColor: "semantic.negative.600.background", }, },
+            positive: { dot: { backgroundColor: "semantic.positive.700.background", }, },
+            negative: { dot: { backgroundColor: "semantic.negative.700.background", }, },
             brand: { dot: { backgroundColor: "semantic.brand.600.background", }, },
         },
     },

@@ -3,8 +3,11 @@ import { definePreset, defineRecipe, } from "@pandacss/dev";
 /**
  * Divider visual projection.
  *
- * A single 1px rule. Paint comes from the quiet boundary role; orientation only
- * swaps the axis and never the colour.
+ * Pen `vZUUG` master / `Uyuv7` documentation: a single 1px rule painted from the
+ * quiet divider role `common/200/divider`; orientation only swaps the axis and
+ * never the colour. Pen documents `subtle` / `strong` and a labelled variant,
+ * plus decorative-vs-separator ARIA; those are recorded BLOCKED, not implemented
+ * here.
  */
 export const dividerRecipe = defineRecipe({
     className: "dividerRule",
