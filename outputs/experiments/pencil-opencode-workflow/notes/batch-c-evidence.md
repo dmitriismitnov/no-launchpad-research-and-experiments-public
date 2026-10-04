@@ -720,3 +720,27 @@ Slice-local counts: `+4` focused unit composition checks (19 → 23 across the t
 - **INFO — mixed working tree.** `mise run check` / `build` ran while a concurrent C4 (`Menu` / `ContextMenu`) change set and untracked `.zed/debug.json` (empty, editor artifact) were present. The commit contains only the C5 paths; the concurrent files were not staged.
 - **INFO — capture method.** Storybook-iframe Playwright captures (`deviceScaleFactor: 2`), consistent with C1/C2; the focused-element outline was read from the live page as part of the capture script.
 - **INFO — Pen read-only.** The Pen was accessed through Pencil MCP `Get`/`Print` only; no mutation call was issued and the file hash is unchanged.
+
+## C4 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `1d0285a9719d44a657029436c7f55a27f798aa16` vs `1a4395b`.
+**Verdict:** **APPROVED** — no Critical findings.
+
+- Menu item focus ring = `semantic.focus.ring`; six Pen-exact role corrections only (surface.overlay, border.subtle, surface.hover, text.link, context trigger surface.raised + border.subtle); geometry and all other tokens unchanged; doc comments match.
+- `menu.tsx`/`context-menu.tsx`/`index.ts`/`panda.config.ts` unchanged; MenuItem internal; ContextMenu still composes public Menu/MenuItem; scope excludes the C5 files.
+- True RED: focus role light + 5 discriminating role corrections (6 browser, 5 composition); dark focus / light check non-discriminating and not claimed.
+- BLOCKED rows recorded; disabled bg stays `DISABLED / REVIEW`.
+
+**Important (process):** the C4 `mise run check` was blocked at `check:lint` by the untracked 0-byte `.zed/debug.json`; C4 has no attributable green end-to-end check in its own commit (resolved for C5's run by temporarily relocating the artifact). To be reconciled at the Batch C final verification.
+**Minor:** (1) evidence "all six new role variables emitted" is inaccurate — only `surface-overlay`/`surface-hover` are newly resolved; (2) Menu overlay dark bg and border both resolve `rgb(30,41,59)` (invisible boundary in dark) — follows Pen roles, INFO; (3) RED pass enumeration omits the `States` regression story; (4) bundled `toMatchObject` reduces per-role discrimination; (5) raw class-selector queries are unhardened.
+
+## C5 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `1a4395b18633021687c357e19494bf0232c36960` vs `64df4da`.
+**Verdict:** **APPROVED** — no Critical/Important findings.
+
+- Step upcoming marker = `semantic.text.secondary` (only Step line); Pagination item + Carousel control/dot focus rings = `semantic.focus.ring`; geometry preserved; component `.tsx`/`index.ts`/`panda.config.ts` unchanged.
+- Scope clean (no C4 menu files). Composition RED independently reproduced (`4 fail / 19 pass`); GREEN `23 pass`. Browser `3 passed / 24 passed`. Step number discriminates both themes; focus rings light-only.
+- No autoplay/timers/loop; no new components; BLOCKED rows recorded; disabled ratios real and `DISABLED / REVIEW`.
+
+**Minor:** (1) evidence overstates no-autoplay as "asserted" — carousel merely contains no timer code; (2) `Step.composition.test.tsx` comment says the label resolves `text/secondary` but the recipe keeps value-equivalent `common.700.background`; (3) browser RED is process evidence, not reproducible from the squashed commit; (4) typo "autplay".
