@@ -32,6 +32,7 @@ export const pinInputRecipe = defineSlotRecipe({
 
     base: {
         root: {
+            position: "relative",
             display: "flex",
             flexDirection: "column",
             gap: "x3",

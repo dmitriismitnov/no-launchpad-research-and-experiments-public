@@ -100,12 +100,18 @@ export const PinInput = ({
     };
 
     const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-        if ( event.key === "ArrowLeft" ) {
+        if ( event.key === "ArrowLeft" || event.key === "ArrowRight" ) {
             event.preventDefault();
-            syncCaret(activeIndex - 1);
-        } else if ( event.key === "ArrowRight" ) {
-            event.preventDefault();
-            syncCaret(activeIndex + 1);
+
+            const step = event.key === "ArrowLeft" ? -1 : 1;
+            // Bound to the typed value so the marker and the native caret stay
+            // identical: a native caret cannot be placed past the end of the
+            // value, and without this the browser would silently clamp the
+            // selection while the decorative marker moved on.
+            const next = clampCaret(caret + step, currentValue.length);
+
+            syncCaret(next);
+            inputRef.current?.setSelectionRange(next, next);
         }
     };
 

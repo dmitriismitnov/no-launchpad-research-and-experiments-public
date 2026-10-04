@@ -163,6 +163,24 @@ export const ArrowKeysMoveMarker: Story = {
     },
 };
 
+export const ArrowThenType: Story = {
+    args: { label: "КОД", length: 4, defaultValue: "48", },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const canvas = within(canvasElement);
+        const user = userEvent.setup();
+        const input = canvas.getByRole("textbox", { name: "КОД", });
+
+        input.focus();
+        await user.keyboard("{ArrowLeft}");
+        await expect(activeCellIndex(canvasElement)).toBe(1);
+
+        await user.keyboard("9");
+        await expect(input).toHaveValue("498");
+        await expect(activeCellIndex(canvasElement)).toBe(2);
+    },
+};
+
 export const PasteFillsCode: Story = {
     args: { label: "КОД", length: 4, },
     render: renderIn("light"),

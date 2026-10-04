@@ -223,6 +223,52 @@ export const DarkExternalError: Story = {
     play: async (context) => assertExternalError(context, "rgb(248, 113, 113)"),
 };
 
+const geometryStack = css({
+    display: "flex",
+    flexDirection: "column",
+    gap: "x6",
+    width: "320px",
+});
+
+const renderGeometry = (theme: "light" | "dark") => () => (
+    <ThemeShell theme={theme}>
+        <div className={geometryStack}>
+            <FileUpload status="idle" />
+            <FileUpload status="uploading" progress={42} fileName="logo.png" statusMessage="Загрузка…" />
+            <FileUpload status="complete" fileName="logo.png" statusMessage="Готово" />
+            <FileUpload status="error" statusMessage="Файл слишком большой." />
+        </div>
+    </ThemeShell>
+);
+
+const assertGeometryPreserved = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+): Promise<void> => {
+    const roots = Array.from(canvasElement.querySelectorAll(".fileUpload__root"));
+
+    await expect(roots.length).toBe(4);
+
+    const firstWidth = roots[0]?.getBoundingClientRect().width ?? 0;
+
+    await expect(firstWidth).toBeGreaterThan(0);
+
+    for ( const root of roots ) {
+        await expect(Math.round(root.getBoundingClientRect().width)).toBe(Math.round(firstWidth));
+        await expect(getComputedStyle(root).minHeight).toBe("150px");
+        await expect(root.getBoundingClientRect().height).toBeGreaterThanOrEqual(150);
+    }
+};
+
+export const GeometryPreserved: Story = {
+    render: renderGeometry("light"),
+    play: assertGeometryPreserved,
+};
+
+export const DarkGeometryPreserved: Story = {
+    render: renderGeometry("dark"),
+    play: assertGeometryPreserved,
+};
+
 const assertThemeRoot = async (
     { canvasElement, }: { canvasElement: HTMLElement; },
     background: string,

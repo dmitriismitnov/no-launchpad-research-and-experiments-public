@@ -119,6 +119,19 @@ describe("FileUpload composition", () => {
         expect(markup).toContain('id="assets-error"');
     });
 
+    test("renders the error reason exactly once when an error status carries a file name", () => {
+        const markup = renderToStaticMarkup(
+            <FileUpload
+                id="assets"
+                status="error"
+                fileName="logo.png"
+                statusMessage="Файл слишком большой."
+            />,
+        );
+
+        expect(markup.match(/Файл слишком большой\./g)?.length).toBe(1);
+    });
+
     test("keeps the dropzone root across every external status", () => {
         for ( const status of [ "idle", "uploading", "complete", "error", ] as const ) {
             const markup = renderToStaticMarkup(<FileUpload status={status} />);

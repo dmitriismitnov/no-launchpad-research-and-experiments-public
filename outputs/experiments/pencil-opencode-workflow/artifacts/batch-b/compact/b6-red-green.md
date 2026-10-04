@@ -45,11 +45,13 @@ Command: `bun test src/shared/components/pin-input/PinInput.composition.test.tsx
 
 | Field | Value |
 | --- | --- |
-| RED (per-owner, before implementation) | PinInput `8 fail` / `4 pass`; FileUpload `3 fail` / `9 pass`; Editable `3 fail` / `7 pass`; ColorPicker and Rating unchanged (regression) |
+| RED (per-owner, before implementation) | PinInput `8 fail` / `4 pass`; FileUpload `4 fail` / `8 pass`; Editable `3 fail` / `7 pass`; ColorPicker and Rating unchanged (regression) |
 | GREEN exit | `0` |
 | GREEN result | `51 pass` / `0 fail` (5 files), `162 expect() calls` |
 
 The ColorPicker composition suite is unchanged and passes as regression; the genuinely missing PinInput/FileUpload/Editable facts failed against the pre-change code.
+
+> **FileUpload RED reconciliation (M4).** The originally recorded cycle-1 per-owner split `3 fail` / `9 pass` undercounted one genuinely failing assertion. The reconciled FileUpload cycle-1 RED over the same 12 tests is **`4 fail` / `8 pass`**: besides the three external-status facts, the error-state reason was rendered twice (inner status span **and** the error paragraph), so the reason-duplication assertion failed as well. This cycle adds the explicit single-instance assertion and gates the inner message (M1).
 
 ### Focused browser stories (Vitest + Playwright Chromium)
 
@@ -135,3 +137,76 @@ Counts moved from the B5 shipped baseline (`3ac4a70`): unit `742 → 753` (`+11`
 | Editable Enter confirm / Escape cancel+restore | **PASS** |
 | Disabled contrast (all five owners) | `DISABLED / REVIEW` (both themes) |
 | **B6 final status** | **PASS** — no unresolved `FAIL` / `BLOCKED` / Critical / Important finding; `znfZu` is resolved as the approved single-input projection, not a `BLOCKED` API |
+
+## B6 correction cycle 2/2 — PinInput caret sync and FileUpload single error
+
+**Date:** 2026-10-05\
+**Base commit:** `976d7da97c31dd12aff777093b0ecb5b83566e40` (`feat(shared): add PinInput single input, FileUpload status, and Editable saving`).\
+**Scope:** `pin-input/{pin-input.tsx,preset.ts,PinInput.stories.tsx}`, `file-upload/{file-upload.tsx,FileUpload.stories.tsx,FileUpload.composition.test.tsx}`, `editable/editable.tsx` (JSDoc only), this artifact and `notes/batch-b-evidence.md`. No API, token, foundation, dependency, barrel, `panda.config.ts`, other-component, screen, Pen or untracked-file change. Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited).
+
+### Breaking change / migration note — Editable blur no longer saves
+
+| Field | Value |
+| --- | --- |
+| Previous documented behavior | The edit view was documented to commit the draft on field blur. |
+| Current behavior (intentional breaking change) | **Blur (focus loss) does not save.** Only `Enter` or the **Confirm** button call `onSave`; `Escape` or **Cancel** restore the previous value and call `onCancel`. |
+| Why | Pen `Uo19r` documents only Enter/Escape, and with the explicit Cancel control a blur-commit races the cancel action. |
+| Consumer action | A consumer that relied on blur-to-save must save explicitly (e.g. call the same handler from its own blur logic) or require Enter/Confirm. |
+| Regression guard | No blur-commit exists or is tested; Enter / Escape / Confirm / Cancel behavior is unchanged. The component JSDoc now states the blur contract explicitly. |
+
+### Corrections
+
+| # | Finding | Fix |
+| --- | --- | --- |
+| I1 | ArrowLeft/ArrowRight `preventDefault()`ed and moved only the decorative marker, so the native caret stayed put and the next typed character was appended at the end. | The handler now computes the clamped next position, calls `syncCaret(next)` **and** `inputRef.current?.setSelectionRange(next, next)`, so the real editing position and the marker stay in sync. Home/End, auto-advance, Backspace and paste are untouched. |
+| M1 | `status="error"` + `fileName` rendered the reason twice (inner status span + error paragraph). | The inner status message now renders only for `uploading`/`complete` (`showStatus && hasText(statusMessage)`). |
+| M2 | The FileUpload external-state "geometry preserved" claim had no computed-style proof. | New `GeometryPreserved` / `DarkGeometryPreserved` stories assert all four roots keep the same width and a `150px` `min-height` across idle / uploading / complete / error. |
+| M3 | PinInput root was not positioned, so its absolutely positioned visually-hidden input/live region escaped the component box. | Root preset gains `position: "relative"` (matching FileUpload); `mise run gen` regenerated the stylesheet. |
+| M4 | The B6 evidence recorded FileUpload unit RED as `3 fail` / `9 pass`. | Reconciled to **`4 fail` / `8 pass`** with the reason recorded above. |
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun): `bun test src/shared/components/file-upload/FileUpload.composition.test.tsx src/shared/components/pin-input/PinInput.composition.test.tsx src/shared/components/editable/Editable.composition.test.tsx`
+
+| Field | Value |
+| --- | --- |
+| RED (before M1 fix) | FileUpload `1 fail` / `12 pass` — `renders the error reason exactly once when an error status carries a file name` (reason rendered twice) |
+| GREEN exit / result | `0` — `35 pass` / `0 fail`, `118 expect() calls` |
+
+Focused browser stories (Vitest + Playwright Chromium): `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/pin-input/PinInput.stories.tsx src/shared/components/file-upload/FileUpload.stories.tsx`
+
+| Field | Value |
+| --- | --- |
+| RED (before I1 fix) | PinInput `Arrow Then Type` failed: expected `498`, received `489` (the typed character was appended at the unmoved native caret) |
+| GREEN exit / result | `0` — `2 passed` files, `35 passed (35)` (PinInput 17, FileUpload 18) |
+
+The FileUpload geometry stories passed on the RED run: the geometry was already preserved, so the new assertion converts an unproven claim into a computed-style proof rather than producing a fabricated failure.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)`; `.pinInput__root { position: relative; }` emitted |
+| focused composition RED | `1` | FileUpload `1 fail` / `12 pass` |
+| focused composition GREEN | `0` | `35 pass` / `0 fail` |
+| focused browser RED | `1` | PinInput `Arrow Then Type` (expected `498`, received `489`) |
+| focused browser GREEN | `0` | `2 passed` files, `35 passed (35)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `754 pass / 0 fail` (90 files); browser `582 passed` (73 files) |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-wuFLA87z.css 223.53 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the cycle-1 B6 baseline (`976d7da`): unit `753 → 754` (`+1`), browser `579 → 582` (`+3`).
+
+### Disposition (cycle 2/2)
+
+| Row | Disposition |
+| --- | --- |
+| PinInput marker and native caret stay in sync on ArrowLeft/ArrowRight (typing inserts at the marked cell) | **PASS** |
+| PinInput Home/End, auto-advance, Backspace, paste unchanged | **PASS** (regression) |
+| FileUpload error reason rendered exactly once | **PASS** |
+| FileUpload external-state width + `150px` min-height preserved (computed, both themes) | **PASS** |
+| PinInput root contains its absolutely positioned hidden input/live region | **PASS** |
+| Editable blur does not save; Enter/Confirm save; Escape/Cancel restore (explicit migration note) | **PASS** |
+| FileUpload unit RED reconciled to `4 fail` / `8 pass` | **PASS** |
+| Disabled contrast (all five owners) | `DISABLED / REVIEW` (both themes) |
+| **B6 correction cycle 2/2 status** | **PASS** |

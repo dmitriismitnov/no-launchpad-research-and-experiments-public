@@ -162,7 +162,9 @@ export const FileUpload = ({
                                 />
                             </span>
                         )}
-                        {hasText(statusMessage) && <span className={styles.statusMessage}>{statusMessage}</span>}
+                        {showStatus && hasText(statusMessage) && (
+                            <span className={styles.statusMessage}>{statusMessage}</span>
+                        )}
                     </span>
                 )}
                 {files.length > 0 && (
