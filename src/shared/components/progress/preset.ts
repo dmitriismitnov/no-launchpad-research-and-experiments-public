@@ -6,14 +6,13 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * A horizontal bar. The fill width is the only runtime value; it is set by the
  * component as an inline percentage so the recipe never branches on data.
  *
- * Pen references `semantic/surface/sunken` for the track and
- * `semantic/action/primary-bg` for the fill:
- * - sunken -> common.100.background (light exact; dark one step, the Skeleton /
- *   Spinner convention)
- * - primary-bg is green.700 in both themes; brand.700.background matches light
- *   and resolves to the brighter green.300 in dark, which keeps contrast on the
- *   sunken dark track.
- * - radius/pill has no foundation token; `9999px` is the equivalent.
+ * Pen `tTGQi` master names the resolved roles:
+ * - surface/sunken -> semantic.surface.sunken (track; neutral.100 light /
+ *   neutral.950 dark)
+ * - action/primary-bg -> semantic.action.primary.background (fill; green.700 in
+ *   both themes)
+ * - radius/pill -> semantic radius `full` (`9999px`), value-equal to the prior
+ *   literal.
  */
 export const progressRecipe = defineSlotRecipe({
     className: "progress",
@@ -28,14 +27,14 @@ export const progressRecipe = defineSlotRecipe({
             width: "100%",
             height: "x3",
             overflow: "hidden",
-            borderRadius: "9999px",
-            backgroundColor: "semantic.common.100.background",
+            borderRadius: "full",
+            backgroundColor: "semantic.surface.sunken",
         },
 
         fill: {
             height: "100%",
-            borderRadius: "9999px",
-            backgroundColor: "semantic.brand.700.background",
+            borderRadius: "full",
+            backgroundColor: "semantic.action.primary.background",
             transition: "width 200ms ease",
             "@media (prefers-reduced-motion: reduce)": {
                 transition: "none",

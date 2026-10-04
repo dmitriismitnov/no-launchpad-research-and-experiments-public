@@ -7,9 +7,12 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * arc whose `strokeDasharray` / `strokeDashoffset` are set by the component from
  * the current value. The whole svg is rotated so the arc starts at the top.
  *
- * Pen references `semantic/surface/sunken` for the track and
- * `semantic/action/primary-bg` for the arc; both resolve through the same
- * tokens as the horizontal Progress bar.
+ * Pen `yz7HH` master names the resolved roles; both resolve through the same
+ * tokens as the horizontal Progress bar:
+ * - surface/sunken -> semantic.surface.sunken (track stroke; neutral.100 light
+ *   / neutral.950 dark)
+ * - action/primary-bg -> semantic.action.primary.background (arc stroke;
+ *   green.700 in both themes)
  */
 export const progressRingRecipe = defineSlotRecipe({
     className: "progressRing",
@@ -31,12 +34,12 @@ export const progressRingRecipe = defineSlotRecipe({
 
         track: {
             fill: "none",
-            stroke: "semantic.common.100.background",
+            stroke: "semantic.surface.sunken",
         },
 
         arc: {
             fill: "none",
-            stroke: "semantic.brand.700.background",
+            stroke: "semantic.action.primary.background",
             strokeLinecap: "round",
         },
     },

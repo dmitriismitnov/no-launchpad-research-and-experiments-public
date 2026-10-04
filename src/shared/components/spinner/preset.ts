@@ -3,6 +3,10 @@ import { definePreset, defineRecipe, } from "@pandacss/dev";
 /**
  * Spinner visual projection: a rotating loader glyph.
  *
+ * Pen `lpijt` master paints the glyph with `semantic/text/secondary`
+ * (neutral.700 light / neutral.300 dark) — value-equal to the prior
+ * `common.700.background` alias.
+ *
  * The component owns its rotation as a local `spin` keyframe pair. Reduced
  * motion stops the animation without swapping the glyph.
  */
@@ -15,7 +19,7 @@ export const spinnerRecipe = defineRecipe({
         flexShrink: "0",
         width: "x12",
         height: "x12",
-        color: "semantic.common.700.background",
+        color: "semantic.text.secondary",
         animation: "spin 1s linear infinite",
         "@media (prefers-reduced-motion: reduce)": {
             animation: "none",

@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { skeletonRecipe, } from "./preset";
 import { Skeleton, } from "./skeleton";
 
 describe("skeleton composition", () => {
@@ -25,5 +26,11 @@ describe("skeleton composition", () => {
 
         expect(markup).toContain("consumer");
         expect(markup).toContain("skeleton");
+    });
+
+    // Pen `qfUOu` token contract: the placeholder fills with the sunken surface
+    // role (neutral.100 light / neutral.950 dark).
+    test("paints the sunken placeholder surface", () => {
+        expect(skeletonRecipe.base).toMatchObject({ backgroundColor: "semantic.surface.sunken", });
     });
 });

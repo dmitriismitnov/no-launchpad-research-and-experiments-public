@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { progressRecipe, } from "./preset";
 import { Progress, } from "./progress";
 
 describe("progress composition", () => {
@@ -44,5 +45,19 @@ describe("progress composition", () => {
         const markup = renderToStaticMarkup(<Progress value={10} data-testid="p" />);
 
         expect(markup).toContain(`data-testid="p"`);
+    });
+
+    // Pen `tTGQi` token contract: the track reads `surface/sunken` and the fill
+    // `action/primary-bg` (both discriminate in dark); the `full` radius is
+    // value-equal to the prior literal.
+    test("paints the sunken track and primary fill", () => {
+        expect(progressRecipe.base?.["track"]).toMatchObject({
+            backgroundColor: "semantic.surface.sunken",
+            borderRadius: "full",
+        });
+        expect(progressRecipe.base?.["fill"]).toMatchObject({
+            backgroundColor: "semantic.action.primary.background",
+            borderRadius: "full",
+        });
     });
 });

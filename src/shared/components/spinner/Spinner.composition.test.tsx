@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { spinnerRecipe, } from "./preset";
 import { Spinner, } from "./spinner";
 
 describe("spinner composition", () => {
@@ -26,5 +27,11 @@ describe("spinner composition", () => {
         const markup = renderToStaticMarkup(<Spinner data-testid="spin" />);
 
         expect(markup).toContain(`data-testid="spin"`);
+    });
+
+    // Pen `lpijt` token contract: the glyph reads `semantic/text/secondary`,
+    // value-equal to the prior `common.700.background` alias (regression).
+    test("paints the loader with the secondary text role", () => {
+        expect(spinnerRecipe.base).toMatchObject({ color: "semantic.text.secondary", });
     });
 });

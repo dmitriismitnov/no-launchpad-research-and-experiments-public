@@ -8,14 +8,15 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * repaints the leading icon; the surface, boundary and copy keep the shared
  * role so a toast stays visually consistent across tones.
  *
- * Pen references the newer role layer (`semantic/surface/*`, `semantic/text/*`,
- * `semantic/action/*`). Each alias is resolved to the closest matrix token:
- * - surface/overlay -> common.50.background (white exact; dark one step)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - text/primary -> common.50.text (exact)
- * - text/secondary -> common.700.background (exact)
- * - text/tertiary -> common.600.background (exact)
- * - text/link -> brand.700.background (light exact; dark one step brighter)
+ * Pen `F1P1XX` master names the resolved roles:
+ * - surface/overlay -> semantic.surface.overlay (white light / neutral.800 dark)
+ * - border/subtle -> semantic.border.subtle (neutral.200/800)
+ * - text/primary -> semantic.text.primary (title; neutral.900/50)
+ * - text/secondary -> semantic.text.secondary (body; neutral.700/300)
+ * - text/tertiary -> semantic.text.tertiary (dismiss; neutral.600/400)
+ * - text/link -> semantic.text.link (action; green.700/400)
+ * The leading icon stays on the tone-tinted matrix alias, which is value-equal
+ * to Pen `feedback/positive-fg` / `negative-fg` (regression, not renamed).
  */
 export const toastRecipe = defineSlotRecipe({
     className: "toast",
@@ -32,8 +33,8 @@ export const toastRecipe = defineSlotRecipe({
             borderWidth: "thin",
             borderStyle: "solid",
             borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
-            borderColor: "semantic.common.200.divider",
+            backgroundColor: "semantic.surface.overlay",
+            borderColor: "semantic.border.subtle",
             boxShadow: "0 8px 24px {colors.semantic.shadow.400}",
         },
 
@@ -56,7 +57,7 @@ export const toastRecipe = defineSlotRecipe({
             fontSize: "sm",
             fontWeight: "semibold",
             lineHeight: "normal",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         },
 
         body: {
@@ -64,7 +65,7 @@ export const toastRecipe = defineSlotRecipe({
             fontSize: "sm",
             fontWeight: "regular",
             lineHeight: "normal",
-            color: "semantic.common.700.background",
+            color: "semantic.text.secondary",
         },
 
         action: {
@@ -78,7 +79,7 @@ export const toastRecipe = defineSlotRecipe({
             fontFamily: "body",
             fontSize: "sm",
             fontWeight: "medium",
-            color: "semantic.brand.700.background",
+            color: "semantic.text.link",
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
@@ -95,7 +96,7 @@ export const toastRecipe = defineSlotRecipe({
             borderStyle: "none",
             backgroundColor: "transparent",
             cursor: "pointer",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },

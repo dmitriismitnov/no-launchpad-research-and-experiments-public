@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { Alert, } from "./alert";
+import { alertRecipe, } from "./preset";
 
 describe("alert composition", () => {
     test("renders the title and body in their slots", () => {
@@ -55,5 +56,26 @@ describe("alert composition", () => {
         const markup = renderToStaticMarkup(<Alert title="Saved" data-testid="a" />);
 
         expect(markup).toContain(`data-testid="a"`);
+    });
+
+    // Pen `Q2PWF` token contract: the icon and title read `feedback/neutral-fg`
+    // and the positive/negative surfaces and foregrounds are value-equal matrix
+    // aliases. The named feedback/* roles are BLOCKED in the foundation, so
+    // these are regression assertions (no production change).
+    test("paints the feedback foreground and positive/negative surface roles", () => {
+        expect(alertRecipe.base?.["icon"]).toMatchObject({ color: "semantic.common.50.icon", });
+        expect(alertRecipe.base?.["title"]).toMatchObject({ color: "semantic.common.50.icon", });
+        expect(alertRecipe.variants?.["tone"]?.["positive"]?.["root"]).toMatchObject({
+            backgroundColor: "semantic.positive.50.background",
+        });
+        expect(alertRecipe.variants?.["tone"]?.["positive"]?.["icon"]).toMatchObject({
+            color: "semantic.positive.700.background",
+        });
+        expect(alertRecipe.variants?.["tone"]?.["negative"]?.["root"]).toMatchObject({
+            backgroundColor: "semantic.negative.50.background",
+        });
+        expect(alertRecipe.variants?.["tone"]?.["negative"]?.["icon"]).toMatchObject({
+            color: "semantic.negative.700.background",
+        });
     });
 });

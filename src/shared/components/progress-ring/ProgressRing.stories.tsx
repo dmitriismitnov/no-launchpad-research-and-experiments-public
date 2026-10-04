@@ -1,4 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
+import type { ReactNode, } from "react";
+
+import { expect, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -46,4 +49,51 @@ export const Values: Story = {
             <ProgressRing value={100} label="100%" />
         </div>
     ),
+};
+
+const shell = css({
+    padding: "x12",
+    backgroundColor: "semantic.surface.base",
+    color: "semantic.text.primary",
+});
+
+const ThemeShell = ({ theme, children, }: { theme: "light" | "dark"; children: ReactNode; }) => (
+    <div data-theme={theme}>
+        <div className={shell}>{children}</div>
+    </div>
+);
+
+// Pen `yz7HH` token contract: the sunken track stroke and the primary arc
+// stroke are value-equal in light and discriminate in dark (track neutral.950,
+// arc the opaque green.700).
+const ringTrack = { light: "rgb(241, 245, 249)", dark: "rgb(2, 6, 23)", } as const;
+const ringArc = { light: "rgb(21, 128, 61)", dark: "rgb(21, 128, 61)", } as const;
+
+const assertProgressRingTokens =
+    (theme: "light" | "dark") => async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+        const canvas = within(canvasElement);
+        const root = canvas.getByTestId("progress-ring-tokens");
+        const track = root.querySelector(".progressRing__track") as SVGElement;
+        const arc = root.querySelector(".progressRing__arc") as SVGElement;
+
+        await expect(getComputedStyle(track).stroke).toBe(ringTrack[theme]);
+        await expect(getComputedStyle(arc).stroke).toBe(ringArc[theme]);
+    };
+
+export const TokenSurfaceLight: Story = {
+    render: () => (
+        <ThemeShell theme="light">
+            <ProgressRing data-testid="progress-ring-tokens" value={60} label="Progress" />
+        </ThemeShell>
+    ),
+    play: assertProgressRingTokens("light"),
+};
+
+export const TokenSurfaceDark: Story = {
+    render: () => (
+        <ThemeShell theme="dark">
+            <ProgressRing data-testid="progress-ring-tokens" value={60} label="Progress" />
+        </ThemeShell>
+    ),
+    play: assertProgressRingTokens("dark"),
 };

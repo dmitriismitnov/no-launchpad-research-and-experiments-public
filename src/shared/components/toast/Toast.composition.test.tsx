@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { toastRecipe, } from "./preset";
 import { Toast, } from "./toast";
 
 describe("toast composition", () => {
@@ -69,5 +70,19 @@ describe("toast composition", () => {
         const markup = renderToStaticMarkup(<Toast title="Saved" data-testid="t" />);
 
         expect(markup).toContain(`data-testid="t"`);
+    });
+
+    // Pen `F1P1XX` token contract: the overlay surface, subtle boundary and the
+    // text/link action are the discriminating roles; title/body/dismiss are
+    // value-equal role renames asserted as regression.
+    test("paints the overlay surface, subtle boundary and copy roles", () => {
+        expect(toastRecipe.base?.["root"]).toMatchObject({
+            backgroundColor: "semantic.surface.overlay",
+            borderColor: "semantic.border.subtle",
+        });
+        expect(toastRecipe.base?.["action"]).toMatchObject({ color: "semantic.text.link", });
+        expect(toastRecipe.base?.["title"]).toMatchObject({ color: "semantic.text.primary", });
+        expect(toastRecipe.base?.["body"]).toMatchObject({ color: "semantic.text.secondary", });
+        expect(toastRecipe.base?.["dismiss"]).toMatchObject({ color: "semantic.text.tertiary", });
     });
 });

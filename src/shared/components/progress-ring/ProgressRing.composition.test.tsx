@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { progressRingRecipe, } from "./preset";
 import { ProgressRing, } from "./progress-ring";
 
 describe("progress ring composition", () => {
@@ -43,5 +44,16 @@ describe("progress ring composition", () => {
         const markup = renderToStaticMarkup(<ProgressRing value={10} data-testid="r" />);
 
         expect(markup).toContain(`data-testid="r"`);
+    });
+
+    // Pen `yz7HH` token contract: the track stroke reads `surface/sunken` and
+    // the arc stroke `action/primary-bg` (both discriminate in dark only).
+    test("paints the sunken track and primary arc strokes", () => {
+        expect(progressRingRecipe.base?.["track"]).toMatchObject({
+            stroke: "semantic.surface.sunken",
+        });
+        expect(progressRingRecipe.base?.["arc"]).toMatchObject({
+            stroke: "semantic.action.primary.background",
+        });
     });
 });

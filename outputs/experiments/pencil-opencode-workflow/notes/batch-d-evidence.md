@@ -210,3 +210,202 @@ StatusIndicator, Badge and Divider report `No FAIL or DISABLED rows` in their Pe
 **Important (corrected):** the Tag **boundary** was described as value-equal in both themes, but `common/50/border.strong` = `neutral.500` both themes while `border/strong` = `neutral.500` light / `neutral.400` dark — so the boundary discriminates in dark. Evidence and the `Tag.stories.tsx` / `Tag.composition.test.tsx` comments were corrected; no production change.
 
 **Minor (recorded):** (1) one Pen-audit disabled ratio (`9.45/13.44`) does not reproduce against code foundation (`8.32/13.97`); row stays `DISABLED / REVIEW`, never PASS; (2) composition RED is role-name-level while "value RED" is light-value-level — wording clarified; (3) StatusIndicator neutral dot discriminates in light only; (4) per-file `ThemeShell` scaffolding duplicated (consistent with repo pattern).
+
+---
+
+# Batch D evidence — D2 feedback & status (Alert · Toast · EmptyState · Skeleton · Spinner · Progress · ProgressRing)
+
+**Date:** 2026-10-04\
+**Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen`\
+**Pen identity:** `9294654` bytes, SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` (verified before and after inspection; unchanged).\
+**Base commit:** `a029aab951e6cbe992329da2b9c119ace076accb` (`docs(shared): correct Batch D1 Tag boundary evidence and record review`).\
+**Method:** Pencil MCP read-only `Get`/`Print` (`get_app_state` confirmed `ex_2.pen` as the active editor; no `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`), code reads, focused Bun composition tests and Vitest + Playwright Chromium story tests. Statuses follow the migration spec: `PASS`, `FAIL`, `INFO`, `HUMAN REVIEW`, `BLOCKED`, `DISABLED / REVIEW`.\
+**Cycle:** D2 cycle 1/2.
+
+> **Hash note (honest):** the handoff again quoted the Pen SHA-256 as a 63-character string (`…dde787421daf7fa`, one digit short). The file's true digest is the 64-character `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` above, matching the D1 header. The Pen was not modified.
+
+## D2 scope
+
+Recipe/token-role substitutions on existing slots for seven feedback & status components, under the user-approved contract, plus both-theme computed-style stories. Public component `.tsx` files, `index.ts` barrels, `panda.config.ts`, the Foundation/token layer and generated `src/shared/styled-system/**` were **not** hand-edited. No new public components; `progress-ring/` stays where it is.
+
+## Pen source node IDs (read-only)
+
+| Owner | Master | Documentation frame | Verbatim Pen facts used |
+| --- | --- | --- | --- |
+| Alert | `Q2PWF` | `K2iLH` | Named parts `root · status icon · title · description · action · dismiss control`; variants `info · positive · negative · neutral, with title, with action, dismissible`; "A live region announces inserted alerts."; "The icon is decorative; the text carries the meaning."; "Dismiss controls have accessible names." |
+| Toast | `F1P1XX` | `UldIG` | Named parts `root · status icon · message · action · close`; variants `info · positive · negative, with action, dismissible`; "Toasts stack in one corner and never cover primary controls."; "A toast with an action stays until it is used or dismissed."; "The toast region is a live region." |
+| Progress | `tTGQi` | `qxDaq` | Named parts `root · track · filled range · value label · indeterminate indicator`; variants `linear · ring, determinate · indeterminate, with value label, error`; state contract `empty · in progress · complete · error`; "Expose the progress value to assistive technology."; "Indeterminate progress never shows a fake percentage." |
+| Progress Ring | `yz7HH` | `qxDaq` (shared with Progress) | No standalone documentation frame exists; the ring is documented inside the Progress frame (`Public variants: linear · ring`). Master binds track `surface/sunken` and arc `action/primary-bg`. |
+| Spinner | `lpijt` | `l4jso` | Named parts `root · indicator · optional label`; variants `size: sm · md · lg, with label, on surface · on colour`; "Expose a busy state on the region it belongs to."; "Respect reduced-motion preferences." |
+| Skeleton | `qfUOu` | `oPSvA` | Named parts `root · block shapes · text lines · avatar shape · media shape`; variants `text · block · media · avatar, composed rows`; "Hidden from assistive technology; the region announces loading."; "Reduced-motion users see a static placeholder." |
+| Empty State | `Kj5Nm` | `EtNCb` | Named parts `root · illustration or icon · title · description · primary action · secondary action`; variants `default · compact, with action, error variant`; state contract `default · compact · open action · disabled action`; "The title is a heading in the surrounding structure."; "The action is the only focusable element." |
+
+Master role bindings confirmed via read-only `Get`: Alert `feedback/neutral-bg · feedback/neutral-border · feedback/neutral-fg · text/link · text/tertiary · text/secondary`; Toast `surface/overlay · border/subtle · text/primary · text/secondary · text/link · text/tertiary`; Skeleton `surface/sunken`; Spinner `text/secondary`; Progress `surface/sunken` + `action/primary-bg`; Progress Ring `surface/sunken` + `action/primary-bg`; Empty State `surface/raised · border/subtle · text/tertiary · text/primary · text/secondary`.
+
+## Enumeration and disposition
+
+| Owner | Axis / slot | Pen role | Disposition |
+| --- | --- | --- | --- |
+| Toast | root surface | `surface/overlay` | **PASS** — `semantic.surface.overlay`; **discriminates in both themes** (white `rgb(255,255,255)` vs prior `neutral.50` `rgb(248,250,252)` light; `neutral.800` `rgb(30,41,59)` vs prior `neutral.950` `rgb(2,6,23)` dark) |
+| Toast | root boundary | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs prior `common/200/divider` `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
+| Toast | action | `text/link` | **PASS (dark RED)** — `semantic.text.link`; light `green.700` value-equal to prior `brand/700/background`, **discriminates in dark** (`green.400` vs prior `green.300`) |
+| Toast | title / body / dismiss | `text/primary` / `text/secondary` / `text/tertiary` | **PASS (regression)** — value-equal role renames, asserted not claimed RED |
+| Toast | leading icon | tone-tinted alias | **INFO** — left on the existing tone alias; value-equal to Pen `feedback/positive-fg` / `negative-fg`, unchanged |
+| Empty State | root surface | `surface/raised` | **PASS** — `semantic.surface.raised`; **discriminates in both themes** (white vs `neutral.50` light; `neutral.900` vs `neutral.950` dark) |
+| Empty State | root boundary | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
+| Empty State | icon / title / description | `text/tertiary` / `text/primary` / `text/secondary` | **PASS (regression)** — value-equal; asserted |
+| Empty State | radius | `radius/lg` | **PASS (regression)** — `lg` resolves `1rem` / `16px`, value-equal to the prior literal |
+| Skeleton | base surface | `surface/sunken` | **PASS (dark RED)** — `semantic.surface.sunken`; light `neutral.100` value-equal, **discriminates in dark** (`neutral.950` `rgb(2,6,23)` vs prior `common/100/background` `neutral.900`) |
+| Progress | track | `surface/sunken` | **PASS (dark RED)** — track; light value-equal, dark `neutral.950` |
+| Progress | fill | `action/primary-bg` | **PASS (dark RED)** — fill; light `green.700` value-equal, dark `green.700` vs prior `brand/700/background` `green.300` |
+| Progress | radius | `radius/pill` | **PASS (regression)** — `full` resolves `9999px`, value-equal |
+| Progress Ring | track stroke | `surface/sunken` | **PASS (dark RED)** — `semantic.surface.sunken` |
+| Progress Ring | arc stroke | `action/primary-bg` | **PASS (dark RED)** — `semantic.action.primary.background` |
+| Spinner | glyph | `text/secondary` | **PASS (regression)** — `semantic.text.secondary`; value-equal to prior `common/700/background` in both themes |
+| Alert | neutral surface/boundary/fg; positive/negative surface/fg | `feedback/*` | **PASS (regression)** — named `feedback/*` roles are **BLOCKED** in the foundation; recipe keeps value-mapped matrix aliases (`common/50/background`, `common/200/divider`, `common/50/icon`, `positive|negative/*`), asserted not changed |
+| Alert | action / info tone / brand tone | `text/link`, `feedback/info-*`, brand | **BLOCKED** (ledger below) |
+
+## Approved contract and changed paths
+
+- **Toast:** root `semantic.surface.overlay`; boundary `semantic.border.subtle`; action `semantic.text.link`; title `semantic.text.primary`; body `semantic.text.secondary`; dismiss `semantic.text.tertiary`.
+- **EmptyState:** root `semantic.surface.raised`; boundary `semantic.border.subtle`; icon `semantic.text.tertiary`; title `semantic.text.primary`; description `semantic.text.secondary`; radius `lg`.
+- **Skeleton:** base `semantic.surface.sunken`.
+- **Progress:** track `semantic.surface.sunken`; fill `semantic.action.primary.background`; radius `full`.
+- **ProgressRing:** track stroke `semantic.surface.sunken`; arc stroke `semantic.action.primary.background`.
+- **Alert:** value-equal regression assertions only; no recipe change.
+- **Spinner:** glyph `semantic.text.secondary` (value-equal regression). Each preset doc comment now names the resolved Pen role.
+
+Changed paths: `src/shared/components/{alert,toast,empty-state,skeleton,spinner,progress,progress-ring}/{preset.ts,*.composition.test.tsx,*.stories.tsx}` (21 files), this evidence, `artifacts/batch-d/feedback-status/` (new captures). Component `.tsx` files, `index.ts`, `panda.config.ts` and the token layer were not touched; generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited). No export changed, so `check:deps` was not required.
+
+## Tests-first proof (RED → GREEN)
+
+### Composition (Bun)
+
+RED was observed by restoring the parent `a029aab` presets, keeping the new assertions, and running:
+
+| Step | Exit | Result |
+| --- | --- | --- |
+| RED command | `bun test src/shared/components/{alert,toast,empty-state,skeleton,spinner,progress,progress-ring}/*.composition.test.tsx` | — |
+| RED | `1` | `6 fail` / `40 pass` (46 tests, 7 files, 105 expect calls) |
+| RED failures | skeleton `paints the sunken placeholder surface`; toast `paints the overlay surface, subtle boundary and copy roles`; empty state `paints the raised surface, subtle boundary and copy roles`; spinner `paints the loader with the secondary text role`; progress ring `paints the sunken track and primary arc strokes`; progress `paints the sunken track and primary fill` | |
+| GREEN | `0` | `46 pass` / `0 fail` (46 tests, 7 files, 114 expect calls) |
+
+The Alert assertion passed on the parent recipe (pure regression). Composition RED is **role-name-level**: every renamed role fails the recipe assertion even when its value is equal; the value-level discriminator is the browser table below. **True RED** (rendered value discriminates): Toast surface + boundary (both themes) and action (dark); EmptyState surface + boundary (both themes); Skeleton, Progress and ProgressRing (dark only). **Regressions** (value-equal, asserted not claimed RED): Toast title/body/dismiss; EmptyState icon/title/description + radius; Spinner; Progress/ProgressRing `full` radius; Alert.
+
+### Browser stories (Vitest + Playwright Chromium)
+
+| Step | Exit | Result |
+| --- | --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts` on the seven `*.stories.tsx` | — |
+| RED | `1` | `5 failed` / `2 passed` files, `7 failed` / `39 passed` (46) |
+| RED failures | empty-state `Token Surface Light`, `Token Surface Dark`; progress `Token Surface Dark`; progress-ring `Token Surface Dark`; skeleton `Token Surface Dark`; toast `Token Surface Light`, `Token Surface Dark` | |
+| GREEN | `0` | `7 passed` files, `46 passed` (46) |
+
+The browser RED is **value-level** and matches the classification exactly: Toast Light/Dark and EmptyState Light/Dark fail (surfaces + boundaries discriminate in both themes), Skeleton/Progress/ProgressRing fail in **dark only**, and Alert `Token Roles Light/Dark` plus Spinner `Token Color Light/Dark` pass on the parent (value-equal regressions). Focused coverage moved `46 → 46` composition tests (all files were extended in place) and added 14 browser token tests (`46` total story tests).
+
+## Both-theme evidence (computed style, in browser)
+
+Code-side Storybook-iframe captures (`deviceScaleFactor: 2`), in `artifacts/batch-d/feedback-status/`: `toast-surface-tokens-{light,dark}`, `empty-state-surface-tokens-{light,dark}`, `skeleton-surface-tokens-{light,dark}`, `spinner-color-tokens-{light,dark}`, `progress-surface-tokens-{light,dark}`, `progress-ring-surface-tokens-{light,dark}`, `alert-role-tokens-{light,dark}` (14 PNGs) plus `computed-styles.json`.
+
+| Surface / role | Light (computed) | Dark (computed) |
+| --- | --- | --- |
+| Toast root `surface/overlay` / `border/subtle` | `rgb(255, 255, 255)` / `rgb(226, 232, 240)` | `rgb(30, 41, 59)` / `rgb(30, 41, 59)` |
+| Toast action `text/link` | `rgb(21, 128, 61)` | `rgb(74, 222, 128)` |
+| Toast title / body / dismiss | `rgb(15, 23, 42)` / `rgb(51, 65, 85)` / `rgb(71, 85, 105)` | `rgb(248, 250, 252)` / `rgb(203, 213, 225)` / `rgb(148, 163, 184)` |
+| EmptyState root `surface/raised` / `border/subtle` (16px) | `rgb(255, 255, 255)` / `rgb(226, 232, 240)` | `rgb(15, 23, 42)` / `rgb(30, 41, 59)` |
+| EmptyState icon / title / description | `rgb(71, 85, 105)` / `rgb(15, 23, 42)` / `rgb(51, 65, 85)` | `rgb(148, 163, 184)` / `rgb(248, 250, 252)` / `rgb(203, 213, 225)` |
+| Skeleton `surface/sunken` | `rgb(241, 245, 249)` | `rgb(2, 6, 23)` |
+| Spinner `text/secondary` | `rgb(51, 65, 85)` | `rgb(203, 213, 225)` |
+| Progress track `surface/sunken` / fill `action/primary-bg` | `rgb(241, 245, 249)` / `rgb(21, 128, 61)` | `rgb(2, 6, 23)` / `rgb(21, 128, 61)` |
+| ProgressRing track / arc stroke | `rgb(241, 245, 249)` / `rgb(21, 128, 61)` | `rgb(2, 6, 23)` / `rgb(21, 128, 61)` |
+| Alert neutral surface / boundary / fg | `rgb(248, 250, 252)` / `rgb(203, 213, 225)` / `rgb(51, 65, 85)` | `rgb(2, 6, 23)` / `rgb(51, 65, 85)` / `rgb(226, 232, 240)` |
+| Alert positive surface / fg | `rgb(240, 253, 244)` / `rgb(21, 128, 61)` | `rgb(5, 46, 22)` / `rgb(134, 239, 172)` |
+| Alert negative surface / fg | `rgb(254, 242, 242)` / `rgb(185, 28, 28)` | `rgb(69, 10, 10)` / `rgb(252, 165, 165)` |
+
+### Contrast (real WCAG ratios)
+
+Content against its resolved surface; thresholds text `≥ 4.5`, icon/boundary `≥ 3`.
+
+| Pair | Light | Dark | Verdict |
+| --- | --- | --- | --- |
+| Toast title `text/primary` / `surface/overlay` | 17.85 | 13.98 | PASS (text) |
+| Toast body `text/secondary` / `surface/overlay` | 10.35 | 9.85 | PASS (text) |
+| Toast dismiss `text/tertiary` / `surface/overlay` | 7.58 | 5.71 | PASS (text) |
+| Toast action `text/link` / `surface/overlay` | 5.02 | 8.40 | PASS (text) |
+| Toast boundary `border/subtle` / `surface/overlay` | 1.23 | 1.00 | **INFO** — decorative boundary |
+| EmptyState title `text/primary` / `surface/raised` | 17.85 | 17.06 | PASS (text) |
+| EmptyState description `text/secondary` / `surface/raised` | 10.35 | 12.02 | PASS (text) |
+| EmptyState icon `text/tertiary` / `surface/raised` | 7.58 | 6.96 | PASS (icon) |
+| EmptyState boundary `border/subtle` / `surface/raised` | 1.23 | 1.22 | **INFO** — decorative boundary |
+| Spinner `text/secondary` / `surface/base` | 9.90 | 13.59 | PASS (icon) |
+| Skeleton `surface/sunken` / `surface/base` | 1.05 | 1.00 | **INFO** — placeholder surface, no WCAG verdict |
+| Progress track `surface/sunken` / `surface/base` | 1.05 | 1.00 | **INFO** — track, no WCAG verdict |
+| Progress fill `action/primary-bg` / `surface/base` | 4.79 | 4.02 | PASS (functional boundary ≥ 3) |
+| ProgressRing track / arc vs `surface/base` | 1.05 / 4.79 | 1.00 / 4.02 | track **INFO**; arc PASS (≥ 3) |
+| Alert neutral fg `common/50/icon` / `common/50/background` | 9.90 | 16.36 | PASS (text) |
+| Alert positive fg `positive/700` / `positive/50` | 4.79 | 10.62 | PASS (icon) |
+| Alert negative fg `negative/700` / `negative/50` | 5.91 | 8.51 | PASS (icon) |
+
+### DISABLED / REVIEW (Pen audit ratios, never counted PASS)
+
+Pen component-role audits for the seven D2 owners. Only EmptyState reports disabled specimens; the other six report `DISABLED / REVIEW 0`. The EmptyState ratios were independently reproduced against the code foundation and match exactly.
+
+| Owner | Pen failure-list row | Light | Dark |
+| --- | --- | --- | --- |
+| Empty State | `st-disabled action disabled-icon action/disabled-bg → text/tertiary` | 6.92 DISABLED | 5.71 DISABLED |
+| Empty State | `st-disabled action disabled-text action/disabled-bg → text/secondary` | 9.45 DISABLED | 9.85 DISABLED |
+| Empty State | `st-disabled action disabled-text action/disabled-bg → text/primary` | 16.30 DISABLED | 13.98 DISABLED |
+
+Alert (`7/7` text, `4/4` icon), Toast (`6/6` text, `2/2` icon), Progress (`3/3` text), Spinner (`3/3` text, `2/2` icon), Skeleton (`3/3` text) and the shared Progress/Ring audit report `No FAIL or DISABLED rows`.
+
+## BLOCKED ledger (recorded, not implemented)
+
+| Item | Pen authority | Reason |
+| --- | --- | --- |
+| Toast queue / auto-dismiss timers / viewport / stacking / portal / dismiss policy | `F1P1XX` / `UldIG` ("stack in one corner"; "stays until used or dismissed"; "Timeout is long enough") | Behaviour/portal; outside the approved token contract |
+| Toast `info` tone / neutral default / live politeness | `UldIG` variants + "live region" | New tone + ARIA policy undecided |
+| Alert `info` tone | `K2iLH` / `Q2PWF` variants | No feedback `info` role decided |
+| Alert `brand` disposition | `K2iLH` variants | Extension policy undecided |
+| Alert action part | `Q2PWF` `Action: text/link` | New part; no `action` change in this slice |
+| Alert neutral-dark root role | `Q2PWF` `feedback/neutral-bg` | Named role absent; alias kept, dark step differs |
+| Alert body-dismiss tint | `Q2PWF` `text/secondary` / `text/tertiary` | Value-equal; not renamed |
+| Alert role policy (live-region / decorative-icon / dismiss naming) | `K2iLH` accessibility contract | ARIA contract change out of scope |
+| EmptyState illustration | `Kj5Nm` / `EtNCb` named parts | New content part |
+| EmptyState primary-secondary action split | `EtNCb` named parts | New composition |
+| EmptyState `default` · `compact` · `error` variants | `EtNCb` variants | New visual axes |
+| EmptyState title heading semantics | `EtNCb` ("title is a heading") | ARIA/heading contract change |
+| EmptyState disabled-action roles | `EtNCb` state contract + 3 disabled rows | Disabled semantics undecided |
+| Skeleton pulse animation | `oPSvA` ("Never animate more than a subtle pulse") | Motion contract (reduced-motion already honoured) |
+| Skeleton `text` · `block` · `media` · `avatar` shape API | `oPSvA` named parts + variants | New component API |
+| Spinner sizes `sm` · `md` · `lg` | `l4jso` variants | New geometry axis |
+| Spinner `on surface` · `on colour` | `l4jso` variants | New colour-context axis |
+| Spinner busy-region ARIA | `l4jso` ("Expose a busy state on the region") | ARIA contract change |
+| Progress linear-ring split / determinate-indeterminate | `qxDaq` variants | New API split |
+| Progress error state | `qxDaq` variants + state contract | New state/roles |
+| Progress visible value label | `qxDaq` named parts + ("Show a value label…") | New content part |
+| Progress completion announcement | `qxDaq` ("Announce completion once") | ARIA contract change |
+| ProgressRing indeterminate / error | `qxDaq` (shared) variants | New API/states |
+| Foundation feedback named roles | Pen audit legend (`feedback/*-bg`, `feedback/*-fg`, `feedback/*-border`) | Value-mapped to the context matrix; INFO, not renamed |
+| New public components | — | Explicitly excluded |
+
+## Verification
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| focused composition RED | `1` | `6 fail` / `40 pass` (46) |
+| focused composition GREEN | `0` | `46 pass` / `0 fail` (114 expect calls) |
+| focused browser RED | `1` | `5 failed` / `2 passed` files, `7 failed` / `39 passed` (46) |
+| focused browser GREEN | `0` | `7 passed` files, `46 passed` (46) |
+| `mise run check` | `0` | lint + types + format; `✓ icons up to date (38 icons)`; `✓ web fonts up to date (2 faces)`; unit `828 pass / 0 fail`; browser `696 passed` (73 files) |
+| `mise run build` | `0` | Vite production build, `141 modules transformed`, `✓ built in 84ms` |
+| `git diff --check` | `0` | no whitespace errors |
+| `check:deps` | n/a | no exports or dependencies changed |
+
+## Concerns / INFO
+
+- **INFO — Progress Ring has no standalone documentation frame.** Its Pen authority `yz7HH` is documented inside the Progress frame `qxDaq` (`Public variants: linear · ring`). It remains the `progress-ring/` component; no new frame or component was created.
+- **INFO — Toast boundary and EmptyState boundary are true RED, not regressions.** Both move from `common/200/divider` (`neutral.300`/`neutral.700`) to `border/subtle` (`neutral.200`/`neutral.800`) and discriminate in both themes; the earlier D1-era reading of `common/200/divider` as `neutral.200` was wrong and is corrected here.
+- **INFO — Spinner is value-equal.** `common/700/background` and `text/secondary` both resolve `neutral.700`/`neutral.300`; the browser `Token Color` stories pass on the parent recipe, so it is a role rename, not a value RED.
+- **INFO — Skeleton, Progress and ProgressRing are dark-only.** Light values are value-equal to the prior `common/100/background`; only the dark step changes (`neutral.900` → `neutral.950`). Progress fill changes from `brand/700/background` (`green.300` dark) to `action/primary-bg` (`green.700` both), dark-only.
+- **INFO — Alert unchanged.** Its named `feedback/*` roles are absent from the foundation; the recipe retains value-mapped matrix aliases and the tests are pure regression assertions.
+- The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.
