@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { stepRecipe, } from "./preset";
 import { Step, } from "./step";
 
 describe("step composition", () => {
@@ -50,6 +51,16 @@ describe("step composition", () => {
 
         expect(markup).toContain("step__root--state_error");
         expect(markup).toContain("!");
+    });
+
+    // Pen `cAzIA` master (`f9QCHG` token contract): the upcoming marker number
+    // (`PC2Eg`) and label (`t5z2Jc`) resolve `text/secondary`, not the numeric
+    // `common.600` fill. The marker surface stays `surface/sunken` and its
+    // boundary `border/strong`.
+    test("paints the upcoming marker number with the text/secondary role", () => {
+        expect(stepRecipe.variants?.["state"]?.["upcoming"]?.["marker"]).toMatchObject({
+            color: "semantic.text.secondary",
+        });
     });
 
     test("forwards native attributes", () => {

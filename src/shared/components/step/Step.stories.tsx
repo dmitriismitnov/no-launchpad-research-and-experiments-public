@@ -1,10 +1,11 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
+import type { ReactNode, } from "react";
 
 import { expect, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
-import { Step, } from "./step";
+import { Step, type StepProps, } from "./step";
 
 const row = css({
     display: "flex",
@@ -85,4 +86,46 @@ export const Stack: Story = {
             <Step number={4} label="Screens" state="upcoming" />
         </div>
     ),
+};
+
+const shell = css({
+    padding: "x12",
+    backgroundColor: "semantic.common.50.background",
+    color: "semantic.common.50.text",
+});
+
+const ThemeShell = ({ theme, children, }: { theme: "light" | "dark"; children: ReactNode; }) => (
+    <div data-theme={theme}>
+        <div className={shell}>{children}</div>
+    </div>
+);
+
+const renderIn = (theme: "light" | "dark") => (args: StepProps) => (
+    <ThemeShell theme={theme}>
+        <Step {...args} />
+    </ThemeShell>
+);
+
+// Pen `cAzIA` master (`f9QCHG` token contract): the upcoming marker number
+// resolves `text/secondary` — neutral.700 light (`rgb(51, 65, 85)`), neutral.300
+// dark (`rgb(203, 213, 225)`). Both themes are discriminating: the previous
+// numeric `common.600.background` resolved neutral.600 (`rgb(71, 85, 105)`) and
+// neutral.400 (`rgb(148, 163, 184)`).
+const assertUpcomingNumber = (color: string) => async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+    const canvas = within(canvasElement);
+    const number = canvas.getByText("3");
+
+    await expect(getComputedStyle(number).color).toBe(color);
+};
+
+export const UpcomingNumberLight: Story = {
+    args: { number: 3, label: "States", state: "upcoming", },
+    render: renderIn("light"),
+    play: assertUpcomingNumber("rgb(51, 65, 85)"),
+};
+
+export const UpcomingNumberDark: Story = {
+    args: { number: 3, label: "States", state: "upcoming", },
+    render: renderIn("dark"),
+    play: assertUpcomingNumber("rgb(203, 213, 225)"),
 };

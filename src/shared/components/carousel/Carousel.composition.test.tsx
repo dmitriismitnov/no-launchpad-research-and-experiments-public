@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { Carousel, } from "./carousel";
+import { carouselRecipe, } from "./preset";
 
 const slides = [
     { label: "Overview", icon: "image", },
@@ -68,5 +69,28 @@ describe("carousel composition", () => {
         const markup = renderToStaticMarkup(<Carousel slides={slides} data-testid="c" />);
 
         expect(markup).toContain(`data-testid="c"`);
+    });
+
+    // Pen `rm4a0` master / `hvrFF` token contract: the focus-visible specimen
+    // (`vQYgz`/`zqnW0`) rings `focus/ring` on the controls, not the brand fill.
+    // Geometry stays the shared 2px ring at offset 0.
+    test("paints the shared focus ring role on the controls", () => {
+        expect(carouselRecipe.base?.["control"]).toMatchObject({
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "0", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
+        });
+    });
+
+    // Pen `rm4a0` master / `hvrFF` token contract: the dot indicators share the
+    // same `focus/ring` contract as the controls.
+    test("paints the shared focus ring role on the dots", () => {
+        expect(carouselRecipe.base?.["dot"]).toMatchObject({
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "0", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
+        });
     });
 });

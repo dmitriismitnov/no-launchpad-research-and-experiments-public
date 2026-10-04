@@ -440,3 +440,140 @@ Counts moved from the C2 baseline: `+4` unit composition checks (`768 → 772`, 
 - BLOCKED/INFO rows recorded and not implemented; capture-method deviation (Playwright CLI, `devicePixelRatio 1`, evidence-only) disclosed.
 
 **Minor (recorded, non-blocking):** (M1) the static-css guard asserts selector presence only, not the `transform: rotate(180deg)` declaration; (M2) the static-css guard lives in `AccordionItem.composition.test.tsx` rather than the canonical `src/shared/styles/panda-static-css.test.ts` — consider consolidating; (M3) the dpr-1 CLI capture should be explicitly marked non-baseline-comparable vs the C1/C2 Storybook-iframe method; (M4) evidence wording "`--colors-semantic-focus-ring` now emitted" is inaccurate (it pre-existed from C1; only the chevron rule is new); (M5) one intermittent browser flake (testing-library timer race) observed, not reproduced, pre-existing; (M6) the added `disabled` static combination has no guard.
+
+## C5 — Step + Pagination + Carousel cycle 1/2
+
+**Scope:** approved recipe/token corrections only — Step upcoming marker number → `text/secondary`; Pagination `item` focus-visible ring → `focus/ring`; Carousel `control` and `dot` focus-visible rings → `focus/ring`. No component `.tsx`, `index.ts` barrel, `panda.config.ts` or new public component changed.
+
+### Pen source node IDs (read-only)
+
+| Role | Master | Documentation / token contract |
+| --- | --- | --- |
+| Step | `cAzIA` (`N73xY` Dot, `PC2Eg` Num, `t5z2Jc` Label) | `f9QCHG` — token contract `B9Zz0`, state contract `aRD7F`, content rules `T6ws7j`, accessibility `bQPSq` |
+| Pagination | `DdvJi` (`j914Bi` Prev, page items, `MEYKy` Ell, `FyVKu` Next) | `yQPcK` — token contract, focus specimen `bPKuW`/`LLO1f` |
+| Carousel | `rm4a0` (`lZBVI` Prev, `MuYfb` Slide, `cGfoS` Next, `G42WVc` Dots) | `hvrFF` — token contract, focus specimen `vQYgz`/`zqnW0`, motion rule `UaLXD` |
+
+Verbatim Pen facts used:
+
+- `cAzIA` master — `PC2Eg` (Num) fill resolves `$semantic/text/secondary` (`#334155` = neutral.700 light); `N73xY` (Dot) resolves `$semantic/surface/sunken` fill and `$semantic/border/strong` stroke (`strokeWidth: 1`).
+- `f9QCHG` — named parts "root · step · indicator · connector · title · description"; public variants "horizontal · vertical, with description, with error, clickable"; state contract "upcoming · current · complete · error · disabled"; content rule "Completed, current and upcoming are visually distinct."; accessibility "The sequence is an ordered list.", "The current step exposes its position and total.", "Error is announced in text, not colour alone."
+- `DdvJi` master — page number (`C1YSy`/`r1rcd9`/`DKb41`/`CbJAl`) fill `#334155` = `text/secondary`; `MEYKy` ellipsis fill `#475569` = `text/tertiary`.
+- `yQPcK` focus specimen `LLO1f` — stroke `$semantic/focus/ring`, `strokeWidth: 2`; public variants "with first/last, with page size, compact, disabled prev/next"; state contract "default, current, disabled prev, disabled next, hover, focus-visible"; content rules "The current page is marked and is not a link.", "Ellipsis hides ranges, it is never a page number.", "Previous and next disable at the bounds rather than disappear."; accessibility "A navigation landmark with an accessible name.", "The current page exposes aria-current.", "Previous and next announce their disabled state."
+- `rm4a0` master — controls `$semantic/action/secondary-bg` / `-border` / `-fg`; slide `$semantic/surface/sunken` + `$semantic/border/subtle`; dots `$semantic/border/strong`; active dot `$semantic/action/primary-bg`.
+- `hvrFF` focus specimen `zqnW0` — stroke `$semantic/focus/ring`, `strokeWidth: 2`; public variants "with dots, with controls, with label, disabled"; content rule `UaLXD` "Auto-advance is not used; movement is user driven."; accessibility "Controls have accessible names.", "The slide region is reachable by keyboard and swipe.", "The current position is exposed in text."
+
+**Read-only confirmation:** Pencil MCP `get_app_state` confirmed `ex_2.pen` as the active editor; only `Get`/`Print` visitors were used (no `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`). Pen SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes, unchanged after inspection.
+
+### Enumeration and disposition
+
+| Owner | Axis | Pen values / rule | Disposition |
+| --- | --- | --- | --- |
+| Step | upcoming marker number | `text/secondary` (`cAzIA`/`PC2Eg`; `f9QCHG`) | **PASS** — `variants.state.upcoming.marker.color` now `semantic.text.secondary`; surface `common.100.background` and boundary `common.50.border.strong` unchanged |
+| Pagination | focus indicator | `focus/ring` (`yQPcK`/`LLO1f`) | **PASS** — `base.item.outlineColor._focusVisible` now `semantic.focus.ring`; `solid`, `{borderWidths.thick}`, offset `0` unchanged |
+| Carousel | control focus indicator | `focus/ring` (`hvrFF`/`zqnW0`) | **PASS** — `base.control.outlineColor._focusVisible` now `semantic.focus.ring`; geometry unchanged |
+| Carousel | dot focus indicator | `focus/ring` (`hvrFF`/`zqnW0`) | **PASS** — `base.dot.outlineColor._focusVisible` now `semantic.focus.ring`; geometry unchanged |
+| Step | states completed · current · upcoming · error | `aRD7F` | regression only — unchanged and re-asserted (composition + stories) |
+| Pagination | current · prev/next disable-at-bounds · ellipsis | `yQPcK` content rules | regression only — unchanged and re-asserted |
+| Carousel | slides · dots · current/slide ARIA · no autoplay | `hvrFF`, `UaLXD` | regression only — unchanged and re-asserted |
+| Step / Pagination / Carousel | disabled | Pen audit marks disabled rows `DISABLED` (`f9QCHG`, `yQPcK`, `hvrFF`) | **DISABLED / REVIEW** — real ratios shown below, never counted PASS |
+
+### Approved public surface and behaviour
+
+- `Step`: the upcoming marker number color switched from the numeric `semantic.common.600.background` to the role `semantic.text.secondary`. Marker surface (`common.100.background`), marker boundary (`common.50.border.strong`), all other states and the `StepProps` API are unchanged.
+- `Pagination`: `item` focus-visible ring switched to `semantic.focus.ring`; outline style/width/offset unchanged. No `with page size` / `compact` / windowing / routing / disabled-role change.
+- `Carousel`: `control` and `dot` focus-visible rings switched to `semantic.focus.ring`; geometry unchanged. No `with dots` / `with controls` / `with label` toggle, no ButtonIcon composition, no `arrow-left` icon, no swipe, no disabled-role swap, no timer/autplay. The no-autoplay contract (`UaLXD`) is untouched.
+- No export changed (`index.ts` barrels and `panda.config.ts` untouched), so `check:deps` was not required. Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited).
+
+Changed paths: `src/shared/components/step/{preset.ts,Step.composition.test.tsx,Step.stories.tsx}`, `src/shared/components/pagination/{preset.ts,Pagination.composition.test.tsx,Pagination.stories.tsx}`, `src/shared/components/carousel/{preset.ts,Carousel.composition.test.tsx,Carousel.stories.tsx}`, this evidence, `artifacts/batch-c/step-pagination-carousel/` (new captures).
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun), written before the implementation:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/components/step/Step.composition.test.tsx src/shared/components/pagination/Pagination.composition.test.tsx src/shared/components/carousel/Carousel.composition.test.tsx` |
+| RED exit | `1` |
+| RED result | `4 fail` / `19 pass` (23 total, 3 files, `57 expect() calls`) |
+| RED failures | step `paints the upcoming marker number with the text/secondary role`; pagination `paints the shared focus ring role on its controls`; carousel `paints the shared focus ring role on the controls`; carousel `paints the shared focus ring role on the dots` |
+| RED cause | Step `upcoming.marker.color` was `semantic.common.600.background`; Pagination `item` / Carousel `control` / Carousel `dot` `outlineColor._focusVisible` were `semantic.brand.500.background` |
+| GREEN exit | `0` |
+| GREEN result | `23 pass` / `0 fail` (`57 expect() calls`) |
+
+Focused browser stories (Vitest + Playwright Chromium), run before the implementation:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/step/Step.stories.tsx src/shared/components/pagination/Pagination.stories.tsx src/shared/components/carousel/Carousel.stories.tsx` |
+| RED exit | `1` |
+| RED result | `3 failed` files, `5 failed` / `19 passed` (24) |
+| RED failures | carousel `Focus Visible Light` (`rgb(34, 197, 94)` vs expected `rgb(22, 163, 74)`); carousel `Dot Focus Visible Light`; pagination `Focus Visible Light`; step `Upcoming Number Light` (`rgb(71, 85, 105)` vs expected `rgb(51, 65, 85)`); step `Upcoming Number Dark` (`rgb(148, 163, 184)` vs expected `rgb(203, 213, 225)`) |
+| GREEN exit | `0` |
+| GREEN result | `3 passed` files, `24 passed` (24) |
+
+Both Step number stories discriminate (light neutral.600 → neutral.700, dark neutral.400 → neutral.300). The dark focus-ring stories (`FocusVisibleDark`, `DotFocusVisibleDark`) are **non-discriminating**: before and after the change the dark outline is `green.500` (`rgb(34, 197, 94)`), because `brand.500.background` and `focus.ring` both resolve `green.500` in dark. The light focus stories and the recipe-level composition tests are the true guards. Step completed/current/error, Pagination current/prev-next/ellipsis and Carousel slides/dots/ARIA/no-autoplay are regression coverage, not fabricated RED.
+
+### Both-theme evidence (computed style, in browser)
+
+| Contract | Light | Dark |
+| --- | --- | --- |
+| Step upcoming marker number (`UpcomingNumberLight` / `Dark`) | `rgb(51, 65, 85)` (`neutral.700`, `text/secondary`) — **discriminating** | `rgb(203, 213, 225)` (`neutral.300`) — **discriminating** |
+| Pagination control focus ring (`FocusVisibleLight` / `Dark`) | `outline: solid 2px rgb(22, 163, 74)` (`green.600`) | `outline: solid 2px rgb(34, 197, 94)` (`green.500`) — **non-discriminating** |
+| Carousel control focus ring (`FocusVisibleLight` / `Dark`) | `outline: solid 2px rgb(22, 163, 74)` (`green.600`) | `outline: solid 2px rgb(34, 197, 94)` (`green.500`) — **non-discriminating** |
+| Carousel dot focus ring (`DotFocusVisibleLight` / `Dark`) | `outline: solid 2px rgb(22, 163, 74)` (`green.600`) | `outline: solid 2px rgb(34, 197, 94)` (`green.500`) — **non-discriminating** |
+| Generated `styles.css` | `.step__marker--state_upcoming { color: var(--colors-semantic-text-secondary) }`; `.pagination__item:focus-visible`, `.carousel__control:focus-visible`, `.carousel__dot:focus-visible { outline-color: var(--colors-semantic-focus-ring) }` | theme-independent (same recipe/CSS) |
+| Step completed / current / error, Pagination current + disabled bounds + ellipsis, Carousel slides + dots + `aria-roledescription` + no autoplay | regression asserted in the focused composition/story runs above; no runtime/ARIA change | theme-independent structure |
+
+Disabled states are **DISABLED / REVIEW** (reported, never counted PASS). Pen audit ratios read from the contracts: Step (`f9QCHG`) disabled-boundary `action/disabled-bg → border/strong` 4.34 / 5.71, disabled-text `surface/raised → text/tertiary` 7.58 / 6.96, `surface/sunken → text/secondary` 9.45 / 13.59, `action/disabled-bg → text/secondary` 9.45 / 9.85; Pagination (`yQPcK`) disabled-text `action/disabled-bg → text/tertiary` 6.92 / 5.71, disabled-icon/text `action/disabled-bg → text/secondary` 9.45 / 9.85 (×2); Carousel (`hvrFF`) disabled-boundary `action/disabled-bg → border/subtle` 1.13 / 1.00, `action/disabled-bg → action/secondary-border` 4.34 / 5.71, disabled-icon `surface/sunken → text/tertiary` 6.92 / 7.87, disabled-text `surface/raised → text/tertiary` 7.58 / 6.96, disabled-icon `action/secondary-bg → action/secondary-fg` 14.63 / 13.35.
+
+Code-side disabled tokens (this system paints no `action/disabled-bg`), ratios via `@shared/utils contrastRatio`: Pagination `item` disabled text `common.400.background` on `common.50.background` = 2.45 light / 2.66 dark; Carousel `control` disabled text `common.400.background` on `common.100.background` = 2.34 / 2.36; Carousel `dot` disabled fill `common.400.background` on `common.50.background` = 2.45 / 2.66. All below 4.5 → DISABLED / REVIEW, not PASS.
+
+### Captures
+
+Code-side Storybook-iframe captures, `deviceScaleFactor: 2`, in `artifacts/batch-c/step-pagination-carousel/`: `step-upcoming-number-{light,dark}`, `step-horizontal-light`, `step-stack-light`, `pagination-default-light`, `pagination-focus-{light,dark}`, `carousel-default-light`, `carousel-disabled-light`, `carousel-control-focus-{light,dark}`, `carousel-dot-focus-{light,dark}` (13 PNGs). The capture script recorded the focused element and its painted outline; focus stories show `solid 2px rgb(22, 163, 74)` light and `solid 2px rgb(34, 197, 94)` dark on `pagination__item` / `carousel__control` / `carousel__dot`.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)`; generated `.step__marker--state_upcoming` now reads `text-secondary`, Pagination/Carousel focus-visible read `--colors-semantic-focus-ring` |
+| focused composition RED | `1` | `4 fail` / `19 pass` (57 expect calls) |
+| focused composition GREEN | `0` | `23 pass` / `0 fail` (57 expect calls) |
+| focused browser RED | `1` | `3 failed` files, `5 failed` / `19 passed` (24) |
+| focused browser GREEN | `0` | `3 passed` files, `24 passed` (24) |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `782 pass / 0 fail` (90 files); browser `639 passed` (73 files) |
+| `mise run check:deps` | n/a | not run — no export changed |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index--m47Sug0.css 223.76 kB` |
+| `git diff --check` | `0` | clean |
+
+Slice-local counts: `+4` focused unit composition checks (19 → 23 across the three files) and `+8` browser story checks (16 → 24 across the three story files). The aggregate `mise run check` totals above are measured in a shared working tree that also contains concurrent Batch C4 (`Menu` / `ContextMenu`) work, so the aggregate is not attributable to C5 alone. An intermittent pre-existing browser flake (`Card` "No Preview" under full-suite load) reproduced once and then passed in isolation and on the clean re-run; and an untracked zero-byte editor artifact `.zed/debug.json` broke `check:lint` and was temporarily relocated for the green run, then restored byte-identical (see concerns).
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| Step upcoming marker number → `semantic.text.secondary` | **PASS** |
+| Pagination `item` focus ring → `semantic.focus.ring` | **PASS** |
+| Carousel `control` focus ring → `semantic.focus.ring` | **PASS** |
+| Carousel `dot` focus ring → `semantic.focus.ring` | **PASS** |
+| Step states, Pagination current/bounds/ellipsis, Carousel slides/dots/ARIA/no-autoplay | **PASS** (regression, unchanged) |
+| Disabled contrast (Step / Pagination / Carousel) | `DISABLED / REVIEW` (both themes, real ratios) |
+| **C5 final status** | **PASS with `DISABLED / REVIEW` rows** — no unresolved `FAIL`; `BLOCKED` items recorded below |
+
+### BLOCKED (recorded, not implemented)
+
+| Item | Pen basis | Reason |
+| --- | --- | --- |
+| Step disabled state, orientation (vertical), clickable, connector component, ordered-list container, current-position + total, mono marker font | `f9QCHG` state contract, public variants, accessibility | public-variant/API + container-architecture decision |
+| Pagination `with page size`, `compact`, windowing policy, URL routing, disabled role swap | `yQPcK` public variants, disabled rows | public-variant/API + routing decision |
+| Carousel `with dots` / `with controls` / `with label` public toggles, controls composed from ButtonIcon, `arrow-left` icon addition, swipe gesture, disabled role swap | `hvrFF` public variants | public-variant/API + icon-set/dependency decision |
+| Carousel autoplay / auto-advance / loop / timers | `UaLXD` "Auto-advance is not used; movement is user driven." | **FORBIDDEN** by the approved contract; movement stays user-driven |
+| New public components (`StepBar` / `Stepper` / `PaginationItem` / `CarouselControl` / `CarouselSlide` / `Connector`) | — | explicitly excluded by the approved contract |
+
+### Unresolved concerns
+
+- **DISABLED / REVIEW — disabled contrast.** Step has no disabled runtime state in scope; Pagination and Carousel disabled controls use `common.400.background` against `common.50/100.background` (real ratios 2.34–2.66, reported, never PASS). The Pen `action/disabled-bg` disabled role swap is BLOCKED.
+- **INFO — dark focus stories non-discriminating.** In dark, `brand.500.background` and `focus.ring` both resolve `green.500`; `FocusVisibleDark` / `DotFocusVisibleDark` pass before and after and are not claimed as proof.
+- **INFO — mixed working tree.** `mise run check` / `build` ran while a concurrent C4 (`Menu` / `ContextMenu`) change set and untracked `.zed/debug.json` (empty, editor artifact) were present. The commit contains only the C5 paths; the concurrent files were not staged.
+- **INFO — capture method.** Storybook-iframe Playwright captures (`deviceScaleFactor: 2`), consistent with C1/C2; the focused-element outline was read from the live page as part of the capture script.
+- **INFO — Pen read-only.** The Pen was accessed through Pencil MCP `Get`/`Print` only; no mutation call was issued and the file hash is unchanged.

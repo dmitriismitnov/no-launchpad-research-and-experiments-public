@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { Pagination, } from "./pagination";
+import { paginationRecipe, } from "./preset";
 
 describe("pagination composition", () => {
     test("renders a labelled navigation landmark with page buttons", () => {
@@ -51,5 +52,17 @@ describe("pagination composition", () => {
         );
 
         expect(markup).toContain(`data-testid="p"`);
+    });
+
+    // Pen `DdvJi` master / `yQPcK` token contract: the focus-visible specimen
+    // (`bPKuW`/`LLO1f`) rings `focus/ring`, not the brand fill. Geometry stays
+    // the shared 2px ring at offset 0.
+    test("paints the shared focus ring role on its controls", () => {
+        expect(paginationRecipe.base?.["item"]).toMatchObject({
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "0", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
+        });
     });
 });

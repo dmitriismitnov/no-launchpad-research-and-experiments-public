@@ -91,7 +91,7 @@ export const stepRecipe = defineSlotRecipe({
                 marker: {
                     backgroundColor: "semantic.common.100.background",
                     borderColor: "semantic.common.50.border.strong",
-                    color: "semantic.common.600.background",
+                    color: "semantic.text.secondary",
                 },
                 title: { color: "semantic.common.700.background", },
             },

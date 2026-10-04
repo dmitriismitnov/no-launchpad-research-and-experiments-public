@@ -52,7 +52,7 @@ export const paginationRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
             _hover: { backgroundColor: "semantic.common.100.background", },
             _disabled: {
                 cursor: "not-allowed",
