@@ -22,9 +22,14 @@ export type LinkProps = ComponentProps<"a"> & {
     disabled?: boolean;
 };
 
+/** Screen-reader-only announcement appended to an external link. */
+const externalAnnouncement = "External link";
+
 /**
  * Inline anchor. The label is the anchor's only text; an optional glyph may sit
- * before or after it. `external` is sugar for the trailing link glyph.
+ * before or after it. `external` is sugar for the trailing link glyph and adds
+ * a visually-hidden announcement that the link leaves the site (`DTTTs`); the
+ * glyph itself stays decorative.
  */
 export const Link = ({
     tone = "link",
@@ -53,6 +58,7 @@ export const Link = ({
             {resolvedTrailing !== undefined && (
                 <Icon className={styles.trailingIcon} name={resolvedTrailing} size="sm" />
             )}
+            {external && <span className={styles.visuallyHidden}>{externalAnnouncement}</span>}
         </a>
     );
 };

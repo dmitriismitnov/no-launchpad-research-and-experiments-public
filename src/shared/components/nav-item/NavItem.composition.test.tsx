@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { NavItem, } from "./nav-item";
+import { navItemRecipe, } from "./preset";
 
 describe("nav item composition", () => {
     test("renders an anchor with the label slot", () => {
@@ -39,5 +40,26 @@ describe("nav item composition", () => {
         const markup = renderToStaticMarkup(<NavItem href="/" label="Overview" data-testid="n" />);
 
         expect(markup).toContain(`data-testid="n"`);
+    });
+
+    // Documented hover state: the quiet surface role. Browser hover timing is
+    // not asserted; the recipe selector is the contract.
+    test("documents the hover surface state", () => {
+        const root = navItemRecipe.base?.["root"] as Record<string, unknown> | undefined;
+
+        expect(root?.["_hover"]).toMatchObject({
+            backgroundColor: "semantic.common.100.background",
+        });
+    });
+
+    // Pen `l8wwSv` / Top Navigation token contract `iosjR`: the focus-indicator
+    // rows use `focus/ring`. `current` stays a single `aria-current` item.
+    test("paints the shared focus ring role", () => {
+        expect(navItemRecipe.base?.["root"]).toMatchObject({
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "0", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
+        });
     });
 });

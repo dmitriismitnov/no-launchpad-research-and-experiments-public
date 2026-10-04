@@ -13,12 +13,15 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * - text/primary -> common.50.text (exact)
  *
  * Approximations: Pen gaps every part 8px (`x4`, exact) and draws a 14px
- * chevron; `Icon` steps to `sm` (16px). The overflow control and compact variant
- * from the master are out of scope: the component renders the full trail.
+ * chevron; `Icon` steps to `sm` (16px). The optional per-crumb glyph
+ * (`i2SiX` icon part, `H5sLG` "with icon") is decorative. The focus indicator
+ * uses the shared `focus/ring` role (`A57dA`), not the brand fill. The overflow
+ * control and compact variant from the master are out of scope: the component
+ * renders the full trail.
  */
 export const breadcrumbsRecipe = defineSlotRecipe({
     className: "breadcrumbs",
-    slots: [ "root", "list", "item", "link", "separator", "current", ],
+    slots: [ "root", "list", "item", "link", "icon", "separator", "current", ],
 
     base: {
         root: {
@@ -42,6 +45,9 @@ export const breadcrumbsRecipe = defineSlotRecipe({
         },
 
         link: {
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "x2",
             borderRadius: "sm",
             textDecorationLine: "none",
             fontFamily: "body",
@@ -53,8 +59,13 @@ export const breadcrumbsRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "2px", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
             _hover: { textDecorationLine: "underline", },
+        },
+
+        icon: {
+            flexShrink: "0",
+            color: "semantic.common.600.background",
         },
 
         separator: {
@@ -64,6 +75,9 @@ export const breadcrumbsRecipe = defineSlotRecipe({
         },
 
         current: {
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "x2",
             fontFamily: "body",
             fontSize: "sm",
             fontWeight: "regular",

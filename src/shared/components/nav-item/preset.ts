@@ -17,7 +17,8 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * Approximations: Pen pads 8px block / 12px inline and gaps 8px; those are exact
  * on the `xN` scale (`x4` / `x6` / `x4`). Pen's optional glyph is 14px; `Icon`
  * uses `sm` (16px). The active indicator is the selected background rather than
- * a separate bar, matching the master.
+ * a separate bar, matching the master. The focus indicator uses the shared
+ * `focus/ring` role (`iosjR`), not the brand fill.
  */
 export const navItemRecipe = defineSlotRecipe({
     className: "navItem",
@@ -37,7 +38,7 @@ export const navItemRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
             _hover: { backgroundColor: "semantic.common.100.background", },
         },
 

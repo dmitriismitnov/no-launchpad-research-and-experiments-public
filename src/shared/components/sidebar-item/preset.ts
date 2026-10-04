@@ -17,7 +17,8 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * Approximations: Pen fixes the item at 200px; the component stretches to its
  * rail (`width: 100%`). Pen's 16px glyph is `Icon` `sm` (`x8`, exact). Group
  * labels, nested items and the collapse control from the master are out of
- * scope.
+ * scope. The focus indicator uses the shared `focus/ring` role (`uhiC3`), not
+ * the brand fill.
  */
 export const sidebarItemRecipe = defineSlotRecipe({
     className: "sidebarItem",
@@ -38,7 +39,7 @@ export const sidebarItemRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
             _hover: { backgroundColor: "semantic.common.100.background", },
         },
 

@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { Breadcrumbs, } from "./breadcrumbs";
+import { breadcrumbsRecipe, } from "./preset";
 
 describe("breadcrumbs composition", () => {
     const items = [
@@ -55,5 +56,42 @@ describe("breadcrumbs composition", () => {
         const markup = renderToStaticMarkup(<Breadcrumbs items={items} data-testid="bc" />);
 
         expect(markup).toContain(`data-testid="bc"`);
+    });
+
+    // Pen `Bvk23` anatomy `i2SiX` names an icon part and the public variants
+    // `H5sLG` include "with icon"; the glyph is decorative.
+    test("renders a decorative icon inside a crumb link", () => {
+        const markup = renderToStaticMarkup(
+            <Breadcrumbs
+                items={[
+                    { label: "Home", href: "/", icon: "folder", },
+                    { label: "Components", href: "/components", },
+                    { label: "Button", },
+                ]}
+            />,
+        );
+        const firstAnchor = markup.slice(0, markup.indexOf("</a>") + 4);
+
+        expect(firstAnchor).toContain("breadcrumbs__link");
+        expect(firstAnchor).toContain("breadcrumbs__icon");
+        expect(markup).toContain("icon--size_sm");
+        expect(markup).toContain(`aria-hidden="true"`);
+    });
+
+    test("renders no icon slot when no crumb asks for one", () => {
+        const markup = renderToStaticMarkup(<Breadcrumbs items={items} />);
+
+        expect(markup).not.toContain("breadcrumbs__icon");
+    });
+
+    // Pen `Bvk23` token contract `A57dA`: the focus-indicator row uses
+    // `focus/ring`; the 2px padding-box ring geometry is unchanged.
+    test("paints the shared focus ring role on the crumb link", () => {
+        expect(breadcrumbsRecipe.base?.["link"]).toMatchObject({
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "2px", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
+        });
     });
 });

@@ -9,6 +9,8 @@ export type BreadcrumbItem = {
     label: string;
     /** Link target; the last crumb is never linked and ignores this. */
     href?: string;
+    /** Optional decorative leading glyph; the glyph never carries a name. */
+    icon?: IconName;
 };
 
 export type BreadcrumbsProps = Omit<ComponentProps<"nav">, "children"> & {
@@ -42,8 +44,22 @@ export const Breadcrumbs = ({
                     return (
                         <li key={index} className={styles.item}>
                             {isCurrent
-                                ? <span className={styles.current} aria-current="page">{item.label}</span>
-                                : <a className={styles.link} href={item.href}>{item.label}</a>}
+                                ? (
+                                    <span className={styles.current} aria-current="page">
+                                        {item.icon !== undefined && (
+                                            <Icon className={styles.icon} name={item.icon} size="sm" />
+                                        )}
+                                        {item.label}
+                                    </span>
+                                )
+                                : (
+                                    <a className={styles.link} href={item.href}>
+                                        {item.icon !== undefined && (
+                                            <Icon className={styles.icon} name={item.icon} size="sm" />
+                                        )}
+                                        {item.label}
+                                    </a>
+                                )}
                             {!isCurrent && (
                                 <Icon
                                     className={styles.separator}

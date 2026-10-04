@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { Link, } from "./link";
+import { linkRecipe, } from "./preset";
 
 describe("link composition", () => {
     test("renders an anchor with the label slot", () => {
@@ -40,6 +41,37 @@ describe("link composition", () => {
         );
 
         expect(markup).toContain("link__trailingIcon");
+    });
+
+    // Pen `QWV5n` accessibility contract `DTTTs`: "External links announce that
+    // they leave the site." The glyph stays decorative; an sr-only phrase
+    // carries the meaning.
+    test("announces that an external link leaves the site", () => {
+        const markup = renderToStaticMarkup(
+            <Link href="https://example.com" external>Open changelog</Link>,
+        );
+
+        expect(markup).toContain("link__visuallyHidden");
+        expect(markup).toContain("External link");
+        expect(markup).toContain("link__trailingIcon");
+        expect(markup).toContain(`aria-hidden="true"`);
+    });
+
+    test("does not announce an internal link", () => {
+        const markup = renderToStaticMarkup(<Link href="/docs">Docs</Link>);
+
+        expect(markup).not.toContain("link__visuallyHidden");
+    });
+
+    // Pen `QWV5n` token contract `Z4EDge`: the focus-indicator row uses
+    // `focus/ring`, not the brand fill. Geometry stays the shared 2px ring.
+    test("paints the shared focus ring role", () => {
+        expect(linkRecipe.base?.["root"]).toMatchObject({
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "2px", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
+        });
     });
 
     test("omits glyph slots by default", () => {
