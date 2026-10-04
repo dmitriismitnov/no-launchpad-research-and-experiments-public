@@ -1203,3 +1203,14 @@ Only Splitter reports disabled specimens (`DISABLED / REVIEW 3`); all three repr
 - **INFO — QRCode module pattern matches Pen.** The committed 7x7 `QR_PATTERN` (41 filled modules) matches the `kQTMg` master module-for-module; it stays decorative and non-scannable (the encode-a-value policy is BLOCKED).
 - **INFO — QRCode grid gap approximation retained.** Pen spaces modules 3px; the scale has no `x1.5`, so the grid gap stays `x1` (2px), padding `x4` (8px exact).
 - The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.
+
+## D6 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `af107e398d59b2faa3ced1c1115ec3bad422bdb9` vs parent `7360e0e`.
+**Verdict:** **APPROVED** — no Critical/Important findings.
+
+- Splitter/MediaPlaceholder/QRCode role corrections verified and emitted in generated CSS; no focus rule or `tabIndex` added — the Splitter Pen focus ring belongs to a non-focusable separator/root, recorded BLOCKED with Pen IDs (`ZVJu8`/`GydgT`/`U4KfQj`/`Wh9cO`), not projected.
+- No new props/slots/variants/components; no `.tsx`/`index.ts`/`panda.config.ts`/foundation/generated change; D1-D5 evidence preserved.
+- Focused composition `18 pass / 47 expect`, browser `3 files / 14 passed` reproduced; true RED only where discriminating; value-equal renames regression; blocked axes not asserted; Splitter `DISABLED / REVIEW` ratios reproduce; no overclaimed PASS; no false focus-slot parity.
+
+**Minor (recorded):** (1) evidence annotates root `border/subtle` with `(10px)` where `10px` is the radius, not boundary width — suggest `(radius 10px)`; (2) per-file `ThemeShell`/`tokenFrame` scaffolding duplicated (established pattern).
