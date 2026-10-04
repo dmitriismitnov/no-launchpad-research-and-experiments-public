@@ -301,7 +301,7 @@ The Alert assertion passed on the parent recipe (pure regression). Composition R
 | RED failures | empty-state `Token Surface Light`, `Token Surface Dark`; progress `Token Surface Dark`; progress-ring `Token Surface Dark`; skeleton `Token Surface Dark`; toast `Token Surface Light`, `Token Surface Dark` | |
 | GREEN | `0` | `7 passed` files, `46 passed` (46) |
 
-The browser RED is **value-level** and matches the classification exactly: Toast Light/Dark and EmptyState Light/Dark fail (surfaces + boundaries discriminate in both themes), Skeleton/Progress/ProgressRing fail in **dark only**, and Alert `Token Roles Light/Dark` plus Spinner `Token Color Light/Dark` pass on the parent (value-equal regressions). Focused coverage moved `46 → 46` composition tests (all files were extended in place) and added 14 browser token tests (`46` total story tests).
+The browser RED is **value-level** and matches the classification exactly: Toast Light/Dark and EmptyState Light/Dark fail (surfaces + boundaries discriminate in both themes), Skeleton/Progress/ProgressRing fail in **dark only**, and Alert `Token Roles Light/Dark` plus Spinner `Token Color Light/Dark` pass on the parent (value-equal regressions). Focused coverage moved `39 → 46` composition tests (all files were extended in place, `+7`) and added 14 browser token tests (`46` total story tests).
 
 ## Both-theme evidence (computed style, in browser)
 
@@ -409,3 +409,16 @@ Alert (`7/7` text, `4/4` icon), Toast (`6/6` text, `2/2` icon), Progress (`3/3` 
 - **INFO — Skeleton, Progress and ProgressRing are dark-only.** Light values are value-equal to the prior `common/100/background`; only the dark step changes (`neutral.900` → `neutral.950`). Progress fill changes from `brand/700/background` (`green.300` dark) to `action/primary-bg` (`green.700` both), dark-only.
 - **INFO — Alert unchanged.** Its named `feedback/*` roles are absent from the foundation; the recipe retains value-mapped matrix aliases and the tests are pure regression assertions.
 - The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.
+
+## D2 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `2b19d4ed9c37e94aa32e552394f9d6b2ac0b938d` vs parent `a029aab`.
+**Verdict:** **APPROVED** — no Critical/Important findings.
+
+- Toast/EmptyState/Skeleton/Progress/ProgressRing token roles verified; Alert recipe unchanged (JSDoc only); Spinner single value-equal rename. No `.tsx`/`index.ts`/`panda.config.ts`/foundation/generated change; no new exports; ProgressRing stayed in its own dir.
+- Scope exactly the 38 expected paths; D1 evidence preserved (199 insertions / 0 deletions, D2 at line 210). The prior interrupted attempt's 21 modified files were completed coherently by the retry.
+- TDD: composition `46 pass`; browser `7 files / 46 passed`; true RED only where values discriminate (Toast surface/boundary + action dark; EmptyState both; Skeleton/Progress/Ring dark-only); Alert/Spinner value-equal regression; no blocked axis asserted.
+- BLOCKED ledger populated and unimplemented; EmptyState `DISABLED / REVIEW` ratios reproduce; other six report 0; Pen unchanged.
+
+**Minor (corrected):** evidence said "`46 → 46` composition tests"; the true delta is `39 → 46` (+7 in-place cases). Corrected in the ledger.
+**INFO:** Toast dark `surface.overlay` == `border.subtle` == `neutral.800`; Skeleton/Progress track boundary 1.00 on `surface.base` dark — follows approved Pen roles and recorded INFO.
