@@ -19,7 +19,7 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * - text/tertiary -> common.600.background (exact)
  * - text/link -> brand.700.background (light exact; dark one step brighter)
  * - text/disabled -> common.400.background (exact, both themes)
- * - focus/ring -> brand.500.background (shared focus convention)
+ * - focus/ring -> semantic.focus.ring (shared focus convention)
  *
  * Approximations: Pen pads the row 6px block / 10px inline (`x3` / `x5`,
  * exact) and steps the indent by 18px; the `xN` scale cannot express 18px, so
@@ -59,7 +59,7 @@ export const treeItemRecipe = defineSlotRecipe({
                 outlineStyle: "solid",
                 outlineWidth: "{borderWidths.thick}",
                 outlineOffset: "0",
-                outlineColor: "semantic.brand.500.background",
+                outlineColor: "semantic.focus.ring",
             },
         },
 

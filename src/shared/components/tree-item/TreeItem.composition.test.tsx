@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { treeItemRecipe, } from "./preset";
 import { TreeItem, } from "./tree-item";
 
 describe("tree item composition", () => {
@@ -73,5 +74,18 @@ describe("tree item composition", () => {
         const markup = renderToStaticMarkup(<TreeItem label="Node" data-testid="t" />);
 
         expect(markup).toContain(`data-testid="t"`);
+    });
+
+    // Pen `RFehj` token contract `f4wq6`: the row focus indicator uses
+    // `focus/ring`, not the brand fill. Geometry stays the shared 2px ring.
+    test("paints the shared focus ring role", () => {
+        expect(treeItemRecipe.base?.["row"]).toMatchObject({
+            _focusWithin: {
+                outlineStyle: "solid",
+                outlineWidth: "{borderWidths.thick}",
+                outlineOffset: "0",
+                outlineColor: "semantic.focus.ring",
+            },
+        });
     });
 });

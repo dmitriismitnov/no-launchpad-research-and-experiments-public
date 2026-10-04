@@ -70,6 +70,15 @@ export default defineConfig({
                     disabled: [ "true", ],
                 },
             ],
+            // Accordion item `open`/`disabled` are passed as runtime variables,
+            // which the static extractor cannot resolve; without this entry the
+            // open-chevron rotation is never emitted.
+            accordionItem: [
+                {
+                    open: [ "true", ],
+                    disabled: [ "true", ],
+                },
+            ],
             carousel: [
                 {
                     current: [ "true", ],

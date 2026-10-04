@@ -301,3 +301,129 @@ Storybook iframe, `deviceScaleFactor: 2`, in `artifacts/batch-c/top-nav-tab/`: `
 - Absolute Pen bounds `43`/`33` → `45.59`/`35.59` is an accepted **REVIEW**: divergence is the pre-existing label line box (`lineHeights.normal` token = 1.4 × 14px = 19.59px vs Pen 17px), a Foundation/typography matter outside the approved C2 surface; disclosed in commit, enumeration, both-theme table, summary, and concerns.
 
 **Minor (recorded, non-blocking):** (1) `Tab.stories.tsx` comment says `lineHeight: normal` but it resolves to the project token `lineHeights.normal = 1.4`; (2) the committed `IndicatorGeometry` delta assertion has no recorded RED run (the RED was the prior absolute `43` assertion); (3) the TopNavigation `column-gap: 24px` evidence row sits in the "computed style, in browser" table but is machine-guarded only at recipe level (`TopNavigation.composition.test.tsx`), not by a `play` assertion — treat as recipe-level; (4) `preset.ts` `opacity: 0` base for the indicator is now redundant.
+
+## C3 — AccordionItem + TreeItem cycle 1/2
+
+**Scope:** `AccordionItem` and `TreeItem` focus-indicator role → `semantic.focus.ring`, and the `AccordionItem` open-chevron rotation emitted through `staticCss`. Approved Tier 1 only; no new public component, no group/container, no API expansion.
+
+### Pen source node IDs (read-only)
+
+| Role | Master | Documentation / token contract |
+| --- | --- | --- |
+| Accordion Item | `YGgyy` (Trigger/Title, Chevron, Panel) | `vswcF` — token contract (`focus/ring`) |
+| Tree Item | `RFehj` (Expander, Icon, Label, Group) | `f4wq6` — token contract (`focus/ring`) |
+
+Verbatim Pen facts used:
+
+- `vswcF` (Accordion Item token contract) — focus-indicator row uses `focus/ring`; the chevron reflects the open state by rotation.
+- `f4wq6` (Tree Item token contract) — focus-indicator row uses `focus/ring`; selection paints the row surface and glyph/label.
+
+**Read-only confirmation:** Pen `ex_2.pen` SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes, unchanged. No `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`; the Pen was never mutated.
+
+### Enumeration and disposition
+
+| Owner | Axis | Pen values / rule | Disposition |
+| --- | --- | --- | --- |
+| Accordion Item | focus indicator | `focus/ring` (`vswcF`) | **PASS** — trigger `outlineColor._focusVisible` now `semantic.focus.ring`; `outlineStyle solid`, `{borderWidths.thick}` (2px), offset `0` retained |
+| Tree Item | focus indicator | `focus/ring` (`f4wq6`) | **PASS** — row `_focusWithin.outlineColor` now `semantic.focus.ring`; 2px, offset `0` retained |
+| Accordion Item | open chevron | rotate `180deg` (`YGgyy`) | **PASS** — `staticCss.accordionItem` `open:["true"]` emits `.accordionItem__chevron--open_true { transform: rotate(180deg) }`; the runtime already carried the class, only the stylesheet rule was missing |
+| Accordion Item / Tree Item | disabled | Pen audit marks disabled rows `DISABLED` | **DISABLED / REVIEW** — contrast is real in the Pen audit but `action/disabled-bg` is out of scope (BLOCKED below) |
+| Accordion Item / Tree Item | ARIA / roles | `aria-expanded`, `aria-controls`, `role=region`/`treeitem`/`group`, `aria-selected`, `aria-level`, `aria-disabled` | regression only — unchanged and re-asserted |
+| Tree Item | `+`/indicator geometry | row 6/10px padding, 18px indent, `x8` expander | regression / documented approximation (INFO below) |
+
+### Approved public surface and behaviour
+
+- `AccordionItem` trigger focus ring switched to `semantic.focus.ring`; the `outlineStyle` / `outlineWidth` / `outlineOffset` values are unchanged.
+- `TreeItem` row `_focusWithin` focus ring switched to `semantic.focus.ring`; the 2px geometry and offset are unchanged. The preset doc comment (`focus/ring -> semantic.focus.ring`) now matches the code.
+- `panda.config.ts` gains an `accordionItem` `staticCss` entry (`open:["true"], disabled:["true"]`), mirroring `treeItem`, so the runtime-selected `open` variant is emitted. No `Accordion`/`Tree` group component and no prop was added.
+- No component markup changed. No `index.ts` barrel changed, so no export changed and `check:deps` was not required.
+- Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited).
+
+Changed paths: `src/shared/components/accordion-item/{preset.ts,AccordionItem.composition.test.tsx,AccordionItem.stories.tsx}`, `src/shared/components/tree-item/{preset.ts,TreeItem.composition.test.tsx,TreeItem.stories.tsx}`, `panda.config.ts`, this evidence, `artifacts/batch-c/accordion-tree/` (new captures).
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun), written before the implementation:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/components/accordion-item/AccordionItem.composition.test.tsx src/shared/components/tree-item/TreeItem.composition.test.tsx` |
+| RED exit | `1` |
+| RED result | `3 fail` / `13 pass` (16 total, 2 files, `44 expect() calls`) |
+| RED failures | accordion `paints the shared focus ring role`; tree `paints the shared focus ring role`; accordion `emits the open chevron rotation without source extraction` |
+| RED cause | both recipes were `semantic.brand.500.background`; `staticCss` had no `accordionItem` entry, so `.accordionItem__chevron--open_true` was absent |
+| GREEN exit | `0` |
+| GREEN result | `16 pass` / `0 fail` (`44 expect() calls`) |
+
+The open-chevron guard compiles the real `panda.config.ts` with an empty `include` (mirroring `src/shared/styles/panda-static-css.test.ts`, which is outside this slice's allowed paths), so whatever appears is emitted purely from `staticCss`. The runtime class assertion (`accordionItem__chevron--open_true` in the markup) is regression coverage and passed before the change.
+
+Focused browser stories (Vitest + Playwright Chromium), proven test-first by `git stash push` of only the two implementation preset files, `mise run gen`, observing RED, then `git stash pop` + `mise run gen`:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/accordion-item/AccordionItem.stories.tsx src/shared/components/tree-item/TreeItem.stories.tsx` |
+| RED exit | `1` |
+| RED result | `2 failed` files, `2 failed` / `9 passed` (11) — accordion `Focus Visible Light`, tree `Focus Visible Light` (both expected `rgb(22, 163, 74)`, received `rgb(34, 197, 94)`) |
+| GREEN exit | `0` |
+| GREEN result | `2 passed` files, `11 passed` (11) |
+
+Dark focus stories are non-discriminating: in dark, `brand.500.background` and `focus.ring` both resolve `green.500` (`rgb(34, 197, 94)`), so `FocusVisibleDark` passes before and after and is **not** claimed as proof of the role change.
+
+### Both-theme evidence (computed style, in browser)
+
+| Contract | Light | Dark |
+| --- | --- | --- |
+| Accordion Item focus ring (`FocusVisibleLight` / `FocusVisibleDark`) | `outline: solid 2px rgb(22, 163, 74)` (`green.600`) | `outline: solid 2px rgb(34, 197, 94)` (`green.500`) — **non-discriminating** |
+| Tree Item row focus ring (`FocusVisibleLight` / `FocusVisibleDark`) | `outline: solid 2px rgb(22, 163, 74)` (`green.600`) | `outline: solid 2px rgb(34, 197, 94)` (`green.500`) — **non-discriminating** |
+| Accordion Item open chevron (`Open`, generated CSS + composition test) | `.accordionItem__chevron--open_true { transform: rotate(180deg) }`; runtime `open` class present | theme-independent (same recipe/CSS) |
+| Accordion Item disabled (regression) | `aria-expanded="false"`, `disabled`, `accordionItem__root--disabled_true`; recipe text `common.400.background` `rgb(148, 163, 184)` | `common.400.background` = `neutral.600` `rgb(71, 85, 105)` — **DISABLED / REVIEW** (token mapping; not browser-asserted in this slice) |
+| Tree Item selected / disabled / tree roles (regression) | `aria-selected="true"`, `treeItem__root--selected_true`; `aria-disabled="true"`, `treeItem__root--disabled_true`; `role=treeitem`/`group`, `aria-level` | theme-independent structure |
+
+Code-side captures (Playwright Chromium CLI, `devicePixelRatio 1`) are in `artifacts/batch-c/accordion-tree/`: `accordion-focus-{light,dark}`, `accordion-open-light`, `accordion-disabled-light`, `accordion-stack-light`, `tree-focus-{light,dark}`, `tree-expanded-light`, `tree-collapsed-light`, `tree-leaf-light` (10 PNGs). The light focus captures visibly show the `green.600` ring; `accordion-open-light` shows the rotated chevron over the rendered panel.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)`; `.accordionItem__chevron--open_true` and `--colors-semantic-focus-ring` now emitted |
+| focused composition RED | `1` | `3 fail` / `13 pass` (44 expect calls) |
+| focused composition GREEN | `0` | `16 pass` / `0 fail` (44 expect calls) |
+| focused browser RED | `1` | `2 failed` files, `2 failed` / `9 passed` (11) |
+| focused browser GREEN | `0` | `2 passed` files, `11 passed` (11) |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `772 pass / 0 fail` (90 files, 4041 expect calls); browser `622 passed` (73 files) |
+| `mise run check:deps` | n/a | not run — no export changed |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-2WdMhsMZ.css 223.85 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the C2 baseline: `+4` unit composition checks (`768 → 772`, 90 files) and `+4` browser story checks (`618 → 622`, 73 files).
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| Accordion Item focus indicator → `semantic.focus.ring` | **PASS** |
+| Tree Item focus indicator → `semantic.focus.ring` | **PASS** |
+| Accordion Item open chevron rotation emitted via `staticCss` | **PASS** |
+| Accordion Item / Tree Item ARIA, disabled, selected, tree roles | **PASS** (regression, unchanged) |
+| Disabled background `action/disabled-bg` for Accordion / Tree | **DISABLED / REVIEW** (BLOCKED below) |
+| **C3 final status** | **PASS with `DISABLED / REVIEW` and `INFO` rows** — no unresolved `FAIL`; `BLOCKED` items recorded below |
+
+### BLOCKED (recorded, not implemented)
+
+| Item | Pen basis | Reason |
+| --- | --- | --- |
+| Disabled background role `action/disabled-bg` for Accordion / Tree | `vswcF`, `f4wq6` disabled rows | Foundation token role decision; disabled stays `DISABLED / REVIEW` |
+| Escape-close + focus return to trigger/row | disclosure/tree interaction contract | shared-model `Z2DD4`, not owner-frame; interaction-policy decision |
+| Accordion group single/multiple, `with icon` / `with description`, panel animation | `YGgyy`/`vswcF` public variants | public-variant/API decision |
+| Tree selection-mode API, roving/arrow-key container architecture, indent guide, lazy mount | `RFehj`/`f4wq6` behaviour | container-architecture/API decision; would introduce a group component |
+| New public `Accordion` / `Tree` group components | — | explicitly excluded by the approved contract |
+
+### Unresolved concerns
+
+- **INFO — border token role.** Accordion root keeps `semantic.common.200.divider`; the Pen `border/subtle` role is a foundation-owned token decision, not this slice.
+- **INFO — hover role.** Accordion trigger / Tree row keep `semantic.common.100.background`; the Pen `surface/hover` role is a foundation-owned token decision. Hover is documented at recipe level (headless hover timing remains non-asserted, as in C1).
+- **INFO — selected text role.** Tree item keeps `semantic.brand.700.background` for the selected glyph/label; the Pen `text/link` role is a foundation-owned token decision.
+- **INFO — padding approximation.** Accordion trigger pads `x6` (12px) block vs Pen 14px; the Tree expander box is `x8` (16px) vs Pen 14px. Both are pre-existing scale approximations.
+- **DISABLED / REVIEW — disabled contrast.** Accordion / Tree disabled text uses `common.400.background` (`neutral.400` light `rgb(148, 163, 184)`, `neutral.600` dark `rgb(71, 85, 105)`); reported, never counted `PASS`.
+- **INFO — dark focus stories non-discriminating.** `FocusVisibleDark` passes before and after the role change; the light story and the recipe-level composition tests are the true guards.
+- **INFO — static-css guard location.** The open-chevron emission guard lives in `AccordionItem.composition.test.tsx` rather than the canonical `src/shared/styles/panda-static-css.test.ts` because the latter is outside this slice's allowed paths; it compiles the real config with an empty `include` exactly as that file does.

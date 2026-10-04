@@ -1,8 +1,11 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
+import type { ReactNode, } from "react";
 
-import { expect, within, } from "storybook/test";
+import { expect, userEvent, within, } from "storybook/test";
 
-import { AccordionItem, } from "./accordion-item";
+import { css, } from "@shared/styled-system/css";
+
+import { AccordionItem, type AccordionItemProps, } from "./accordion-item";
 
 const meta = {
     title: "Components/Navigation & disclosure/Accordion Item",
@@ -51,4 +54,50 @@ export const Stack: Story = {
             </AccordionItem>
         </div>
     ),
+};
+
+const shell = css({
+    padding: "x12",
+    backgroundColor: "semantic.common.50.background",
+    color: "semantic.common.50.text",
+});
+
+const ThemeShell = ({ theme, children, }: { theme: "light" | "dark"; children: ReactNode; }) => (
+    <div data-theme={theme}>
+        <div className={shell}>{children}</div>
+    </div>
+);
+
+const renderIn = (theme: "light" | "dark") => (args: AccordionItemProps) => (
+    <ThemeShell theme={theme}>
+        <AccordionItem {...args} />
+    </ThemeShell>
+);
+
+// Pen `YGgyy` token contract `vswcF`: focus/ring resolves green.600 light
+// (`rgb(22, 163, 74)`) and green.500 dark (`rgb(34, 197, 94)`) with the shared
+// 2px ring. Only light is discriminating: in dark the old brand fill and
+// focus/ring both resolve green.500, so `FocusVisibleDark` is non-discriminating.
+const assertFocusRing = (outline: string) => async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+    const user = userEvent.setup();
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /What are primitive tokens/, });
+
+    await user.tab();
+    await expect(trigger).toHaveFocus();
+
+    const style = getComputedStyle(trigger);
+    await expect(style.outlineStyle).toBe("solid");
+    await expect(style.outlineWidth).toBe("2px");
+    await expect(style.outlineColor).toBe(outline);
+};
+
+export const FocusVisibleLight: Story = {
+    render: renderIn("light"),
+    play: assertFocusRing("rgb(22, 163, 74)"),
+};
+
+export const FocusVisibleDark: Story = {
+    render: renderIn("dark"),
+    play: assertFocusRing("rgb(34, 197, 94)"),
 };
