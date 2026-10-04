@@ -1086,3 +1086,27 @@ Slice-local counts: `+21` focused unit composition checks (44 → 65 across the 
 - **INFO — `mise run check` blocked at lint.** The pre-existing untracked 0-byte `.zed/debug.json` fails ESLint parsing; per instruction it was left in place (not deleted) and every other stage was run and recorded green individually.
 - **INFO — capture method.** Storybook-iframe Playwright captures (`deviceScaleFactor: 2`, Storybook on port `6006`); focus was driven with a CDP `Tab` key event so `:focus-visible` engaged, and the focused element's computed outline was read from the live page.
 - **INFO — Pen read-only.** The Pen was accessed through Pencil MCP `Get`/`Print` only; no mutation call was issued and the file hash is unchanged.
+
+## C6 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `b6cf7c6e3df752e4665905de211e618131a6253a` vs parent `57eab53`.
+**Verdict:** **APPROVED** — no Critical/Important findings.
+
+- Focus rings → `semantic.focus.ring` on tooltip/popover/hover-card triggers and floating-panel trigger/collapse/close; geometry preserved.
+- Surfaces → `surface.overlay` + `border.subtle` + radius `lg`; text roles updated (value-equivalent) with matching doc comments. No component/API/export/barrel/config change.
+- True RED: light focus + surface/border/radius; text roles not browser-claimed; dark focus non-discriminating and not claimed. ARIA/Escape/outside/hover/focus/placement regression.
+- BLOCKED: Tooltip dark surface (`tooltip/bg`/`fg` absent in Foundation) stays `DISABLED-REVIEW` never PASS; delay/arrow/popover variants/focus-return/portal/hover-intent/FP drag-resize-persistence/`aria-controls`.
+
+**Minor:** (1) evidence says "No `.tsx`" but story/test `.tsx` changed (means no component `.tsx`); (2) dark `SurfaceDark` asserts border == background (`neutral.800`) — faithful but not a visible-boundary proof, recorded INFO; (3) browser RED is process evidence only; (4) popover doc-comment "with header out of scope" is slightly ambiguous vs the rendered title/description header.
+
+## C7 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `888ebd8daa6cfe28f65f010ce10cbc2d15e75561` vs parent `b6cf7c6`.
+**Verdict:** **APPROVED** — no Critical/Important findings.
+
+- Focus rings → `semantic.focus.ring` on 14 slots across dialog/alertDialog/drawer/sheet/tour; surfaces → `surface.overlay` + `border.subtle`; footer separators `border.subtle`; sheet handle + tour dot `border.strong`; tour current dot `action.primary.background`; action roles (tour next/back, alert destructive/cancel) corrected; text roles value-equivalent; scrim literal kept.
+- No component/API/export/barrel/config/foundation change; AlertDialog not merged into Dialog; Sheet not merged into Drawer.
+- True RED: 21 composition + 21 browser discriminating; dark focus non-discriminating not claimed; text roles not browser-claimed; existing DOM/role/aria/Escape regression.
+- BLOCKED rows all recorded; `DISABLED / REVIEW` with real ratios (2.56/1.93 text, 1.48/1.41 border).
+
+**Minor:** (1) evidence capture port stated as `6006` in places vs `6008` in C6 (documentation only); (2) dark `SurfaceDark` border == background (`neutral.800`) — recorded INFO.
