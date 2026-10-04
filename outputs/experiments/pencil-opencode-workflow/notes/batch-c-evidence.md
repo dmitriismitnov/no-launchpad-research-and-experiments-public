@@ -1110,3 +1110,43 @@ Slice-local counts: `+21` focused unit composition checks (44 → 65 across the 
 - BLOCKED rows all recorded; `DISABLED / REVIEW` with real ratios (2.56/1.93 text, 1.48/1.41 border).
 
 **Minor:** (1) evidence capture port stated as `6006` in places vs `6008` in C6 (documentation only); (2) dark `SurfaceDark` border == background (`neutral.800`) — recorded INFO.
+
+## Batch C final verification (verifier: DeepSeek v4.1 Flash)
+
+**Verified at:** `c1283de` (`docs(shared): record Batch C6 and C7 review dispositions`).
+**Commit range:** Batch C slices `e3bb1d3` (C1) → `888ebd8` (C7), plus review-disposition docs commits. Program Batch C plan base: `6e3b000`.
+**Pen read-only:** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes — unchanged.
+**Worktree:** only pre-existing untracked `outputs/shared/notes/*` remain; no modified tracked files. The transient 0-byte `.zed/debug.json` editor artifact (which broke `check:lint`) was removed before this run.
+
+### Command results (exact)
+
+| # | Command | Exit | Result |
+| --- | --- | --- | --- |
+| 1 | `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `813 pass / 0 fail` (90 files, `4119 expect()`); browser `672 passed` (73 files) |
+| 2 | `mise run check:deps` | `0` | Knip, no findings |
+| 3 | `mise run build` | `0` | `✓ built in 78ms`; `dist/assets/index-DnHxqs-t.css 223.36 kB`; `index-CMkGtUR1.js 273.25 kB` |
+| 4 | `git diff --check` | `0` | clean |
+
+Slices and reviewed commits:
+
+| Slice | Owner(s) | Commit | Review |
+| --- | --- | --- | --- |
+| C1 | Link, NavItem, Brand, Breadcrumbs, SidebarItem | `e3bb1d3` | APPROVED |
+| C2 | TopNavigation, Tab | `6c4721c` | APPROVED |
+| C3 | AccordionItem, TreeItem | `5e480e2` | APPROVED |
+| C4 | Menu, ContextMenu | `1d0285a` | APPROVED |
+| C5 | Step, Pagination, Carousel | `1a4395b` | APPROVED |
+| C6 | Tooltip, Popover, HoverCard, FloatingPanel | `b6cf7c6` | APPROVED |
+| C7 | Dialog, AlertDialog, Drawer, Sheet, Tour | `888ebd8` | APPROVED |
+
+All 24 Batch C masters are mapped to an existing owner directory; no duplicate owner or container component was created (Menu Item internal to `menu/`; ContextMenu composes public Menu; CalendarDay/ColorPopup unaffected; no Accordion/Tree/Step/Pagination/Carousel/Tour group component).
+
+### Row disposition summary
+
+- **PASS / PASS (regression):** focus-ring role unification to `semantic.focus.ring` across all touched owners; Pen-exact surface/border/radius/text/action role corrections (C4/C6/C7); Link external sr-only announcement; Breadcrumbs per-crumb icon; Accordion open-chevron emission; Step upcoming number; Tab indicator on active only; TopNavigation actions gap.
+- **INFO:** documented token approximations and non-discriminating dark focus/aliased text roles (recorded per slice); Menu overlay dark boundary `neutral.800`==`neutral.800`.
+- **REVIEW:** Tab absolute indicator bounds (`45.59/35.59` vs Pen `43/33`) — pre-existing `lineHeights.normal` label box (Foundation).
+- **BLOCKED / DISABLED-REVIEW:** verified-unspecified axes recorded per slice (routing/active-matching, nesting/collapse/submenu, roving/arrow policy, open-state/dismissal/portal/focus-trap, panel/tour progression, drag/resize/persistence, icon additions, Foundation token gaps: scrim, `tooltip/bg|fg`, per-owner `action/disabled-bg`). Tooltip dark surface remains `DISABLED / REVIEW`, never PASS. Disabled contrast is `DISABLED / REVIEW` everywhere.
+- **No** unresolved `FAIL`, Critical, or Important review finding across Batch C.
+
+**Batch C: COMPLETE.** Next: Batch D (content/data/feedback), then Batch E (full evidence and final regression).
