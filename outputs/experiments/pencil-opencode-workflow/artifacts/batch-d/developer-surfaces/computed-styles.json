@@ -1,0 +1,258 @@
+[
+    {
+        "name": "clipboard-surface-tokens-light",
+        "story": "components-data-display-clipboard--token-surface-light",
+        "styles": {
+            ".clipboard__root": [
+                {
+                    "backgroundColor": "rgb(241, 245, 249)",
+                    "borderTopColor": "rgb(226, 232, 240)",
+                    "color": "rgb(15, 23, 42)",
+                    "outlineStyle": "none",
+                    "outlineWidth": "3px",
+                    "outlineColor": "rgb(15, 23, 42)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ],
+            ".clipboard__value": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "outlineStyle": "none",
+                    "outlineWidth": "3px",
+                    "outlineColor": "rgb(15, 23, 42)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ],
+            ".clipboard__copy": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "outlineStyle": "none",
+                    "outlineWidth": "3px",
+                    "outlineColor": "rgb(51, 65, 85)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ]
+        }
+    },
+    {
+        "name": "clipboard-surface-tokens-dark",
+        "story": "components-data-display-clipboard--token-surface-dark",
+        "styles": {
+            ".clipboard__root": [
+                {
+                    "backgroundColor": "rgb(2, 6, 23)",
+                    "borderTopColor": "rgb(30, 41, 59)",
+                    "color": "rgb(248, 250, 252)",
+                    "outlineStyle": "none",
+                    "outlineWidth": "3px",
+                    "outlineColor": "rgb(248, 250, 252)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ],
+            ".clipboard__value": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "outlineStyle": "none",
+                    "outlineWidth": "3px",
+                    "outlineColor": "rgb(248, 250, 252)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ],
+            ".clipboard__copy": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "outlineStyle": "none",
+                    "outlineWidth": "3px",
+                    "outlineColor": "rgb(203, 213, 225)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ]
+        }
+    },
+    {
+        "name": "clipboard-focus-light",
+        "story": "components-data-display-clipboard--token-focus-light",
+        "styles": {
+            ".clipboard__copy": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "outlineStyle": "solid",
+                    "outlineWidth": "2px",
+                    "outlineColor": "rgb(22, 163, 74)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ]
+        }
+    },
+    {
+        "name": "clipboard-focus-dark",
+        "story": "components-data-display-clipboard--token-focus-dark",
+        "styles": {
+            ".clipboard__copy": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "outlineStyle": "solid",
+                    "outlineWidth": "2px",
+                    "outlineColor": "rgb(34, 197, 94)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ]
+        }
+    },
+    {
+        "name": "code-block-focus-light",
+        "story": "components-data-display-code-block--token-focus-light",
+        "styles": {
+            ".codeBlock__copy": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "outlineStyle": "solid",
+                    "outlineWidth": "2px",
+                    "outlineColor": "rgb(22, 163, 74)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ]
+        }
+    },
+    {
+        "name": "code-block-focus-dark",
+        "story": "components-data-display-code-block--token-focus-dark",
+        "styles": {
+            ".codeBlock__copy": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "outlineStyle": "solid",
+                    "outlineWidth": "2px",
+                    "outlineColor": "rgb(34, 197, 94)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ]
+        }
+    },
+    {
+        "name": "scroll-area-surface-tokens-light",
+        "story": "components-layout-scroll-area--token-surface-light",
+        "styles": {
+            ".scrollArea__root": [
+                {
+                    "backgroundColor": "rgb(255, 255, 255)",
+                    "borderTopColor": "rgb(226, 232, 240)",
+                    "color": "rgb(15, 23, 42)",
+                    "outlineStyle": "none",
+                    "outlineWidth": "3px",
+                    "outlineColor": "rgb(15, 23, 42)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ],
+            ".scrollArea__viewport": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "outlineStyle": "none",
+                    "outlineWidth": "3px",
+                    "outlineColor": "rgb(15, 23, 42)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "rgb(100, 116, 139) rgba(0, 0, 0, 0)",
+                    "thumbBackgroundColor": "rgb(100, 116, 139)"
+                }
+            ]
+        }
+    },
+    {
+        "name": "scroll-area-surface-tokens-dark",
+        "story": "components-layout-scroll-area--token-surface-dark",
+        "styles": {
+            ".scrollArea__root": [
+                {
+                    "backgroundColor": "rgb(15, 23, 42)",
+                    "borderTopColor": "rgb(30, 41, 59)",
+                    "color": "rgb(248, 250, 252)",
+                    "outlineStyle": "none",
+                    "outlineWidth": "3px",
+                    "outlineColor": "rgb(248, 250, 252)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "auto"
+                }
+            ],
+            ".scrollArea__viewport": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "outlineStyle": "none",
+                    "outlineWidth": "3px",
+                    "outlineColor": "rgb(248, 250, 252)",
+                    "outlineOffset": "0px",
+                    "scrollbarColor": "rgb(148, 163, 184) rgba(0, 0, 0, 0)",
+                    "thumbBackgroundColor": "rgb(148, 163, 184)"
+                }
+            ]
+        }
+    },
+    {
+        "name": "scroll-area-focus-light",
+        "story": "components-layout-scroll-area--token-focus-light",
+        "styles": {
+            ".scrollArea__viewport": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "outlineStyle": "solid",
+                    "outlineWidth": "2px",
+                    "outlineColor": "rgb(22, 163, 74)",
+                    "outlineOffset": "-2px",
+                    "scrollbarColor": "rgb(100, 116, 139) rgba(0, 0, 0, 0)",
+                    "thumbBackgroundColor": "rgb(100, 116, 139)"
+                }
+            ]
+        }
+    },
+    {
+        "name": "scroll-area-focus-dark",
+        "story": "components-layout-scroll-area--token-focus-dark",
+        "styles": {
+            ".scrollArea__viewport": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "outlineStyle": "solid",
+                    "outlineWidth": "2px",
+                    "outlineColor": "rgb(34, 197, 94)",
+                    "outlineOffset": "-2px",
+                    "scrollbarColor": "rgb(148, 163, 184) rgba(0, 0, 0, 0)",
+                    "thumbBackgroundColor": "rgb(148, 163, 184)"
+                }
+            ]
+        }
+    }
+]

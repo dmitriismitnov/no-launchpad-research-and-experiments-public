@@ -830,3 +830,179 @@ Only List reports disabled specimens (`DISABLED / REVIEW 6`); all six reproduce 
 - No overclaimed PASS: every PASS row is observable through the public markup.
 
 **Minor (corrected):** (1) Timeline marker-boundary note inverted the dark comparison — corrected to "Pen dark `neutral.400` is one step lighter than the prior `common/50/border.strong` `neutral.500`"; (2) List focus row relabelled from `INFO (conditional projection)` to plain `INFO` (nothing is projected).
+
+---
+
+# Batch D evidence — D5 Clipboard · CodeBlock · ScrollArea
+
+**Date:** 2026-10-05\
+**Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen`\
+**Pen identity:** `9294654` bytes, SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` (verified before and after inspection; unchanged).\
+**Base commit:** `f08b84d9189bc98834bcf933ec29131fa00302ec` (`docs(shared): correct Batch D4 Timeline boundary note and record review`).\
+**Method:** Pencil MCP read-only `Get`/`Print`/`GetVariables` (`get_app_state` confirmed `ex_2.pen` as the active editor; only `Get`/`Print`/`GetVariables` were executed, no `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`), code reads, focused Bun composition tests and Vitest + Playwright Chromium story tests. Statuses follow the migration spec: `PASS`, `FAIL`, `INFO`, `HUMAN REVIEW`, `BLOCKED`, `DISABLED / REVIEW`.\
+**Cycle:** D5 cycle 1/2.
+
+> **Hash note (honest):** the handoff again quoted the Pen SHA-256 as a 63-character string (`…dde787421daf7fa`, one digit short). The file's true digest is the 64-character `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` above, matching the D1–D4 headers. The Pen was not modified.
+
+## D5 scope
+
+Token/focus-role corrections on existing slots for three content & data owners, plus both-theme computed-style stories. Public component `.tsx` files, `index.ts` barrels, `panda.config.ts`, the Foundation/token layer and generated `src/shared/styled-system/**` were **not** hand-edited. No new public components.
+
+## Pen source node IDs (read-only)
+
+| Owner | Master | Documentation frame | Verbatim Pen facts used |
+| --- | --- | --- | --- |
+| Clipboard | `Jfhu9` | `wsiFp` | Named parts `root · value · copy control · confirmation · error state`; variants `inline · field, with label, masked, error`; state contract `default · error · hover · copied · focus-visible`; audit `text 6/6`, `icon 3/3`, `focus-indicator 1/1 PASS`, `FAIL rows 0`, `DISABLED / REVIEW 0`. Master roles: root fill `$semantic/surface/sunken` + stroke `$semantic/border/subtle` (1px); value `$semantic/text/primary`; copy icon `$semantic/text/secondary`; check/err icons `$semantic/feedback/positive-fg` / `$semantic/feedback/negative-fg`. Focus specimen `LVPnH` (`st-focus-visible`): root fill `surface/sunken` + stroke `$semantic/focus/ring`, `strokeWidth 2`, `strokeAlignment outer`. |
+| CodeBlock | `th3Nd` | `VLMbo` | Named parts `root · filename bar · copy control · line numbers · code lines`; variants `with filename, with line numbers, wrapped, diff`; state contract `default · error · hover copy · copied · focus-visible`; audit `text 9/9`, `icon 3/3`, `focus-indicator 1/1 PASS`, `FAIL rows 0`, `DISABLED / REVIEW 0`. Master roles: root fill `$semantic/tooltip/bg`; dots d1/d3 `$semantic/feedback/negative-fg` / `$semantic/feedback/positive-fg`, d2 `$semantic/text/tertiary`; filename, copy icon, line numbers and code `$semantic/tooltip/fg`. Focus specimen `Xi9jm`: root fill `tooltip/bg` + stroke `$semantic/focus/ring`, `strokeWidth 2`, `strokeAlignment outer`. |
+| ScrollArea | `pHjwJ` | `EbeiJ` | Named parts `root · viewport · content · track · thumb`; variants `vertical · horizontal, with inset, always visible · on hover`; state contract `default · hover · dragging · focus-visible`; audit `text 5/5`, `icon 0/0`, `focus-indicator 1/1 PASS`, `FAIL rows 0`, `DISABLED / REVIEW 0`. Master roles: root fill `$semantic/surface/raised` + stroke `$semantic/border/subtle` (1px); content `$semantic/text/secondary`; thumb `$semantic/border/strong`. Focus specimen `lsQWy`: root fill `surface/raised` + stroke `$semantic/focus/ring`, `strokeWidth 2`, `strokeAlignment outer`. |
+
+Master/doc role bindings confirmed with `GetVariables` (read-only). The code `semantic` named-role layer ships `surface/*`, `text/*`, `border/*`, `focus/ring`, `action/*` — but **no `semantic/tooltip/*` and no `semantic/feedback/*`** (the Tooltip preset records the same missing role). `borderWidths.thick` = `2px`; `semantic/focus/ring` = `green.600` light / `green.500` dark.
+
+## Enumeration and disposition
+
+### Clipboard
+
+| Axis / slot | Pen role | Disposition |
+| --- | --- | --- |
+| root surface | `surface/sunken` | **PASS (dark RED)** — `semantic.surface.sunken`; light `rgb(241, 245, 249)` value-equal to the prior `common.100.background`, dark `rgb(2, 6, 23)` vs the prior `neutral.900` `rgb(15, 23, 42)` |
+| root boundary | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs prior `common.200.divider` `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
+| value | `text/primary` | **PASS (regression)** — `semantic.text.primary`; value-equal to the prior `common.50.text`, asserted not claimed RED |
+| copy control | `text/secondary` | **PASS (regression)** — `semantic.text.secondary`; value-equal to the prior `common.700.background`, asserted |
+| copy focus ring | `focus/ring` (2px outer) | **PASS (light RED; dark value-equal)** — `semantic.focus.ring`; light `green.600` `rgb(22, 163, 74)` vs the prior `brand.500.background` `green.500` `rgb(34, 197, 94)`, dark `green.500` either way |
+| confirmation / error icons | `feedback/positive-fg` / `feedback/negative-fg` | **BLOCKED** — no `feedback/*` Foundation role and no confirmation/error public state |
+| `inline · field` / `with label` / `masked` / `error`, `hover` / `copied` / `error` | `wsiFp` variants + state contract | **BLOCKED** (ledger below) |
+
+### CodeBlock
+
+| Axis / slot | Pen role | Disposition |
+| --- | --- | --- |
+| copy focus ring | `focus/ring` (2px outer) | **PASS (light RED; dark value-equal)** — `semantic.focus.ring`; light `green.600` `rgb(22, 163, 74)` vs the prior `brand.500.background` `green.500` `rgb(34, 197, 94)`, dark `green.500` either way |
+| root surface | `tooltip/bg` | **BLOCKED** — the foundation ships no `semantic.tooltip.bg`; the block keeps `common.900.background` (light exact `neutral.900`; dark inverts to `neutral.100`) |
+| filename / copy / line-number / code text | `tooltip/fg` | **BLOCKED** — no `semantic.tooltip.fg`; the block keeps `common.900.text` |
+| window dots | `feedback/negative-fg` / `feedback/positive-fg` | **BLOCKED** — no `feedback/*` role; the block keeps the `negative.600` / `positive.600` Badge convention |
+| d2 dot | `text/tertiary` | **INFO** — the block keeps `common.900.icon` (muted window control); a `text/*` role is not projected on this decorative dot |
+| active-line highlight | `palette/blue/950` + `palette/blue/300` | **BLOCKED** — no blue/info semantic group |
+| `with filename` / `with line numbers` / `wrapped` / `diff`, `error` / `hover copy` / `copied` | `VLMbo` variants + state contract | **BLOCKED** (ledger below) |
+
+### ScrollArea
+
+| Axis / slot | Pen role | Disposition |
+| --- | --- | --- |
+| root surface | `surface/raised` | **PASS** — `semantic.surface.raised`; **discriminates in both themes** (`white` vs prior `common.50.background` `neutral.50` light; `neutral.900` vs `neutral.950` dark) |
+| root boundary | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs prior `common.200.divider` `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
+| scrollbar thumb | `border/strong` | **PASS (dark RED)** — `semantic.border.strong`; light `neutral.500` value-equal to the prior `common.50.border.strong`, **discriminates in dark** (`neutral.400` `rgb(148, 163, 184)` vs `neutral.500` `rgb(100, 116, 139)`) |
+| viewport focus ring | `focus/ring` (2px) | **PASS (light RED; dark value-equal)** — `semantic.focus.ring`; light `green.600` vs the prior `brand.500.background` `green.500`, dark `green.500` either way |
+| content text | `text/secondary` | **INFO** — the recipe projects no viewport colour; content styling stays a consumer concern |
+| `vertical · horizontal` / `with inset` / `always visible · on hover`, `hover` / `dragging` | `EbeiJ` variants + state contract | **BLOCKED** (ledger below) |
+
+## Approved contract and changed paths
+
+- **Clipboard:** root `semantic.surface.sunken` + `semantic.border.subtle`; value `semantic.text.primary`; copy `semantic.text.secondary`; copy `:focus-visible` outline `semantic.focus.ring` (2px geometry preserved: `borderWidths.thick` / offset 0).
+- **CodeBlock:** copy `:focus-visible` outline `semantic.focus.ring` (2px geometry preserved). All other roles BLOCKED.
+- **ScrollArea:** root `semantic.surface.raised` + `semantic.border.subtle`; scrollbar thumb `semantic.border.strong` (both the standard `scrollbar-color` pair and the webkit thumb); viewport `:focus-visible` outline `semantic.focus.ring` (2px geometry preserved: `borderWidths.thick` / offset `-2px`).
+- Each preset doc comment now names the resolved roles and the Pen master/doc IDs.
+
+Changed paths: `src/shared/components/{clipboard,code-block,scroll-area}/{preset.ts,<Owner>.composition.test.tsx,<Owner>.stories.tsx}` (9 files), this evidence, `artifacts/batch-d/developer-surfaces/` (new: 10 PNGs + `computed-styles.json` + `capture.mjs`). Component `.tsx` files, `index.ts`, `panda.config.ts` and the token layer were not touched; generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited). No export changed, so `check:deps` was not required.
+
+## Tests-first proof (RED → GREEN)
+
+### Composition (Bun)
+
+RED was observed by stashing only the three `preset.ts` files (keeping the new assertions), running `mise run gen`, and re-running; then restoring the edited presets, regenerating and re-running:
+
+| Step | Exit | Result |
+| --- | --- | --- |
+| RED command | `bun test src/shared/components/clipboard/Clipboard.composition.test.tsx src/shared/components/code-block/CodeBlock.composition.test.tsx src/shared/components/scroll-area/ScrollArea.composition.test.tsx` | — |
+| RED | `1` | `3 fail` / `15 pass` (18 tests, 3 files, 49 expect calls) |
+| RED failures | clipboard `paints the sunken surface, subtle boundary and copy roles`; code block `paints the copy control focus ring`; scroll area `paints the raised surface, subtle boundary, thumb and focus ring` | |
+| GREEN | `0` | `18 pass` / `0 fail` (18 tests, 3 files, 57 expect calls) |
+
+Composition RED is **role-name-level**: every renamed role fails the recipe assertion even when its value is equal. The value-level discriminator is the browser table below.
+
+### Browser stories (Vitest + Playwright Chromium)
+
+| Step | Exit | Result |
+| --- | --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/{clipboard/Clipboard,code-block/CodeBlock,scroll-area/ScrollArea}.stories.tsx` (parent presets + `mise run gen`) | — |
+| RED | `1` | `3 failed` files, `7 failed` / `12 passed` (19) |
+| RED failures | clipboard `Token Surface Light`, `Token Surface Dark`, `Token Focus Light`; code-block `Token Focus Light`; scroll-area `Token Surface Light`, `Token Surface Dark`, `Token Focus Light` | |
+| GREEN | `0` | `3 passed` files, `19 passed` (19) |
+
+**True RED** (rendered value discriminates): Clipboard surface (dark) + boundary (both) + focus ring (light); CodeBlock focus ring (light); ScrollArea surface + boundary (both) + focus ring (light). **Non-discriminating** (passed on the parent, no dark proof claimed): Clipboard / CodeBlock / ScrollArea `Token Focus Dark` — dark `focus/ring` is `green.500`, value-equal to the prior `brand.500.background`. **Regressions** (value-equal, asserted not claimed RED): Clipboard value/copy text. Focused coverage moved `15 → 18` composition tests (`+3`, 3 files) and `9 → 19` browser tests (`+10`).
+
+## Both-theme evidence (computed style, in browser)
+
+Code-side Storybook-iframe captures (`deviceScaleFactor: 2`), in `artifacts/batch-d/developer-surfaces/`: `clipboard-surface-tokens-{light,dark}`, `clipboard-focus-{light,dark}`, `code-block-focus-{light,dark}`, `scroll-area-surface-tokens-{light,dark}`, `scroll-area-focus-{light,dark}` (10 PNGs) plus `computed-styles.json` and `capture.mjs`.
+
+| Surface / role | Light (computed) | Dark (computed) |
+| --- | --- | --- |
+| Clipboard root `surface/sunken` / `border/subtle` | `rgb(241, 245, 249)` / `rgb(226, 232, 240)` | `rgb(2, 6, 23)` / `rgb(30, 41, 59)` |
+| Clipboard value `text/primary` | `rgb(15, 23, 42)` | `rgb(248, 250, 252)` |
+| Clipboard copy `text/secondary` | `rgb(51, 65, 85)` | `rgb(203, 213, 225)` |
+| Clipboard copy `:focus-visible` outline `focus/ring` (2px solid) | `rgb(22, 163, 74)` | `rgb(34, 197, 94)` |
+| CodeBlock copy `:focus-visible` outline `focus/ring` (2px solid) | `rgb(22, 163, 74)` | `rgb(34, 197, 94)` |
+| CodeBlock copy `common.900.text` (blocked `tooltip/fg`) | `rgb(248, 250, 252)` | `rgb(15, 23, 42)` |
+| ScrollArea root `surface/raised` / `border/subtle` | `rgb(255, 255, 255)` / `rgb(226, 232, 240)` | `rgb(15, 23, 42)` / `rgb(30, 41, 59)` |
+| ScrollArea thumb `border/strong` (webkit + `scrollbar-color`) | `rgb(100, 116, 139)` | `rgb(148, 163, 184)` |
+| ScrollArea viewport `:focus-visible` outline `focus/ring` (2px solid, offset `-2px`) | `rgb(22, 163, 74)` | `rgb(34, 197, 94)` |
+
+### Contrast (real WCAG ratios)
+
+Content against its resolved surface; thresholds text `≥ 4.5`, icon/boundary/focus `≥ 3`.
+
+| Pair | Light | Dark | Verdict |
+| --- | --- | --- | --- |
+| Clipboard value `text/primary` / `surface/sunken` | 16.30 | 19.28 | PASS (text) |
+| Clipboard copy `text/secondary` / `surface/sunken` | 9.45 | 13.59 | PASS (text) |
+| Clipboard boundary `border/subtle` / `surface/sunken` | 1.13 | 1.38 | **INFO** — decorative boundary |
+| Clipboard focus `focus/ring` / `surface/sunken` | 3.01 | 8.85 | PASS (focus indicator ≥ 3) |
+| CodeBlock copy `common.900.text` / `common.900.background` | 17.06 | 16.30 | PASS (text) — blocked-role INFO |
+| CodeBlock focus `focus/ring` / `common.900.background` | 5.42 | 2.08 | light PASS; dark **INFO / REVIEW (< 3)** — the block surface is the BLOCKED inverted `common.900` approximation (Pen `tooltip/bg` dark `neutral.800`), not a PASS |
+| ScrollArea `surface/raised` / `surface/base` | 1.05 | 1.13 | **INFO** — surface step |
+| ScrollArea boundary `border/subtle` / `surface/raised` | 1.23 | 1.22 | **INFO** — decorative boundary |
+| ScrollArea thumb `border/strong` / `surface/raised` | 4.76 | 6.96 | PASS (functional boundary ≥ 3) |
+| ScrollArea focus `focus/ring` / `surface/raised` | 3.30 | 7.83 | PASS (focus indicator ≥ 3) |
+
+### DISABLED / REVIEW (Pen audit ratios, never counted PASS)
+
+All three component-role audits report `DISABLED / REVIEW 0` and `No FAIL or DISABLED rows` in both themes. The CodeBlock dark focus indicator above is the only non-PASS contrast row; it is a consequence of the BLOCKED `tooltip/bg` surface, not of the focus-role correction.
+
+## BLOCKED ledger (recorded, not implemented)
+
+| Item | Pen authority | Reason |
+| --- | --- | --- |
+| Clipboard confirmation / error icons | `Jfhu9` `U605e` / `xsQNU` (`feedback/positive-fg` / `feedback/negative-fg`) | No `feedback/*` Foundation role; no confirmation/error public prop |
+| Clipboard `error` / `copied` / `hover` states | `wsiFp` state contract | New interaction/confirmation state |
+| Clipboard `inline · field` / `with label` / `masked` / `error` | `wsiFp` variant names | New visual/content axes |
+| CodeBlock `tooltip/bg` surface + `tooltip/fg` text | `th3Nd` root / `BCIHe` / `ugB9r` / line numbers | Foundation ships no `semantic.tooltip.*`; recorded as the same gap as the Tooltip component |
+| CodeBlock window dots `feedback/*-fg` | `th3Nd` `k1rp1` / `VyEJ1` | No `feedback/*` role; Badge 600 convention retained |
+| CodeBlock active-line `palette/blue/950` / `palette/blue/300` | `th3Nd` `k9aW8` / `q9rit` | No blue/info semantic group |
+| CodeBlock `with filename` / `with line numbers` / `wrapped` / `diff`, `error` / `hover copy` / `copied` | `VLMbo` variants + state contract | New content/states |
+| ScrollArea `vertical · horizontal` / `with inset` / `always visible · on hover` | `EbeiJ` variant names | New props or a JavaScript scrollbar |
+| ScrollArea `hover` / `dragging` states | `EbeiJ` state contract | New interaction/state |
+| ScrollArea content text role | `pHjwJ` `fS82H` (`text/secondary`) | The recipe sets no viewport colour; consumer concern |
+| Focus ring slot projection | `Jfhu9` `LVPnH` / `th3Nd` `Xi9jm` / `pHjwJ` `lsQWy` draw the ring on the field/block/root | The code's only focusable slots are the copy control (Clipboard/CodeBlock) and the viewport (ScrollArea); the ring role was corrected there, preserving the 2px geometry, without adding a focusable root or new props |
+| Foundation named roles `tooltip/*` and `feedback/*` | Pen audit legend / master fills | The code named-role layer ships neither; value-mapped approximations retained (INFO) |
+| New public components | — | Explicitly excluded |
+
+## Verification
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| focused composition RED | `1` | `3 fail` / `15 pass` (18, 49 expect calls) |
+| focused composition GREEN | `0` | `18 pass` / `0 fail` (18, 57 expect calls) |
+| focused browser RED | `1` | `3 failed` files, `7 failed` / `12 passed` (19) |
+| focused browser GREEN | `0` | `3 passed` files, `19 passed` (19) |
+| `mise run check` | `0` | lint + types + format; `✓ icons up to date (38 icons)`; `✓ web fonts up to date (2 faces)`; unit `837 pass / 0 fail`; browser `718 passed` (73 files) |
+| `mise run build` | `0` | Vite production build, `141 modules transformed`, `✓ built in 89ms` |
+| `git diff --check` | `0` | no whitespace errors |
+| `check:deps` | n/a | no exports or dependencies changed |
+
+## Concerns / INFO
+
+- **INFO — Pen draws the focus ring on the field/block/root.** The `focus-indicator 1/1 PASS` audit resolves `focus/ring` (2px, `strokeAlignment outer`) drawn around the whole Clipboard field, Code Block and Scroll Area root. The code's observable focusable slots are the copy control and the viewport, which already carried a 2px outline; only the ring role was corrected. No root was made focusable and no slot was added.
+- **INFO — CodeBlock surface is a blocked approximation.** `tooltip/bg` (`neutral.900` light / `neutral.800` dark) and `tooltip/fg` (`neutral.50` both) are absent from the code foundation, so the block keeps the inverting `common.900` pair. In dark the block renders as a light surface, and the `focus/ring` contrast falls to 2.08 (light 5.42); the dark row is `INFO / REVIEW`, never PASS. This mirrors the Tooltip component's recorded gap.
+- **INFO — Clipboard light focus ring.** `focus/ring` light is `green.600` `rgb(22, 163, 74)` against `surface/sunken` `rgb(241, 245, 249)` = 3.01, just at the ≥ 3 focus threshold; the prior `green.500` was 2.08 (below threshold).
+- **INFO — ScrollArea content text.** The master's content text is `text/secondary`, but the recipe projects no viewport colour; the story supplies it. Recorded, not changed.
+- **INFO — Clipboard surface is dark-only RED.** `surface/sunken` and `common.100.background` are both `neutral.100` light; only dark differs (`neutral.950` vs `neutral.900`).
+- The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.

@@ -10,12 +10,18 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * `scrollbar-width` / `scrollbar-color` pair (Firefox). There is no JavaScript
  * scrollbar simulation.
  *
- * Pen references the newer role layer (`semantic/surface/raised`,
- * `semantic/border/*`, `semantic/text/*`):
- * - surface/raised -> common.50.background (white exact; dark one step)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - border/strong -> common.50.border.strong (the Pen thumb colour)
- * - text/tertiary -> common.600.background (exact)
+ * Pen `pHjwJ` (master) / `EbeiJ` (documentation): named parts `root · viewport ·
+ * content · track · thumb`; state contract `default · hover · dragging ·
+ * focus-visible`. Resolved roles:
+ * - root fill `surface/raised` -> `semantic.surface.raised`
+ * - root stroke `border/subtle` -> `semantic.border.subtle`
+ * - scrollbar thumb `border/strong` -> `semantic.border.strong`
+ * - viewport focus ring `focus/ring` (2px) -> `semantic.focus.ring`
+ *
+ * Pen's `vertical · horizontal / with inset / always visible / on hover`
+ * variants and the `hover` / `dragging` states need new public props or a
+ * JavaScript scrollbar; the content text role is a consumer concern (the recipe
+ * sets no viewport colour). They are recorded BLOCKED, not implemented.
  *
  * Approximations: Pen's scrollbar is a 10px track with a 4px inset thumb; the
  * webkit thumb reproduces that with a 3px transparent border and
@@ -32,16 +38,16 @@ export const scrollAreaRecipe = defineSlotRecipe({
             overflow: "hidden",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
+            borderColor: "semantic.border.subtle",
             borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
+            backgroundColor: "semantic.surface.raised",
         },
 
         viewport: {
             overflowY: "auto",
             padding: "x6",
             scrollbarWidth: "thin",
-            scrollbarColor: "{colors.semantic.common.50.border.strong} transparent",
+            scrollbarColor: "{colors.semantic.border.strong} transparent",
             "&::-webkit-scrollbar": {
                 width: "x5",
             },
@@ -53,14 +59,14 @@ export const scrollAreaRecipe = defineSlotRecipe({
                 borderStyle: "solid",
                 borderColor: "transparent",
                 borderRadius: "9999px",
-                backgroundColor: "semantic.common.50.border.strong",
+                backgroundColor: "semantic.border.strong",
                 backgroundClip: "padding-box",
             },
             "&:focus-visible": {
                 outlineStyle: "solid",
                 outlineWidth: "{borderWidths.thick}",
                 outlineOffset: "-2px",
-                outlineColor: "semantic.brand.500.background",
+                outlineColor: "semantic.focus.ring",
             },
         },
     },

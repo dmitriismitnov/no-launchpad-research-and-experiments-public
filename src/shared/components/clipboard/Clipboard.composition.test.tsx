@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { Clipboard, } from "./clipboard";
+import { clipboardRecipe, } from "./preset";
 
 describe("clipboard composition", () => {
     test("renders the readonly value without a copy button by default", () => {
@@ -37,5 +38,25 @@ describe("clipboard composition", () => {
         const markup = renderToStaticMarkup(<Clipboard value="npm i" data-testid="c" />);
 
         expect(markup).toContain(`data-testid="c"`);
+    });
+
+    // Pen `Jfhu9` master / `wsiFp` documentation: root fill `surface/sunken`
+    // with a `border/subtle` boundary, value `text/primary`, copy control
+    // `text/secondary` and a 2px outer `focus/ring` on the copy control. The
+    // confirmation/error icons and the error/copied/hover states are BLOCKED
+    // (no public props; no `feedback/*` Foundation roles).
+    test("paints the sunken surface, subtle boundary and copy roles", () => {
+        const root = clipboardRecipe.base?.["root"] as Record<string, unknown> | undefined;
+        const value = clipboardRecipe.base?.["value"] as Record<string, unknown> | undefined;
+        const copy = clipboardRecipe.base?.["copy"] as Record<string, unknown> | undefined;
+
+        expect(root).toMatchObject({
+            backgroundColor: "semantic.surface.sunken",
+            borderColor: "semantic.border.subtle",
+        });
+        expect(value?.["color"]).toBe("semantic.text.primary");
+        expect(copy?.["color"]).toBe("semantic.text.secondary");
+        expect(copy?.["outlineWidth"]).toMatchObject({ _focusVisible: "{borderWidths.thick}", });
+        expect(copy?.["outlineColor"]).toMatchObject({ _focusVisible: "semantic.focus.ring", });
     });
 });

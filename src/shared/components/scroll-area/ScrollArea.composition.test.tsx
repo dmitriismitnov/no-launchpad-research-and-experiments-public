@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { scrollAreaRecipe, } from "./preset";
 import { ScrollArea, } from "./scroll-area";
 
 describe("scroll area composition", () => {
@@ -47,5 +48,27 @@ describe("scroll area composition", () => {
         const markup = renderToStaticMarkup(<ScrollArea data-testid="s" />);
 
         expect(markup).toContain(`data-testid="s"`);
+    });
+
+    // Pen `pHjwJ` master / `EbeiJ` documentation: root fill `surface/raised`
+    // with a `border/subtle` boundary, the scrollbar thumb `border/strong`, and
+    // a 2px `focus/ring` on the focusable viewport. The vertical/horizontal,
+    // inset, always-visible/on-hover variants and the hover/dragging states are
+    // BLOCKED (new props or a JavaScript scrollbar); the content text role stays
+    // a consumer concern.
+    test("paints the raised surface, subtle boundary, thumb and focus ring", () => {
+        const root = scrollAreaRecipe.base?.["root"] as Record<string, unknown> | undefined;
+        const viewport = scrollAreaRecipe.base?.["viewport"] as Record<string, unknown> | undefined;
+        const thumb = viewport?.["&::-webkit-scrollbar-thumb"] as Record<string, unknown> | undefined;
+        const focus = viewport?.["&:focus-visible"] as Record<string, unknown> | undefined;
+
+        expect(root).toMatchObject({
+            backgroundColor: "semantic.surface.raised",
+            borderColor: "semantic.border.subtle",
+        });
+        expect(viewport?.["scrollbarColor"]).toBe("{colors.semantic.border.strong} transparent");
+        expect(thumb?.["backgroundColor"]).toBe("semantic.border.strong");
+        expect(focus?.["outlineWidth"]).toBe("{borderWidths.thick}");
+        expect(focus?.["outlineColor"]).toBe("semantic.focus.ring");
     });
 });

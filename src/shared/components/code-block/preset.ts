@@ -8,15 +8,20 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * anatomy is closed: the component maps the code string into numbered rows and
  * paints the optional copy control.
  *
- * Pen references `semantic/tooltip/bg` + `semantic/tooltip/fg`. The code
- * foundation has no always-dark tooltip role, so the block uses the inverse
- * `common.900` pair, which keeps the surface dark with light copy in the light
- * theme and flips to a light surface with dark copy in the dark theme:
- * - tooltip/bg -> common.900.background (light exact neutral.900; inverts in dark)
- * - tooltip/fg -> common.900.text (pairs with the surface in both themes)
- * - muted line numbers -> common.900.icon
- * - window dots -> negative.600.background / positive.600.background,
- *   matching the Badge dot convention
+ * Pen `th3Nd` (master) / `VLMbo` (documentation): named parts `root · filename
+ * bar · copy control · line numbers · code lines`; state contract `default ·
+ * error · hover copy · copied · focus-visible`. The copy control's `focus/ring`
+ * indicator (2px outer) resolves `semantic.focus.ring`.
+ *
+ * The block surface and the file/copy/line-number text resolve Pen's
+ * `tooltip/bg` + `tooltip/fg`, and the window dots resolve `feedback/negative-fg`
+ * / `feedback/positive-fg`. The code foundation ships no `semantic.tooltip.*` or
+ * `semantic.feedback.*` named roles (the Tooltip component records the same gap),
+ * so the block keeps the inverse `common.900` pair and the Badge 600 dot
+ * convention as value-mapped approximations. The `with filename` / `with line
+ * numbers` / `wrapped` / `diff` variants and the `error` / `hover copy` /
+ * `copied` states need new public props or the missing Foundation roles; they are
+ * recorded BLOCKED, not implemented.
  *
  * Approximations: Pen's mono family (IBM Plex Mono) has no code token, so the
  * body family is used. Pen highlights the active line with `palette/blue/*`;
@@ -110,7 +115,7 @@ export const codeBlockRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         code: {

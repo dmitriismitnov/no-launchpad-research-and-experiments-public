@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { CodeBlock, } from "./code-block";
+import { codeBlockRecipe, } from "./preset";
 
 describe("code block composition", () => {
     const code = 'import { tokens } from "@nolaunchpad/core";\n\nconst button = tokens.semantic.brand[600];';
@@ -62,5 +63,19 @@ describe("code block composition", () => {
         );
 
         expect(markup).toContain(`data-testid="c"`);
+    });
+
+    // Pen `th3Nd` master / `VLMbo` documentation: the copy control carries a
+    // 2px outer `focus/ring`. The block surface (`tooltip/bg`) and the
+    // file/copy/line-number text (`tooltip/fg`), the window dots
+    // (`feedback/*-fg`) and the error/hover copy/copied states are BLOCKED: the
+    // code foundation ships no `semantic.tooltip.*` / `semantic.feedback.*`
+    // roles and the states need new public props.
+    test("paints the copy control focus ring", () => {
+        const copy = codeBlockRecipe.base?.["copy"] as Record<string, unknown> | undefined;
+
+        expect(copy?.["outlineStyle"]).toMatchObject({ _focusVisible: "solid", });
+        expect(copy?.["outlineWidth"]).toMatchObject({ _focusVisible: "{borderWidths.thick}", });
+        expect(copy?.["outlineColor"]).toMatchObject({ _focusVisible: "semantic.focus.ring", });
     });
 });
