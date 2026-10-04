@@ -288,3 +288,16 @@ Storybook iframe, `deviceScaleFactor: 2`, in `artifacts/batch-c/top-nav-tab/`: `
 - **REVIEW — Tab absolute bounds.** The Pen `VWQNE` `43`/`33` trigger heights are not reached because this system pins `lineHeight: normal` (1.4 → `19.59px`) while Pen's label is font-default `17px`. The indicator contribution (`+10px = 8px gap + 2px bar`) and its position (`8px` above the trigger bottom) are exact.
 - **INFO — dark focus stories.** `FocusVisibleDark` is not discriminating: before and after the change the dark outline is `green.500`. The light story and the recipe-level composition test are the true guards.
 - **INFO — indicator fill token.** The indicator keeps `semantic.brand.700.background`; the Pen `action/primary-bg` (dark parity) is `BLOCKED` above and not claimed as PASS.
+
+## C2 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `6c4721cf080bcc0b796ac17de2dc425c624f8700` vs `9c72c24`.
+**Verdict:** **APPROVED** — no Critical/Important findings.
+
+- Tab focus ring now `semantic.focus.ring`; geometry (2px, offset 0) unchanged; generated CSS confirms.
+- TopNavigation `actions.gap` = `24px` (`x12`); only that line changed.
+- Tab indicator renders only when active (`tab.tsx` conditional) with `list.alignItems: flex-start`; +10px indicator delta exact. ARIA intact.
+- True RED confirmed: focus-role light mismatch, always-rendered indicator, `actions.gap x4`. Dark focus non-discriminating and not claimed as proof.
+- Absolute Pen bounds `43`/`33` → `45.59`/`35.59` is an accepted **REVIEW**: divergence is the pre-existing label line box (`lineHeights.normal` token = 1.4 × 14px = 19.59px vs Pen 17px), a Foundation/typography matter outside the approved C2 surface; disclosed in commit, enumeration, both-theme table, summary, and concerns.
+
+**Minor (recorded, non-blocking):** (1) `Tab.stories.tsx` comment says `lineHeight: normal` but it resolves to the project token `lineHeights.normal = 1.4`; (2) the committed `IndicatorGeometry` delta assertion has no recorded RED run (the RED was the prior absolute `43` assertion); (3) the TopNavigation `column-gap: 24px` evidence row sits in the "computed style, in browser" table but is machine-guarded only at recipe level (`TopNavigation.composition.test.tsx`), not by a `play` assertion — treat as recipe-level; (4) `preset.ts` `opacity: 0` base for the indicator is now redundant.
