@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { List, } from "./list";
+import { listRecipe, } from "./preset";
 
 describe("list composition", () => {
     test("renders one item per entry with title, meta and trailing", () => {
@@ -55,5 +56,28 @@ describe("list composition", () => {
         const markup = renderToStaticMarkup(<List items={[]} data-testid="l" />);
 
         expect(markup).toContain(`data-testid="l"`);
+    });
+
+    // Pen master `fgxmm` / `h9Cf2t` and documentation `dm7Dn`: the container
+    // frame is `surface/raised` with a `border/subtle` boundary; the row icon
+    // resolves `text/secondary`; the title `text/primary`; metadata and the
+    // trailing slot `text/tertiary`. The doc's row focus rule belongs to the
+    // BLOCKED selectable/interactive row (focus-indicator audit is 0/0), so the
+    // resting `<li>` carries no focus ring.
+    test("paints the raised surface, subtle boundary and row text roles", () => {
+        const root = listRecipe.base?.["root"] as Record<string, unknown> | undefined;
+        const icon = listRecipe.base?.["itemIcon"] as Record<string, unknown> | undefined;
+        const title = listRecipe.base?.["itemTitle"] as Record<string, unknown> | undefined;
+        const meta = listRecipe.base?.["itemMeta"] as Record<string, unknown> | undefined;
+        const trailing = listRecipe.base?.["itemTrailing"] as Record<string, unknown> | undefined;
+
+        expect(root).toMatchObject({
+            backgroundColor: "semantic.surface.raised",
+            borderColor: "semantic.border.subtle",
+        });
+        expect(icon?.["color"]).toBe("semantic.text.secondary");
+        expect(title?.["color"]).toBe("semantic.text.primary");
+        expect(meta?.["color"]).toBe("semantic.text.tertiary");
+        expect(trailing?.["color"]).toBe("semantic.text.tertiary");
     });
 });

@@ -616,3 +616,206 @@ Card reports `FAIL rows 0` and `DISABLED / REVIEW 11` (6 rows listed + 5 grouped
 **Important (corrected):** the Card focus row was marked `PASS`, but the public `Card` root is not focusable (no `tabIndex`/interactive role); the rule only fires on a consumer-supplied focus target (the story injects `tabIndex={0}`), and Pen's focus indicator belongs to the BLOCKED interactive variant `fz3DO`. Downgraded to **INFO (conditional projection)**; CSS and test retained.
 **Minor (corrected):** `Statistic.composition.test.tsx` asserted the CSS-less `statistic__delta--trend_up` class; now asserts the emitted `statistic__deltaText--trend_up` copy slot. (The glyph slot class only renders with a `deltaIcon`.)
 **Minor:** `positive|negative.700.background` is used as a foreground role (value-equal to Pen `feedback/*-fg`; Foundation naming stays BLOCKED).
+
+---
+
+# Batch D evidence — D4 List · Timeline · DataTable
+
+**Date:** 2026-10-05\
+**Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen`\
+**Pen identity:** `9294654` bytes, SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` (verified before and after inspection; unchanged).\
+**Base commit:** `12b311333fdafd37f6bc8b34eef54e7403e7e231` (`docs(shared): correct Batch D3 Card focus disposition and Statistic assertion`).\
+**Method:** Pencil MCP read-only `Get`/`Print`/`GetVariables` (`get_app_state` confirmed `ex_2.pen` as the active editor; only `Get`/`Print`/`GetVariables` were executed, no `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`), code reads, focused Bun composition tests and Vitest + Playwright Chromium story tests. Statuses follow the migration spec: `PASS`, `FAIL`, `INFO`, `HUMAN REVIEW`, `BLOCKED`, `DISABLED / REVIEW`.\
+**Cycle:** D4 cycle 1/2.
+
+> **Hash note (honest):** the handoff again quoted the Pen SHA-256 as a 63-character string (`…dde787421daf7fa`, one digit short). The file's true digest is the 64-character `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` above, matching the D1/D2/D3 headers. The Pen was not modified.
+
+## D4 scope
+
+Token/focus-role corrections on existing slots for three content & data owners, plus both-theme computed-style stories. Public component `.tsx` files, `index.ts` barrels, `panda.config.ts`, the Foundation/token layer and generated `src/shared/styled-system/**` were **not** hand-edited. No new public components: `List Item`, `Timeline Item` and `Table Row` stay internal to `list/`, `timeline/` and `data-table/`.
+
+## Pen source node IDs (read-only)
+
+| Owner | Master(s) | Documentation frame | Verbatim Pen facts used |
+| --- | --- | --- | --- |
+| List | `fgxmm` (List) · `h9Cf2t` (List Item) | `dm7Dn` | Named parts `root · item · leading icon or avatar · title · metadata · trailing slot`; variants `default · compact, selectable, with avatar, with trailing action`; state contract `default · compact · hover · selected · disabled`; "Container frame: border.subtle. Row separators: divider. Selected/hovered rows use the action surface roles, not a stronger boundary. Focus: semantic/focus/ring on the row."; "A list role with the number of items when known."; "Selected rows expose their state."; "Trailing actions are labelled and separately focusable."; audit `focus-indicator 0/0 PASS`, `FAIL rows 0`, `DISABLED / REVIEW 6`. |
+| Timeline | `z4hUE9` (Timeline) · `d5pll` (Timeline Item) | `K7WV8o` | Named parts `root · rail · connector · status dot · title · metadata`; variants `complete · current · upcoming · error, compact`; state contract `complete · current · upcoming · error`; interaction `none, static`; "The rail connects events; it never ends mid-item."; "Status is stated in text, not by dot colour alone."; "Timestamps are machine readable."; audit `focus-indicator 0/0 PASS`, `functional-boundary 3/3 PASS`, `FAIL rows 0`, `DISABLED / REVIEW 0`. |
+| DataTable | `FZPkF` (Data Table) · `M2LZ59` (Table Row) | `g02ukq` | Named parts `root · toolbar · header row · sortable column · selection cell · row · pagination footer · empty state`; variants `comfortable · compact, selectable, sortable, loading, empty, error`; state contract `default · loading · hover row · selected row · sorted column · empty · error`; "Container frame: border.subtle. Header and row separators: divider. Selected row boundary: border.strong; alert/invalid rows use semantic/feedback/negative-* roles. Focus: semantic/focus/ring."; audit `focus-indicator 0/0 PASS`, `FAIL rows 0`, `DISABLED / REVIEW 0`. |
+
+Master role bindings confirmed read-only: List `fgxmm` fill `$semantic/surface/raised`, stroke `$semantic/border/subtle`; List Item `h9Cf2t` icon `$semantic/text/secondary`, title `$semantic/text/primary`, meta `$semantic/text/tertiary`, trailing `$semantic/text/tertiary`. Timeline Item `d5pll` dot fill `$semantic/surface/raised` + stroke `$semantic/border/strong` (2px), line `$semantic/border/subtle`, title `$semantic/text/primary`, meta `$semantic/text/secondary`. Table Row `M2LZ59` bottom stroke `$semantic/common/200/divider`, Name `$semantic/text/primary`, Role `$semantic/text/secondary`, Status `$semantic/feedback/positive-fg`, Actions icon `$semantic/text/tertiary`; Data Table `FZPkF` fill `$semantic/surface/raised`, stroke `$semantic/border/subtle`, header band fill `$semantic/surface/sunken` with `$semantic/text/tertiary` labels. Named roles resolved via `GetVariables` (identical to the code foundation): `surface/raised` white/neutral.900, `surface/sunken` neutral.100/neutral.950, `border/subtle` neutral.200/neutral.800, `border/strong` neutral.500/neutral.400, `text/primary` neutral.900/neutral.50, `text/secondary` neutral.700/neutral.300, `text/tertiary` neutral.600/neutral.400, `focus/ring` green.600/green.500.
+
+## Enumeration and disposition
+
+### List
+
+| Axis / slot | Pen role | Disposition |
+| --- | --- | --- |
+| root surface | `surface/raised` | **PASS** — `semantic.surface.raised`; **discriminates in both themes** (white vs prior `common/50/background` `neutral.50` light; `neutral.900` vs `neutral.950` dark) |
+| root boundary | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs prior `common/200/divider` `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
+| item icon | `text/secondary` | **PASS** — `semantic.text.secondary`; **discriminates in both themes** (`neutral.700` vs prior `common/600/background` `neutral.600` light; `neutral.300` vs `neutral.400` dark) |
+| item title | `text/primary` | **PASS (regression)** — `semantic.text.primary`; value-equal to prior `common/50/text`, asserted not claimed RED |
+| item metadata | `text/tertiary` | **PASS (regression)** — `semantic.text.tertiary`; value-equal to prior `common/600/background`, asserted |
+| item trailing | `text/tertiary` | **PASS (regression)** — `semantic.text.tertiary`; value-equal, asserted |
+| row focus ring | `semantic/focus/ring` on the row (prose) | **INFO (conditional projection)** — no ring is projected: the audit is `focus-indicator 0/0` and the resting `<li>` is not focusable; the ring belongs to the BLOCKED selectable/interactive row |
+| selectable · compact · with avatar · with trailing action · hover · selected · disabled | `dm7Dn` variants/state contract | **BLOCKED** (ledger below) |
+
+### Timeline
+
+| Axis / slot | Pen role | Disposition |
+| --- | --- | --- |
+| marker surface | `surface/raised` | **PASS** — `semantic.surface.raised`; **discriminates in both themes** (white vs prior `common/50/background` `neutral.50` light; `neutral.900` vs `neutral.950` dark) |
+| marker boundary | `border/strong` (2px) | **PASS (dark RED)** — `semantic.border.strong`; light `neutral.500` value-equal to prior `common/50/border.strong`, **discriminates in dark** (`neutral.500` vs prior `neutral.500` both themes ⇒ prior dark was one step lighter than Pen) |
+| connector | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs prior `common/200/divider` `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
+| title | `text/primary` | **PASS (regression)** — `semantic.text.primary`; value-equal to prior `common/50/text`, asserted |
+| metadata | `text/secondary` | **PASS (regression)** — `semantic.text.secondary`; value-equal to prior `common/700/background`, asserted |
+| complete · current · upcoming · error · compact, error `feedback/negative-bg`, per-event feedback tones, ordering, ordered-list/timestamp ARIA | `K7WV8o` variants/state contract/rules | **BLOCKED** (ledger below) |
+
+### DataTable
+
+| Axis / slot | Pen role | Disposition |
+| --- | --- | --- |
+| card surface | `surface/raised` | **PASS** — `semantic.surface.raised`; **discriminates in both themes** (white vs prior `common/50/background` light; `neutral.900` vs `neutral.950` dark) |
+| card boundary | `border/subtle` | **PASS** — `semantic.border.subtle`; **discriminates in both themes** (`neutral.200` vs prior `common/200/divider` `neutral.300` light; `neutral.800` vs `neutral.700` dark) |
+| header band | `surface/sunken` | **PASS (dark RED)** — `semantic.surface.sunken`; light `neutral.100` value-equal to prior `common/100/background`, **discriminates in dark** (`neutral.950` vs prior `neutral.900`) |
+| header label | `text/tertiary` | **PASS (regression)** — `semantic.text.tertiary`; value-equal to prior `common/600/background`, asserted |
+| body cell | `text/secondary` | **PASS (regression)** — `semantic.text.secondary`; value-equal to prior `common/700/background`, asserted |
+| leading cell | `text/primary` | **PASS (regression)** — `semantic.text.primary`; value-equal to prior `common/50/text`, asserted |
+| header/row separators | `common/200/divider` | **PASS (regression)** — already `semantic.common.200.divider`; unchanged |
+| row radius | `radius/lg` | **PASS (regression)** — `1rem` literal resolves `16px`, value-equal |
+| toolbar · sortable column · selection cell · pagination footer · loading/empty/error · hover/selected/sorted rows · row focus ring/`border/strong` · per-cell status tone | `g02ukq`/`FZPkF`/`M2LZ59` | **BLOCKED** (ledger below) |
+
+## Approved contract and changed paths
+
+- **List:** root `semantic.surface.raised` + `semantic.border.subtle`; item icon `semantic.text.secondary`; title `semantic.text.primary`; metadata and trailing `semantic.text.tertiary`. No focus ring (no Pen focus-indicator row; item not focusable).
+- **Timeline:** marker surface `semantic.surface.raised`; marker boundary `semantic.border.strong`; connector `semantic.border.subtle`; title `semantic.text.primary`; metadata `semantic.text.secondary`. No focus ring.
+- **DataTable:** root `semantic.surface.raised` + `semantic.border.subtle`; header band `semantic.surface.sunken`; header label `semantic.text.tertiary`; body cell `semantic.text.secondary`; leading cell `semantic.text.primary`. Row/header separators remain `semantic.common.200.divider`. No focus ring.
+- Each preset doc comment now names the resolved roles and the Pen master/doc IDs.
+
+Changed paths: `src/shared/components/{list,timeline,data-table}/{preset.ts,<Owner>.composition.test.tsx,<Owner>.stories.tsx}` (9 files), this evidence, `artifacts/batch-d/collections/` (new: 6 PNGs + `computed-styles.json` + `capture.mjs`). Component `.tsx` files, `index.ts`, `panda.config.ts` and the token layer were not touched; generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited). No export changed, so `check:deps` was not required.
+
+## Tests-first proof (RED → GREEN)
+
+### Composition (Bun)
+
+RED was observed by stashing only the three `preset.ts` files (keeping the new assertions), running `mise run gen`, and re-running; then restoring the presets, regenerating and re-running:
+
+| Step | Exit | Result |
+| --- | --- | --- |
+| RED command | `bun test src/shared/components/list/List.composition.test.tsx src/shared/components/timeline/Timeline.composition.test.tsx src/shared/components/data-table/DataTable.composition.test.tsx` | — |
+| RED | `1` | `3 fail` / `14 pass` (17 tests, 3 files, 65 expect calls) |
+| RED failures | list `paints the raised surface, subtle boundary and row text roles`; timeline `paints the rail marker, connector and text roles`; data table `paints the raised surface, sunken header and cell text roles` | |
+| GREEN | `0` | `17 pass` / `0 fail` (17 tests, 3 files, 76 expect calls) |
+
+Composition RED is **role-name-level** (e.g. data table root showed `backgroundColor: semantic.common.50.background` / `borderColor: semantic.common.200.divider` against the expected `semantic.surface.raised` / `semantic.border.subtle`). The value-level discriminator is the browser table below.
+
+### Browser stories (Vitest + Playwright Chromium)
+
+| Step | Exit | Result |
+| --- | --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/list/List.stories.tsx src/shared/components/timeline/Timeline.stories.tsx src/shared/components/data-table/DataTable.stories.tsx` (pre-change presets + `mise run gen`) | — |
+| RED | `1` | `3 failed` files, `6 failed` / `9 passed` (15) |
+| RED failures | data-table `Token Surface Light`, `Token Surface Dark`; list `Token Surface Light`, `Token Surface Dark`; timeline `Token Rail Light`, `Token Rail Dark` | |
+| GREEN | `0` | `3 passed` files, `15 passed` (15) |
+
+**True RED** (rendered value discriminates): List surface + boundary + icon (both themes); Timeline marker surface + connector (both themes) and marker boundary (dark); DataTable surface + boundary (both themes) and header band (dark). **Regressions** (value-equal, asserted not claimed RED): List title/metadata/trailing; Timeline title/metadata; DataTable header label/body cell/leading cell. Focused coverage moved `14 → 17` composition tests (`+3`, 3 files) and `9 → 15` browser tests (`+6`).
+
+## Both-theme evidence (computed style, in browser)
+
+Code-side Storybook-iframe captures (`deviceScaleFactor: 2`), in `artifacts/batch-d/collections/`: `list-surface-tokens-{light,dark}`, `timeline-rail-tokens-{light,dark}`, `data-table-surface-tokens-{light,dark}` (6 PNGs) plus `computed-styles.json` and `capture.mjs`.
+
+| Surface / role | Light (computed) | Dark (computed) |
+| --- | --- | --- |
+| List root `surface/raised` / `border/subtle` | `rgb(255, 255, 255)` / `rgb(226, 232, 240)` | `rgb(15, 23, 42)` / `rgb(30, 41, 59)` |
+| List icon `text/secondary` | `rgb(51, 65, 85)` | `rgb(203, 213, 225)` |
+| List title `text/primary` | `rgb(15, 23, 42)` | `rgb(248, 250, 252)` |
+| List metadata / trailing `text/tertiary` | `rgb(71, 85, 105)` | `rgb(148, 163, 184)` |
+| Timeline marker `surface/raised` + `border/strong` (2px) | `rgb(255, 255, 255)` / `rgb(100, 116, 139)` | `rgb(15, 23, 42)` / `rgb(148, 163, 184)` |
+| Timeline connector `border/subtle` | `rgb(226, 232, 240)` | `rgb(30, 41, 59)` |
+| Timeline title `text/primary` | `rgb(15, 23, 42)` | `rgb(248, 250, 252)` |
+| Timeline metadata `text/secondary` | `rgb(51, 65, 85)` | `rgb(203, 213, 225)` |
+| DataTable root `surface/raised` / `border/subtle` (16px) | `rgb(255, 255, 255)` / `rgb(226, 232, 240)` | `rgb(15, 23, 42)` / `rgb(30, 41, 59)` |
+| DataTable header band `surface/sunken` | `rgb(241, 245, 249)` | `rgb(2, 6, 23)` |
+| DataTable header label `text/tertiary` | `rgb(71, 85, 105)` | `rgb(148, 163, 184)` |
+| DataTable body cell `text/secondary` | `rgb(51, 65, 85)` | `rgb(203, 213, 225)` |
+| DataTable leading cell `text/primary` | `rgb(15, 23, 42)` | `rgb(248, 250, 252)` |
+
+### Contrast (real WCAG ratios)
+
+List/DataTable content against its resolved surface (`surface/raised` unless noted); Timeline content against the story shell `surface/base` (`#F8FAFC` light / `#020617` dark). Thresholds text `≥ 4.5`, icon/boundary `≥ 3`.
+
+| Pair | Light | Dark | Verdict |
+| --- | --- | --- | --- |
+| List title `text/primary` / `surface/raised` | 17.85 | 17.06 | PASS (text) |
+| List icon `text/secondary` / `surface/raised` | 10.35 | 12.02 | PASS (icon) |
+| List metadata/trailing `text/tertiary` / `surface/raised` | 7.58 | 6.96 | PASS (text) |
+| List boundary `border/subtle` / `surface/raised` | 1.23 | 1.22 | **INFO** — decorative boundary |
+| Timeline title `text/primary` / `surface/base` | 17.06 | 19.28 | PASS (text) |
+| Timeline metadata `text/secondary` / `surface/base` | 9.90 | 13.59 | PASS (text) |
+| Timeline marker `border/strong` / `surface/raised` | 4.76 | 6.96 | PASS (functional boundary ≥ 3) |
+| Timeline connector `border/subtle` / `surface/base` | 1.18 | 1.38 | **INFO** — divider |
+| DataTable body cell `text/secondary` / `surface/raised` | 10.35 | 12.02 | PASS (text) |
+| DataTable leading cell `text/primary` / `surface/raised` | 17.85 | 17.06 | PASS (text) |
+| DataTable header label `text/tertiary` / `surface/sunken` | 6.92 | 7.87 | PASS (text) |
+| DataTable boundary `border/subtle` / `surface/raised` | 1.23 | 1.22 | **INFO** — decorative boundary |
+| DataTable header band `surface/sunken` / `surface/raised` | 1.10 | 1.13 | **INFO** — surface step, no WCAG verdict |
+| DataTable row divider `common/200/divider` / `surface/raised` | 1.48 | 1.72 | **INFO** — divider |
+
+### DISABLED / REVIEW (Pen audit ratios, never counted PASS)
+
+Only List reports disabled specimens (`DISABLED / REVIEW 6`); all six reproduce exactly against the code foundation. Timeline (`FAIL rows 0`, `DISABLED / REVIEW 0`) and DataTable (`FAIL rows 0`, `DISABLED / REVIEW 0`) report `No FAIL or DISABLED rows`.
+
+| Owner | Pen failure-list row | Light | Dark |
+| --- | --- | --- | --- |
+| List | `st-disabled disabled-boundary surface/raised → border/subtle` | 1.23 DISABLED | 1.22 DISABLED |
+| List | `specimen: st-hover · selected · disabled disabled-text action/disabled-bg → text/disabled` | 2.34 DISABLED | 1.93 DISABLED |
+| List | `List col disabled-text action/disabled-bg → text/tertiary` | 6.92 DISABLED | 5.71 DISABLED |
+| List | `st-disabled disabled-text surface/raised → text/tertiary` | 7.58 DISABLED | 6.96 DISABLED |
+| List | `List col disabled-icon action/disabled-bg → text/secondary` | 9.45 DISABLED | 9.85 DISABLED |
+| List | `List col disabled-text action/disabled-bg → text/primary` | 16.30 DISABLED | 13.98 DISABLED |
+
+## BLOCKED ledger (recorded, not implemented)
+
+| Item | Pen authority | Reason |
+| --- | --- | --- |
+| List selectable / selected / hover / disabled / focus-visible row | `dm7Dn` state contract + "Selected/hovered rows use the action surface roles"; "Focus: semantic/focus/ring on the row" | New interaction/selection states and a focusable row; audit `focus-indicator 0/0` |
+| List `compact` density, `with avatar`, `with trailing action` | `dm7Dn` variants + named parts | New geometry/content axes |
+| List row separators (`divider`) | `dm7Dn` "Row separators: divider" | Rows carry no separator in the current API |
+| List selected-state ARIA / list item count | `dm7Dn` accessibility ("Selected rows expose their state."; "A list role with the number of items when known.") | ARIA contract change |
+| Timeline `complete` · `current` · `upcoming` · `error` states, `compact` | `K7WV8o` variants + state contract | New tone/state axes |
+| Timeline per-event feedback tones / error `feedback/negative-bg` | `K7WV8o` "Status uses the feedback tones consistently." + error specimen | New per-item tone prop/state |
+| Timeline "most recent event reads first" ordering | `K7WV8o` content rule | Ordering policy; data-driven order retained |
+| Timeline ordered-list order / machine-readable timestamps | `K7WV8o` accessibility | ARIA/attribute contract change |
+| DataTable toolbar (title/search/primary action) | `FZPkF` named parts | New content parts/behaviour |
+| DataTable sortable column / sorted-column state | `g02ukq` variants + state contract | Sorting policy |
+| DataTable selection cell | `FZPkF` / `M2LZ59` named parts + `border/strong` | Selection policy + new slot |
+| DataTable pagination footer | `FZPkF` named parts | Pagination policy |
+| DataTable loading / empty / error | `g02ukq` variants + state contract | New states + feedback roles |
+| DataTable hover / selected row, selected `border/strong`, row focus ring | `g02ukq` state contract + border/focus prose | New interactive states/focusable row; audit `focus-indicator 0/0` |
+| DataTable per-cell status tone (`feedback/positive-fg`) | `M2LZ59` Status fill | New per-cell tone prop; cells render plain text |
+| List/Timeline/DataTable `focus-visible` ring | doc prose only | Pen focus-indicator audit `0/0` for all three; no focusable slot in the current API |
+| Foundation named role `feedback/*-fg` / `feedback/*-border` | Pen audit legend | Value-mapped to the context matrix / `positive|negative`; INFO, not renamed |
+| Public `List Item` / `Timeline Item` / `Table Row` owners | — | Aggregate ownership retained: items stay internal to their component |
+| New public components | — | Explicitly excluded |
+
+## Verification
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| focused composition RED | `1` | `3 fail` / `14 pass` (17, 65 expect calls) |
+| focused composition GREEN | `0` | `17 pass` / `0 fail` (17, 76 expect calls) |
+| focused browser RED | `1` | `3 failed` files, `6 failed` / `9 passed` (15) |
+| focused browser GREEN | `0` | `3 passed` files, `15 passed` (15) |
+| `mise run check` | `0` | lint + types + format; `✓ icons up to date (38 icons)`; `✓ web fonts up to date (2 faces)`; unit `834 pass / 0 fail`; browser `708 passed` (73 files) |
+| `mise run build` | `0` | Vite production build, `✓ built in 80ms` |
+| `git diff --check` | `0` | no whitespace errors |
+| `check:deps` | n/a | no exports or dependencies changed |
+
+## Concerns / INFO
+
+- **INFO — List `itemIcon` vs metadata.** The old recipe used the same `common/600/background` for both the icon and the metadata/trailing. Pen splits them: icon `text/secondary` (`neutral.700/300`) and metadata/trailing `text/tertiary` (`neutral.600/400`), so the icon moved a step darker in light / lighter in dark (true RED both themes) while metadata stayed value-equal.
+- **INFO — Timeline marker boundary is dark-only RED.** `common/50/border.strong` resolved `neutral.500` in both themes; Pen `border/strong` resolves `neutral.500` light / `neutral.400` dark, so only the dark story discriminates.
+- **INFO — DataTable header band is dark-only RED.** `common/100/background` and `surface/sunken` both resolve `neutral.100` light; only dark differs (`neutral.900` → `neutral.950`).
+- **INFO — no focus ring projected.** All three docs name `semantic/focus/ring`, but every audit reports `focus-indicator 0/0` and the current public APIs render no focusable slot (no interactive row). Consistent with the D3 Card "conditional projection" treatment; a declared interactive variant/row is BLOCKED.
+- **INFO — DataTable separators unchanged.** Pen's header and row separators bind `$semantic/common/200/divider`, which the recipe already used; no change.
+- **INFO — `feedback/positive-fg` status cell.** Pen's Table Row colours the Status cell with `feedback/positive-fg`; the code renders cells as plain text (no per-cell tone), so this is a BLOCKED axis, not a token rename.
+- The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.

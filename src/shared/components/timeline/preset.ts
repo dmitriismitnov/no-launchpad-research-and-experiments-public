@@ -9,12 +9,17 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * sequence does not trail off.
  *
  * Pen references the newer role layer (`semantic/surface/raised`,
- * `semantic/border/*`, `semantic/text/*`):
- * - surface/raised -> common.50.background (white exact; dark one step)
- * - border/strong -> common.50.border.strong (neutral.500/400; code dark step same value)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - text/primary -> common.50.text (exact)
- * - text/secondary -> common.700.background (exact)
+ * `semantic/border/*`, `semantic/text/*`), resolved against the Pen
+ * documentation frame `K7WV8o` and the masters `z4hUE9` (Timeline) / `d5pll`
+ * (Timeline Item):
+ * - marker surface -> semantic.surface.raised (white light / neutral.900 dark)
+ * - marker boundary -> semantic.border.strong (neutral.500 light / neutral.400 dark)
+ * - connector -> semantic.border.subtle (neutral.200/800)
+ * - title -> semantic.text.primary (neutral.900/50)
+ * - metadata -> semantic.text.secondary (neutral.700/300)
+ *
+ * The static timeline has no focusable slot (Pen focus-indicator audit 0/0), so
+ * no focus ring is projected.
  *
  * Approximations: Pen spaces rows 14px; the scale has no x7, so `x6` (12px) is
  * used. The 14px marker has no scale token and is a literal.
@@ -53,14 +58,14 @@ export const timelineRecipe = defineSlotRecipe({
             borderRadius: "9999px",
             borderWidth: "thick",
             borderStyle: "solid",
-            borderColor: "semantic.common.50.border.strong",
-            backgroundColor: "semantic.common.50.background",
+            borderColor: "semantic.border.strong",
+            backgroundColor: "semantic.surface.raised",
         },
 
         line: {
             width: "{borderWidths.thick}",
             height: "x20",
-            backgroundColor: "semantic.common.200.divider",
+            backgroundColor: "semantic.border.subtle",
         },
 
         text: {
@@ -77,7 +82,7 @@ export const timelineRecipe = defineSlotRecipe({
             fontWeight: "semibold",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         },
 
         meta: {
@@ -86,7 +91,7 @@ export const timelineRecipe = defineSlotRecipe({
             fontWeight: "regular",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.700.background",
+            color: "semantic.text.secondary",
         },
     },
 });

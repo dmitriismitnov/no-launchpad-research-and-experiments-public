@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { DataTable, } from "./data-table";
+import { dataTableRecipe, } from "./preset";
 
 const columns = [
     { key: "name", header: "NAME", emphasis: "primary", },
@@ -82,5 +83,28 @@ describe("data table composition", () => {
         const withoutColumns = <DataTable rows={rows} />;
 
         expect(withoutColumns).toBeDefined();
+    });
+
+    // Pen master `FZPkF` / `M2LZ59` and documentation `g02ukq`: the card frame
+    // is `surface/raised` with a `border/subtle` boundary; the header band is
+    // `surface/sunken`; header labels `text/tertiary`; body cells
+    // `text/secondary`; the leading cell `text/primary`. Row/header separators
+    // stay the Pen `common/200/divider`. The doc's focus rule belongs to the
+    // BLOCKED interactive row (focus-indicator audit 0/0), so no focus ring.
+    test("paints the raised surface, sunken header and cell text roles", () => {
+        const root = dataTableRecipe.base?.["root"] as Record<string, unknown> | undefined;
+        const head = dataTableRecipe.base?.["head"] as Record<string, unknown> | undefined;
+        const headCell = dataTableRecipe.base?.["headCell"] as Record<string, unknown> | undefined;
+        const cell = dataTableRecipe.base?.["cell"] as Record<string, unknown> | undefined;
+        const cellLead = dataTableRecipe.base?.["cellLead"] as Record<string, unknown> | undefined;
+
+        expect(root).toMatchObject({
+            backgroundColor: "semantic.surface.raised",
+            borderColor: "semantic.border.subtle",
+        });
+        expect(head?.["backgroundColor"]).toBe("semantic.surface.sunken");
+        expect(headCell?.["color"]).toBe("semantic.text.tertiary");
+        expect(cell?.["color"]).toBe("semantic.text.secondary");
+        expect(cellLead?.["color"]).toBe("semantic.text.primary");
     });
 });

@@ -1,0 +1,638 @@
+[
+    {
+        "name": "list-surface-tokens-light",
+        "story": "components-data-display-list--token-surface-light",
+        "styles": {
+            ".list__root": [
+                {
+                    "backgroundColor": "rgb(255, 255, 255)",
+                    "borderTopColor": "rgb(226, 232, 240)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "1px",
+                    "borderTopLeftRadius": "10px",
+                    "stroke": "none"
+                }
+            ],
+            ".list__itemIcon": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".list__itemTitle": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".list__itemMeta": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(71, 85, 105)",
+                    "color": "rgb(71, 85, 105)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(71, 85, 105)",
+                    "color": "rgb(71, 85, 105)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".list__itemTrailing": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(71, 85, 105)",
+                    "color": "rgb(71, 85, 105)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(71, 85, 105)",
+                    "color": "rgb(71, 85, 105)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ]
+        }
+    },
+    {
+        "name": "list-surface-tokens-dark",
+        "story": "components-data-display-list--token-surface-dark",
+        "styles": {
+            ".list__root": [
+                {
+                    "backgroundColor": "rgb(15, 23, 42)",
+                    "borderTopColor": "rgb(30, 41, 59)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "1px",
+                    "borderTopLeftRadius": "10px",
+                    "stroke": "none"
+                }
+            ],
+            ".list__itemIcon": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".list__itemTitle": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".list__itemMeta": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(148, 163, 184)",
+                    "color": "rgb(148, 163, 184)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(148, 163, 184)",
+                    "color": "rgb(148, 163, 184)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".list__itemTrailing": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(148, 163, 184)",
+                    "color": "rgb(148, 163, 184)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(148, 163, 184)",
+                    "color": "rgb(148, 163, 184)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ]
+        }
+    },
+    {
+        "name": "timeline-rail-tokens-light",
+        "story": "components-data-display-timeline--token-rail-light",
+        "styles": {
+            ".timeline__marker": [
+                {
+                    "backgroundColor": "rgb(255, 255, 255)",
+                    "borderTopColor": "rgb(100, 116, 139)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "2px",
+                    "borderTopLeftRadius": "9999px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgb(255, 255, 255)",
+                    "borderTopColor": "rgb(100, 116, 139)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "2px",
+                    "borderTopLeftRadius": "9999px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgb(255, 255, 255)",
+                    "borderTopColor": "rgb(100, 116, 139)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "2px",
+                    "borderTopLeftRadius": "9999px",
+                    "stroke": "none"
+                }
+            ],
+            ".timeline__line": [
+                {
+                    "backgroundColor": "rgb(226, 232, 240)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgb(226, 232, 240)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".timeline__title": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".timeline__meta": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ]
+        }
+    },
+    {
+        "name": "timeline-rail-tokens-dark",
+        "story": "components-data-display-timeline--token-rail-dark",
+        "styles": {
+            ".timeline__marker": [
+                {
+                    "backgroundColor": "rgb(15, 23, 42)",
+                    "borderTopColor": "rgb(148, 163, 184)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "2px",
+                    "borderTopLeftRadius": "9999px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgb(15, 23, 42)",
+                    "borderTopColor": "rgb(148, 163, 184)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "2px",
+                    "borderTopLeftRadius": "9999px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgb(15, 23, 42)",
+                    "borderTopColor": "rgb(148, 163, 184)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "2px",
+                    "borderTopLeftRadius": "9999px",
+                    "stroke": "none"
+                }
+            ],
+            ".timeline__line": [
+                {
+                    "backgroundColor": "rgb(30, 41, 59)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgb(30, 41, 59)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".timeline__title": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".timeline__meta": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ]
+        }
+    },
+    {
+        "name": "data-table-surface-tokens-light",
+        "story": "components-data-display-data-table--token-surface-light",
+        "styles": {
+            ".dataTable__root": [
+                {
+                    "backgroundColor": "rgb(255, 255, 255)",
+                    "borderTopColor": "rgb(226, 232, 240)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "1px",
+                    "borderTopLeftRadius": "16px",
+                    "stroke": "none"
+                }
+            ],
+            ".dataTable__head": [
+                {
+                    "backgroundColor": "rgb(241, 245, 249)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".dataTable__headCell": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(71, 85, 105)",
+                    "color": "rgb(71, 85, 105)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "16px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(71, 85, 105)",
+                    "color": "rgb(71, 85, 105)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(71, 85, 105)",
+                    "color": "rgb(71, 85, 105)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".dataTable__cell:not(.dataTable__cellLead)": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(51, 65, 85)",
+                    "color": "rgb(51, 65, 85)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".dataTable__cellLead": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(15, 23, 42)",
+                    "color": "rgb(15, 23, 42)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ]
+        }
+    },
+    {
+        "name": "data-table-surface-tokens-dark",
+        "story": "components-data-display-data-table--token-surface-dark",
+        "styles": {
+            ".dataTable__root": [
+                {
+                    "backgroundColor": "rgb(15, 23, 42)",
+                    "borderTopColor": "rgb(30, 41, 59)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "1px",
+                    "borderTopLeftRadius": "16px",
+                    "stroke": "none"
+                }
+            ],
+            ".dataTable__head": [
+                {
+                    "backgroundColor": "rgb(2, 6, 23)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".dataTable__headCell": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(148, 163, 184)",
+                    "color": "rgb(148, 163, 184)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "16px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(148, 163, 184)",
+                    "color": "rgb(148, 163, 184)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(148, 163, 184)",
+                    "color": "rgb(148, 163, 184)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".dataTable__cell:not(.dataTable__cellLead)": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(203, 213, 225)",
+                    "color": "rgb(203, 213, 225)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ],
+            ".dataTable__cellLead": [
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px 0px 1px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                },
+                {
+                    "backgroundColor": "rgba(0, 0, 0, 0)",
+                    "borderTopColor": "rgb(248, 250, 252)",
+                    "color": "rgb(248, 250, 252)",
+                    "borderWidth": "0px",
+                    "borderTopLeftRadius": "0px",
+                    "stroke": "none"
+                }
+            ]
+        }
+    }
+]

@@ -9,15 +9,18 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * the markup keeps native table semantics.
  *
  * Pen references the newer role layer (`semantic/surface/*`, `semantic/border/*`,
- * `semantic/text/*`):
- * - surface/raised -> common.50.background (white exact; dark one step)
- * - surface/sunken -> common.100.background (light exact; dark one step, the
- *   Skeleton/Spinner convention)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - dividers -> common.200.divider, matching the Pen row rule
- * - text/primary -> common.50.text (exact)
- * - text/secondary -> common.700.background (exact)
- * - text/tertiary -> common.600.background (exact)
+ * `semantic/text/*`), resolved against the Pen documentation frame `g02ukq` and
+ * the masters `FZPkF` (Data Table) / `M2LZ59` (Table Row):
+ * - card surface -> semantic.surface.raised (white light / neutral.900 dark)
+ * - card boundary -> semantic.border.subtle (neutral.200/800)
+ * - header band -> semantic.surface.sunken (neutral.100 light / neutral.950 dark)
+ * - header label -> semantic.text.tertiary (neutral.600/400)
+ * - body cell -> semantic.text.secondary (neutral.700/300)
+ * - leading cell -> semantic.text.primary (neutral.900/50)
+ * - header/row separators -> common.200.divider (Pen `common/200/divider`)
+ *
+ * The doc's focus rule belongs to the BLOCKED interactive row (focus-indicator
+ * audit 0/0), so no focus ring is projected.
  *
  * Approximations: Pen's `radius/lg` (16px) has no foundation token, so `1rem` is
  * the literal equivalent (the EmptyState convention). Pen's 14px inline padding
@@ -38,13 +41,13 @@ export const dataTableRecipe = defineSlotRecipe({
             overflow: "hidden",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
+            borderColor: "semantic.border.subtle",
             borderRadius: "1rem",
-            backgroundColor: "semantic.common.50.background",
+            backgroundColor: "semantic.surface.raised",
         },
 
         head: {
-            backgroundColor: "semantic.common.100.background",
+            backgroundColor: "semantic.surface.sunken",
         },
 
         headCell: {
@@ -56,7 +59,7 @@ export const dataTableRecipe = defineSlotRecipe({
             fontWeight: "medium",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
             borderBottomWidth: "thin",
             borderBottomStyle: "solid",
             borderBottomColor: "semantic.common.200.divider",
@@ -83,7 +86,7 @@ export const dataTableRecipe = defineSlotRecipe({
             fontWeight: "regular",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.700.background",
+            color: "semantic.text.secondary",
             borderBottomWidth: "thin",
             borderBottomStyle: "solid",
             borderBottomColor: "semantic.common.200.divider",
@@ -91,7 +94,7 @@ export const dataTableRecipe = defineSlotRecipe({
 
         cellLead: {
             fontWeight: "medium",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         },
 
         cellEnd: {

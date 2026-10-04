@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { timelineRecipe, } from "./preset";
 import { Timeline, } from "./timeline";
 
 describe("timeline composition", () => {
@@ -49,5 +50,25 @@ describe("timeline composition", () => {
         const markup = renderToStaticMarkup(<Timeline items={[]} data-testid="t" />);
 
         expect(markup).toContain(`data-testid="t"`);
+    });
+
+    // Pen master `z4hUE9` / `d5pll` and documentation `K7WV8o`: the rail marker
+    // is a `surface/raised` dot with a `border/strong` functional boundary; the
+    // connector is `border/subtle`; the title `text/primary`; metadata
+    // `text/secondary`. The static timeline has no focusable slot (audit
+    // focus-indicator 0/0), so no focus ring is projected.
+    test("paints the rail marker, connector and text roles", () => {
+        const marker = timelineRecipe.base?.["marker"] as Record<string, unknown> | undefined;
+        const line = timelineRecipe.base?.["line"] as Record<string, unknown> | undefined;
+        const title = timelineRecipe.base?.["title"] as Record<string, unknown> | undefined;
+        const meta = timelineRecipe.base?.["meta"] as Record<string, unknown> | undefined;
+
+        expect(marker).toMatchObject({
+            backgroundColor: "semantic.surface.raised",
+            borderColor: "semantic.border.strong",
+        });
+        expect(line?.["backgroundColor"]).toBe("semantic.border.subtle");
+        expect(title?.["color"]).toBe("semantic.text.primary");
+        expect(meta?.["color"]).toBe("semantic.text.secondary");
     });
 });

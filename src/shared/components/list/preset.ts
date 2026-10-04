@@ -10,12 +10,15 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * children, which keeps the anatomy closed.
  *
  * Pen references the newer role layer (`semantic/surface/raised`,
- * `semantic/border/subtle`, `semantic/text/*`):
- * - surface/raised -> common.50.background (white exact; dark one step)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - text/primary -> common.50.text (exact)
- * - text/secondary -> common.600.background (exact)
- * - text/tertiary -> common.600.background (exact)
+ * `semantic/border/subtle`, `semantic/text/*`), resolved against the Pen
+ * documentation frame `dm7Dn` and the masters `fgxmm` (List) / `h9Cf2t`
+ * (List Item):
+ * - container surface -> semantic.surface.raised (white light / neutral.900 dark)
+ * - container boundary -> semantic.border.subtle (neutral.200/800)
+ * - row icon -> semantic.text.secondary (neutral.700/300)
+ * - title -> semantic.text.primary (neutral.900/50)
+ * - metadata -> semantic.text.tertiary (neutral.600/400)
+ * - trailing slot -> semantic.text.tertiary (neutral.600/400)
  *
  * Approximations: Pen pads each row 14px inline; the scale has no x7, so `x6`
  * (12px) is used. Pen's mono trailing value falls back to the body family
@@ -35,9 +38,9 @@ export const listRecipe = defineSlotRecipe({
             listStyleType: "none",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
+            borderColor: "semantic.border.subtle",
             borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
+            backgroundColor: "semantic.surface.raised",
         },
 
         item: {
@@ -51,7 +54,7 @@ export const listRecipe = defineSlotRecipe({
 
         itemIcon: {
             flexShrink: "0",
-            color: "semantic.common.600.background",
+            color: "semantic.text.secondary",
         },
 
         itemText: {
@@ -68,7 +71,7 @@ export const listRecipe = defineSlotRecipe({
             fontWeight: "medium",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         },
 
         itemMeta: {
@@ -77,7 +80,7 @@ export const listRecipe = defineSlotRecipe({
             fontWeight: "regular",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
         },
 
         itemTrailing: {
@@ -87,7 +90,7 @@ export const listRecipe = defineSlotRecipe({
             fontWeight: "regular",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
         },
     },
 });
