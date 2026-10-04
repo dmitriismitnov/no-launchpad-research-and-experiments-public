@@ -3,11 +3,20 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
 /**
  * Fixed Card anatomy; semantic tokens own theme projection.
  *
- * Pen `Card` (ziJHM): a raised surface with a subtle boundary and a 16px
- * radius, a flush 140px sunken media surface and a 16px body with a 10px gap.
+ * Pen `Card` (ziJHM): a raised surface `surface/raised` with a structural
+ * boundary `border/subtle` and a 16px radius, a flush 140px sunken media
+ * surface `surface/sunken` with a `text/tertiary` glyph, and a 16px body whose
+ * `text/primary` title, `text/secondary` description and `text/tertiary` meta
+ * follow the Pen content roles.
  * `Card Plain` (vTMbw) drops the media and keeps the same body. `Card Compact`
  * (XqPjN) drops the media and tightens the body to a 6px gap with `sm`/`xs`
- * type and a `tertiary` description. No variant carries a footer divider.
+ * type and a `text/tertiary` description. The footer's `text/link` action is the
+ * link role; no variant carries a footer divider.
+ *
+ * Pen `l3a7qL` documents an interactive card (fz3DO) whose `focus-visible`
+ * state (X3L3d2 / q4UQZm) resolves a 2px outer `focus/ring`; the root carries
+ * that focus ring on `:focus-visible`. The interactive, hover, selected and
+ * disabled variants are recorded BLOCKED, not implemented.
  */
 export const cardRecipe = defineSlotRecipe({
     className: "card",
@@ -38,6 +47,12 @@ export const cardRecipe = defineSlotRecipe({
             // Pen's Card master is clipped, so the flush media follows the
             // rounded corner instead of carrying its own radius.
             overflow: "hidden",
+            // Pen focus-visible (`q4UQZm`): a 2px outer `focus/ring` indicator,
+            // expressed with the house outline mechanism.
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "0", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         media: {

@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { statisticRecipe, } from "./preset";
 import { Statistic, } from "./statistic";
 
 describe("statistic composition", () => {
@@ -61,5 +62,36 @@ describe("statistic composition", () => {
         );
 
         expect(markup).toContain(`data-testid="s"`);
+    });
+
+    // Pen `CjnzL` master / `gLCov` documentation / `FMXaz` anatomy: label
+    // `text/tertiary`, value `text/primary`, delta glyph `text/secondary` and
+    // delta copy `text/primary`. The delta glyph/copy roles discriminate in
+    // both themes; label/value are value-equal role renames (regression,
+    // asserted not claimed as RED).
+    test("paints the label, value and delta roles", () => {
+        const base = statisticRecipe.base as Record<string, unknown>;
+
+        expect(base["label"]).toMatchObject({ color: "semantic.text.tertiary", });
+        expect(base["value"]).toMatchObject({ color: "semantic.text.primary", });
+        expect(base["deltaIcon"]).toMatchObject({ color: "semantic.text.secondary", });
+        expect(base["deltaText"]).toMatchObject({ color: "semantic.text.primary", });
+    });
+
+    // Pen `gLCov` state contract: `positive delta` / `negative delta` resolve
+    // `feedback/positive-fg` / `feedback/negative-fg` on the glyph and copy.
+    // Those named feedback roles are BLOCKED in the Foundation; the value-equal
+    // `positive|negative.700.background` matrix roles are used instead.
+    test("paints the up and down trend roles on the delta glyph and copy", () => {
+        const trend = statisticRecipe.variants?.["trend"] as Record<string, unknown> | undefined;
+
+        expect(trend?.["up"]).toMatchObject({
+            deltaIcon: { color: "semantic.positive.700.background", },
+            deltaText: { color: "semantic.positive.700.background", },
+        });
+        expect(trend?.["down"]).toMatchObject({
+            deltaIcon: { color: "semantic.negative.700.background", },
+            deltaText: { color: "semantic.negative.700.background", },
+        });
     });
 });

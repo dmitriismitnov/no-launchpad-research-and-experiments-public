@@ -3,6 +3,7 @@ import { renderToStaticMarkup, } from "react-dom/server";
 
 import * as cardModule from "./card";
 import { Card, type CardProps, } from "./card";
+import { cardRecipe, } from "./preset";
 
 describe("card composition", () => {
     test("renders an article with its required title and forwarded attributes", () => {
@@ -220,6 +221,25 @@ describe("card composition", () => {
 
         expect(markup).toContain("card__media");
         expect(markup).not.toContain("card__root--variant_default");
+    });
+
+    // Pen `ziJHM` master / `l3a7qL` documentation: the resting card is already
+    // aligned (raised surface `surface/raised`, structural boundary
+    // `border/subtle`, sunken media `surface/sunken`, `text/primary` title,
+    // `text/secondary` description, `text/tertiary` meta/action and
+    // `text/link`). The interactive card's `focus-visible` state (`fz3DO` /
+    // `q4UQZm` / `X3L3d2`) resolves `focus/ring` (2px outer), so the root
+    // carries the focus ring on `:focus-visible`. It is asserted on the recipe
+    // (role level) and measured in both themes by the browser stories.
+    test("paints the raised surface, subtle boundary and the focus ring", () => {
+        const root = cardRecipe.base?.["root"] as Record<string, unknown> | undefined;
+
+        expect(root).toMatchObject({
+            backgroundColor: "semantic.surface.raised",
+            borderColor: "semantic.border.subtle",
+        });
+        expect(root?.["outlineStyle"]).toMatchObject({ _focusVisible: "solid", });
+        expect(root?.["outlineColor"]).toMatchObject({ _focusVisible: "semantic.focus.ring", });
     });
 
     test("exports only the public card from the module", () => {

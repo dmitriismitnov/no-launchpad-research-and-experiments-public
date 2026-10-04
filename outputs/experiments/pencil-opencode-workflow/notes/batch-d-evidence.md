@@ -422,3 +422,185 @@ Alert (`7/7` text, `4/4` icon), Toast (`6/6` text, `2/2` icon), Progress (`3/3` 
 
 **Minor (corrected):** evidence said "`46 → 46` composition tests"; the true delta is `39 → 46` (+7 in-place cases). Corrected in the ledger.
 **INFO:** Toast dark `surface.overlay` == `border.subtle` == `neutral.800`; Skeleton/Progress track boundary 1.00 on `surface.base` dark — follows approved Pen roles and recorded INFO.
+
+---
+
+# Batch D evidence — D3 Card · Statistic
+
+**Date:** 2026-10-05\
+**Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen`\
+**Pen identity:** `9294654` bytes, SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` (verified before and after inspection; unchanged).\
+**Base commit:** `a76ec20b232a7c2f0e9abd25bbfb26b294272d04` (`docs(shared): correct Batch D2 coverage delta and record review`).\
+**Method:** Pencil MCP read-only `Get`/`Print`/`GetVariables` (`get_app_state` confirmed `ex_2.pen` as the active editor; no `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`), code reads, focused Bun composition tests and Vitest + Playwright Chromium story tests. Statuses follow the migration spec: `PASS`, `FAIL`, `INFO`, `HUMAN REVIEW`, `BLOCKED`, `DISABLED / REVIEW`.\
+**Cycle:** D3 cycle 1/2.
+
+> **Hash note (honest):** the handoff again quoted the Pen SHA-256 as a 63-character string (`…dde787421daf7fa`, one digit short). The file's true digest is the 64-character `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa` above, matching the D1/D2 headers. The Pen was not modified.
+
+## D3 scope
+
+Token/focus-role corrections on existing slots for two content & data owners, plus both-theme computed-style stories. Public component `.tsx` files, `index.ts` barrels, `panda.config.ts`, the Foundation/token layer and generated `src/shared/styled-system/**` were **not** hand-edited. No new public components; `Card Plain`/`Card Compact` stay `card/` variants and `Statistic` stays its own owner.
+
+## Pen source node IDs (read-only)
+
+| Owner | Master | Documentation frame | Verbatim Pen facts used |
+| --- | --- | --- | --- |
+| Card | `ziJHM` | `l3a7qL` | Named parts `root · media · header · title · description · footer · meta · action`; variants "plain · raised · compact, with media, interactive, selected"; state contract `default · hover · selected · disabled · focus-visible`; "An interactive card is a single target with one focus stop"; "An interactive card exposes a link or button role"; "Selected state is exposed, not only coloured"; audit summary `focus-indicator 1/1 PASS` light + dark. |
+| Card Plain | `vTMbw` | `l3a7qL` (shared) | Media-less body, `surface/raised` + `border/subtle`; `text/primary` title, `text/tertiary` action glyph, `text/secondary` description, `text/tertiary` meta, `text/link` link. |
+| Card Compact | `XqPjN` | `l3a7qL` (shared) | 280px media-less body, 6px gap, `sm` title, `xs` `text/tertiary` description; `xs` `text/tertiary` badge. |
+| Statistic | `CjnzL` | `gLCov` | Named parts `root · label · value · delta · delta icon · context`; variants "with delta · with icon · loading · compact"; state contract `default · disabled · loading · positive delta · negative delta`; "The label states what is measured and over what period"; "Direction of change uses an icon as well as colour"; "Trend direction is stated in text, never colour alone"; audit summary `focus-indicator 0/0 PASS`. |
+
+Master/doc role bindings confirmed with `GetVariables` + `Get` (read-only). Pen named roles resolved from the variables: `text/primary` = `neutral.900`/`neutral.50`, `text/secondary` = `neutral.700`/`neutral.300`, `text/tertiary` = `neutral.600`/`neutral.400`, `surface/raised` = `base.white`/`neutral.900`, `surface/sunken` = `neutral.100`/`neutral.950`, `border/subtle` = `neutral.200`/`neutral.800`, `focus/ring` = `green.600`/`green.500`, `feedback/positive-fg` = `green.700`/`green.300`, `feedback/negative-fg` = `red.700`/`red.300`.
+
+- **Card** `ziJHM` root stroke `$semantic/border/subtle`, fill `$semantic/surface/raised`; media `$semantic/surface/sunken` with `$semantic/text/tertiary` glyph; title `$semantic/text/primary`; description `$semantic/text/secondary`; meta `$semantic/text/tertiary`; link `$semantic/text/link`. `vTMbw`/`XqPjN` repeat the same roles; `XqPjN` description is `$semantic/text/tertiary`.
+- **Card interactive/focus** `fz3DO` (interactive, ref `vTMbw`) → `q4UQZm`/`X3L3d2` focus-visible ref `ziJHM`, `stroke: $semantic/focus/ring`, `strokeWidth: 2`, `strokeAlignment: outer`.
+- **Statistic** `CjnzL`/`FMXaz` anatomy: label `$semantic/text/tertiary`, value `$semantic/text/primary`, DIcon `$semantic/text/secondary`, DText `$semantic/text/primary`. State specimens `Nz6WE`/`YZsWF` paint glyph + copy `feedback/positive-fg` / `feedback/negative-fg`.
+
+## Enumeration and disposition
+
+| Owner | Axis / slot | Pen role | Disposition |
+| --- | --- | --- | --- |
+| Card | root surface | `surface/raised` | **PASS (regression)** — already `semantic.surface.raised`; light `rgb(255, 255, 255)` / dark `rgb(15, 23, 42)`, asserted |
+| Card | root boundary | `border/subtle` | **PASS (regression)** — already `semantic.border.subtle`; light `rgb(226, 232, 240)` / dark `rgb(30, 41, 59)`, INFO decorative |
+| Card | media surface + glyph | `surface/sunken` + `text/tertiary` | **PASS (regression)** — already `semantic.surface.sunken` / `semantic.text.tertiary`; light `rgb(241, 245, 249)` / `rgb(71, 85, 105)`, asserted |
+| Card | title / description / meta / link | `text/primary` / `text/secondary` / `text/tertiary` / `text/link` | **PASS (regression)** — already the named roles, both themes asserted |
+| Card | focus-visible ring | `focus/ring` (2px outer) | **PASS** — root `:focus-visible` outline added; **discriminates in both themes** (no ring → `green.600` `rgb(22, 163, 74)` light / `green.500` `rgb(34, 197, 94)` dark) |
+| Card | hover / selected / disabled / interactive | `surface/hover` / `surface/selected` + `action/primary-bg` border / `action/disabled-bg` + `text/disabled` | **BLOCKED** (ledger below) — new public variant/state |
+| Statistic | label | `text/tertiary` | **PASS (regression)** — `semantic.text.tertiary`, value-equal to prior `common.600.background` in both themes |
+| Statistic | value | `text/primary` | **PASS (regression)** — `semantic.text.primary`, value-equal to prior `common.50.text` in both themes |
+| Statistic | delta glyph | `text/secondary` | **PASS** — `semantic.text.secondary`; **discriminates in both themes** (prior inherited `text/tertiary`; light `rgb(51, 65, 85)` vs `rgb(71, 85, 105)`, dark `rgb(203, 213, 225)` vs `rgb(148, 163, 184)`) |
+| Statistic | delta copy | `text/primary` | **PASS** — `semantic.text.primary`; **discriminates in both themes** (prior inherited `text/tertiary`; light `rgb(15, 23, 42)` vs `rgb(71, 85, 105)`, dark `rgb(248, 250, 252)` vs `rgb(148, 163, 184)`) |
+| Statistic | trend up / down | `feedback/positive-fg` / `feedback/negative-fg` | **PASS (regression)** — value-equal `positive.700.background` / `negative.700.background`; the trend variant now paints the glyph and copy directly instead of the delta frame, values unchanged |
+| Statistic | tone neutral / positive / negative / brand | `text/primary` / `feedback/*-fg` (positive delta) / brand extension | **PASS (regression)** — neutral `semantic.text.primary`; positive/negative `positive|negative.700.background` (value-equal `feedback/*-fg`); brand kept (light exact, dark one step) |
+| Statistic | loading / disabled states, `with icon` / `compact` variants | `gLCov` state contract | **BLOCKED** (ledger below) |
+| Foundation | named role `feedback/*-fg` / `feedback/*-border` | Pen audit legend | **BLOCKED** — value-mapped to the existing context matrix (`positive`/`negative`); INFO, not renamed |
+
+## Approved contract and changed paths
+
+- **Card:** resting roles already matched Pen (no value change); root gains the `:focus-visible` outline (`outlineStyle: solid`, `outlineWidth: {borderWidths.thick}` = 2px, `outlineColor: semantic.focus.ring`), matching the interactive card's Pen focus indicator (`q4UQZm`/`X3L3d2`). Hover/selected/disabled/interactive variants BLOCKED.
+- **Statistic:** label `semantic.text.tertiary`; value + `tone.neutral` `semantic.text.primary`; `deltaIcon` `semantic.text.secondary`; `deltaText` `semantic.text.primary`; `trend.up` paints glyph + copy `semantic.positive.700.background`; `trend.down` paints glyph + copy `semantic.negative.700.background`; the delta frame is no longer a colour carrier. Loading/disabled states and `with icon`/`compact` variants BLOCKED. Each preset doc comment now names the resolved roles.
+
+Changed paths: `src/shared/components/card/{preset.ts,Card.composition.test.tsx,Card.stories.tsx}`, `src/shared/components/statistic/{preset.ts,Statistic.composition.test.tsx,Statistic.stories.tsx}`, this evidence, `artifacts/batch-d/cards-metrics/` (new captures). Component `.tsx` files, `index.ts`, `panda.config.ts` and the token layer were not touched; generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited). No export changed, so `check:deps` was not required.
+
+## Tests-first proof (RED → GREEN)
+
+### Composition (Bun)
+
+RED was observed by restoring the parent `a76ec20` presets (`git checkout --` on both `preset.ts`), keeping the new assertions, running the focused files, then regenerating (`mise run gen`) and re-running to GREEN:
+
+| Step | Exit | Result |
+| --- | --- | --- |
+| RED command | `bun test src/shared/components/card/Card.composition.test.tsx src/shared/components/statistic/Statistic.composition.test.tsx` | — |
+| RED | `1` | `3 fail` / `27 pass` (30 tests, 2 files, 88 expect calls) |
+| RED failures | card `paints the raised surface, subtle boundary and the focus ring`; statistic `paints the label, value and delta roles`; statistic `paints the up and down trend roles on the delta glyph and copy` | |
+| GREEN | `0` | `30 pass` / `0 fail` (30 tests, 2 files, 93 expect calls) |
+
+Composition RED is **role-name-level**: every renamed role fails the recipe assertion even when its value is equal. The value-level discriminator is the browser table below.
+
+### Browser stories (Vitest + Playwright Chromium)
+
+| Step | Exit | Result |
+| --- | --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/card/Card.stories.tsx src/shared/components/statistic/Statistic.stories.tsx` (parent presets + `mise run gen`) | — |
+| RED | `1` | `2 failed` files, `4 failed` / `16 passed` (20) |
+| RED failures | card `Token Focus Light`, `Token Focus Dark`; statistic `Token Delta Light`, `Token Delta Dark` | |
+| GREEN | `0` | `2 passed` files, `20 passed` (20) |
+
+**True RED** (rendered value discriminates): Card focus ring (both themes); Statistic neutral delta glyph + copy (both themes). **Regressions** (value-equal, asserted not claimed as RED): Statistic label/value renames and the trend up/down retargeting — their stories (`Token Trend Light/Dark`) pass on the parent recipe. Focused coverage moved `27 → 30` composition tests (`+3`) and added 6 browser token stories (`14 → 20` in the two files).
+
+## Both-theme evidence (computed style, in browser)
+
+Code-side Storybook-iframe captures (`deviceScaleFactor: 2`), in `artifacts/batch-d/cards-metrics/`: `card-surface-tokens-{light,dark}`, `card-focus-ring-{light,dark}`, `statistic-delta-tokens-{light,dark}`, `statistic-trend-tokens-{light,dark}` (8 PNGs) plus `computed-styles.json` and `capture.mjs`.
+
+| Surface / role | Light (computed) | Dark (computed) |
+| --- | --- | --- |
+| Card root `surface/raised` / `border/subtle` | `rgb(255, 255, 255)` / `rgb(226, 232, 240)` | `rgb(15, 23, 42)` / `rgb(30, 41, 59)` |
+| Card title / description / meta / link | `rgb(15, 23, 42)` / `rgb(51, 65, 85)` / `rgb(71, 85, 105)` / `rgb(21, 128, 61)` | `rgb(248, 250, 252)` / `rgb(203, 213, 225)` / `rgb(148, 163, 184)` / `rgb(74, 222, 128)` |
+| Card media `surface/sunken` + glyph `text/tertiary` | `rgb(241, 245, 249)` / `rgb(71, 85, 105)` | `rgb(2, 6, 23)` / `rgb(148, 163, 184)` |
+| Card `:focus-visible` outline `focus/ring` (2px solid) | `rgb(22, 163, 74)` | `rgb(34, 197, 94)` |
+| Statistic label `text/tertiary` | `rgb(71, 85, 105)` | `rgb(148, 163, 184)` |
+| Statistic value `text/primary` | `rgb(15, 23, 42)` | `rgb(248, 250, 252)` |
+| Statistic delta glyph `text/secondary` | `rgb(51, 65, 85)` | `rgb(203, 213, 225)` |
+| Statistic delta copy `text/primary` | `rgb(15, 23, 42)` | `rgb(248, 250, 252)` |
+| Statistic trend up glyph + copy `positive.700` | `rgb(21, 128, 61)` | `rgb(134, 239, 172)` |
+| Statistic trend down glyph + copy `negative.700` | `rgb(185, 28, 28)` | `rgb(252, 165, 165)` |
+
+### Contrast (real WCAG ratios)
+
+Statistic content against the story shell `surface/base` (`#F8FAFC` light / `#020617` dark); Card content against its `surface/raised`. Thresholds text `≥ 4.5`, icon/boundary/focus `≥ 3`.
+
+| Pair | Light | Dark | Verdict |
+| --- | --- | --- | --- |
+| Statistic label `text/tertiary` / `surface/base` | 7.24 | 7.87 | PASS (text) |
+| Statistic value `text/primary` / `surface/base` | 17.06 | 19.28 | PASS (text) |
+| Statistic delta glyph `text/secondary` / `surface/base` | 9.90 | 13.59 | PASS (icon) |
+| Statistic delta copy `text/primary` / `surface/base` | 17.06 | 19.28 | PASS (text) |
+| Statistic trend up `positive.700` / `surface/base` | 4.79 | 14.37 | PASS (text) |
+| Statistic trend down `negative.700` / `surface/base` | 6.18 | 10.63 | PASS (text) |
+| Card title `text/primary` / `surface/raised` | 17.85 | 17.06 | PASS (text) |
+| Card description `text/secondary` / `surface/raised` | 10.35 | 12.02 | PASS (text) |
+| Card meta `text/tertiary` / `surface/raised` | 7.58 | 6.96 | PASS (text) |
+| Card link `text/link` / `surface/raised` | 5.02 | 10.25 | PASS (text) |
+| Card media glyph `text/tertiary` / `surface/sunken` | 6.92 | 7.87 | PASS (icon) |
+| Card boundary `border/subtle` / `surface/raised` | 1.23 | 1.22 | **INFO** — decorative boundary |
+| Card focus `focus/ring` / `surface/raised` | 3.30 | 7.83 | PASS (focus indicator ≥ 3) |
+
+### DISABLED / REVIEW (Pen audit ratios, never counted PASS)
+
+The Pen component-role audits for Card and Statistic contain disabled specimens; their ratios are quoted for parity. Ratios marked ❋ did not reproduce against the code foundation and stay `DISABLED / REVIEW` regardless (disabled visuals are never PASS).
+
+| Owner | Pen failure-list row | Light | Dark |
+| --- | --- | --- | --- |
+| Card | `States 2 disabled-boundary surface/base → border/subtle` | 1.18 DISABLED | 1.38 DISABLED |
+| Card | `Cards disabled-boundary surface/raised → border/subtle` | 1.23 DISABLED | 1.22 DISABLED |
+| Card | `Cards disabled-text action/disabled-bg → text/disabled` | 2.34 DISABLED | 1.93 DISABLED |
+| Card | `Cards disabled-text action/disabled-bg → text/link` | 6.12 DISABLED ❋ (code 4.58) | 5.75 DISABLED ❋ (code 8.40) |
+| Card | `Cards disabled-icon action/disabled-bg → text/tertiary` | 6.92 DISABLED | 5.71 DISABLED |
+| Card | `Cards disabled-text action/disabled-bg → text/tertiary` | 6.92 DISABLED | 5.71 DISABLED |
+| Statistic | `st-disabled disabled-icon action/disabled-bg → feedback/positive-fg` | 4.58 DISABLED | 10.42 DISABLED |
+| Statistic | `st-disabled disabled-text action/disabled-bg → feedback/positive-fg` | 4.58 DISABLED | 10.42 DISABLED |
+| Statistic | `st-disabled disabled-text action/disabled-bg → text/tertiary` | 6.92 DISABLED | 5.71 DISABLED |
+| Statistic | `st-disabled disabled-text surface/raised → text/tertiary` | 7.58 DISABLED | 6.96 DISABLED |
+| Statistic | `st-disabled disabled-text action/disabled-bg → text/primary` | 16.30 DISABLED | 13.98 DISABLED |
+
+Card reports `FAIL rows 0` and `DISABLED / REVIEW 11` (6 rows listed + 5 grouped); Statistic reports `FAIL rows 0` and `DISABLED / REVIEW 5` (all listed). Neither reports a focus-indicator failure (Card `1/1 PASS`, Statistic `0/0`).
+
+## BLOCKED ledger (recorded, not implemented)
+
+| Item | Pen authority | Reason |
+| --- | --- | --- |
+| Card interactive variant | `l3a7qL` "interactive"; `fz3DO` | New public variant + link/button role; outside the token contract |
+| Card hover / selected / disabled states | `l3a7qL` state contract; `CaHpa`, `mBcXT`, `Xo724` | New interaction/selection states (`surface/hover`, `surface/selected` + `action/primary-bg` border, `action/disabled-bg` + `text/disabled`) |
+| Card elevation affordance | `l3a7qL` ("Interactive cards signal affordance with elevation and text") | Shadow/elevation policy undecided |
+| Card selected-state ARIA | `D8pkI`/`u6YqKX` ("Selected state is exposed, not only coloured") | ARIA contract change |
+| Card footer separator (`divider`) | `RH6sw` ("Separators inside a card use divider") | No footer divider in the current API; new part |
+| Card named part `meta`/`action` split | `c8W54` named parts | Current `header`/`footer` mapping retained |
+| Statistic `loading` state + skeleton | `gLCov` state contract; `BSME1` | New state/geometry |
+| Statistic `disabled` state | `gLCov` state contract; `TqTPX` + 5 disabled rows | Disabled semantics + Foundation disabled roles undecided |
+| Statistic `with icon` / `compact` variants | `vcfL8` variant names | New content/geometry axes |
+| Statistic `context` named part | `aZkUR` named parts | New content part |
+| Statistic tabular digits | `WF6qJ` ("Digits are tabular so values align") | Numeric font feature; no Foundation token |
+| Statistic value size `2xl` | `CjnzL` value `font-size/2xl` | Foundation tops out at `xl`; existing approximation retained |
+| Foundation named role `feedback/*-fg` / `feedback/*-border` | Pen audit legend | Value-mapped to `positive|negative` matrix; INFO, not renamed |
+| New public components | — | Explicitly excluded |
+
+## Verification
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| focused composition RED | `1` | `3 fail` / `27 pass` (30) |
+| focused composition GREEN | `0` | `30 pass` / `0 fail` (93 expect calls) |
+| focused browser RED | `1` | `2 failed` files, `4 failed` / `16 passed` (20) |
+| focused browser GREEN | `0` | `2 passed` files, `20 passed` (20) |
+| `mise run check` | `0` | lint + types + format; `✓ icons up to date (38 icons)`; `✓ web fonts up to date (2 faces)`; unit `831 pass / 0 fail` (90 files); browser `702 passed` (73 files) |
+| `mise run build` | `0` | Vite production build, `141 modules transformed`, `✓ built in 80ms` |
+| `git diff --check` | `0` | no whitespace errors |
+| `check:deps` | n/a | no exports or dependencies changed |
+
+## Concerns / INFO
+
+- **INFO — Card resting roles were already aligned.** The master/doc (raised surface, subtle boundary, sunken media, primary/secondary/tertiary text, link) already matched the code; this slice adds the focus ring and both-theme regression coverage only.
+- **INFO — Card focus ring is state-level, not a declared variant.** Pen's focus indicator belongs to the interactive card (`fz3DO`), which the code does not model. The ring is applied to the existing root slot and is observable when a consumer makes the native `article` focusable (`tabIndex`); a declared interactive variant is BLOCKED.
+- **INFO — Statistic delta architecture change.** The delta frame no longer carries the colour; `deltaIcon` and `deltaText` now own their roles, and the `trend` variants retarget them. The trend up/down values are unchanged (value-equal `feedback/*-fg`), so the browser `Token Trend` stories pass on the parent recipe.
+- **INFO — Statistic delta specimen split.** The Pen `default` state and `FMXaz` anatomy give the delta glyph `text/secondary` and the copy `text/primary`; the abstract `CjnzL` master and the positive/negative state specimens paint both with `feedback/*-fg`. The anatomy/default (neutral) roles are used as the base; the state roles drive the trend variants.
+- **INFO — Card disabled text/link ratio.** Pen's `6.12/5.75` did not reproduce against the code foundation (`4.58/8.40`); the row stays `DISABLED / REVIEW` and is never counted PASS.
+- The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.

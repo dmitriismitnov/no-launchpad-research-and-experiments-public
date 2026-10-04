@@ -5,16 +5,23 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * deltaIcon / deltaText.
  *
  * A compact metric: a muted label, a prominent value and an optional delta line.
- * `tone` paints the value; `trend` paints the delta and therefore the optional
- * trend glyph, which inherits `currentColor`.
+ * `tone` paints the value; `trend` paints the delta glyph and copy, which no
+ * longer rely on `currentColor` inheritance from the delta frame.
  *
- * Pen references the newer role layer (`semantic/text/*`,
- * `semantic/feedback/*`). Each alias is resolved to the closest matrix token:
- * - text/primary -> common.50.text (exact)
- * - text/tertiary -> common.600.background (exact)
- * - feedback/positive-fg -> positive.700.background (exact)
- * - feedback/negative-fg -> negative.700.background (exact)
+ * Pen `CjnzL` master / `gLCov` documentation / `FMXaz` anatomy bind the named
+ * role layer; each role resolves to the closest semantic token:
+ * - label text/tertiary -> semantic.text.tertiary (exact)
+ * - value text/primary -> semantic.text.primary (exact)
+ * - delta glyph text/secondary -> semantic.text.secondary (exact)
+ * - delta copy text/primary -> semantic.text.primary (exact)
+ * - trend up feedback/positive-fg -> positive.700.background (exact)
+ * - trend down feedback/negative-fg -> negative.700.background (exact)
  * - brand -> brand.700.background (light exact; dark one step brighter)
+ *
+ * The named Foundation roles `feedback/positive-fg` and `feedback/negative-fg`
+ * do not exist yet, so the value-equal matrix roles above are used and the
+ * named feedback roles are recorded BLOCKED. Pen's `loading` and `disabled`
+ * states and the `with icon` / `compact` variants are recorded BLOCKED too.
  *
  * Approximations: Pen uses font-size/2xl (32px) for the value; the foundation
  * tops out at `xl` (24px), so the value steps down one size. Pen tracking/wide
@@ -37,7 +44,7 @@ export const statisticRecipe = defineSlotRecipe({
             fontWeight: "regular",
             lineHeight: "tight",
             letterSpacing: "wide",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
         },
 
         value: {
@@ -46,18 +53,18 @@ export const statisticRecipe = defineSlotRecipe({
             fontWeight: "bold",
             lineHeight: "tight",
             letterSpacing: "normal",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         },
 
         delta: {
             display: "flex",
             alignItems: "center",
             gap: "x2",
-            color: "semantic.common.600.background",
         },
 
         deltaIcon: {
             flexShrink: "0",
+            color: "semantic.text.secondary",
         },
 
         deltaText: {
@@ -66,20 +73,27 @@ export const statisticRecipe = defineSlotRecipe({
             fontWeight: "regular",
             lineHeight: "normal",
             letterSpacing: "normal",
+            color: "semantic.text.primary",
         },
     },
 
     variants: {
         tone: {
-            neutral: { value: { color: "semantic.common.50.text", }, },
+            neutral: { value: { color: "semantic.text.primary", }, },
             positive: { value: { color: "semantic.positive.700.background", }, },
             negative: { value: { color: "semantic.negative.700.background", }, },
             brand: { value: { color: "semantic.brand.700.background", }, },
         },
         trend: {
-            neutral: { delta: { color: "semantic.common.600.background", }, },
-            up: { delta: { color: "semantic.positive.700.background", }, },
-            down: { delta: { color: "semantic.negative.700.background", }, },
+            neutral: {},
+            up: {
+                deltaIcon: { color: "semantic.positive.700.background", },
+                deltaText: { color: "semantic.positive.700.background", },
+            },
+            down: {
+                deltaIcon: { color: "semantic.negative.700.background", },
+                deltaText: { color: "semantic.negative.700.background", },
+            },
         },
     },
 

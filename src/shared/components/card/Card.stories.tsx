@@ -1,7 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, waitFor, within, } from "storybook/test";
+import { expect, userEvent, waitFor, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -419,4 +419,46 @@ export const Dark: Story = {
         // Pen Card description is `sm` (14px) on a 1.4 line height.
         await expect(getComputedStyle(description).lineHeight).toBe("19.6px");
     },
+};
+
+// Pen `l3a7qL`: the resting roles (raised surface, subtle boundary,
+// `text/primary` title, `text/secondary` description) are already captured by
+// `Light`/`Dark`. The interactive card's `focus-visible` specimen (`fz3DO` /
+// `q4UQZm` / `X3L3d2`) resolves a 2px outer `focus/ring` — green.600 light
+// (`rgb(22, 163, 74)`) and green.500 dark (`rgb(34, 197, 94)`). The Card has no
+// declared interactive variant, so the ring is observed by making the native
+// article focusable; a declared interactive variant is BLOCKED.
+const assertFocusRing = (ring: string) => async ({ canvasElement, }: { canvasElement: HTMLElement; }) => {
+    const user = userEvent.setup();
+    const article = canvasElement.querySelector("article") as HTMLElement;
+
+    await user.tab();
+    await expect(article).toHaveFocus();
+
+    const style = getComputedStyle(article);
+    await expect(style.outlineStyle).toBe("solid");
+    await expect(style.outlineWidth).toBe("2px");
+    await expect(style.outlineColor).toBe(ring);
+};
+
+const renderFocus = (theme: "light" | "dark") => () => (
+    <ThemeShell theme={theme}>
+        <div className={stack}>
+            <div className={frame}>
+                <Card title="Focusable card" tabIndex={0} />
+            </div>
+        </div>
+    </ThemeShell>
+);
+
+export const TokenFocusLight: Story = {
+    args: { title: "Focusable card", },
+    render: renderFocus("light"),
+    play: assertFocusRing("rgb(22, 163, 74)"),
+};
+
+export const TokenFocusDark: Story = {
+    args: { title: "Focusable card", },
+    render: renderFocus("dark"),
+    play: assertFocusRing("rgb(34, 197, 94)"),
 };
