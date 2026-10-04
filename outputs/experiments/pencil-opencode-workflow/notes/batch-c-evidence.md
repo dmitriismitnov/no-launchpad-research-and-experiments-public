@@ -906,3 +906,183 @@ Slice-local counts: `+10` focused unit composition checks (37 → 47 across the 
 - **INFO — `mise run check` blocked at lint.** The pre-existing untracked 0-byte `.zed/debug.json` fails ESLint parsing; per instruction it was left in place (not deleted) and every other stage was run and recorded green individually.
 - **INFO — capture method.** Storybook-iframe Playwright captures (`deviceScaleFactor: 2`, dedicated Storybook on port `6008`), consistent with C1–C5; focus was driven with a CDP `Tab` key event so `:focus-visible` engaged, and the focused element's computed outline was read from the live page.
 - **INFO — Pen read-only.** The Pen was accessed through Pencil MCP `Get`/`Print` only; no mutation call was issued and the file hash is unchanged.
+
+## C7 — Dialog + AlertDialog + Drawer + Sheet + Tour cycle 1/2
+
+**Scope:** approved recipe-only role corrections — the Dialog, Alert Dialog, Drawer, Sheet and Tour triggers/closes (plus Alert Dialog cancel/confirm and Tour back/next) move to `focus/ring`; the modal surfaces resolve `surface/overlay` + `border/subtle`; the Drawer and Tour footer separators resolve `border/subtle`; the Sheet handle and Tour inactive dots resolve `border/strong`; the Tour current dot, Tour next and Alert Dialog destructive confirm resolve the `action/*` roles; and the named text roles (`text/primary` · `text/secondary` · `text/tertiary`) replace the common step ramp. The scrim stays a fixed literal. No component `.tsx`, `index.ts` barrel, `panda.config.ts` or new public component changed.
+
+### Pen source node IDs (read-only)
+
+| Role | Master | Documentation frame | Token contract & audit | State contract | Anatomy / accessibility |
+| --- | --- | --- | --- | --- | --- |
+| Dialog | `UJUPb` | `SV28R` | `ByFFJ` (table `ztw8c`) | `DdsbR` | `PKRLu` / `lhgaV` |
+| Alert Dialog | `FiHft` | `ZOluA` | `P1EWw6` (table `tw1XG`) | `F3btC` | `DHvK4` / `T7kmS1` |
+| Drawer | `UbA6r` | `P6x6P` | `egbSj` (table `g5rLz`) | `g4D79B` | `o6vTHS` / `WSZne` |
+| Sheet | `aOMDf` | `kuTcw` | `VfAQJ` (table `DfFvq`) | `Z0o7X` | `gxLH8` / `y8iWyp` |
+| Tour | `AHDih` | `p3wP8` | `b9WHl` (table `I6h1f8`) | `N8BO5g` | `GGdH9` / `Y8XKFw` |
+
+Verbatim Pen facts used (token contract & audit tables):
+
+- `ByFFJ` (Dialog) — content rows "`Dialogs | text + icon | surface/overlay | text/* (content role) …`"; functional-boundary rows "`surface/overlay … action/secondary-border`"; decorative-boundary rows "`… border/subtle`"; audit summary `focus-indicator 1/1 PASS` light + dark, `FAIL rows 0`.
+- `P1EWw6` (Alert Dialog) — "`Scrim | decorative-boundary | overlay/scrim … border/subtle`"; "`theme light | text + icon | surface/base | text/* (content role)`"; audit summary `focus-indicator 1/1 PASS` both themes; failure list `st-destructive disabled … action/disabled-bg → action/danger-fg 1.10 / 14.63 DISABLED`.
+- `egbSj` (Drawer) — "`Drawer col | decorative-boundary | surface/raised … border/subtle`"; "`Drawer col | text + icon | surface/overlay | text/*`"; `focus-indicator 1/1 PASS`; disabled boundary `action/disabled-bg → border/subtle 1.13 / 1.00 DISABLED`.
+- `VfAQJ` (Sheet) — "`Sheet col | text + icon | surface/overlay | text/*`"; `focus-indicator 1/1 PASS`; disabled boundary `action/disabled-bg → action/secondary-border 4.34 / 5.71 DISABLED`.
+- `b9WHl` (Tour) — "`Tour col | text + icon | surface/overlay | text/*`"; `focus-indicator 1/1 PASS` both themes; functional-boundary `1/1 PASS`; "`No FAIL or DISABLED rows — every resolved role pair meets its contract in both themes.`"
+
+**Read-only confirmation:** Pencil MCP `get_app_state` confirmed `ex_2.pen` as the active canvas editor; only `Get`/`Print` reads were issued (no `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`). Pen SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes, unchanged (mtime `2026-10-02 08:35`).
+
+### Enumeration and disposition
+
+| Owner | Axis | Pen values / rule | Disposition |
+| --- | --- | --- | --- |
+| Dialog | trigger / close focus indicator | `focus/ring` (`ByFFJ`) | **PASS** — both `outlineColor._focusVisible` now `semantic.focus.ring`; `solid`, `{borderWidths.thick}` (2px), offset `0` retained |
+| Alert Dialog | trigger / close / cancel / confirm focus indicator | `focus/ring` (`P1EWw6`) | **PASS** — all four now `semantic.focus.ring` |
+| Drawer | trigger / close focus indicator | `focus/ring` (`egbSj`) | **PASS** — both now `semantic.focus.ring` |
+| Sheet | trigger / close focus indicator | `focus/ring` (`VfAQJ`) | **PASS** — both now `semantic.focus.ring` |
+| Tour | trigger / back / next / close focus indicator | `focus/ring` (`b9WHl`) | **PASS** — all four now `semantic.focus.ring` |
+| Dialog / Alert Dialog / Drawer / Sheet / Tour | modal surface + boundary | `surface/overlay` + `border/subtle` (`ByFFJ`, `P1EWw6`, `egbSj`, `VfAQJ`, `b9WHl`) | **PASS** — `surface`/`panel` `backgroundColor` → `semantic.surface.overlay`, `borderColor` → `semantic.border.subtle`; discriminating both themes |
+| Drawer / Tour | footer separator | `border/subtle` (`egbSj`, `b9WHl`) | **PASS** — `footer.borderTopColor` → `semantic.border.subtle`; discriminating both themes |
+| Sheet | grabber boundary | `border/strong` (`VfAQJ`) | **PASS** — `handle.backgroundColor` → `semantic.border.strong`; dark discriminates, light value-equivalent |
+| Tour | inactive dot boundary / current dot | `border/strong` / `action/primary-bg` (`b9WHl`) | **PASS** — `dot.backgroundColor` → `semantic.border.strong`, `current.true.dot.backgroundColor` → `semantic.action.primary.background`; dark roles discriminate |
+| Tour | back (secondary) action roles | `action/secondary-*` (`b9WHl`) | **PASS** — `back.borderColor` → `semantic.action.secondary.border`, `_hover.backgroundColor` → `semantic.action.secondary.hover`, `color` → `semantic.action.secondary.foreground` |
+| Tour | next (primary) action roles | `action/primary-*` (`b9WHl`) | **PASS** — `next.backgroundColor` → `semantic.action.primary.background`, `color` → `semantic.action.primary.foreground` |
+| Alert Dialog | secondary cancel action roles | `action/secondary-*` (`P1EWw6`) | **PASS** — `cancel.borderColor` → `semantic.action.secondary.border`, `_hover.backgroundColor` → `semantic.action.secondary.hover`, `color` → `semantic.action.secondary.foreground` |
+| Alert Dialog | destructive confirm roles | `action/danger-*` (`P1EWw6`) | **PASS** — destructive `confirm.backgroundColor` → `semantic.action.danger.background`, `color` → `semantic.action.danger.foreground`; dark discriminates (red.400 → red.600, red.950 → white) |
+| Dialog / Alert Dialog / Drawer / Sheet / Tour | named content text roles | `text/*` content role (`ByFFJ`, `P1EWw6`, `egbSj`, `VfAQJ`, `b9WHl`) | **PASS** — title/body/description/step/close roles resolve `semantic.text.primary` · `text.secondary` · `text.tertiary` (value-equivalent; not browser-discriminating) |
+| All five | ARIA / roles / Escape / scrim / autofocus / sizes / placement / side / handle render / destructive behaviour / dots/current / back-disabled-first / finish label | docs above | regression only — unchanged and re-asserted |
+| All five | disabled rows (`st-disabled`, `st-destructive disabled`) | token contract failure lists | **DISABLED / REVIEW** — real ratios shown below, never counted PASS; `action/disabled-bg` is a Foundation role decision (`BLOCKED` below) |
+| Dialog / Alert Dialog / Drawer / Sheet / Tour | scrim role | Pen `overlay/scrim` | **BLOCKED / INFO** — Foundation has no scrim token; literal kept as approved |
+| Alert Dialog | non-destructive base `confirm` fill/fg | `common.50.text` / `common.950.text` | **INFO** — the approved contract names only the destructive confirm; the base confirm is left as-is |
+| Tour | back `_disabled` roles | state contract `N8BO5g` | **DISABLED / REVIEW** — `common.400.background` / `common.200.divider`, left as-is (no role swap) |
+
+### Approved public surface and behaviour
+
+- `dialog` recipe: `trigger`/`close` focus rings → `semantic.focus.ring`; `surface` `backgroundColor` → `semantic.surface.overlay`, `borderColor` → `semantic.border.subtle`; `title` → `semantic.text.primary`, `description` → `semantic.text.secondary`, `close` color → `semantic.text.tertiary`. `md` radius, `440px` width, scrim literal, `shadow.500` and all ARIA unchanged.
+- `alertDialog` recipe: `trigger`/`close`/`cancel`/`confirm` focus rings → `semantic.focus.ring`; `surface` → `semantic.surface.overlay` + `semantic.border.subtle`; `cancel` → `semantic.action.secondary.{border,hover,foreground}`; destructive `confirm` → `semantic.action.danger.{background,foreground}`; `title`/`description`/`close` text roles. The non-destructive `confirm` fill/fg, the `icon` (`negative.700.background`), `420px` width, `md` radius, scrim and the destructive scrim/Escape policy are unchanged.
+- `drawer` recipe: `trigger`/`close` focus rings → `semantic.focus.ring`; `panel` → `semantic.surface.overlay` + `semantic.border.subtle`; `footer.borderTopColor` → `semantic.border.subtle`; text roles resolved. `360px` width, inner-edge radii, `shadow.500` and `side` variants unchanged.
+- `sheet` recipe: `trigger`/`close` focus rings → `semantic.focus.ring`; `panel` → `semantic.surface.overlay` + `semantic.border.subtle`; `handle.backgroundColor` → `semantic.border.strong`; text roles resolved. `18px` header, `85vh`, corner radii, `side` variants and the conditional handle render unchanged.
+- `tour` recipe: `trigger`/`back`/`next`/`close` focus rings → `semantic.focus.ring`; `surface` → `semantic.surface.overlay` + `semantic.border.subtle`; `footer.borderTopColor` → `semantic.border.subtle`; `dot` → `semantic.border.strong`; `current.true.dot` → `semantic.action.primary.background`; `back` → `semantic.action.secondary.{border,hover,foreground}`; `next` → `semantic.action.primary.{background,foreground}`; `step`/`title`/`body` text roles. The `_disabled` back roles, `340px` width, placement variants and the no-target-highlight/no-focus-trap contract are unchanged.
+- Preset doc comments updated to name the resolved role tokens. No component markup changed; all `*.tsx`, `index.ts` barrels and `panda.config.ts` are untouched. No export changed, so `check:deps` was not required. Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited).
+
+Changed paths: `src/shared/components/dialog/{preset.ts,Dialog.composition.test.tsx,Dialog.stories.tsx}`, `src/shared/components/alert-dialog/{preset.ts,AlertDialog.composition.test.tsx,AlertDialog.stories.tsx}`, `src/shared/components/drawer/{preset.ts,Drawer.composition.test.tsx,Drawer.stories.tsx}`, `src/shared/components/sheet/{preset.ts,Sheet.composition.test.tsx,Sheet.stories.tsx}`, `src/shared/components/tour/{preset.ts,Tour.composition.test.tsx,Tour.stories.tsx}`, this evidence, `artifacts/batch-c/modal-surfaces/` (new captures).
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun), written before the implementation:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/components/dialog/Dialog.composition.test.tsx src/shared/components/alert-dialog/AlertDialog.composition.test.tsx src/shared/components/drawer/Drawer.composition.test.tsx src/shared/components/sheet/Sheet.composition.test.tsx src/shared/components/tour/Tour.composition.test.tsx` |
+| RED exit | `1` |
+| RED result | `21 fail` / `44 pass` (65 total, 5 files, `160 expect() calls`) |
+| RED failures | dialog `paints the shared focus ring role on the trigger and close`, `resolves the modal surface roles`, `resolves the named text roles`; alert dialog `paints the shared focus ring role on the trigger, close, cancel and confirm`, `resolves the modal surface roles`, `resolves the secondary cancel action roles`, `resolves the destructive confirm action roles`, `resolves the named text roles`; drawer `paints the shared focus ring role on the trigger and close`, `resolves the panel surface roles`, `resolves the footer boundary role`, `resolves the named text roles`; sheet `paints the shared focus ring role on the trigger and close`, `resolves the panel surface roles`, `resolves the handle boundary role`, `resolves the named text roles`; tour `paints the shared focus ring role on the trigger, back, next and close`, `resolves the bubble surface and footer boundary roles`, `resolves the dot and current dot roles`, `resolves the action roles`, `resolves the named text roles` |
+| RED cause | `outlineColor._focusVisible` was `semantic.brand.500.background`; surfaces were `common.50.background` + `common.200.divider`; the Sheet handle and Tour dots were `common.50.border.strong`; the Tour current dot / next were `brand.700.background`; the Alert Dialog destructive confirm was `negative.600.*`; text roles were the common step ramp |
+| GREEN exit | `0` |
+| GREEN result | `65 pass` / `0 fail` (`182 expect() calls`) |
+
+Focused browser stories (Vitest + Playwright Chromium), written and run before the implementation (stale generated CSS provided the RED):
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/dialog/Dialog.stories.tsx src/shared/components/alert-dialog/AlertDialog.stories.tsx src/shared/components/drawer/Drawer.stories.tsx src/shared/components/sheet/Sheet.stories.tsx src/shared/components/tour/Tour.stories.tsx` |
+| RED exit | `1` |
+| RED result | `5 failed` files, `21 failed` / `28 passed` (49) |
+| RED failures | 5× `Focus Visible Light`; 5× `Surface Light`; 5× `Surface Dark`; alert dialog `Destructive Dark`, `Cancel Roles Light`, `Cancel Roles Dark`; sheet `Handle Dark`; tour `Dots Dark`, `Actions Dark` |
+| GREEN exit | `0` |
+| GREEN result | `5 passed` files, `49 passed` (49) |
+
+All 21 new browser checks are true RED: the light focus-role mismatch, the surface/border changes, the dark destructive confirm, the cancel border/color, the dark Sheet handle, the dark Tour dots/current dot and the dark Tour actions all change the computed value. The dark focus-role stories are **not claimed** — in dark, `brand.500.background` and `focus.ring` both resolve `green.500`; the light focus stories and the recipe-level composition tests are the true guards. The text-role changes are **value-equivalent** (same RGB) and are not browser-discriminating.
+
+### Both-theme evidence (computed style, in browser)
+
+| Contract | Light | Dark |
+| --- | --- | --- |
+| Dialog / Alert Dialog / Drawer / Sheet / Tour surface (`SurfaceLight` / `SurfaceDark`) | bg `rgb(255, 255, 255)` (`surface.overlay` = white), border `rgb(226, 232, 240)` (`border.subtle` = `neutral.200`) — **discriminating** (old `common.50.background` `rgb(248, 250, 252)`, `common.200.divider` `rgb(203, 213, 225)`) | bg `rgb(30, 41, 59)` (`neutral.800`), border `rgb(30, 41, 59)` — **discriminating** (old `neutral.950` `rgb(2, 6, 23)`, `neutral.700` `rgb(51, 65, 85)`) |
+| Drawer / Tour footer separator (`SurfaceLight`/`SurfaceDark` capture) | `border-top-color: rgb(226, 232, 240)` | `rgb(30, 41, 59)` — discriminating |
+| Focus rings light (`FocusVisibleLight` ×5) | `outline: solid 2px rgb(22, 163, 74)` (`green.600`) — discriminating | not claimed (dark `brand.500.background` = `focus.ring` = `green.500`) |
+| Alert Dialog destructive confirm (`DestructiveDark`) | not claimed (old `red.600` `rgb(220, 38, 38)` fill is equal) | bg `rgb(220, 38, 38)` (`action.danger.background`), color `rgb(255, 255, 255)` — **discriminating** (old `red.400` `rgb(248, 113, 113)`, `red.950` `rgb(69, 10, 10)`) |
+| Alert Dialog cancel (`CancelRolesLight` / `CancelRolesDark`) | border `rgb(100, 116, 139)` (`neutral.500`), color `rgb(30, 41, 59)` (`neutral.800`) — discriminating (old `neutral.700` / `neutral.900`) | border `rgb(148, 163, 184)` (`neutral.400`), color `rgb(241, 245, 249)` (`neutral.100`) — discriminating |
+| Sheet handle (`HandleDark`) | not claimed (light `neutral.500` both) | `rgb(148, 163, 184)` (`border.strong` = `neutral.400`) — **discriminating** (old `common.50.border.strong` = `neutral.500` `rgb(100, 116, 139)`) |
+| Tour dots (`DotsDark`) | not claimed (light `neutral.500` both) | inactive `rgb(148, 163, 184)` (`border.strong`), current `rgb(21, 128, 61)` (`action.primary.background`) — **discriminating** (old `neutral.500` `rgb(100, 116, 139)` and `green.300` `rgb(134, 239, 172)`) |
+| Tour actions (`ActionsDark`) | not claimed (light next `green.700` both; back border `neutral.500` both) | next bg `rgb(21, 128, 61)`, color `rgb(255, 255, 255)`; back border `rgb(148, 163, 184)`, color `rgb(241, 245, 249)` — **discriminating** (old `green.300` next, `common.50.background` text `neutral.950` `rgb(2, 6, 23)`, `neutral.500` border, `neutral.50` text) |
+| Named text roles (title/body/description/step/close) | `text.primary` `neutral.900` `rgb(15, 23, 42)`, `text.secondary` `neutral.700` `rgb(51, 65, 85)`, `text.tertiary` `neutral.600` `rgb(71, 85, 105)` — **value-equivalent**, not browser-discriminating | `neutral.50` / `neutral.300` / `neutral.400` — **value-equivalent** |
+| Generated `styles.css` | `.dialog__surface`, `.alertDialog__surface`, `.drawer__panel`, `.sheet__panel`, `.tour__surface` read `var(--colors-semantic-surface-overlay)` + `var(--colors-semantic-border-subtle)`; all triggers/closes/actions read `var(--colors-semantic-focus-ring)`; `.sheet__handle` and `.tour__dot` read `var(--colors-semantic-border-strong)`; `.tour__next` + `.tour__dot--current_true` read `var(--colors-semantic-action-primary-background)`; `.alertDialog__confirm--destructive_true` reads `var(--colors-semantic-action-danger-background)` | theme-independent (same recipe/CSS) |
+| ARIA / roles / Escape / scrim / autofocus / sizes / placement / side / handle / dots / back-disabled-first / finish label | regression asserted in the focused composition/story runs above; no runtime/ARIA change | theme-independent structure |
+
+Real ratios (`@shared/utils contrastRatio`; reported, never counted PASS):
+
+- Content on `surface.overlay`: `text.primary` 17.85 light / 13.98 dark; `text.secondary` 10.35 / 9.85; `text.tertiary` 7.58 / 5.71; `action.secondary.foreground` 14.63 / 13.35; `action.danger.foreground` on `action.danger.background` 4.83 both; `action.primary.foreground` on `action.primary.background` 5.02 both.
+- Boundaries on `surface.overlay`: `focus.ring` 3.30 light / 6.42 dark; `border.strong` 4.76 / 5.71; `border.subtle` 1.23 / 1.00 (structural decorative boundary, INFO); `action.secondary.border` 4.76 / 5.71.
+- **DISABLED / REVIEW:** Tour back `_disabled` text `common.400.background` on `surface.overlay` = 2.56 light / 1.93 dark (below 4.5); Tour back `_disabled` border `common.200.divider` on `surface.overlay` = 1.48 / 1.41. The Pen contract failure lists report the same pattern against `action/disabled-bg` (Dialog 4 rows, Alert Dialog `1.10 / 14.63` + `2.34 / 3.07`, Drawer `1.13 / 1.00`, Sheet `4.34 / 5.71`); `action/disabled-bg` is absent from Foundation (`BLOCKED` below), so no disabled row is counted PASS.
+
+### Captures
+
+Code-side Storybook-iframe captures (`deviceScaleFactor: 2`, dedicated Storybook on port `6006`), in `artifacts/batch-c/modal-surfaces/`: `dialog-focus-light`, `dialog-surface-{light,dark}`, `alert-dialog-focus-light`, `alert-dialog-surface-{light,dark}`, `alert-dialog-destructive-dark`, `alert-dialog-cancel-{light,dark}`, `drawer-focus-light`, `drawer-surface-{light,dark}`, `sheet-focus-light`, `sheet-surface-{light,dark}`, `sheet-handle-dark`, `tour-focus-light`, `tour-surface-{light,dark}`, `tour-dot-inactive-dark`, `tour-dot-current-dark`, `tour-next-dark`, `tour-back-dark` (23 PNGs) plus `computed-styles.json`. The capture script recorded each target's computed style; focus captures show `solid 2px rgb(22, 163, 74)` on the trigger, surface captures show `rgb(255, 255, 255)` / `rgb(30, 41, 59)` with `rgb(226, 232, 240)` / `rgb(30, 41, 59)` borders, and the dark role captures show the destructive confirm `rgb(220, 38, 38)`, the Sheet handle `rgb(148, 163, 184)`, the Tour dots `rgb(148, 163, 184)` / `rgb(21, 128, 61)` and the Tour next/back roles.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)`; overlay/surface + focus-ring + action/border role variables emitted |
+| focused composition RED | `1` | `21 fail` / `44 pass` (160 expect calls) |
+| focused composition GREEN | `0` | `65 pass` / `0 fail` (182 expect calls) |
+| focused browser RED | `1` | `5 failed` files, `21 failed` / `28 passed` (49) |
+| focused browser GREEN | `0` | `5 passed` files, `49 passed` (49) |
+| `mise run check` (aggregate) | `1` | **blocked at `check:lint`** by the pre-existing untracked 0-byte `.zed/debug.json` (`1:1 Parsing error: Unexpected end of input`); the artifact was left in place, not deleted |
+| `check:lint` (`.zed` ignored) | `0` | `eslint . --ignore-pattern ".zed/**"` — no findings in any C7 path |
+| `check:types` | `0` | clean |
+| `check:format` | `0` | clean after `dprint fmt` on the 3 mis-ordered import lines |
+| `icons:check` | `0` | `✓ icons up to date (38 icons)` |
+| `fonts:check` | `0` | `✓ web fonts up to date (2 faces)` |
+| `test:unit` | `0` | `813 pass` / `0 fail` (90 files, `4119 expect() calls`) |
+| `test:browser` | `0` | `73 passed` files, `672 passed` (672) |
+| `check:deps` | n/a | not run — no export changed |
+| `mise run build` | `0` | `✓ built in 78ms`; `dist/assets/index-DnHxqs-t.css 223.36 kB` |
+| `git diff --check` | `0` | clean |
+
+Slice-local counts: `+21` focused unit composition checks (44 → 65 across the five files) and `+21` browser story checks (28 → 49 across the five story files). Aggregate unit `792 → 813`; aggregate browser `651 → 672`.
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| Dialog / Alert Dialog / Drawer / Sheet / Tour trigger + close focus → `semantic.focus.ring` | **PASS** |
+| Alert Dialog cancel + confirm focus → `semantic.focus.ring`; Tour back + next focus → `semantic.focus.ring` | **PASS** |
+| Modal surface → `semantic.surface.overlay` + `semantic.border.subtle` (all five) | **PASS** (discriminating both themes) |
+| Drawer / Tour footer separator → `semantic.border.subtle` | **PASS** (discriminating both themes) |
+| Sheet handle + Tour inactive dot → `semantic.border.strong` | **PASS** (dark discriminating) |
+| Tour current dot + next, Alert Dialog destructive confirm → `action/*` | **PASS** (dark discriminating) |
+| Alert Dialog cancel + Tour back → `action/secondary-*` | **PASS** (discriminating both themes / dark) |
+| Named text roles (`text/primary` · `text/secondary` · `text/tertiary`) | **PASS** (recipe-level; value-equivalent) |
+| ARIA / roles / Escape / scrim / autofocus / sizes / placement / side / handle / dots / destructive behaviour | **PASS** (regression, unchanged) |
+| Disabled rows (`st-disabled`, `st-destructive disabled`) | **DISABLED / REVIEW** (real ratios, never PASS) |
+| **C7 final status** | **PASS with `DISABLED / REVIEW` and `BLOCKED` rows** — no unresolved `FAIL` |
+
+### BLOCKED (recorded, not implemented)
+
+| Item | Pen basis | Reason |
+| --- | --- | --- |
+| Portal / focus-trap / move-in / return | overlay interaction contract | interaction/API decision |
+| Dismissal / backdrop-click / Enter-alone policy | overlay interaction contract | interaction-policy decision |
+| Drawer `resizable` | `P6x6P` public variants | public-variant/interaction decision |
+| Sheet snap heights / destructive item | `kuTcw` public variants | public-variant decision |
+| Scroll lock / restore | overlay interaction contract | interaction-policy decision |
+| Tour target-anchoring / target-highlight / progression | `p3wP8` behaviour | **FORBIDDEN** by the approved contract |
+| Dialog `destructive` / `with close control` / `scrollable body` | `SV28R` public variants | public-variant/API decision |
+| Alert Dialog `with close` / `with icon` toggles / `focusCancel` / `disabledDelete` / default-confirm-tone | `ZOluA` public variants | public-API decision |
+| Scrim semantic token | `ByFFJ`/`P1EWw6` `overlay/scrim` | Foundation token-role decision; literal kept |
+| Sheet side-axis public API | `kuTcw` variants | public-API decision |
+| Alert Dialog base (non-destructive) confirm tone | `P1EWw6` | approved contract names only the destructive confirm |
+| `action/disabled-bg` disabled backgrounds | token contract failure lists | Foundation token-role decision; stays `DISABLED / REVIEW` |
+| New public components / merging Alert Dialog into Dialog / Sheet into Drawer | — | explicitly excluded by the approved contract |
+
+### Unresolved concerns
+
+- **DISABLED / REVIEW — disabled rows.** The Pen failure lists report `action/disabled-bg` ratios that Foundation cannot express; the code-side Tour back disabled text/border ratios are 2.56 / 1.93 and 1.48 / 1.41, reported and never counted PASS.
+- **INFO — dark focus stories non-discriminating.** In dark, `brand.500.background` and `focus.ring` both resolve `green.500`; the light focus stories and the recipe-level composition tests are the true guards.
+- **INFO — dark overlay boundary invisible.** In dark, `surface.overlay` and `border.subtle` both resolve `neutral.800` (`rgb(30, 41, 59)`); this follows the Pen roles and matches the C4/C6 observations.
+- **INFO — value-equivalent text roles.** The `text/primary` / `text/secondary` / `text/tertiary` corrections resolve the same RGB as the replaced common step ramp; true at recipe level, not claimed as browser-discriminating.
+- **INFO — base confirm left as-is.** The Alert Dialog non-destructive `confirm` keeps `common.50.text` fill + `common.950.text` fg; the approved contract names only the destructive confirm role pair.
+- **INFO — `mise run check` blocked at lint.** The pre-existing untracked 0-byte `.zed/debug.json` fails ESLint parsing; per instruction it was left in place (not deleted) and every other stage was run and recorded green individually.
+- **INFO — capture method.** Storybook-iframe Playwright captures (`deviceScaleFactor: 2`, Storybook on port `6006`); focus was driven with a CDP `Tab` key event so `:focus-visible` engaged, and the focused element's computed outline was read from the live page.
+- **INFO — Pen read-only.** The Pen was accessed through Pencil MCP `Get`/`Print` only; no mutation call was issued and the file hash is unchanged.

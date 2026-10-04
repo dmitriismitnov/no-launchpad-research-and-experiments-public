@@ -3,6 +3,7 @@ import { renderToStaticMarkup, } from "react-dom/server";
 
 import { Button, } from "@shared/components/button";
 
+import { sheetRecipe, } from "./preset";
 import { Sheet, } from "./sheet";
 
 describe("sheet composition", () => {
@@ -96,5 +97,44 @@ describe("sheet composition", () => {
         const markup = renderToStaticMarkup(<Sheet title="Share" data-testid="s" />);
 
         expect(markup).toContain(`data-testid="s"`);
+    });
+
+    // Pen Sheet token contract: the trigger and close focus indicators resolve
+    // `focus/ring`, not the brand fill. The light role discriminates; dark is
+    // non-discriminating and is not claimed.
+    test("paints the shared focus ring role on the trigger and close", () => {
+        for ( const slot of [ "trigger", "close", ] ) {
+            expect(sheetRecipe.base?.[slot]).toMatchObject({
+                outlineColor: { _focusVisible: "semantic.focus.ring", },
+            });
+        }
+    });
+
+    // Pen Sheet token contract: the panel resolves `surface/overlay` and the
+    // `border/subtle` structural boundary. Both discriminate in each theme.
+    test("resolves the panel surface roles", () => {
+        expect(sheetRecipe.base?.["panel"]).toMatchObject({
+            backgroundColor: "semantic.surface.overlay",
+            borderColor: "semantic.border.subtle",
+        });
+    });
+
+    // Pen Sheet token contract: the grabber resolves the `border/strong`
+    // functional boundary. The dark role discriminates (neutral.500 ->
+    // neutral.400); the light role is value-equivalent (neutral.500 both).
+    test("resolves the handle boundary role", () => {
+        expect(sheetRecipe.base?.["handle"]).toMatchObject({
+            backgroundColor: "semantic.border.strong",
+        });
+    });
+
+    // Pen Sheet: the named content roles (`text/primary`, `text/secondary`,
+    // `text/tertiary`) are value-equivalent to the previous common step ramp.
+    test("resolves the named text roles", () => {
+        expect(sheetRecipe.base?.["title"]).toMatchObject({ color: "semantic.text.primary", });
+        expect(sheetRecipe.base?.["description"]).toMatchObject({
+            color: "semantic.text.secondary",
+        });
+        expect(sheetRecipe.base?.["close"]).toMatchObject({ color: "semantic.text.tertiary", });
     });
 });

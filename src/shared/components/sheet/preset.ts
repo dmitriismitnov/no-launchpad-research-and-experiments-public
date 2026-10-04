@@ -10,14 +10,15 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * nodes. An optional grabber `handle` is drawn at the anchored edge.
  *
  * Pen references the newer role layer (`semantic/surface/*`, `semantic/text/*`,
- * `semantic/border/*`, `semantic/shadow/*`, `semantic/overlay/*`):
+ * `semantic/border/*`, `semantic/focus/*`, `semantic/shadow/*`):
  * - overlay/scrim -> a fixed literal (the foundation has no scrim token)
- * - surface/overlay -> common.50.background (white near-exact; dark one step)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - border/strong -> common.50.border.strong (handle)
- * - text/primary -> common.50.text (exact)
- * - text/secondary -> common.700.background (exact)
- * - text/tertiary -> common.600.background (exact)
+ * - surface/overlay -> semantic.surface.overlay
+ * - border/subtle -> semantic.border.subtle
+ * - border/strong -> semantic.border.strong (handle)
+ * - focus/ring -> semantic.focus.ring (trigger, close)
+ * - text/primary -> semantic.text.primary
+ * - text/secondary -> semantic.text.secondary
+ * - text/tertiary -> semantic.text.tertiary
  * - shadow/500 -> semantic.shadow.500 (Pen offsets 0 -8px 32px)
  *
  * Approximations: the scrim is a literal `rgba(15, 23, 42, 0.72)` because there
@@ -65,7 +66,7 @@ export const sheetRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         overlay: {
@@ -82,8 +83,8 @@ export const sheetRecipe = defineSlotRecipe({
             flexDirection: "column",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
-            backgroundColor: "semantic.common.50.background",
+            borderColor: "semantic.border.subtle",
+            backgroundColor: "semantic.surface.overlay",
             boxShadow: "0 12px 32px {colors.semantic.shadow.500}",
         },
 
@@ -94,7 +95,7 @@ export const sheetRecipe = defineSlotRecipe({
             height: "4px",
             marginBlockStart: "x3",
             borderRadius: "9999px",
-            backgroundColor: "semantic.common.50.border.strong",
+            backgroundColor: "semantic.border.strong",
         },
 
         header: {
@@ -114,7 +115,7 @@ export const sheetRecipe = defineSlotRecipe({
             fontWeight: "semibold",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         },
 
         close: {
@@ -127,11 +128,11 @@ export const sheetRecipe = defineSlotRecipe({
             borderStyle: "none",
             backgroundColor: "transparent",
             cursor: "pointer",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         body: {
@@ -148,7 +149,7 @@ export const sheetRecipe = defineSlotRecipe({
             fontSize: "sm",
             fontWeight: "regular",
             lineHeight: "normal",
-            color: "semantic.common.700.background",
+            color: "semantic.text.secondary",
         },
 
         footer: {

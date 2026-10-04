@@ -4,6 +4,7 @@ import { renderToStaticMarkup, } from "react-dom/server";
 import { Button, } from "@shared/components/button";
 
 import { Drawer, } from "./drawer";
+import { drawerRecipe, } from "./preset";
 
 describe("drawer composition", () => {
     test("renders an edge panel with a title, body and actions", () => {
@@ -90,5 +91,43 @@ describe("drawer composition", () => {
         const markup = renderToStaticMarkup(<Drawer title="Filters" data-testid="d" />);
 
         expect(markup).toContain(`data-testid="d"`);
+    });
+
+    // Pen Drawer token contract: the trigger and close focus indicators resolve
+    // `focus/ring`, not the brand fill. The light role discriminates; dark is
+    // non-discriminating and is not claimed.
+    test("paints the shared focus ring role on the trigger and close", () => {
+        for ( const slot of [ "trigger", "close", ] ) {
+            expect(drawerRecipe.base?.[slot]).toMatchObject({
+                outlineColor: { _focusVisible: "semantic.focus.ring", },
+            });
+        }
+    });
+
+    // Pen Drawer token contract: the panel resolves `surface/overlay` and the
+    // `border/subtle` structural boundary. Both discriminate in each theme.
+    test("resolves the panel surface roles", () => {
+        expect(drawerRecipe.base?.["panel"]).toMatchObject({
+            backgroundColor: "semantic.surface.overlay",
+            borderColor: "semantic.border.subtle",
+        });
+    });
+
+    // Pen Drawer token contract: the footer separator resolves the
+    // `border/subtle` structural boundary. Discriminating in each theme.
+    test("resolves the footer boundary role", () => {
+        expect(drawerRecipe.base?.["footer"]).toMatchObject({
+            borderTopColor: "semantic.border.subtle",
+        });
+    });
+
+    // Pen Drawer: the named content roles (`text/primary`, `text/secondary`,
+    // `text/tertiary`) are value-equivalent to the previous common step ramp.
+    test("resolves the named text roles", () => {
+        expect(drawerRecipe.base?.["title"]).toMatchObject({ color: "semantic.text.primary", });
+        expect(drawerRecipe.base?.["description"]).toMatchObject({
+            color: "semantic.text.secondary",
+        });
+        expect(drawerRecipe.base?.["close"]).toMatchObject({ color: "semantic.text.tertiary", });
     });
 });

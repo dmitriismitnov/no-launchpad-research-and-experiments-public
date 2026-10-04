@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { tourRecipe, } from "./preset";
 import { Tour, } from "./tour";
 
 const steps = [
@@ -99,5 +100,67 @@ describe("tour composition", () => {
         const markup = renderToStaticMarkup(<Tour steps={steps} data-testid="t" />);
 
         expect(markup).toContain(`data-testid="t"`);
+    });
+
+    // Pen Tour token contract: the trigger, back, next and close focus
+    // indicators resolve `focus/ring`, not the brand fill. The light role
+    // discriminates; dark is non-discriminating and is not claimed.
+    test("paints the shared focus ring role on the trigger, back, next and close", () => {
+        for ( const slot of [ "trigger", "back", "next", "close", ] ) {
+            expect(tourRecipe.base?.[slot]).toMatchObject({
+                outlineColor: { _focusVisible: "semantic.focus.ring", },
+            });
+        }
+    });
+
+    // Pen Tour token contract: the bubble resolves `surface/overlay` and the
+    // `border/subtle` structural boundary, and the footer separator resolves the
+    // same boundary. All discriminate in each theme.
+    test("resolves the bubble surface and footer boundary roles", () => {
+        expect(tourRecipe.base?.["surface"]).toMatchObject({
+            backgroundColor: "semantic.surface.overlay",
+            borderColor: "semantic.border.subtle",
+        });
+        expect(tourRecipe.base?.["footer"]).toMatchObject({
+            borderTopColor: "semantic.border.subtle",
+        });
+    });
+
+    // Pen Tour token contract: the inactive dots resolve the `border/strong`
+    // boundary and the current dot resolves `action/primary-bg`. The dark roles
+    // discriminate (neutral.500 -> neutral.400; green.300 -> green.700); the
+    // light roles are non-discriminating and are not claimed.
+    test("resolves the dot and current dot roles", () => {
+        expect(tourRecipe.base?.["dot"]).toMatchObject({
+            backgroundColor: "semantic.border.strong",
+        });
+        expect(tourRecipe.variants?.["current"]?.["true"]?.["dot"]).toMatchObject({
+            backgroundColor: "semantic.action.primary.background",
+        });
+    });
+
+    // Pen Tour token contract: Back is the secondary action
+    // (`action/secondary-*`) and Next is the primary action
+    // (`action/primary-bg` + `action/primary-fg`). Both dark pairs discriminate
+    // (green.300 -> green.700 fill; neutral.950 -> white next text); the light
+    // roles are value-equivalent or non-discriminating.
+    test("resolves the action roles", () => {
+        expect(tourRecipe.base?.["back"]).toMatchObject({
+            borderColor: "semantic.action.secondary.border",
+            color: "semantic.action.secondary.foreground",
+            backgroundColor: { _hover: "semantic.action.secondary.hover", },
+        });
+        expect(tourRecipe.base?.["next"]).toMatchObject({
+            backgroundColor: "semantic.action.primary.background",
+            color: "semantic.action.primary.foreground",
+        });
+    });
+
+    // Pen Tour: the named content roles (`text/tertiary`, `text/primary`,
+    // `text/secondary`) are value-equivalent to the previous common step ramp.
+    test("resolves the named text roles", () => {
+        expect(tourRecipe.base?.["step"]).toMatchObject({ color: "semantic.text.tertiary", });
+        expect(tourRecipe.base?.["title"]).toMatchObject({ color: "semantic.text.primary", });
+        expect(tourRecipe.base?.["body"]).toMatchObject({ color: "semantic.text.secondary", });
     });
 });

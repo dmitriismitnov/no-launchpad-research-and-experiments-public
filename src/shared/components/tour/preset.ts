@@ -10,17 +10,18 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * trapping and focus return are out of scope.
  *
  * Pen references the newer role layer (`semantic/surface/*`, `semantic/text/*`,
- * `semantic/border/*`, `semantic/shadow/*`, `semantic/action/*`):
- * - surface/overlay -> common.50.background (white near-exact; dark one step)
- * - border/subtle -> common.200.divider (nearest structural boundary)
- * - border/strong -> common.50.border.strong (inactive dots, secondary border)
- * - text/primary -> common.50.text (exact)
- * - text/secondary -> common.700.background (exact)
- * - text/tertiary -> common.600.background (exact)
- * - action/primary-bg -> brand.700.background (light exact; dark one step)
- * - action/primary-fg -> common.50.background (inverse foreground pair)
- * - action/secondary-* -> transparent fill + common.50.border.strong border +
- *   common.50.text foreground (Pen's secondary action roles)
+ * `semantic/border/*`, `semantic/focus/*`, `semantic/shadow/*`,
+ * `semantic/action/*`):
+ * - surface/overlay -> semantic.surface.overlay
+ * - border/subtle -> semantic.border.subtle (bubble frame and footer separator)
+ * - border/strong -> semantic.border.strong (inactive dots)
+ * - focus/ring -> semantic.focus.ring (trigger, back, next, close)
+ * - text/primary -> semantic.text.primary
+ * - text/secondary -> semantic.text.secondary
+ * - text/tertiary -> semantic.text.tertiary
+ * - action/primary-bg -> semantic.action.primary.background
+ * - action/primary-fg -> semantic.action.primary.foreground
+ * - action/secondary-* -> semantic.action.secondary.*
  * - shadow/500 -> semantic.shadow.500 (Pen offsets 0 12px 32px)
  *
  * Approximations: Pen fixes the bubble at 340px and uses the mono family for the
@@ -67,7 +68,7 @@ export const tourRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         surface: {
@@ -76,9 +77,9 @@ export const tourRecipe = defineSlotRecipe({
             width: "340px",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
+            borderColor: "semantic.border.subtle",
             borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
+            backgroundColor: "semantic.surface.overlay",
             boxShadow: "0 12px 32px {colors.semantic.shadow.500}",
         },
 
@@ -95,7 +96,7 @@ export const tourRecipe = defineSlotRecipe({
             fontWeight: "regular",
             lineHeight: "tight",
             letterSpacing: "wide",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
         },
 
         title: {
@@ -104,7 +105,7 @@ export const tourRecipe = defineSlotRecipe({
             fontWeight: "semibold",
             lineHeight: "normal",
             letterSpacing: "normal",
-            color: "semantic.common.50.text",
+            color: "semantic.text.primary",
         },
 
         body: {
@@ -112,7 +113,7 @@ export const tourRecipe = defineSlotRecipe({
             fontSize: "sm",
             fontWeight: "regular",
             lineHeight: "normal",
-            color: "semantic.common.700.background",
+            color: "semantic.text.secondary",
         },
 
         footer: {
@@ -124,7 +125,7 @@ export const tourRecipe = defineSlotRecipe({
             paddingBlockEnd: "x8",
             borderTopWidth: "thin",
             borderTopStyle: "solid",
-            borderTopColor: "semantic.common.200.divider",
+            borderTopColor: "semantic.border.subtle",
         },
 
         dots: {
@@ -139,7 +140,7 @@ export const tourRecipe = defineSlotRecipe({
             width: "x3",
             height: "x3",
             borderRadius: "9999px",
-            backgroundColor: "semantic.common.50.border.strong",
+            backgroundColor: "semantic.border.strong",
         },
 
         back: {
@@ -152,22 +153,22 @@ export const tourRecipe = defineSlotRecipe({
             paddingInline: "x8",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.50.border.strong",
+            borderColor: "semantic.action.secondary.border",
             borderRadius: "sm",
             backgroundColor: {
                 base: "transparent",
-                _hover: "semantic.common.100.background",
+                _hover: "semantic.action.secondary.hover",
             },
             cursor: "pointer",
             fontFamily: "body",
             fontSize: "sm",
             fontWeight: "medium",
             lineHeight: "tight",
-            color: "semantic.common.50.text",
+            color: "semantic.action.secondary.foreground",
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
             _disabled: {
                 cursor: "not-allowed",
                 color: "semantic.common.400.background",
@@ -188,18 +189,18 @@ export const tourRecipe = defineSlotRecipe({
             borderWidth: "none",
             borderStyle: "none",
             borderRadius: "sm",
-            backgroundColor: "semantic.brand.700.background",
+            backgroundColor: "semantic.action.primary.background",
             cursor: "pointer",
             fontFamily: "body",
             fontSize: "sm",
             fontWeight: "medium",
             lineHeight: "tight",
-            color: "semantic.common.50.background",
+            color: "semantic.action.primary.foreground",
             opacity: { base: 1, _hover: 0.85, },
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
 
         close: {
@@ -212,11 +213,11 @@ export const tourRecipe = defineSlotRecipe({
             borderStyle: "none",
             backgroundColor: "transparent",
             cursor: "pointer",
-            color: "semantic.common.600.background",
+            color: "semantic.text.tertiary",
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
         },
     },
 
@@ -232,7 +233,7 @@ export const tourRecipe = defineSlotRecipe({
             true: {
                 dot: {
                     width: "x8",
-                    backgroundColor: "semantic.brand.700.background",
+                    backgroundColor: "semantic.action.primary.background",
                 },
             },
         },

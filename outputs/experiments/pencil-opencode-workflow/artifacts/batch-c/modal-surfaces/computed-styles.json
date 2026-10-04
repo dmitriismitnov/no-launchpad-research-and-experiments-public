@@ -1,0 +1,324 @@
+[
+    {
+        "name": "dialog-focus-light",
+        "selector": ".dialog__trigger",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(15, 23, 42)",
+            "borderTopColor": "rgb(15, 23, 42)",
+            "borderRadius": "0px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "dialog-surface-light",
+        "selector": ".dialog__surface",
+        "style": {
+            "backgroundColor": "rgb(255, 255, 255)",
+            "borderColor": "rgb(226, 232, 240)",
+            "borderTopColor": "rgb(226, 232, 240)",
+            "borderRadius": "10px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(15, 23, 42)"
+        }
+    },
+    {
+        "name": "dialog-surface-dark",
+        "selector": ".dialog__surface",
+        "style": {
+            "backgroundColor": "rgb(30, 41, 59)",
+            "borderColor": "rgb(30, 41, 59)",
+            "borderTopColor": "rgb(30, 41, 59)",
+            "borderRadius": "10px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "alert-dialog-focus-light",
+        "selector": ".alertDialog__trigger",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(15, 23, 42)",
+            "borderTopColor": "rgb(15, 23, 42)",
+            "borderRadius": "0px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "alert-dialog-surface-light",
+        "selector": ".alertDialog__surface",
+        "style": {
+            "backgroundColor": "rgb(255, 255, 255)",
+            "borderColor": "rgb(226, 232, 240)",
+            "borderTopColor": "rgb(226, 232, 240)",
+            "borderRadius": "10px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(15, 23, 42)"
+        }
+    },
+    {
+        "name": "alert-dialog-surface-dark",
+        "selector": ".alertDialog__surface",
+        "style": {
+            "backgroundColor": "rgb(30, 41, 59)",
+            "borderColor": "rgb(30, 41, 59)",
+            "borderTopColor": "rgb(30, 41, 59)",
+            "borderRadius": "10px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "alert-dialog-destructive-dark",
+        "selector": ".alertDialog__confirm",
+        "style": {
+            "backgroundColor": "rgb(220, 38, 38)",
+            "borderColor": "rgb(255, 255, 255)",
+            "borderTopColor": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "color": "rgb(255, 255, 255)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(255, 255, 255)"
+        }
+    },
+    {
+        "name": "alert-dialog-cancel-light",
+        "selector": ".alertDialog__cancel",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(100, 116, 139)",
+            "borderTopColor": "rgb(100, 116, 139)",
+            "borderRadius": "6px",
+            "color": "rgb(30, 41, 59)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "alert-dialog-cancel-dark",
+        "selector": ".alertDialog__cancel",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(148, 163, 184)",
+            "borderTopColor": "rgb(148, 163, 184)",
+            "borderRadius": "6px",
+            "color": "rgb(241, 245, 249)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(34, 197, 94)"
+        }
+    },
+    {
+        "name": "drawer-focus-light",
+        "selector": ".drawer__trigger",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(15, 23, 42)",
+            "borderTopColor": "rgb(15, 23, 42)",
+            "borderRadius": "0px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "drawer-surface-light",
+        "selector": ".drawer__panel",
+        "style": {
+            "backgroundColor": "rgb(255, 255, 255)",
+            "borderColor": "rgb(226, 232, 240)",
+            "borderTopColor": "rgb(226, 232, 240)",
+            "borderRadius": "10px 0px 0px 10px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(15, 23, 42)"
+        }
+    },
+    {
+        "name": "drawer-surface-dark",
+        "selector": ".drawer__panel",
+        "style": {
+            "backgroundColor": "rgb(30, 41, 59)",
+            "borderColor": "rgb(30, 41, 59)",
+            "borderTopColor": "rgb(30, 41, 59)",
+            "borderRadius": "10px 0px 0px 10px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "sheet-focus-light",
+        "selector": ".sheet__trigger",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(15, 23, 42)",
+            "borderTopColor": "rgb(15, 23, 42)",
+            "borderRadius": "0px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "sheet-surface-light",
+        "selector": ".sheet__panel",
+        "style": {
+            "backgroundColor": "rgb(255, 255, 255)",
+            "borderColor": "rgb(226, 232, 240)",
+            "borderTopColor": "rgb(226, 232, 240)",
+            "borderRadius": "10px 10px 0px 0px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(15, 23, 42)"
+        }
+    },
+    {
+        "name": "sheet-surface-dark",
+        "selector": ".sheet__panel",
+        "style": {
+            "backgroundColor": "rgb(30, 41, 59)",
+            "borderColor": "rgb(30, 41, 59)",
+            "borderTopColor": "rgb(30, 41, 59)",
+            "borderRadius": "10px 10px 0px 0px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "sheet-handle-dark",
+        "selector": ".sheet__handle",
+        "style": {
+            "backgroundColor": "rgb(148, 163, 184)",
+            "borderColor": "rgb(248, 250, 252)",
+            "borderTopColor": "rgb(248, 250, 252)",
+            "borderRadius": "9999px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "tour-focus-light",
+        "selector": ".tour__trigger",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(15, 23, 42)",
+            "borderTopColor": "rgb(15, 23, 42)",
+            "borderRadius": "0px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(22, 163, 74)"
+        }
+    },
+    {
+        "name": "tour-surface-light",
+        "selector": ".tour__surface",
+        "style": {
+            "backgroundColor": "rgb(255, 255, 255)",
+            "borderColor": "rgb(226, 232, 240)",
+            "borderTopColor": "rgb(226, 232, 240)",
+            "borderRadius": "10px",
+            "color": "rgb(15, 23, 42)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(15, 23, 42)"
+        }
+    },
+    {
+        "name": "tour-surface-dark",
+        "selector": ".tour__surface",
+        "style": {
+            "backgroundColor": "rgb(30, 41, 59)",
+            "borderColor": "rgb(30, 41, 59)",
+            "borderTopColor": "rgb(30, 41, 59)",
+            "borderRadius": "10px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "tour-dot-inactive-dark",
+        "selector": ".tour__dot",
+        "style": {
+            "backgroundColor": "rgb(148, 163, 184)",
+            "borderColor": "rgb(248, 250, 252)",
+            "borderTopColor": "rgb(248, 250, 252)",
+            "borderRadius": "9999px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "tour-dot-current-dark",
+        "selector": ".tour__dot--current_true",
+        "style": {
+            "backgroundColor": "rgb(21, 128, 61)",
+            "borderColor": "rgb(248, 250, 252)",
+            "borderTopColor": "rgb(248, 250, 252)",
+            "borderRadius": "9999px",
+            "color": "rgb(248, 250, 252)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(248, 250, 252)"
+        }
+    },
+    {
+        "name": "tour-next-dark",
+        "selector": ".tour__next",
+        "style": {
+            "backgroundColor": "rgb(21, 128, 61)",
+            "borderColor": "rgb(255, 255, 255)",
+            "borderTopColor": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "color": "rgb(255, 255, 255)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(255, 255, 255)"
+        }
+    },
+    {
+        "name": "tour-back-dark",
+        "selector": ".tour__back",
+        "style": {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(148, 163, 184)",
+            "borderTopColor": "rgb(148, 163, 184)",
+            "borderRadius": "6px",
+            "color": "rgb(241, 245, 249)",
+            "outlineStyle": "none",
+            "outlineWidth": "3px",
+            "outlineColor": "rgb(241, 245, 249)"
+        }
+    }
+]

@@ -2,6 +2,7 @@ import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
 import { AlertDialog, } from "./alert-dialog";
+import { alertDialogRecipe, } from "./preset";
 
 describe("alert dialog composition", () => {
     test("renders a modal alertdialog with icon, copy and actions", () => {
@@ -75,5 +76,59 @@ describe("alert dialog composition", () => {
         const markup = renderToStaticMarkup(<AlertDialog title="Delete component?" data-testid="a" />);
 
         expect(markup).toContain(`data-testid="a"`);
+    });
+
+    // Pen Alert Dialog token contract: the trigger, close, cancel and confirm
+    // focus indicators resolve `focus/ring`, not the brand fill. The light role
+    // discriminates; dark is non-discriminating and is not claimed.
+    test("paints the shared focus ring role on the trigger, close, cancel and confirm", () => {
+        for ( const slot of [ "trigger", "close", "cancel", "confirm", ] ) {
+            expect(alertDialogRecipe.base?.[slot]).toMatchObject({
+                outlineColor: { _focusVisible: "semantic.focus.ring", },
+            });
+        }
+    });
+
+    // Pen Alert Dialog token contract: the modal surface resolves
+    // `surface/overlay` and the `border/subtle` structural boundary. Both
+    // discriminate in each theme.
+    test("resolves the modal surface roles", () => {
+        expect(alertDialogRecipe.base?.["surface"]).toMatchObject({
+            backgroundColor: "semantic.surface.overlay",
+            borderColor: "semantic.border.subtle",
+        });
+    });
+
+    // Pen Alert Dialog: the cancel action is the quieter secondary control
+    // (`action/secondary-*`). The dark border and hover discriminate; the light
+    // border discriminates (neutral.700 -> neutral.500).
+    test("resolves the secondary cancel action roles", () => {
+        expect(alertDialogRecipe.base?.["cancel"]).toMatchObject({
+            borderColor: "semantic.action.secondary.border",
+            color: "semantic.action.secondary.foreground",
+            backgroundColor: { _hover: "semantic.action.secondary.hover", },
+        });
+    });
+
+    // Pen Alert Dialog: the destructive confirm action resolves
+    // `action/danger-bg` + `action/danger-fg`. The dark pair discriminates
+    // (red.400 -> red.600 fill; red.950 -> white text); light fill is
+    // non-discriminating (red.600 both) and is not claimed.
+    test("resolves the destructive confirm action roles", () => {
+        expect(alertDialogRecipe.variants?.["destructive"]?.["true"]?.["confirm"]).toMatchObject({
+            backgroundColor: "semantic.action.danger.background",
+            color: "semantic.action.danger.foreground",
+        });
+    });
+
+    // Pen Alert Dialog: the named content roles (`text/primary`,
+    // `text/secondary`, `text/tertiary`) are value-equivalent to the previous
+    // common step ramp.
+    test("resolves the named text roles", () => {
+        expect(alertDialogRecipe.base?.["title"]).toMatchObject({ color: "semantic.text.primary", });
+        expect(alertDialogRecipe.base?.["description"]).toMatchObject({
+            color: "semantic.text.secondary",
+        });
+        expect(alertDialogRecipe.base?.["close"]).toMatchObject({ color: "semantic.text.tertiary", });
     });
 });

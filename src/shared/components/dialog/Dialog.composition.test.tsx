@@ -4,6 +4,7 @@ import { renderToStaticMarkup, } from "react-dom/server";
 import { Button, } from "@shared/components/button";
 
 import { Dialog, } from "./dialog";
+import { dialogRecipe, } from "./preset";
 
 describe("dialog composition", () => {
     test("renders a modal surface with a title, body and actions", () => {
@@ -82,5 +83,37 @@ describe("dialog composition", () => {
         const markup = renderToStaticMarkup(<Dialog title="Publish?" data-testid="d" />);
 
         expect(markup).toContain(`data-testid="d"`);
+    });
+
+    // Pen Dialog token contract: the trigger and close focus indicators resolve
+    // `focus/ring`, not the brand fill. The light role discriminates; dark is
+    // non-discriminating (brand.500.background and focus.ring both resolve
+    // green.500) and is not claimed.
+    test("paints the shared focus ring role on the trigger and close", () => {
+        for ( const slot of [ "trigger", "close", ] ) {
+            expect(dialogRecipe.base?.[slot]).toMatchObject({
+                outlineColor: { _focusVisible: "semantic.focus.ring", },
+            });
+        }
+    });
+
+    // Pen Dialog token contract: the modal surface resolves `surface/overlay`
+    // and the `border/subtle` structural boundary. Both discriminate in each
+    // theme (the old common.50.background / common.200.divider step ramp).
+    test("resolves the modal surface roles", () => {
+        expect(dialogRecipe.base?.["surface"]).toMatchObject({
+            backgroundColor: "semantic.surface.overlay",
+            borderColor: "semantic.border.subtle",
+        });
+    });
+
+    // Pen Dialog: the named content roles (`text/primary`, `text/secondary`,
+    // `text/tertiary`) are value-equivalent to the previous common step ramp.
+    test("resolves the named text roles", () => {
+        expect(dialogRecipe.base?.["title"]).toMatchObject({ color: "semantic.text.primary", });
+        expect(dialogRecipe.base?.["description"]).toMatchObject({
+            color: "semantic.text.secondary",
+        });
+        expect(dialogRecipe.base?.["close"]).toMatchObject({ color: "semantic.text.tertiary", });
     });
 });
