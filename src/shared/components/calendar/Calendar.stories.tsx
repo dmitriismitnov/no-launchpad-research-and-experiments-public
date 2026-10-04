@@ -66,6 +66,11 @@ type Story = StoryObj<typeof meta>;
 const cell = (canvasElement: HTMLElement, iso: string): HTMLButtonElement =>
     canvasElement.querySelector(`[data-date="${iso}"]`) as HTMLButtonElement;
 
+const tabStops = (canvasElement: HTMLElement): HTMLButtonElement[] =>
+    Array.from(canvasElement.querySelectorAll<HTMLButtonElement>(`[data-date][tabindex="0"]`));
+
+const disabledDates = (...days: number[]) => (date: Date) => days.includes(date.getDate());
+
 export const Playground: Story = {
     args: reference,
     render: renderIn("light"),
@@ -336,4 +341,196 @@ export const Dark: Story = {
     args: reference,
     render: renderIn("dark"),
     play: async (context) => assertThemeRoot(context, "rgb(2, 6, 23)"),
+};
+
+// --- Keyboard focus skips disabled days (B5 correction cycle 2/2) ---
+
+export const KeyboardSkipsDisabled: Story = {
+    args: {
+        defaultMonth: march,
+        defaultValue: day(16),
+        today,
+        weekStartsOn: 1,
+        isDateDisabled: disabledDates(17, 18),
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+
+        cell(canvasElement, "2025-03-16").focus();
+        await user.keyboard("{ArrowRight}");
+
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-19"));
+        await expect(cell(canvasElement, "2025-03-19").tabIndex).toBe(0);
+        await expect(cell(canvasElement, "2025-03-17").disabled).toBe(true);
+        await expect(cell(canvasElement, "2025-03-17").tabIndex).toBe(-1);
+        await expect(cell(canvasElement, "2025-03-18").disabled).toBe(true);
+        await expect(cell(canvasElement, "2025-03-18").tabIndex).toBe(-1);
+        await expect(tabStops(canvasElement).length).toBe(1);
+        await expect(tabStops(canvasElement)[0]).toBe(cell(canvasElement, "2025-03-19"));
+
+        await user.keyboard("{ArrowLeft}");
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-16"));
+        await expect(cell(canvasElement, "2025-03-16").tabIndex).toBe(0);
+    },
+};
+
+export const KeyboardVerticalSkip: Story = {
+    args: {
+        defaultMonth: march,
+        defaultValue: day(16),
+        today,
+        weekStartsOn: 1,
+        isDateDisabled: disabledDates(17, 23),
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+
+        // ArrowDown skips the disabled 23 and lands on the enabled 30.
+        cell(canvasElement, "2025-03-16").focus();
+        await user.keyboard("{ArrowDown}");
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-30"));
+        await expect(cell(canvasElement, "2025-03-30").tabIndex).toBe(0);
+        await expect(cell(canvasElement, "2025-03-23").disabled).toBe(true);
+        await expect(cell(canvasElement, "2025-03-23").tabIndex).toBe(-1);
+
+        // ArrowUp skips the disabled 17 and lands on the enabled 10.
+        cell(canvasElement, "2025-03-24").focus();
+        await user.keyboard("{ArrowUp}");
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-10"));
+        await expect(cell(canvasElement, "2025-03-10").tabIndex).toBe(0);
+        await expect(cell(canvasElement, "2025-03-17").disabled).toBe(true);
+        await expect(cell(canvasElement, "2025-03-17").tabIndex).toBe(-1);
+        await expect(tabStops(canvasElement).length).toBe(1);
+    },
+};
+
+export const KeyboardMinMax: Story = {
+    args: {
+        defaultMonth: march,
+        defaultValue: day(17),
+        today,
+        weekStartsOn: 1,
+        min: day(15),
+        max: day(20),
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+
+        cell(canvasElement, "2025-03-17").focus();
+        await user.keyboard("{ArrowLeft}{ArrowLeft}");
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-15"));
+
+        // ArrowLeft at the minimum: no enabled day exists to the left, so focus
+        // and the roving tab stop stay on the current day.
+        await user.keyboard("{ArrowLeft}");
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-15"));
+        await expect(cell(canvasElement, "2025-03-15").tabIndex).toBe(0);
+        await expect(cell(canvasElement, "2025-03-14").disabled).toBe(true);
+        await expect(cell(canvasElement, "2025-03-14").tabIndex).toBe(-1);
+        await expect(tabStops(canvasElement).length).toBe(1);
+
+        // ArrowRight at the maximum behaves the same way.
+        cell(canvasElement, "2025-03-20").focus();
+        await user.keyboard("{ArrowRight}");
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-20"));
+        await expect(cell(canvasElement, "2025-03-20").tabIndex).toBe(0);
+        await expect(cell(canvasElement, "2025-03-21").disabled).toBe(true);
+        await expect(cell(canvasElement, "2025-03-21").tabIndex).toBe(-1);
+    },
+};
+
+export const KeyboardHomeEnd: Story = {
+    args: {
+        defaultMonth: march,
+        defaultValue: day(13),
+        today,
+        weekStartsOn: 1,
+        isDateDisabled: disabledDates(10, 11, 15, 16),
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const user = userEvent.setup();
+
+        cell(canvasElement, "2025-03-13").focus();
+        await user.keyboard("{Home}");
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-12"));
+        await expect(cell(canvasElement, "2025-03-12").tabIndex).toBe(0);
+        await expect(cell(canvasElement, "2025-03-10").disabled).toBe(true);
+        await expect(cell(canvasElement, "2025-03-10").tabIndex).toBe(-1);
+        await expect(cell(canvasElement, "2025-03-11").tabIndex).toBe(-1);
+
+        await user.keyboard("{End}");
+        await expect(document.activeElement).toBe(cell(canvasElement, "2025-03-14"));
+        await expect(cell(canvasElement, "2025-03-14").tabIndex).toBe(0);
+        await expect(cell(canvasElement, "2025-03-15").tabIndex).toBe(-1);
+        await expect(cell(canvasElement, "2025-03-16").tabIndex).toBe(-1);
+        await expect(tabStops(canvasElement).length).toBe(1);
+    },
+};
+
+export const KeyboardNoEnabledCandidate: Story = {
+    args: {
+        defaultMonth: march,
+        defaultValue: day(16),
+        today,
+        weekStartsOn: 1,
+        isDateDisabled: () => true,
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const grid = canvasElement.querySelector(`[role="grid"]`) as HTMLElement;
+
+        await fireEvent.keyDown(grid, { key: "ArrowRight", });
+        await fireEvent.keyDown(grid, { key: "PageDown", });
+
+        await expect(within(canvasElement).getByText("March 2025")).toBeTruthy();
+        await expect(tabStops(canvasElement).length).toBe(0);
+        await expect(cell(canvasElement, "2025-03-16").tabIndex).toBe(-1);
+    },
+};
+
+export const InitialDisabledDefault: Story = {
+    args: {
+        defaultMonth: march,
+        defaultValue: day(20),
+        today,
+        weekStartsOn: 1,
+        isDateDisabled: disabledDates(20),
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const disabled = cell(canvasElement, "2025-03-20");
+        const stops = tabStops(canvasElement);
+
+        await expect(disabled.disabled).toBe(true);
+        await expect(disabled.tabIndex).toBe(-1);
+        await expect(stops.length).toBe(1);
+        await expect(stops[0]?.disabled).toBe(false);
+        await expect(stops[0]?.getAttribute("data-date")).toBe("2025-02-24");
+    },
+};
+
+export const InitialDisabledValue: Story = {
+    args: {
+        month: march,
+        value: day(20),
+        today,
+        weekStartsOn: 1,
+        isDateDisabled: disabledDates(20),
+    },
+    render: renderIn("light"),
+    play: async ({ canvasElement, }) => {
+        const disabled = cell(canvasElement, "2025-03-20");
+        const stops = tabStops(canvasElement);
+
+        await expect(disabled).toHaveAttribute("aria-selected", "true");
+        await expect(disabled.disabled).toBe(true);
+        await expect(disabled.tabIndex).toBe(-1);
+        await expect(stops.length).toBe(1);
+        await expect(stops[0]?.disabled).toBe(false);
+        await expect(stops[0]?.getAttribute("data-date")).toBe("2025-02-24");
+    },
 };

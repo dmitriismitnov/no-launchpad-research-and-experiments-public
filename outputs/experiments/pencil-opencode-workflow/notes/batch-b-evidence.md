@@ -1184,3 +1184,82 @@ Counts moved from the B4 shipped baseline (`0034ba5`): unit `738 → 742` (`+4`)
 | DatePicker invalid / hint `aria-describedby` association | **PASS** |
 | Both-theme selected / range / disabled captures | **PASS** (disabled contrast `DISABLED / REVIEW`) |
 | **B5 final status** | **PASS** — no unresolved `FAIL` / `BLOCKED` / Critical / Important finding; no new dependency, portal, locale/timezone, parser or past-date policy |
+
+## B5 correction — keyboard focus never lands on a disabled day (cycle 2/2)
+
+**Date:** 2026-10-04\
+**Base commit:** `695f755` (`feat(shared): support Calendar and DatePicker date ranges`).\
+**Correction plan (GPT systematic-debugging):** keyboard navigation computed a raw target and set `focusedDate` unconditionally, so a disabled day became the roving `tabIndex=0` cell and the native disabled control silently refused programmatic focus.\
+**Status:** **PASS**.\
+**Artifact:** `artifacts/batch-b/dates/b5-red-green.md` (correction cycle 2/2 section).
+
+### Root cause
+
+`handleKeyDown` computed the adjacent / edge / month date and `moveFocus` set `focusedDate(next)` without checking `isDisabled`. A disabled target then received the only `tabIndex={0}`, while `target.focus()` on the native disabled `<button>` did nothing; `2025-03-16` + `ArrowRight` with `17`/`18` disabled landed on disabled `17` and focus stayed on `16`.
+
+### Fix
+
+| # | Change |
+| --- | --- |
+| 1 | The single `isDisabled` (explicit `min` / `max` + `isDateDisabled`) moved before the state and is the only disabled source the resolvers use. |
+| 2 | `focusedDate` is nullable (`Date \| null`); `resolveInitialFocus` keeps an enabled anchor, else the first enabled day of the grid, else `null`. |
+| 3 | Finite resolvers: `findEnabled(from, step, 366)` for arrows, `findEnabledInWeek` for `Home`/`End`, `findEnabledInMonth` (nearest enabled, forward then backward) for `PageUp`/`PageDown`. |
+| 4 | No enabled candidate ⇒ the key is consumed (`preventDefault`) but focus and month are preserved. |
+| 5 | Defensive `moveFocus` and `onFocus`; `tabIndex={0}` only for the non-null focused enabled day. |
+
+No prop, type, barrel, recipe or other component changed; `CalendarDay` stays internal. `mise run gen` was not required.
+
+### Tests-first proof (RED → GREEN)
+
+Focused browser stories (Vitest + Playwright Chromium), `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/calendar/Calendar.stories.tsx` (new stories run test-first against the base `calendar.tsx`):
+
+| Field | Value |
+| --- | --- |
+| RED exit / result | `1` — `7 failed \| 19 passed (26)` |
+| RED failures | `Keyboard Skips Disabled`, `Keyboard Vertical Skip`, `Keyboard Min Max`, `Keyboard Home End`, `Keyboard No Enabled Candidate`, `Initial Disabled Default`, `Initial Disabled Value` |
+| GREEN exit / result | `0` — `26 passed (26)` |
+
+Focused unit / composition (Bun): `30 pass` / `0 fail` (`82 expect() calls`). Focused Calendar + DatePicker + DateInput regression: `3 passed` files, `44 passed (44)`.
+
+### Browser assertions added
+
+| Story | Assertion |
+| --- | --- |
+| `Keyboard Skips Disabled` | `16` → `ArrowRight` skips disabled `17`/`18` → `19` (`activeElement`, sole `tabindex="0"`); `17`/`18` native `disabled` + `tabIndex -1`; `ArrowLeft` back to `16`. |
+| `Keyboard Vertical Skip` | `16` → `ArrowDown` skips `23` → `30`; `24` → `ArrowUp` skips `17` → `10`. |
+| `Keyboard Min Max` | At `min` `15`, `ArrowLeft` stays; at `max` `20`, `ArrowRight` stays; the disabled neighbor keeps `tabIndex -1`. |
+| `Keyboard Home End` | `Home` skips leading disabled `10`/`11` → `12`; `End` skips trailing disabled `15`/`16` → `14`. |
+| `Keyboard No Enabled Candidate` | all days disabled: no month change, zero `tabindex="0"`. |
+| `Initial Disabled Default` / `Initial Disabled Value` | a disabled `defaultValue` / `value` `20` is `tabIndex -1`; the sole tab stop is enabled `2025-02-24`. |
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| focused browser RED | `1` | `7 failed \| 19 passed (26)` |
+| focused browser GREEN | `0` | `26 passed (26)` |
+| focused unit / composition | `0` | `30 pass` / `0 fail` |
+| focused browser regression (3 files) | `0` | `44 passed (44)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `742 pass / 0 fail` (90 files); browser `550 passed` (73 files) |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-_kX2xiic.css 219.62 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the B5 shipped baseline (`695f755`): browser `543 → 550` (`+7`); unit unchanged at `742`. `mise run check:deps` was intentionally not run (no dependency / export / barrel change).
+
+### Changed paths
+
+`src/shared/components/calendar/{calendar.tsx,Calendar.stories.tsx}`, this evidence and `artifacts/batch-b/dates/b5-red-green.md`. No API, preset, token, generated, dependency, Pen or other-component file was touched.
+
+### Disposition (cycle 2/2)
+
+| Row | Disposition |
+| --- | --- |
+| A disabled day can never be the roving `tabIndex=0` target | **PASS** |
+| `2025-03-16` `ArrowRight` skips disabled `17`/`18` to `19` | **PASS** |
+| `ArrowUp` / `ArrowDown` skip disabled cells | **PASS** |
+| `min` / `max` boundary movement preserves focus and month | **PASS** |
+| `Home` / `End` skip leading / trailing disabled in the week | **PASS** |
+| No enabled candidate preserves focus and month, no tab stop | **PASS** |
+| Initial disabled `defaultValue` / `value` starts on an enabled roving day | **PASS** |
+| Existing selection / range / cross-month / `Keyboard` stories green | **PASS** |
+| **B5 correction final status** | **PASS** |

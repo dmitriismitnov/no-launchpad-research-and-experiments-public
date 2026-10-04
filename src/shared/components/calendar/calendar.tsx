@@ -193,14 +193,90 @@ export const Calendar = (props: CalendarProps) => {
     const initialAnchor = isRange
         ? ( initialRange.start ?? initialRange.end )
         : ( ( initialValue as Date | null | undefined ) ?? undefined );
+
+    /**
+     * Единственный источник «день недоступен»: явные `min` / `max` и предикат
+     * `isDateDisabled`. Клавиатурные резолверы ниже ходят только через него,
+     * поэтому недоступный день никогда не станет переносимой целью фокуса.
+     */
+    const isDisabled = (date: Date): boolean => {
+        const isOutOfRange = ( minDate !== undefined && date < minDate )
+            || ( maxDate !== undefined && date > maxDate );
+
+        return isOutOfRange || isDateDisabled?.(date) === true;
+    };
+
+    /** Конечный предел поиска, чтобы резолвер не мог зациклиться. */
+    const MAX_FOCUS_STEPS = 366;
+
+    /**
+     * Первый доступный день от `from` с шагом `step` не более `limit` шагов.
+     * Возвращает `null`, когда доступного дня нет: тогда текущий фокус и
+     * месяц сохраняются.
+     */
+    const findEnabled = (from: Date, step: number, limit: number = MAX_FOCUS_STEPS): Date | null => {
+        let candidate = toDateOnly(from);
+
+        for ( let index = 0; index < limit; index += 1 ) {
+            if ( !isDisabled(candidate) ) {
+                return candidate;
+            }
+
+            candidate = addDays(candidate, step);
+        }
+
+        return null;
+    };
+
+    /** Доступный день внутри недели: вперёд от начала или назад от конца. */
+    const findEnabledInWeek = (weekStartDate: Date, forward: boolean): Date | null =>
+        forward
+            ? findEnabled(weekStartDate, 1, 7)
+            : findEnabled(addDays(weekStartDate, 6), -1, 7);
+
+    /**
+     * Ближайший доступный день внутри месяца якоря: сам якорь, иначе ближайший
+     * вперёд, иначе ближайший назад. Постраничный переход не выходит за
+     * пределы целевого месяца.
+     */
+    const findEnabledInMonth = (anchor: Date): Date | null => {
+        const monthStart = startOfMonth(anchor);
+        const daysInTarget = getDaysInMonth(monthStart);
+        const dayIndex = anchor.getDate() - 1;
+
+        return findEnabled(anchor, 1, daysInTarget - dayIndex)
+            ?? findEnabled(addDays(anchor, -1), -1, dayIndex);
+    };
+
+    const initialDisplayMonth = startOfMonth(month ?? defaultMonth ?? initialAnchor ?? todayDate);
+
+    /**
+     * Безопасный старт: якорь, если он доступен, иначе первый доступный день
+     * отображаемой сетки, иначе `null` — переносимого таба нет только когда
+     * недоступны все дни.
+     */
+    const resolveInitialFocus = (): Date | null => {
+        const preferred = toDateOnly(initialAnchor ?? todayDate);
+
+        if ( !isDisabled(preferred) ) {
+            return preferred;
+        }
+
+        const leading = ( initialDisplayMonth.getDay() - weekStart + 7 ) % 7;
+        const gridStart = addDays(initialDisplayMonth, -leading);
+        const totalCells = Math.ceil(( leading + getDaysInMonth(initialDisplayMonth) ) / 7) * 7;
+
+        return findEnabled(gridStart, 1, totalCells);
+    };
+
     const [ uncontrolledMonth, setUncontrolledMonth, ] = useState<Date>(
         () => startOfMonth(defaultMonth ?? initialAnchor ?? todayDate),
     );
     const [ uncontrolledValue, setUncontrolledValue, ] = useState<Date | DateRange | null>(
         () => defaultValue ?? null,
     );
-    const [ focusedDate, setFocusedDate, ] = useState<Date>(
-        () => toDateOnly(initialAnchor ?? todayDate),
+    const [ focusedDate, setFocusedDate, ] = useState<Date | null>(
+        () => resolveInitialFocus(),
     );
     const gridRef = useRef<HTMLDivElement>(null);
     const pendingFocusRef = useRef(false);
@@ -233,19 +309,16 @@ export const Calendar = (props: CalendarProps) => {
 
         pendingFocusRef.current = false;
 
+        if ( focusedDate === null ) {
+            return;
+        }
+
         const target = gridRef.current?.querySelector<HTMLButtonElement>(
             `[data-date="${formatIso(focusedDate)}"]`,
         );
 
         target?.focus();
     }, [ focusedDate, displayMonth, ]);
-
-    const isDisabled = (date: Date): boolean => {
-        const isOutOfRange = ( minDate !== undefined && date < minDate )
-            || ( maxDate !== undefined && date > maxDate );
-
-        return isOutOfRange || isDateDisabled?.(date) === true;
-    };
 
     const isSelected = (date: Date): boolean => {
         if ( isRange ) {
@@ -307,6 +380,14 @@ export const Calendar = (props: CalendarProps) => {
     };
 
     const moveFocus = (next: Date) => {
+        if ( isDisabled(next) ) {
+            return;
+        }
+
+        if ( focusedDate !== null && isSameDay(next, focusedDate) ) {
+            return;
+        }
+
         setFocusedDate(next);
 
         if ( !isSameMonth(next, displayMonth) ) {
@@ -323,43 +404,59 @@ export const Calendar = (props: CalendarProps) => {
             return;
         }
 
+        if ( focusedDate === null ) {
+            return;
+        }
+
         let next: Date | null = null;
+        let handled = false;
 
         switch ( event.key ) {
             case "ArrowRight":
-                next = addDays(focusedDate, 1);
+                handled = true;
+                next = findEnabled(addDays(focusedDate, 1), 1);
                 break;
             case "ArrowLeft":
-                next = addDays(focusedDate, -1);
+                handled = true;
+                next = findEnabled(addDays(focusedDate, -1), -1);
                 break;
             case "ArrowDown":
-                next = addDays(focusedDate, 7);
+                handled = true;
+                next = findEnabled(addDays(focusedDate, 7), 7);
                 break;
             case "ArrowUp":
-                next = addDays(focusedDate, -7);
+                handled = true;
+                next = findEnabled(addDays(focusedDate, -7), -7);
                 break;
             case "Home":
-                next = startOfWeek(focusedDate, weekStart);
+                handled = true;
+                next = findEnabledInWeek(startOfWeek(focusedDate, weekStart), true);
                 break;
             case "End":
-                next = addDays(startOfWeek(focusedDate, weekStart), 6);
+                handled = true;
+                next = findEnabledInWeek(startOfWeek(focusedDate, weekStart), false);
                 break;
             case "PageUp":
-                next = addMonths(focusedDate, -1);
+                handled = true;
+                next = findEnabledInMonth(addMonths(focusedDate, -1));
                 break;
             case "PageDown":
-                next = addMonths(focusedDate, 1);
+                handled = true;
+                next = findEnabledInMonth(addMonths(focusedDate, 1));
                 break;
             default:
                 break;
         }
 
-        if ( next === null ) {
+        if ( !handled ) {
             return;
         }
 
         event.preventDefault();
-        moveFocus(next);
+
+        if ( next !== null ) {
+            moveFocus(next);
+        }
     };
 
     return (
@@ -416,9 +513,13 @@ export const Calendar = (props: CalendarProps) => {
                                 inRange={isInRange(date)}
                                 outsideMonth={!isSameMonth(date, displayMonth)}
                                 disabled={isDisabled(date)}
-                                tabIndex={isSameDay(date, focusedDate) ? 0 : -1}
+                                tabIndex={focusedDate !== null && isSameDay(date, focusedDate) ? 0 : -1}
                                 onSelect={selectDate}
-                                onFocus={() => setFocusedDate(date)}
+                                onFocus={() => {
+                                    if ( !isDisabled(date) ) {
+                                        setFocusedDate(date);
+                                    }
+                                }}
                             />
                         ))}
                     </div>
