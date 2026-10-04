@@ -41,8 +41,9 @@ describe("tag composition", () => {
     // Pen `UyMqu` / `QIUyy` token contract: the chip is the raised surface with
     // the functional boundary role and a hover surface; the label reads the
     // secondary text role and the remove control the tertiary role. Surface and
-    // hover are discriminating light values; border/label/close are value-equal
-    // role renames (regression, asserted not claimed as RED).
+    // hover are discriminating light values; the boundary is light-value-equal
+    // but discriminates in dark; label/close are value-equal role renames
+    // (regression, asserted not claimed as RED).
     test("paints the chip surface, boundary and hover roles", () => {
         const root = tagRecipe.base?.["root"] as Record<string, unknown> | undefined;
 

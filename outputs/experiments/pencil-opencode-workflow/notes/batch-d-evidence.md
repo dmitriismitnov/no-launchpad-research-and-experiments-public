@@ -39,7 +39,7 @@ Recipe/token-role corrections plus regression stories for five passive atoms, un
 | Avatar | icon fallback / stacked group / disabled-hover-focus / initials-as-text | documented | **BLOCKED** (ledger below) |
 | Tag | surface | raised surface role | **PASS** — `semantic.surface.raised`; light `rgb(255, 255, 255)` |
 | Tag | hover surface | state contract lists hover | **PASS (recipe-level)** — `_hover: semantic.surface.hover`; not browser-claimed (headless `:hover`; Batch C INFO) |
-| Tag | boundary | functional boundary `border/strong` | **PASS (regression)** — value-equal to prior `common/50/border.strong`; asserted not claimed RED |
+| Tag | boundary | functional boundary `border/strong` | **PASS** — light-value-equal to prior `common/50/border.strong` (`neutral.500`); **discriminates in dark** (`common/50/border.strong` = `neutral.500` both themes vs `border/strong` = `neutral.400` dark) |
 | Tag | label | muted foreground role | **PASS (regression)** — `semantic.text.secondary`; value-equal, asserted not claimed RED |
 | Tag | close | tertiary foreground role | **PASS (regression)** — `semantic.text.tertiary`; value-equal, asserted not claimed RED |
 | Tag | close focus ring | not Pen-proven | **INFO** — left `semantic.brand.500.background`, unchanged |
@@ -73,7 +73,7 @@ RED was observed after adding the focused assertions and before the recipe edits
 | RED failures | status indicator `paints the dot and label token roles`; avatar `paints the presence dot and its outline from the role tokens`; tag `paints the chip surface, boundary and hover roles`; tag `paints the label and close roles` | |
 | GREEN | `0` | `27 pass` / `0 fail` (27 tests, 5 files, 64 expect calls) |
 
-True RED (light value discriminates): the StatusIndicator step-700 and `border/strong` dots, the Avatar presence dot + `surface/raised` outline, and the Tag `surface/raised` + hover surface. The Tag label/close/boundary and the StatusIndicator label are value-equal role renames: asserted, but **not claimed as RED** (no light-value discriminator — e.g. Tag label `common/700/background` and `text/secondary` both resolve `neutral.700` light / `neutral.300` dark). Badge and Divider assertions passed on the pre-change recipe (pure regression).
+True RED (light value discriminates): the StatusIndicator step-700 and `border/strong` dots, the Avatar presence dot + `surface/raised` outline, and the Tag `surface/raised` + hover surface. The Tag label/close and the StatusIndicator label are value-equal role renames: asserted, but **not claimed as RED** (no light-value discriminator — e.g. Tag label `common/700/background` and `text/secondary` both resolve `neutral.700` light / `neutral.300` dark). The Tag **boundary** is light-value-equal only and **discriminates in dark** (`common/50/border.strong` `neutral.500` both themes vs `border/strong` `neutral.400` dark), so the dark `Surface Tokens` RED is attributable to both the surface and the boundary. Badge and Divider assertions passed on the pre-change recipe (pure regression).
 
 ### Browser stories (Vitest + Playwright Chromium)
 
@@ -194,5 +194,19 @@ StatusIndicator, Badge and Divider report `No FAIL or DISABLED rows` in their Pe
 - **INFO — Avatar presence outline.** The `surface/raised` outline against `brand/100` resolves 1.10 light / 1.96 dark; Pen classifies it as a decorative boundary (INFO), not a functional one.
 - **INFO — StatusIndicator brand tone.** Kept from the prior slice; Pen documents `positive · warning · negative · neutral · inactive`, so `brand` is an explicit extension.
 - **INFO — Badge / Divider "no change".** Their recipes already matched the documented pairs; this slice adds both-theme regression coverage and role-naming doc comments only.
-- **INFO — Tag boundary.** `border/strong` is value-equal to the prior `common/50/border.strong` (both `neutral.500` light / `neutral.400` dark) and is recorded as a role-name correction, not a visual RED.
+- **INFO — Tag boundary.** `border/strong` is light-value-equal to the prior `common/50/border.strong` (`neutral.500`); it **discriminates in dark** (`common/50/border.strong` = `neutral.500` both themes vs `border/strong` = `neutral.400` dark). Recorded as a role correction; the dark `Surface Tokens` RED covers both surface and boundary.
 - The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.
+
+## D1 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `0d40feb9d09841e9d9bf1e0bc662c4748db042b3` vs parent `ac24dee`.
+**Verdict:** **APPROVED** (code) — one Important evidence-accuracy defect, corrected here (documentation/comments only).
+
+- StatusIndicator dot roles, Avatar presence dot+outline, Tag root/hover/label/close/boundary verified; Tag close focus ring untouched; Badge/Divider comment-only + regression; no component `.tsx`/`index.ts`/`panda.config.ts`/foundation/generated change; scope clean; Pen unchanged.
+- TDD: composition RED independently reproduced (`4 fail / 23 pass` against parent); true RED only for light-discriminating roles; value-equal renames stated as regression; no RED for blocked axes.
+- BLOCKED rows recorded; `DISABLED / REVIEW` ratios real (all 17 reproduce).
+- Reviewer confirmed Badge needs no production change (its missing appearance/outline axis is BLOCKED) and Divider `common.200.divider` is correct.
+
+**Important (corrected):** the Tag **boundary** was described as value-equal in both themes, but `common/50/border.strong` = `neutral.500` both themes while `border/strong` = `neutral.500` light / `neutral.400` dark — so the boundary discriminates in dark. Evidence and the `Tag.stories.tsx` / `Tag.composition.test.tsx` comments were corrected; no production change.
+
+**Minor (recorded):** (1) one Pen-audit disabled ratio (`9.45/13.44`) does not reproduce against code foundation (`8.32/13.97`); row stays `DISABLED / REVIEW`, never PASS; (2) composition RED is role-name-level while "value RED" is light-value-level — wording clarified; (3) StatusIndicator neutral dot discriminates in light only; (4) per-file `ThemeShell` scaffolding duplicated (consistent with repo pattern).

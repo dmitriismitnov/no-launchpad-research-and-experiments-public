@@ -53,8 +53,9 @@ const ThemeShell = ({ theme, children, }: { theme: "light" | "dark"; children: R
 
 // Pen `UyMqu` / `QIUyy` token contract: the chip is `surface/raised` with the
 // functional `border/strong` boundary; the label reads `text/secondary` and the
-// remove control `text/tertiary`. Surface and boundary are the discriminating
-// light values; border/label/close are value-equal role renames, covered as
+// remove control `text/tertiary`. Surface is a discriminating light value; the
+// boundary is light-value-equal but discriminates in dark; label/close are
+// value-equal role renames, covered as
 // regression. The hover surface is documented at recipe level only — headless
 // Chromium does not apply `:hover` (Batch C INFO).
 const surfaceColour = { light: "rgb(255, 255, 255)", dark: "rgb(15, 23, 42)", } as const;
