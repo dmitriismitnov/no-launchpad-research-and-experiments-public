@@ -296,7 +296,7 @@ Real keyboard focus-visible styling and the disabled surface are asserted in bot
 | focused browser RED | `1` | `10 failed \| 17 passed (27)` |
 | focused browser GREEN | `0` | `27 passed (27)` |
 | `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `687 pass / 0 fail` (90 files); browser `422 passed` (73 files) |
-| `mise run check:deps` | `1` | **BLOCKED (pre-existing, out of B1 scope)** — `Unlisted dependencies @pandacss/node src/shared/styles/panda-static-css.test.ts:6:53`, introduced by the Batch B0 static-CSS test and reproduced at HEAD with the B1 diff stashed. B1's own `ToggleGroupSelectionMode` unused-export finding was fixed. |
+| `mise run check:deps` | `1` | **BLOCKED (pre-existing, out of B1 scope; RESOLVED at final verification)** — `Unlisted dependencies @pandacss/node src/shared/styles/panda-static-css.test.ts:6:53`, introduced by the Batch B0 static-CSS test and reproduced at HEAD with the B1 diff stashed. B1's own `ToggleGroupSelectionMode` unused-export finding was fixed. **Resolved by `0709208`** (`build(deps): declare @pandacss/node as a direct devDependency`); the final `mise run check:deps` exits `0` with no findings (see the B2 command table and the final verification). |
 | `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-RgfOP5jp.css 213.78 kB` |
 
 Counts moved from the Batch B0 shipped baseline (`53c9aa7`): unit `676 → 687` (`+11`), browser `408 → 422` (`+14`).
@@ -319,7 +319,7 @@ Counts moved from the Batch B0 shipped baseline (`53c9aa7`): unit `676 → 687` 
 | Label-less icon + non-empty accessible name contract (compile time and runtime) | **PASS** (cycle 2) |
 | ToggleGroup disabled selected segment paints the disabled surface | **PASS** (cycle 2) |
 | Disabled contrast | `DISABLED / REVIEW` (both themes) |
-| `mise run check:deps` pre-existing `@pandacss/node` finding | **BLOCKED (out of scope)** — needs a dependency/Knip-config decision owned by the B0 static-CSS slice, not B1 |
+| `mise run check:deps` pre-existing `@pandacss/node` finding | **RESOLVED** — was `BLOCKED (out of scope)`, needing a dependency/Knip-config decision owned by the B0 static-CSS slice, not B1; resolved by `0709208` with the final `mise run check:deps` exiting `0`, no findings |
 | **B1 final status** | **PASS** for the action enumeration/API slice; the only blocker is the pre-existing, out-of-scope Knip finding |
 
 ## B1 correction — selection, icon contract, disabled surface, browser proof (cycle 2/2)
@@ -1093,7 +1093,8 @@ RED was produced by temporarily restoring the legacy `48px` row estimate in `sel
 **Pen source (read-only):** `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen` — SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes (unchanged; re-verified after the read-only queries).\
 **Base commit:** `0034ba5` (`test(shared): assert exact and physical Select popup flip placement`).\
 **Method:** Pencil MCP `execute` read-only `Get`/`Print` (`get_app_state` confirmed `ex_2.pen` as the active editor; no mutation), focused Bun composition tests and Vitest + Playwright Chromium story tests.\
-**Evidence artifact:** `artifacts/batch-b/dates/b5-red-green.md`.
+**Evidence artifact:** `artifacts/batch-b/dates/b5-red-green.md`.\
+**Owner paths:** `src/shared/components/{date-input,calendar,date-picker}/`.
 
 ### Pen enumeration gate (B5)
 
@@ -1142,10 +1143,13 @@ Focused browser stories (Vitest + Playwright Chromium):
 
 | Contract | Light | Dark |
 | --- | --- | --- |
+| DateInput field (empty / filled / focus-visible / invalid / disabled) | `EmptyState` → surface `rgb(248, 250, 252)`, border `rgb(100, 116, 139)`, value `rgb(15, 23, 42)`; `FilledState` → value `rgb(15, 23, 42)`; `FocusVisible` → outline `2px` `rgb(34, 197, 94)`; `InvalidState` → border + error `rgb(220, 38, 38)`; `DisabledState` → surface `rgb(241, 245, 249)`, fg `rgb(148, 163, 184)` | `DarkEmptyState` → surface `rgb(2, 6, 23)`, border `rgb(100, 116, 139)`, value `rgb(248, 250, 252)`; `DarkFilledState` → value `rgb(248, 250, 252)`; `DarkFocusVisible` → outline `2px` `rgb(34, 197, 94)`; `DarkInvalidState` → border + error `rgb(248, 113, 113)`; `DarkDisabledState` → surface `rgb(15, 23, 42)`, fg `rgb(71, 85, 105)` |
 | Calendar selected day bg | `Selected Colors` → `rgb(21, 128, 61)` | `Dark Selected Colors` → `rgb(134, 239, 172)` |
 | Calendar range span bg | `Range Colors` → `rgb(220, 252, 231)` | `Dark Range Colors` → `rgb(20, 83, 45)` |
 | Calendar disabled day text | `Disabled Days` → `rgb(148, 163, 184)` (`disabled`, `aria-disabled`) | `Dark Disabled Days` → `rgb(71, 85, 105)` |
 | DatePicker disabled field / value | `Disabled Surface` → `rgb(241, 245, 249)` / `rgb(148, 163, 184)` | `Dark Disabled Surface` → `rgb(15, 23, 42)` / `rgb(71, 85, 105)` |
+
+The DateInput row is a verification/spec-lock capture: the ten stories (`Empty`/`Filled`/`FocusVisible`/`Invalid`/`Disabled`, each light + dark) were written against the already-shipped `dateInput` recipe and passed on the first run, so no behaviour RED was fabricated. The calendar glyph is asserted decorative (`aria-hidden="true"`); no parser, formatter, locale or timezone behaviour is claimed.
 
 Disabled contrast remains `DISABLED / REVIEW` (computed style recorded, never `PASS`).
 
@@ -1353,9 +1357,9 @@ Counts moved from the cycle-2 shipped baseline (`b6127cc`): browser `550 → 552
 | Pin Input | `K8gNTw` content + accessibility | typing advances / Backspace steps back; full-code paste; `znfZu` "One accessible input for the whole code where possible."; `X856Z2` "Announce how many characters remain."; "Never rely on colour alone for the filled state." | **PASS** — single input + active-cell marker; polite remaining region; the digit is the non-colour filled state. `znfZu` is **PASS**, not `BLOCKED` |
 | File Upload | `YxCMD` → `pikCU` | named parts `root · dropzone · icon · instruction · accepted types · file row · progress · remove`; `single · multiple, drag active, uploading, error`; `default · drag active · uploading · complete · error · disabled` | **PASS for the visual projection** — external `status`/`progress`/`fileName`/`statusMessage`; no transport/retry/parsing/files-array/remove API |
 | File Upload | `pikCU` accessibility | `m0JpkI` keyboard reachable/activatable; `ZorBH` "Progress changes are announced."; `S6563z` "Error rows explain the reason in text." | **PASS** — native input focus ring; `role="progressbar"` with `aria-valuenow/min/max`; negative border + text reason |
-| Color Picker | `Ecy07` + `vUOIa` → `RLmkc` | named parts `root · swatch · trigger · popup · palette grid · value field · opacity`; `swatch · trigger, with palette, with value field, invalid`; `default · focus-visible · invalid · disabled` | **PASS** — no public API change; `Color Popup` stays private |
+| Color Picker | `Ecy07` + `vUOIa` → `RLmkc` | named parts `root · swatch · trigger · popup · palette grid · value field · opacity`; `swatch · trigger, with palette, with value field, invalid`; `default · focus-visible · invalid · disabled` | **PASS** for the implemented swatch/trigger/popup axes — no public API change; `Color Popup` stays private. **BLOCKED**: `value field`, `opacity` (Pen names both; no specimen; not implemented) |
 | Color Picker | `RLmkc` selected/open | selected indicator stroke 2 + `text/primary` (`WHWWK`); open specimen `Al6Ac` (`cp2`) resolves `E8X0Qf` `Chevron rot=180` | **PASS** — 2px `text/primary` selected stroke; 180° chevron while open |
-| Rating | `qIRY3` → `PxfEf` | named parts `root · icon row · filled icon · empty icon · value label`; `interactive · read-only, sizes, with value label` | **PASS (regression only)** — untouched |
+| Rating | `qIRY3` → `PxfEf` | named parts `root · icon row · filled icon · empty icon · value label`; `interactive · read-only, sizes, with value label` | **PASS (regression only)** for the semantics/value-label axes — untouched. **BLOCKED**: `sizes` (Pen names it; no size specimen; the existing `size` prop stays **HUMAN REVIEW**) |
 | Rating | `PxfEf` accessibility | `IVyo2` score + maximum; `uCV9n` arrow keys; `z94Ii` read-only is text, not controls | **PASS (regression only)** |
 | Editable | `zoEMh` → `RN3EO` | named parts `root · read view · edit view · affordance icon · confirm and cancel`; `text, with affordance, multiline, saving`; `read · hover · edit · focus-visible · saving · disabled` | **PASS** — Confirm/Cancel + `saving`; `multiline` out of scope |
 | Editable | `RN3EO` content + accessibility | `Uo19r` Enter confirms / Escape cancels; `LiBiT` affordance on hover and focus; `y6mZ4` saving keeps the field + progress; `WLTIp`/`DRJ0l`/`XrUb6` read view focusable, edit view labelled, Confirm/Cancel keyboard reachable | **PASS** |
@@ -1435,10 +1439,13 @@ Counts moved from the B5 shipped baseline (`3ac4a70`): unit `742 → 753` (`+11`
 | FileUpload keyboard activation (`m0JpkI`) | **PASS** (regression) |
 | ColorPicker selected 2px `text/primary` (`WHWWK`) + chevron 180° (`E8X0Qf`) | **PASS** |
 | ColorPicker `Color Popup` stays private, no API change | **PASS** |
+| ColorPicker `value field` | **BLOCKED** — Pen `RLmkc` names it; no specimen renders a value field and none is implemented |
+| ColorPicker `opacity` | **BLOCKED** — Pen `RLmkc` names it; no specimen renders an opacity control and none is exposed |
 | Rating documented semantics | **PASS** (regression only) |
+| Rating `sizes` | **BLOCKED** — Pen `PxfEf` names it; no size specimen exists; the existing `size` prop remains **HUMAN REVIEW** |
 | Editable Confirm/Cancel (`XrUb6`) + `saving` (`y6mZ4`) + affordance (`LiBiT`) | **PASS** |
 | Disabled contrast (all five owners) | `DISABLED / REVIEW` (both themes) |
-| **B6 final status** | **PASS** — no unresolved `FAIL` / `BLOCKED` / Critical / Important finding; `znfZu` is resolved as the approved single-input projection |
+| **B6 final status** | **PASS** — no unresolved `FAIL` / Critical / Important finding; `znfZu` is resolved as the approved single-input projection; the `value field` / `opacity` / `sizes` axes are explicit scope `BLOCKED` rows with no speculative API |
 
 ## B6 correction — caret sync, single error, geometry proof, positioned root (cycle 2/2)
 
@@ -1517,3 +1524,120 @@ Counts moved from the cycle-1 B6 baseline (`976d7da`): unit `753 → 754` (`+1`)
 | FileUpload unit RED count verified as the original `3 fail` / `9 pass` (M4 recomputation retracted) | **PASS** |
 | Disabled contrast (all five owners) | `DISABLED / REVIEW` (both themes) |
 | **B6 correction final status** | **PASS** |
+
+## Batch B final verification (verifier: DeepSeek v4.1 Flash)
+
+**Verified at:** `0de0427` (`docs(shared): retract incorrect B6 FileUpload RED reconciliation`).
+**Commit range:** plan base `6e3b000` (`docs: plan Pen migration Batch B`) → `0de0427`; 18 commits (`b81a080..0de0427`).
+**Pen read-only:** `artifacts/ex_2.pen` SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes; `git diff --quiet 6e3b000..HEAD -- …/ex_2.pen` exit `0` (unchanged).
+**Worktree:** no modified tracked source/test/story/preset/token/Pen/generated/dependency files. The only untracked entries are the pre-existing `outputs/shared/notes/*.md` and a `.swp` file, all outside Batch B. This appended section is the verifier's only change (not committed by the verifier).
+
+### Command results (exact)
+
+| # | Command | Exit | Result |
+| --- | --- | --- | --- |
+| 1 | `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| 2 | focused owner unit suites (7 commands, table below) | `0` | `336 pass` / `0 fail`, `26 files` |
+| 3 | focused owner browser stories (23 `.stories.tsx`) | `0` | `23 passed` files, `367 passed (367)` |
+| 4 | `mise run check` | `0` | lint + types + format clean; `✓ icons up to date (38 icons)`; `✓ web fonts up to date (2 faces)`; unit `754 pass / 0 fail` (90 files, `4011 expect()`); browser `582 passed` (73 files) |
+| 5 | `mise run check:deps` | `0` | Knip, no findings |
+| 6 | `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-wuFLA87z.css 223.53 kB`; `dist/assets/index-kXXv07pu.js 273.13 kB` |
+| 7 | `git diff --check` (worktree) | `0` | clean |
+| 8 | `git diff --check 6e3b000..0de0427` | `0` | clean |
+
+Focused owner unit suites (`bun test`, each exit `0`):
+
+| Slice | Files | Result |
+| --- | --- | --- |
+| B0 | `button/{Button.test.ts,Button.composition.test.tsx}`, `button-icon/{ButtonIcon.test.ts,ButtonIcon.composition.test.tsx}` | `61 pass` / `0 fail`, `241 expect()` |
+| B1 | `toggle/Toggle.composition.test.tsx`, `toggle-group/ToggleGroup.composition.test.tsx` | `32 pass` / `0 fail`, `73 expect()` |
+| B2 | `input/{Input.test.ts,Input.composition.test.tsx}`, `textarea`, `number-input`, `field` | `70 pass` / `0 fail`, `238 expect()` |
+| B3 | `checkbox`, `radio`, `radio-group`, `switch`, `slider` composition | `61 pass` / `0 fail`, `169 expect()` |
+| B4 | `select/Select.composition.test.tsx`, `multi-select/MultiSelect.composition.test.tsx` | `30 pass` / `0 fail`, `87 expect()` |
+| B5 | `date-input`, `calendar`, `date-picker` composition | `30 pass` / `0 fail`, `82 expect()` |
+| B6 | `pin-input`, `file-upload`, `color-picker`, `rating`, `editable` composition | `52 pass` / `0 fail`, `163 expect()` |
+
+### Owner / row audit
+
+Required fields: Pen master + documentation frame, public-variant/state transcription, owner path, focused RED→GREEN, both-theme story evidence, disposition row.
+
+| Slice | Owner (Pen master → doc frame) | Transcription | Owner path | RED→GREEN | Both-theme | Disposition |
+| --- | --- | --- | --- | --- | --- | --- |
+| B0 | Button `IcuBw` → `vW8MG` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B0 | ButtonIcon `L72UAx` → `L2cyL` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B1 | Toggle `gkK5e` → `MApo8` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B1 | ToggleGroup `e5ySA` → `OHpCJ` (+ `yqYp1`) | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B2 | Input `dO8tX` → `VSh2R` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B2 | Textarea `w6oNZ7` → `N0ymEX` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B2 | NumberInput `EZfrL` → `oTL4D` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B2 | Field `pHfEy` → `c6uIoT` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B3 | Checkbox `e2q2z` → `RB6lx` | ✓ | ✓ | GREEN only (no RED) | ✓ | ✓ |
+| B3 | Radio `UrFJz` → `BRhSj` | ✓ | ✓ (atomic) | GREEN only | via RadioGroup | ✓ |
+| B3 | RadioGroup `IENTK` → `BRhSj` | ✓ | ✓ | GREEN only (no RED) | ✓ | ✓ |
+| B3 | Switch `BQvnn` → `gHtWp` | ✓ | ✓ | GREEN only (no RED) | ✓ | ✓ |
+| B3 | Slider `z57yzW` → `lLkUG` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B4 | Select `tOLtR` → `vMd62` (Option `GjzX0`, Popup `aXD61` private) | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B4 | MultiSelect `f985P` → `jZrkt` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B5 | DateInput `ivx6N` → `dW2kV` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B5 | Calendar `zh2sP` (+ CalendarDay `oKLr9`) → `qPx25` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B5 | DatePicker `bpCbJ` → `qPx25` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B6 | PinInput `E3ZhdP` → `K8gNTw` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B6 | FileUpload `YxCMD` → `pikCU` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B6 | ColorPicker `Ecy07` + `UOIa` → `RLmkc` | ✓ | ✓ | ✓ | ✓ | ✓ (`value field`/`opacity` **BLOCKED**) |
+| B6 | Rating `qIRY3` → `PxfEf` | ✓ | ✓ | GREEN only | ✓ | ✓ (`sizes` **BLOCKED**; `size` prop **HUMAN REVIEW**) |
+| B6 | Editable `zoEMh` → `RN3EO` | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+No literal `FAIL`, `Critical`, or `Important` disposition exists anywhere in the file. `HUMAN REVIEW` appears only in the status legend (line 7) and where the Rating `size` prop is explicitly recorded as an open scope decision (the B6 gate row, disposition row, audit row and gap note); no unresolved `FAIL` / `Critical` / `Important` finding exists.
+
+### Gaps and notes (verifier)
+
+1. **Stale `BLOCKED` resolved.** The B1 rows (lines 299, 322) record `mise run check:deps` as `BLOCKED (out of scope)` for the `@pandacss/node` Knip finding. That finding was resolved by `0709208` and the final `mise run check:deps` exits `0` with no findings. No unresolved blocker remains.
+2. **Accepted design-decision `BLOCKED` rows (user-scope, no API shipped).** B2: Input `size`, Input `valid` visual, NumberInput `size`, Textarea `auto-grow`, Field `label placement`. B3: Switch `size`, Slider `range`/`ticks`/numeric fallback. These are the documented unapproved design decisions; no speculative API was added.
+3. **B5 owner field.** **Closed.** B5 now carries an explicit `Owner paths: \`src/shared/components/{date-input,calendar,date-picker}/\`` line (matching B2–B4 and B6).
+4. **DateInput both-theme capture.** **Closed.** B5's both-theme table now has a dedicated DateInput row; `DateInput.stories.tsx` gains ten light/dark computed-style stories (empty, filled, focus-visible, invalid, disabled) that passed against the shipped recipe as verification/spec-lock coverage (no fabricated RED).
+5. **B3 no-RED rows.** Checkbox, Radio, RadioGroup and Switch composition assertions passed on the first run (documented as pre-existing-implemented regression coverage); only Slider produced a real RED. Recorded honestly, not hidden.
+6. **B6 un-dispositioned axes.** **Closed.** The B6 disposition table now carries explicit rows: ColorPicker `value field` **BLOCKED**, ColorPicker `opacity` **BLOCKED**, Rating `sizes` **BLOCKED** (Pen names them; no specimen/no implementation), with the existing Rating `size` prop recorded as **HUMAN REVIEW**.
+7. **Disabled contrast** remains `DISABLED / REVIEW` (never `PASS`) for every owner, as required.
+
+### Verdict
+
+**Overall Batch B: COMPLETE.** `mise run gen`, all seven focused unit suites, the 23 focused browser story files, `mise run check`, `mise run check:deps`, `mise run build`, and `git diff --check` (worktree and `6e3b000..0de0427`) all exit `0`; the Pen source is byte-identical. The only unresolved `BLOCKED` rows are the documented user design-decision scopes in B2/B3; the B1 `check:deps` blocker is stale and resolved. The gaps above are evidence-completeness caveats, not failing product behavior.
+
+## Batch B evidence-completeness closure (builder pass)
+
+**Scope:** test/evidence only. No component runtime, public API, preset, token, Pen, generated config or dependency was changed. `mise run gen` was not required (no preset changed).
+
+### Gaps closed
+
+| # | Gap (from the final verification) | Closure |
+| --- | --- | --- |
+| 1 | DateInput had no dedicated light/dark computed-style capture | `src/shared/components/date-input/DateInput.stories.tsx` gains ten browser stories covering the documented Pen `ivx6N` states (empty, filled, focus-visible, invalid, disabled), each in light and dark |
+| 2 | B5 had no explicit owner field | Added the explicit `Owner paths:` line (`src/shared/components/{date-input,calendar,date-picker}/`) to the B5 section |
+| 3 | B6 `value field` / `opacity` / `sizes` were un-dispositioned | Added explicit disposition rows: ColorPicker `value field` **BLOCKED**, ColorPicker `opacity` **BLOCKED**, Rating `sizes` **BLOCKED** (existing `size` prop stays **HUMAN REVIEW**) |
+| 4 | B1 `check:deps` `BLOCKED` rows were stale | Annotated both B1 rows as resolved by `0709208` (final `mise run check:deps` exits `0`, no findings) |
+
+### DateInput spec-lock stories (no fabricated RED)
+
+The ten stories were written against the already-shipped `dateInput` recipe and **passed on the first run**; they are verification/spec-lock coverage, not a behaviour RED, and no RED is claimed. No DateInput state diverged from the Pen fact, so no component code was touched.
+
+| Story (theme) | Assertion | Observed |
+| --- | --- | --- |
+| `EmptyState` / `DarkEmptyState` | 40px (`x20`) field, `surface/raised`, `border/strong`, empty value `text/primary`, muted placeholder, decorative calendar glyph | light surface `rgb(248, 250, 252)`, border `rgb(100, 116, 139)`, value `rgb(15, 23, 42)`, placeholder `rgb(100, 116, 139)`; dark surface `rgb(2, 6, 23)`, border `rgb(100, 116, 139)`, value `rgb(248, 250, 252)`; glyph `aria-hidden="true"` |
+| `FilledState` / `DarkFilledState` | filled value reads `text/primary` | light `rgb(15, 23, 42)`; dark `rgb(248, 250, 252)` |
+| `FocusVisible` / `DarkFocusVisible` | real focus paints the shared `brand.500.background` focus ring | outline `solid` / `2px` / `rgb(34, 197, 94)` in both themes |
+| `InvalidState` / `DarkInvalidState` | `feedback/negative-border` + negative error text; `aria-invalid="true"` | light border + error `rgb(220, 38, 38)`; dark `rgb(248, 113, 113)` |
+| `DisabledState` / `DarkDisabledState` | `action/disabled-bg` / `action/disabled-fg` on control, input, icon and label; native `disabled`, `not-allowed` cursor | light surface `rgb(241, 245, 249)`, fg `rgb(148, 163, 184)`; dark surface `rgb(15, 23, 42)`, fg `rgb(71, 85, 105)` |
+
+### Command results (closure pass)
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| focused browser `vitest run … src/shared/components/date-input/DateInput.stories.tsx` | `0` | `1 passed` file, `16 passed (16)` |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `754 pass / 0 fail` (90 files, `4011 expect() calls`); browser `592 passed` (73 files) |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the final-verification baseline: browser `582 → 592` (`+10`, the ten DateInput stories); unit unchanged at `754`.
+
+### Changed paths (closure pass)
+
+`src/shared/components/date-input/DateInput.stories.tsx`, this evidence. No other file was touched.

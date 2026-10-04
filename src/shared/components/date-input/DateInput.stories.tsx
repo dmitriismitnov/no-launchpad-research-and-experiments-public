@@ -130,3 +130,187 @@ export const Dark: Story = {
     render: renderIn("dark"),
     play: async (context) => assertThemeControl(context, "rgb(2, 6, 23)"),
 };
+
+// --- Both-theme computed-style evidence for the documented Pen states ---
+//
+// Verification/spec-lock stories (not a behaviour RED): they assert the
+// already-shipped `dateInput` recipe against Pen `ivx6N`. The recipe maps
+// `surface/raised` -> `common.50.background`, `border/strong` ->
+// `common.50.border.strong`, `feedback/negative-border` ->
+// `negative.600.background`, and `action/disabled-*` -> `common.100.background`
+// / `common.400.background`; the focus ring is the shared `brand.500.background`.
+
+const inputOf = (canvasElement: HTMLElement): HTMLInputElement =>
+    canvasElement.querySelector(".dateInput__input") as HTMLInputElement;
+
+const controlOf = (canvasElement: HTMLElement): Element =>
+    canvasElement.querySelector(".dateInput__control") as Element;
+
+const iconOf = (canvasElement: HTMLElement): Element => canvasElement.querySelector(".dateInput__icon") as Element;
+
+const labelOf = (canvasElement: HTMLElement): Element => canvasElement.querySelector(".dateInput__label") as Element;
+
+const errorOf = (canvasElement: HTMLElement): Element => canvasElement.querySelector(".dateInput__error") as Element;
+
+const assertEmptyState = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    { surface, border, value, placeholder, }: {
+        surface: string;
+        border: string;
+        value: string;
+        placeholder: string;
+    },
+): Promise<void> => {
+    const control = controlOf(canvasElement);
+    const input = inputOf(canvasElement);
+
+    // 40px field (`x20`), `surface/raised` + `border/strong`.
+    await expect(getComputedStyle(control).height).toBe("40px");
+    await expect(getComputedStyle(control).backgroundColor).toBe(surface);
+    await expect(getComputedStyle(control).borderTopColor).toBe(border);
+    // Empty value reads `text/primary`; the placeholder is the muted cue.
+    await expect(input.value).toBe("");
+    await expect(getComputedStyle(input).color).toBe(value);
+    await expect(getComputedStyle(input, "::placeholder").color).toBe(placeholder);
+    // The calendar glyph is decorative only.
+    await expect(iconOf(canvasElement)).toHaveAttribute("aria-hidden", "true");
+};
+
+export const EmptyState: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: async (context) =>
+        assertEmptyState(context, {
+            surface: "rgb(248, 250, 252)",
+            border: "rgb(100, 116, 139)",
+            value: "rgb(15, 23, 42)",
+            placeholder: "rgb(100, 116, 139)",
+        }),
+};
+
+export const DarkEmptyState: Story = {
+    args: reference,
+    render: renderIn("dark"),
+    play: async (context) =>
+        assertEmptyState(context, {
+            surface: "rgb(2, 6, 23)",
+            border: "rgb(100, 116, 139)",
+            value: "rgb(248, 250, 252)",
+            placeholder: "rgb(100, 116, 139)",
+        }),
+};
+
+const assertFilledState = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    value: string,
+): Promise<void> => {
+    const input = inputOf(canvasElement);
+
+    await expect(input.value).toBe("2025-03-14");
+    await expect(getComputedStyle(input).color).toBe(value);
+};
+
+export const FilledState: Story = {
+    args: { ...reference, value: "2025-03-14", readOnly: true, },
+    render: renderIn("light"),
+    play: async (context) => assertFilledState(context, "rgb(15, 23, 42)"),
+};
+
+export const DarkFilledState: Story = {
+    args: { ...reference, value: "2025-03-14", readOnly: true, },
+    render: renderIn("dark"),
+    play: async (context) => assertFilledState(context, "rgb(248, 250, 252)"),
+};
+
+const assertFocusRing = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    ring: string,
+): Promise<void> => {
+    const control = controlOf(canvasElement);
+    const input = inputOf(canvasElement);
+
+    input.focus();
+
+    await expect(document.activeElement).toBe(input);
+    await expect(getComputedStyle(control).outlineStyle).toBe("solid");
+    await expect(getComputedStyle(control).outlineWidth).toBe("2px");
+    await expect(getComputedStyle(control).outlineColor).toBe(ring);
+};
+
+export const FocusVisible: Story = {
+    args: reference,
+    render: renderIn("light"),
+    play: async (context) => assertFocusRing(context, "rgb(34, 197, 94)"),
+};
+
+export const DarkFocusVisible: Story = {
+    args: reference,
+    render: renderIn("dark"),
+    play: async (context) => assertFocusRing(context, "rgb(34, 197, 94)"),
+};
+
+const assertInvalidState = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    { border, errorText, }: { border: string; errorText: string; },
+): Promise<void> => {
+    const input = inputOf(canvasElement);
+
+    await expect(input).toHaveAttribute("aria-invalid", "true");
+    await expect(getComputedStyle(controlOf(canvasElement)).borderTopColor).toBe(border);
+    await expect(getComputedStyle(errorOf(canvasElement)).color).toBe(errorText);
+    await expect(canvasElement.textContent).toContain("Укажите дату.");
+};
+
+export const InvalidState: Story = {
+    args: { ...reference, invalid: true, error: "Укажите дату.", },
+    render: renderIn("light"),
+    play: async (context) =>
+        assertInvalidState(context, {
+            border: "rgb(220, 38, 38)",
+            errorText: "rgb(220, 38, 38)",
+        }),
+};
+
+export const DarkInvalidState: Story = {
+    args: { ...reference, invalid: true, error: "Укажите дату.", },
+    render: renderIn("dark"),
+    play: async (context) =>
+        assertInvalidState(context, {
+            border: "rgb(248, 113, 113)",
+            errorText: "rgb(248, 113, 113)",
+        }),
+};
+
+const assertDisabledState = async (
+    { canvasElement, }: { canvasElement: HTMLElement; },
+    { surface, foreground, }: { surface: string; foreground: string; },
+): Promise<void> => {
+    const input = inputOf(canvasElement);
+
+    await expect(input).toBeDisabled();
+    await expect(getComputedStyle(input).cursor).toBe("not-allowed");
+    await expect(getComputedStyle(controlOf(canvasElement)).backgroundColor).toBe(surface);
+    await expect(getComputedStyle(input).color).toBe(foreground);
+    await expect(getComputedStyle(iconOf(canvasElement)).color).toBe(foreground);
+    await expect(getComputedStyle(labelOf(canvasElement)).color).toBe(foreground);
+};
+
+export const DisabledState: Story = {
+    args: { ...reference, disabled: true, },
+    render: renderIn("light"),
+    play: async (context) =>
+        assertDisabledState(context, {
+            surface: "rgb(241, 245, 249)",
+            foreground: "rgb(148, 163, 184)",
+        }),
+};
+
+export const DarkDisabledState: Story = {
+    args: { ...reference, disabled: true, },
+    render: renderIn("dark"),
+    play: async (context) =>
+        assertDisabledState(context, {
+            surface: "rgb(15, 23, 42)",
+            foreground: "rgb(71, 85, 105)",
+        }),
+};
