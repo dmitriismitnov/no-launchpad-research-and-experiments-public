@@ -59,7 +59,7 @@ export const Tab = ({
         >
             {icon !== undefined && <Icon className={styles.icon} name={icon} size="sm" />}
             <span className={styles.label}>{label}</span>
-            <span className={styles.indicator} aria-hidden="true" />
+            {active && <span className={styles.indicator} aria-hidden="true" />}
         </button>
     );
 };

@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { tabRecipe, } from "./preset";
 import { Tab, TabList, } from "./tab";
 
 describe("tab composition", () => {
@@ -33,6 +34,28 @@ describe("tab composition", () => {
 
         expect(markup).toContain(`aria-selected="false"`);
         expect(markup).not.toContain("tab__root--active_true");
+    });
+
+    // Pen `z2jG4r` (`PRWpN.enabled=false` by default) and `VWQNE` (`t1` enables
+    // the indicator, every other tab leaves it off): only the active trigger
+    // carries an indicator, so an inactive trigger reserves no indicator space.
+    test("renders the indicator only for the active trigger", () => {
+        const active = renderToStaticMarkup(<Tab label="Overview" active />);
+        const inactive = renderToStaticMarkup(<Tab label="Tokens" />);
+
+        expect(active).toContain("tab__indicator");
+        expect(inactive).not.toContain("tab__indicator");
+    });
+
+    // Pen `CCpkF` (`vfPHi`) token contract: the focus-indicator row resolves
+    // `focus/ring`, not the brand fill. Geometry stays the shared 2px ring.
+    test("paints the shared focus ring role", () => {
+        expect(tabRecipe.base?.["root"]).toMatchObject({
+            outlineStyle: { _focusVisible: "solid", },
+            outlineWidth: { _focusVisible: "{borderWidths.thick}", },
+            outlineOffset: { _focusVisible: "0", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
+        });
     });
 
     test("renders the icon slot when an icon is given", () => {

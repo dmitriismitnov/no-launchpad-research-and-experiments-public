@@ -17,12 +17,16 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  * - text/secondary -> common.700.background (exact)
  * - text/disabled -> common.400.background (exact, both themes)
  * - border/subtle -> common.200.divider (nearest structural boundary)
+ * - focus/ring -> green.600 / green.500 (`CCpkF` `vfPHi`, exact)
  *
  * Approximations: Pen gaps the trigger 8px (`x4`, exact), pads 8px block / 4px
  * inline (`x4` / `x2`, exact) and draws a 2px indicator (`{borderWidths.thick}`,
- * exact) whose radius is a pill. Pen spaces tab triggers 28px; the scale has no
- * `x14`, so the list uses `x12` (24px). The `pill` variant and the scrollable,
- * badge and icon-only cases from the master are out of scope.
+ * exact) whose radius is a pill. The indicator is off by default and only the
+ * active trigger renders it (`z2jG4r` `PRWpN` `enabled:false`; `VWQNE` `t1`), so
+ * inactive triggers reserve no indicator space and the list aligns triggers at
+ * `flex-start`. Pen spaces tab triggers 28px; the scale has no `x14`, so the
+ * list uses `x12` (24px). The `pill` variant and the scrollable, badge and
+ * icon-only cases from the master are out of scope.
  */
 export const tabRecipe = defineSlotRecipe({
     className: "tab",
@@ -31,7 +35,7 @@ export const tabRecipe = defineSlotRecipe({
     base: {
         list: {
             display: "flex",
-            alignItems: "stretch",
+            alignItems: "flex-start",
             gap: "x12",
             borderBottomWidth: "thin",
             borderBottomStyle: "solid",
@@ -54,7 +58,7 @@ export const tabRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
             _hover: { backgroundColor: "semantic.common.100.background", },
         },
 

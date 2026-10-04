@@ -14,7 +14,8 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  *
  * Approximations: Pen's bar is 64px tall, which the `xN` scale does not reach, so
  * the height is the literal `64px`. Side padding is `x8` (16px, exact) and the
- * major groups gap 24px (`x12`, exact); nav entries gap 4px (`x2`, exact). Pen
+ * major groups gap 24px (`x12`, exact); the trailing actions ride the same
+ * 24px rhythm (`x12`) and nav entries gap 4px (`x2`, exact). Pen
  * strokes all four edges and lets a screen override the fill; `surface` exposes
  * that as `base` / `transparent`. The mobile menu trigger and search/account
  * variants from the master are out of scope.
@@ -55,7 +56,7 @@ export const topNavigationRecipe = defineSlotRecipe({
         actions: {
             display: "flex",
             alignItems: "center",
-            gap: "x4",
+            gap: "x12",
             flexShrink: "0",
         },
     },

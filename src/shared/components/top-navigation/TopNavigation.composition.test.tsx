@@ -1,6 +1,7 @@
 import { describe, expect, test, } from "bun:test";
 import { renderToStaticMarkup, } from "react-dom/server";
 
+import { topNavigationRecipe, } from "./preset";
 import { TopNavigation, } from "./top-navigation";
 
 describe("top navigation composition", () => {
@@ -28,6 +29,12 @@ describe("top navigation composition", () => {
         expect(markup).toContain("<nav");
         expect(markup).toContain("Overview");
         expect(markup).toContain("Sign in");
+    });
+
+    // Pen `KI0Dl`: the account actions are direct root children, so they ride
+    // the bar rhythm — gap 24px (`x12`, exact), not the smaller nav gap.
+    test("gaps the actions slot at the bar rhythm", () => {
+        expect(topNavigationRecipe.base?.["actions"]).toMatchObject({ gap: "x12", });
     });
 
     test("omits the nav and actions slots when not provided", () => {

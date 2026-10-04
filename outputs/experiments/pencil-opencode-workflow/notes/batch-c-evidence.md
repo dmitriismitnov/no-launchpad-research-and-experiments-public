@@ -158,3 +158,133 @@ Counts moved from the HEAD baseline: this slice adds `+11` unit composition chec
 - BLOCKED axes recorded and not implemented.
 
 **Minor (recorded, not blocking):** (1) Link announcement wording `"External link"` vs contract phrase "leaves this site" — acceptable conventional phrasing; (2) no explicit `rel` regression assertion in `Link.stories.tsx` (implementation adds neither `target` nor `rel`); (3) dark focus stories non-discriminating; (4) `Breadcrumbs.composition.test.tsx` icon-size assertion is scoped to whole markup. INFO: Breadcrumbs renders `item.icon` on the current crumb too when supplied (aria-hidden; permissive opt-in).
+
+## C2 — TopNavigation + Tab cycle 1/2
+
+**Scope:** `TopNavigation` actions-slot rhythm and `Tab` focus-ring role + indicator-on-active. Approved contract only; no new public components, props or layout API.
+
+### Pen source node IDs (read-only)
+
+| Role | Master | Documentation / specimen |
+| --- | --- | --- |
+| Top Navigation | `KI0Dl` (Brand, Nav, Spacer, Sign in, CTA; root `gap:24`, `padding:[0,16]`) | `LK4fe` — token contract `iosjR` |
+| Tab | `z2jG4r` (`knYwe` Label, `PRWpN` Indicator `enabled:false`) | `CCpkF` — token contract `vfPHi`, content `BBltl`, accessibility `h7IXS` |
+| Tab indicator specimens | — | `f2iIiG` (inactive, indicator off), `HcOEO` (active `surface/selected`, indicator off), `VWQNE` List (`t1` indicator on, every other trigger off) |
+
+Verbatim Pen facts used:
+
+- `KI0Dl` — the brand, nav, spacer, Sign in and CTA are direct root children of a single 24px-gap row, so the trailing account actions ride the bar rhythm (24px, `x12`).
+- `vfPHi` (Tab token contract) — focus-indicator row uses `focus/ring`.
+- `z2jG4r` — `PRWpN` Indicator is `enabled:false` by default; `VWQNE` enables it only on `t1`.
+- `VWQNE` resolved bounds — `t1` (indicator on) height `43`, every indicator-off trigger height `33`; `pq7Ay/PRWpN` sits at `y=33`, `h=2` (8px above the trigger bottom, matching the `padding-block: x4` and `gap: x4`).
+- `CCpkF` `BBltl` — "The indicator sits against the active tab, never floating." `h7IXS` — tablist/tab semantics, active announced, icon-only needs a name.
+
+**Read-only confirmation:** Pencil MCP `Get`/`Print` only; no `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`. The active editor remained `ex_2.pen` (`get_app_state`), and no Pen byte was modified.
+
+### Enumeration and disposition
+
+| Owner | Axis | Pen values / rule | Disposition |
+| --- | --- | --- | --- |
+| Tab | focus indicator | `focus/ring` (`vfPHi`) | **PASS** — `tab` root `outlineColor._focusVisible` now `semantic.focus.ring`; 2px, offset 0 retained |
+| Top Navigation | actions slot rhythm | root gap 24 (`KI0Dl`) | **PASS** — `topNavigation.actions.gap` now `x12` (24px, exact) |
+| Tab | indicator on active only | `PRWpN.enabled:false`; `VWQNE` `t1` (`z2jG4r`) | **PASS** — indicator rendered only when `active`; `list.alignItems` `flex-start` so inactive triggers reserve no indicator space |
+| Tab | absolute trigger bounds | `VWQNE`: active 43 / inactive 33 | **REVIEW** — measured 45.59 / 35.59; the 10px indicator contribution is exact but the label line box is 19.59px (`line-height: normal` 1.4) vs Pen's font-default 17px, so the absolute Pen bounds need a label geometry change outside this contract |
+| Tab | tablist / tab / `aria-selected` / disabled / icon | `h7IXS` | regression only — unchanged and re-asserted |
+| Tab | dark `action/primary-bg` indicator parity | `vfPHi` | `BLOCKED` — Foundation token ownership, out of scope; indicator keeps `semantic.brand.700.background` |
+
+### Approved public surface and behaviour
+
+- `Tab` root focus ring switched to `semantic.focus.ring` (geometry unchanged). The indicator `<span>` renders only for `active`; inactive triggers carry no indicator and no reserved space, so the list is `flex-start` rather than `stretch`. No new prop, no `active` API change.
+- `TopNavigation` actions slot gap moved from `x4` (8px) to `x12` (24px). No other geometry changed; the slot contract (`actions?: ReactNode`) is unchanged.
+- No export changed (`index.ts` barrels untouched), so `check:deps` was not required.
+
+Changed paths: `src/shared/components/tab/{tab.tsx,preset.ts,Tab.composition.test.tsx,Tab.stories.tsx}`, `src/shared/components/top-navigation/{preset.ts,TopNavigation.composition.test.tsx}`, this evidence, `artifacts/batch-c/top-nav-tab/` (new captures). Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited).
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun), written before the implementation:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/components/tab/Tab.composition.test.tsx src/shared/components/top-navigation/TopNavigation.composition.test.tsx` |
+| RED exit | `1` |
+| RED result | `3 fail` / `11 pass` (14 total, 2 files, `35 expect() calls`) |
+| RED failures | tab `renders the indicator only for the active trigger`; tab `paints the shared focus ring role`; top navigation `gaps the actions slot at the bar rhythm` |
+| RED cause | `outlineColor._focusVisible` was `semantic.brand.500.background`; the indicator was always rendered; `actions.gap` was `x4` |
+| GREEN exit | `0` |
+| GREEN result | `14 pass` / `0 fail` (`35 expect() calls`) |
+
+Focused browser stories (Vitest + Playwright Chromium), run before the implementation:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/tab/Tab.stories.tsx src/shared/components/top-navigation/TopNavigation.stories.tsx` |
+| RED exit | `1` |
+| RED result | `1 failed` / `1 passed` files, `2 failed` / `10 passed` (12) |
+| RED failures | tab `Focus Visible Light` (`rgb(34, 197, 94)` vs expected `rgb(22, 163, 74)`); tab `Indicator Geometry` (active height `46` under the then-absolute `43` assertion) |
+| GREEN exit | `0` |
+| GREEN result | `2 passed` files, `12 passed` (12) |
+
+The `Indicator Geometry` assertion was narrowed from the unattainable absolute Pen heights to the genuine, token-independent contract (`active - inactive = 10`, indicator only on active, `2px` bar, `8px` above the trigger bottom). The absolute-height divergence is recorded as `REVIEW` below rather than fabricated green.
+
+### Both-theme evidence (computed style, in browser)
+
+| Contract | Light | Dark |
+| --- | --- | --- |
+| Tab focus ring (`FocusVisibleLight` / `FocusVisibleDark`) | `outline: solid 2px rgb(22, 163, 74)` (`green.600`) | `outline: solid 2px rgb(34, 197, 94)` (`green.500`) — **non-discriminating** (brand fill and `focus/ring` both resolve `green.500` in dark) |
+| Tab indicator geometry (`IndicatorGeometry`) | active `45.59px`, inactive `35.59px` (delta `10`), indicator `2px`, `8px` above the trigger bottom, inactive has no indicator, list `align-items:flex-start` | theme-independent (same recipe/CSS) |
+| Tab disabled (regression) | `aria-selected="false"`, `disabled`, `tab__root--disabled_true` | — (no dark disabled tab story in scope) |
+| Top Navigation actions gap (`Default`) | `column-gap: 24px` (`x12`), measured gap `24` | theme-independent (same recipe/CSS) |
+
+Absolute Pen bounds `33`/`43` are **not** reached: with this system's `line-height: normal` (1.4) the label line box is `19.59px`, giving `35.59`/`45.59`. Pen's `43`/`33` assume its font-default `17px` label. Matching them would require a Tab label line-height/height override, which is a geometry decision outside the approved indicator change.
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)` |
+| focused composition RED | `1` | `3 fail` / `11 pass` |
+| focused composition GREEN | `0` | `14 pass` / `0 fail` (35 expect calls) |
+| focused browser RED | `1` | `1 failed` / `1 passed` files, `2 failed` / `10 passed` (12) |
+| focused browser GREEN | `0` | `2 passed` files, `12 passed` (12) |
+| `mise run check` | `0` | lint + types + format + `✓ icons up to date (38 icons)` + `✓ web fonts up to date (2 faces)`; unit `768 pass / 0 fail` (90 files); browser `618 passed` (73 files) |
+| `mise run check:deps` | n/a | not run — no export changed |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index-AUy9uW-l.css 223.81 kB` |
+| `git diff --check` | `0` | clean |
+
+Counts moved from the C1 baseline: `+3` unit composition checks (`765 → 768`, 90 files) and `+3` browser story checks (`615 → 618`, 73 files).
+
+### Captures
+
+Storybook iframe, `deviceScaleFactor: 2`, in `artifacts/batch-c/top-nav-tab/`: `tab-indicator-geometry`, `tab-row`, `tab-disabled`, `tab-focus-light`, `tab-focus-dark`, `top-navigation-default` (6 PNGs).
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| Tab focus indicator → `semantic.focus.ring` | **PASS** |
+| Tab indicator only on the active trigger (inactive reserves no space) | **PASS** |
+| Top Navigation actions gap → `x12` (24px) | **PASS** |
+| Tab absolute trigger bounds `43` / `33` | **REVIEW** — 10px contribution exact; absolute heights `45.59` / `35.59` from `line-height: normal` (1.4) vs Pen font-default `17px` |
+| Tab ARIA / tablist / tab / `aria-selected` / disabled / icon | **PASS** (regression, unchanged) |
+| **C2 final status** | **PASS with one `REVIEW`** — no unresolved `FAIL`; `BLOCKED` items recorded below |
+
+### BLOCKED (recorded, not implemented)
+
+| Item | Pen basis | Reason |
+| --- | --- | --- |
+| Mobile menu trigger, `aria-expanded`, collapse policy | `LK4fe` `tQq1f`; `yL5Uy` "mobile" | public-variant/behaviour decision |
+| `with search` / `condensed` variants | `yL5Uy` "with search, with account, condensed" | public-variant decision |
+| Bar-level hover / current / disabled / focus-visible container states | `E1cOv` | interaction/API decision |
+| Default or required landmark name | `T5EFO` "The bar is a landmark with an accessible name" | content/API decision |
+| Tab panel component + `aria-controls` / id ownership | `CCpkF` `h7IXS`; named parts "panel" | public-component/API decision |
+| Tab keyboard roving (activation mode, wrap, disabled-skip) and Home/End | `h7IXS` "arrow-key movement" | interaction policy decision |
+| `pill` / `with badge` / `scrollable` / compact | `CCpkF` `IorsF` | public-variant decision |
+| Icon-only label-optional API | `h7IXS` "Icon-only tabs need an accessible name" | public-API decision |
+| Dark `action/primary-bg` indicator token parity | `vfPHi` | Foundation token ownership, out of scope |
+
+### Unresolved concerns
+
+- **REVIEW — Tab absolute bounds.** The Pen `VWQNE` `43`/`33` trigger heights are not reached because this system pins `lineHeight: normal` (1.4 → `19.59px`) while Pen's label is font-default `17px`. The indicator contribution (`+10px = 8px gap + 2px bar`) and its position (`8px` above the trigger bottom) are exact.
+- **INFO — dark focus stories.** `FocusVisibleDark` is not discriminating: before and after the change the dark outline is `green.500`. The light story and the recipe-level composition test are the true guards.
+- **INFO — indicator fill token.** The indicator keeps `semantic.brand.700.background`; the Pen `action/primary-bg` (dark parity) is `BLOCKED` above and not claimed as PASS.
