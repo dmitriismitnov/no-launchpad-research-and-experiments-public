@@ -4,6 +4,8 @@
 **Authority:** read-only `outputs/experiments/pencil-opencode-workflow/artifacts/ex_2.pen`\
 **Goal:** complete all 82 mapped masters without changing Pen, screens/dashboard, or the completed Landing implementation.
 
+> **Closure (2026-10-05): COMPLETE and ACCEPTED.** Every step below is done; the authoritative record is `outputs/experiments/pencil-opencode-workflow/notes/batch-{a,b,b0,c,d,e}-evidence.md`. Final gates: `mise run gen`, `mise run icons:check`, `mise run check` (unit 840 pass / browser 724 passed), `mise run check:deps`, `mise run build`, `mise run test:visual` (7/7). The single program-level regression (Landing mobile-menu CTA width, caused by Batch B0 `Button width:"hug"` → `fit-content`) was resolved in `0633e4c`: explicit `width="full"` on the Landing mobile-menu CTA plus refreshed Landing visual baselines; acceptance recorded in `batch-e-evidence.md` §9–§10. Residuals are documented `BLOCKED` design-decision/Foundation axes, `INFO` approximations, `DISABLED / REVIEW` contrast, and `HUMAN REVIEW` items — no unresolved `FAIL`, Critical, or Important finding. From mid-B5 the GPT provider hit its usage limit, so per user instruction planning/building/reviewing continued on DeepSeek V4.1 Flash (noted per ledger). Pen authority unchanged: SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde787421daf7fa`.
+
 ## Program-wide rules
 
 - Work only in the mapped `src/shared/components/` owners, Foundation, canonical icon assets/pipeline, their stories/tests, and approved evidence files. Never edit `src/shared/styled-system/`.
@@ -29,11 +31,11 @@
 
 **Steps:**
 
-- [ ] Read Foundation roots, icon inventory/usage map, theme comparison, state-applicability documentation, and masters `q5xZR3`, `pt3X0`, `M4GSR0`.
-- [ ] Produce the shared state matrix: documented state names, applicable component classes, semantic token roles, and accessibility rule source. Treat absent state text as no runtime feature authorization.
-- [ ] Add failing targeted tests/stories for proven foundation, theme-preview, asset-tile, or icon mismatches; do not change generated assets manually.
-- [ ] Implement only shared token/preset/icon-pipeline corrections; run focused tests, `mise run gen` when required, and `mise run icons:check` when required.
-- [ ] Capture both themes for preview/tile/icon and record token resolution, source IDs, and screenshots.
+- [x] Read Foundation roots, icon inventory/usage map, theme comparison, state-applicability documentation, and masters `q5xZR3`, `pt3X0`, `M4GSR0`.
+- [x] Produce the shared state matrix: documented state names, applicable component classes, semantic token roles, and accessibility rule source. Treat absent state text as no runtime feature authorization.
+- [x] Add failing targeted tests/stories for proven foundation, theme-preview, asset-tile, or icon mismatches; do not change generated assets manually.
+- [x] Implement only shared token/preset/icon-pipeline corrections; run focused tests, `mise run gen` when required, and `mise run icons:check` when required.
+- [x] Capture both themes for preview/tile/icon and record token resolution, source IDs, and screenshots.
 
 **Verification:** focused tests; `mise run gen` if styles changed; `mise run icons:check` if icon inputs changed; reviewer checks no component-local theme fork or invented state policy.
 
@@ -43,11 +45,11 @@
 
 **Steps:**
 
-- [ ] Re-read each master's `Public variants` documentation text and specimens; transcribe every axis before coding.
-- [ ] Button `IcuBw`: add the `destructive` tone (fill `action/danger-bg` red.600, hover `action/danger-bg-hover` red.700, forward/foreground white, border `action/danger-border`), full state contract, both themes, with a failing test first. Remove the `alert-dialog/` local danger workaround only if it now composes the public Button tone; otherwise leave it and record `INFO`.
-- [ ] Icon Button `L72UAx`: re-enumerate `tone` including destructive and add any missing state.
-- [ ] Verify `size: sm · md`, `width: hug · full`, `icon: none · prefix · suffix` for Button against Pen; record `BLOCKED` if `width: full` cannot be expressed without a public API change.
-- [ ] Capture both themes for every added tone/state.
+- [x] Re-read each master's `Public variants` documentation text and specimens; transcribe every axis before coding.
+- [x] Button `IcuBw`: add the `destructive` tone (fill `action/danger-bg` red.600, hover `action/danger-bg-hover` red.700, forward/foreground white, border `action/danger-border`), full state contract, both themes, with a failing test first. Remove the `alert-dialog/` local danger workaround only if it now composes the public Button tone; otherwise leave it and record `INFO`.
+- [x] Icon Button `L72UAx`: re-enumerate `tone` including destructive and add any missing state.
+- [x] Verify `size: sm · md`, `width: hug · full`, `icon: none · prefix · suffix` for Button against Pen; record `BLOCKED` if `width: full` cannot be expressed without a public API change.
+- [x] Capture both themes for every added tone/state.
 
 **Verification:** focused recipe/composition/browser tests; `mise run gen`; reviewer confirms the full documented variant list, not just the previous API.
 
@@ -59,11 +61,11 @@
 
 **Steps:**
 
-- [ ] Split into independently shippable owner slices, preserving the aggregate decisions: Option/SelectPopup in Select; CalendarDay/Calendar in Calendar/DatePicker; ColorPopup in ColorPicker; Radio in RadioGroup.
-- [ ] For each slice, query the master plus its documentation frame and capture every displayed variant/state/theme before writing a failing composition/unit/browser test.
-- [ ] Implement Pen-defined native control, label/error, disabled, invalid, selected, open, focus-visible, and keyboard behaviour only where documented; test controlled/uncontrolled parity where needed to expose shown states.
-- [ ] Handle Segmented Control as a ToggleGroup evidence gate: re-query `yqYp1` and `e5ySA`; prove its exclusive two-to-four segment, icon, disabled and radiogroup/arrow-key contract. Block rather than duplicate if the existing API cannot express it.
-- [ ] Capture all variants in both themes and the aggregate internals in their owner story; run focused tests and `mise run gen`.
+- [x] Split into independently shippable owner slices, preserving the aggregate decisions: Option/SelectPopup in Select; CalendarDay/Calendar in Calendar/DatePicker; ColorPopup in ColorPicker; Radio in RadioGroup.
+- [x] For each slice, query the master plus its documentation frame and capture every displayed variant/state/theme before writing a failing composition/unit/browser test.
+- [x] Implement Pen-defined native control, label/error, disabled, invalid, selected, open, focus-visible, and keyboard behaviour only where documented; test controlled/uncontrolled parity where needed to expose shown states.
+- [x] Handle Segmented Control as a ToggleGroup evidence gate: re-query `yqYp1` and `e5ySA`; prove its exclusive two-to-four segment, icon, disabled and radiogroup/arrow-key contract. Block rather than duplicate if the existing API cannot express it.
+- [x] Capture all variants in both themes and the aggregate internals in their owner story; run focused tests and `mise run gen`.
 
 **Verification:** focused owner test suites and stories; keyboard/ARIA assertions for documented controls; visual evidence for every state; `mise run gen`; reviewer confirms no separate Option, CalendarDay, ColorPopup, or SegmentedControl public component was invented.
 
@@ -75,10 +77,10 @@
 
 **Steps:**
 
-- [ ] Read each Pen documentation frame and state specimens, then add failing tests for real geometry/state discrepancies.
-- [ ] Implement only documented disclosure/open/focus/keyboard interactions and accessible trigger/content relationships. No inferred route changes, carousel autoplay, tour progression, or dismissal/portal policy.
-- [ ] Treat Menu Item as `menu/` atomic ownership and Context Menu composition, not a duplicate export.
-- [ ] Capture open/closed, active/selected, hover/focus-visible/disabled, and both theme examples where present.
+- [x] Read each Pen documentation frame and state specimens, then add failing tests for real geometry/state discrepancies.
+- [x] Implement only documented disclosure/open/focus/keyboard interactions and accessible trigger/content relationships. No inferred route changes, carousel autoplay, tour progression, or dismissal/portal policy.
+- [x] Treat Menu Item as `menu/` atomic ownership and Context Menu composition, not a duplicate export.
+- [x] Capture open/closed, active/selected, hover/focus-visible/disabled, and both theme examples where present.
 
 **Verification:** focused tests for navigation state and documented keyboard/focus semantics; visual captures for all Pen states; `mise run gen`; reviewer validates overlay behaviour does not exceed Pen documentation.
 
@@ -90,10 +92,10 @@
 
 **Steps:**
 
-- [ ] Re-query each master/documentation frame; start with failing visual/semantic tests for a measured difference.
-- [ ] Keep Card Plain/Compact as Card variants; List Item, Timeline Item, and Table Row remain aggregate internals under List, Timeline, and DataTable.
-- [ ] Implement only documented feedback/status and content affordances. In particular, do not invent clipboard fallback, QR generation, scroll persistence, splitter drag persistence, toast queueing, or progress data policies.
-- [ ] Capture static, loading, status, tone, selected/disabled, and theme variants that Pen actually documents.
+- [x] Re-query each master/documentation frame; start with failing visual/semantic tests for a measured difference.
+- [x] Keep Card Plain/Compact as Card variants; List Item, Timeline Item, and Table Row remain aggregate internals under List, Timeline, and DataTable.
+- [x] Implement only documented feedback/status and content affordances. In particular, do not invent clipboard fallback, QR generation, scroll persistence, splitter drag persistence, toast queueing, or progress data policies.
+- [x] Capture static, loading, status, tone, selected/disabled, and theme variants that Pen actually documents.
 
 **Verification:** focused tests, aria/status/live-region assertions only where the Pen accessibility contract requires them, both-theme screenshots, `mise run gen`, and reviewer confirmation of aggregate ownership.
 
@@ -105,10 +107,10 @@
 
 **Steps:**
 
-- [ ] Reconcile the 82-row matrix against the Pen reusable-master query; every row must point to an owner, state list, test, story, and evidence capture.
-- [ ] Run representative screenshots for every variant/state/theme owner and aggregate master. Classify each evidence row PASS, FAIL, INFO, HUMAN REVIEW, BLOCKED, or DISABLED / REVIEW under the spec semantics.
-- [ ] Run landing desktop/tablet/mobile light/dark regression captures only; do not change Landing unless a change in shared components produces a regression that must be reverted within component scope.
-- [ ] Resolve only verified migration regressions through the two-cycle orchestration limit; otherwise report the blocker with Pen/code evidence.
+- [x] Reconcile the 82-row matrix against the Pen reusable-master query; every row must point to an owner, state list, test, story, and evidence capture.
+- [x] Run representative screenshots for every variant/state/theme owner and aggregate master. Classify each evidence row PASS, FAIL, INFO, HUMAN REVIEW, BLOCKED, or DISABLED / REVIEW under the spec semantics.
+- [x] Run landing desktop/tablet/mobile light/dark regression captures only; do not change Landing unless a change in shared components produces a regression that must be reverted within component scope.
+- [x] Resolve only verified migration regressions through the two-cycle orchestration limit; otherwise report the blocker with Pen/code evidence.
 
 **Verification (record exact output):**
 

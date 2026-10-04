@@ -284,3 +284,9 @@ Therefore the Batch E acceptance condition "no unresolved `FAIL` or `BLOCKED` ex
 - **Pen authority unchanged:** SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes.
 
 **Migration status: COMPLETE and ACCEPTED.**
+
+## 11. Plan-document closure
+
+The program plan (`docs/superpowers/plans/2026-10-03-full-pen-component-migration.md`), the Batch B plan (`docs/superpowers/plans/2026-10-03-pen-migration-batch-b.md`), and the Landing remediation plan (`docs/superpowers/plans/2026-10-03-landing-pen-parity-remediation.md`) were updated to reflect reality: a **Closure** header added to each (status, evidence references, final gate results, regression resolution, GPT-limit note) and all their tracking checkboxes marked complete. These plans previously had no ticked boxes because state was tracked in the evidence ledgers; they now match the accepted state.
+
+Two older, out-of-scope plan documents (`2026-10-02-pen-visual-parity-phase-1.md`, `2026-10-02-pencil-opencode-workflow.md`) were left unchanged; their exploratory/benchmark steps are not part of this migration's acceptance surface.

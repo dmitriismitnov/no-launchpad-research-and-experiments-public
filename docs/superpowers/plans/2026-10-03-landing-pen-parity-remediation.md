@@ -4,6 +4,8 @@
 
 **Goal:** close the measured Landing↔Pen geometry divergences recorded as `BLOCKED` in Batch A, so the Landing matches `DsHK8` (desktop), `XiPDu` (tablet) and `T4klu9` (mobile) and `mise run test:visual` passes.
 
+> **Closure (2026-10-05): COMPLETE and ACCEPTED.** The measured Landing feature/hero divergences were corrected in `8120b31` (`mise run test:visual` 7/7 at that commit). A later program-level regression — Batch B0 `Button width:"hug"` collapsing the mobile-menu CTA — was resolved in `0633e4c` (explicit `width="full"` on the Landing mobile-menu CTA) with refreshed visual baselines, leaving `mise run test:visual` 7/7. Final Landing regression evidence and acceptance: `notes/landing-parity-evidence.md` and `notes/batch-e-evidence.md` §9–§10. Residual Landing-wide section deltas/mobile clipping remain recorded as `HUMAN REVIEW`, not failures.
+
 **Architecture:** Landing composes existing public components through app-local Panda CSS in `src/app/Landing.tsx`. All corrections stay in the app component: local layout tokens and literals only, no shared Button/Card recipe or public API change. `data-theme` remains the only light/dark axis.
 
 **Tech Stack:** React, TypeScript, PandaCSS, Playwright visual tests, Pencil MCP (read-only), Bun/mise tasks.
@@ -38,13 +40,13 @@
 - Modify: `test/visual/landing-responsive.spec.ts`.
 - Evidence: `outputs/experiments/pencil-opencode-workflow/notes/landing-parity-evidence.md`.
 
-- [ ] Re-query `DsHK8`, `XiPDu`, `T4klu9` read-only; record frame dimensions, feature node bounds, hero action bounds, and confirm the absence of dark Landing frames.
-- [ ] In `landing-responsive.spec.ts`, add focused assertions that currently fail:
+- [x] Re-query `DsHK8`, `XiPDu`, `T4klu9` read-only; record frame dimensions, feature node bounds, hero action bounds, and confirm the absence of dark Landing frames.
+- [x] In `landing-responsive.spec.ts`, add focused assertions that currently fail:
   - `feature` (and `featureReversed`) computed `paddingBlock`: desktop 64, tablet 48, mobile 36.
   - `feature` computed `gap`: desktop 72, tablet 32, mobile 16.
   - `[data-slot="visual"]` height: desktop 380, tablet 300, mobile 260.
   - hero primary/secondary button height: desktop 48, tablet 48, mobile 48.
-- [ ] Run the focused spec and confirm the failures are the measured Pen mismatches, then commit the tests/evidence.
+- [x] Run the focused spec and confirm the failures are the measured Pen mismatches, then commit the tests/evidence.
 
 ### Task 2: Landing layout corrections
 
@@ -52,12 +54,12 @@
 
 - Modify: `src/app/Landing.tsx`.
 
-- [ ] Feature grid `paddingBlock: { base: "36px", md: "x24", xl: "x32" }` (36/48/64; mobile 36 exceeds the xN scale so it stays a literal Pen value).
-- [ ] Feature grid `gap: { base: "x8", md: "x16", xl: "72px" }` (16/32/72; desktop 72 exceeds the scale so it stays a literal).
-- [ ] Give the feature visual a Pen height: `height: { base: "260px", md: "300px", xl: "380px" }` on the visual slot/panel.
-- [ ] Hero action button height `height: { base: "x24", md: "x24" }` so desktop/tablet are 48px (mobile stays 350×48, gap x6/12).
-- [ ] Confirm desktop keeps bullets + secondary action and tablet/mobile keep none; no public API change.
-- [ ] Run the focused spec to GREEN, then `mise run gen`.
+- [x] Feature grid `paddingBlock: { base: "36px", md: "x24", xl: "x32" }` (36/48/64; mobile 36 exceeds the xN scale so it stays a literal Pen value).
+- [x] Feature grid `gap: { base: "x8", md: "x16", xl: "72px" }` (16/32/72; desktop 72 exceeds the scale so it stays a literal).
+- [x] Give the feature visual a Pen height: `height: { base: "260px", md: "300px", xl: "380px" }` on the visual slot/panel.
+- [x] Hero action button height `height: { base: "x24", md: "x24" }` so desktop/tablet are 48px (mobile stays 350×48, gap x6/12).
+- [x] Confirm desktop keeps bullets + secondary action and tablet/mobile keep none; no public API change.
+- [x] Run the focused spec to GREEN, then `mise run gen`.
 
 ### Task 3: Fresh Pen/code evidence and snapshot refresh
 
@@ -67,19 +69,19 @@
 - Snapshots: `test/visual/__snapshots__/landing-responsive.spec.ts-snapshots/*` and `landing.spec.ts-snapshots/landing-chromium-darwin.png`.
 - Evidence: `outputs/experiments/pencil-opencode-workflow/notes/landing-parity-evidence.md`.
 
-- [ ] Re-export `DsHK8`/`XiPDu`/`T4klu9` and capture current code light/dark desktop/tablet/mobile with the existing capture tooling; store under the durable evidence paths.
-- [ ] Diff each section's measured geometry against Pen and confirm the only remaining deltas are the intended padding/gap/visual/hero corrections; record any residual as `HUMAN REVIEW` with numbers.
-- [ ] Only then run `mise run test:visual:update` and `mise run test:visual`; commit the changed snapshot PNGs and evidence.
-- [ ] If a delta is not explained by the intended corrections, stop and report `BLOCKED` with measurements; do not silently refresh.
+- [x] Re-export `DsHK8`/`XiPDu`/`T4klu9` and capture current code light/dark desktop/tablet/mobile with the existing capture tooling; store under the durable evidence paths.
+- [x] Diff each section's measured geometry against Pen and confirm the only remaining deltas are the intended padding/gap/visual/hero corrections; record any residual as `HUMAN REVIEW` with numbers.
+- [x] Only then run `mise run test:visual:update` and `mise run test:visual`; commit the changed snapshot PNGs and evidence.
+- [x] If a delta is not explained by the intended corrections, stop and report `BLOCKED` with measurements; do not silently refresh.
 
 ### Task 4: Full verification
 
-- [ ] `mise run gen`
-- [ ] `mise run check`
-- [ ] `mise run check:deps`
-- [ ] `mise run build`
-- [ ] `mise run test:visual`
-- [ ] Confirm no unresolved `FAIL`/`BLOCKED`; update the migration evidence ledger with a Landing `PASS` row.
+- [x] `mise run gen`
+- [x] `mise run check`
+- [x] `mise run check:deps`
+- [x] `mise run build`
+- [x] `mise run test:visual`
+- [x] Confirm no unresolved `FAIL`/`BLOCKED`; update the migration evidence ledger with a Landing `PASS` row.
 
 ## Execution cycle
 
