@@ -427,3 +427,16 @@ Counts moved from the C2 baseline: `+4` unit composition checks (`768 → 772`, 
 - **DISABLED / REVIEW — disabled contrast.** Accordion / Tree disabled text uses `common.400.background` (`neutral.400` light `rgb(148, 163, 184)`, `neutral.600` dark `rgb(71, 85, 105)`); reported, never counted `PASS`.
 - **INFO — dark focus stories non-discriminating.** `FocusVisibleDark` passes before and after the role change; the light story and the recipe-level composition tests are the true guards.
 - **INFO — static-css guard location.** The open-chevron emission guard lives in `AccordionItem.composition.test.tsx` rather than the canonical `src/shared/styles/panda-static-css.test.ts` because the latter is outside this slice's allowed paths; it compiles the real config with an empty `include` exactly as that file does.
+
+## C3 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `5e480e29933cbb33a396c9edeafe28b9923fd5ca` vs `51f34e1`.
+**Verdict:** **APPROVED** — no Critical/Important findings.
+
+- AccordionItem trigger and TreeItem row focus roles now `semantic.focus.ring`; 2px geometry preserved; generated CSS confirms.
+- `panda.config.ts` adds only the `accordionItem` staticCss entry; generated `.accordionItem__chevron--open_true { transform: rotate(180deg) }` now emitted; `styled-system` regenerated (styles.css hash identical before/after gen).
+- No public API/prop/component/barrel change; no Accordion/Tree group container; aggregate ownership preserved.
+- True RED confirmed: focus-role light mismatch ×2 and the missing chevron-open rule. Dark focus non-discriminating and not claimed as proof. ARIA/selected/disabled tests are regression.
+- BLOCKED/INFO rows recorded and not implemented; capture-method deviation (Playwright CLI, `devicePixelRatio 1`, evidence-only) disclosed.
+
+**Minor (recorded, non-blocking):** (M1) the static-css guard asserts selector presence only, not the `transform: rotate(180deg)` declaration; (M2) the static-css guard lives in `AccordionItem.composition.test.tsx` rather than the canonical `src/shared/styles/panda-static-css.test.ts` — consider consolidating; (M3) the dpr-1 CLI capture should be explicitly marked non-baseline-comparable vs the C1/C2 Storybook-iframe method; (M4) evidence wording "`--colors-semantic-focus-ring` now emitted" is inaccurate (it pre-existed from C1; only the chevron rule is new); (M5) one intermittent browser flake (testing-library timer race) observed, not reproduced, pre-existing; (M6) the added `disabled` static combination has no guard.
