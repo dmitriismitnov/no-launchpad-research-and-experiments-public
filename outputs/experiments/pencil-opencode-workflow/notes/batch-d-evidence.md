@@ -1006,3 +1006,14 @@ All three component-role audits report `DISABLED / REVIEW 0` and `No FAIL or DIS
 - **INFO — ScrollArea content text.** The master's content text is `text/secondary`, but the recipe projects no viewport colour; the story supplies it. Recorded, not changed.
 - **INFO — Clipboard surface is dark-only RED.** `surface/sunken` and `common.100.background` are both `neutral.100` light; only dark differs (`neutral.950` vs `neutral.900`).
 - The Pen digest in the handoff was one character short; the real, unchanged digest is recorded in the header.
+
+## D5 review disposition (reviewer: DeepSeek v4.1 Flash)
+
+**Reviewed at:** `28f5e8c971c6f36aed876c52987b5d3efdf6bf55` vs parent `f08b84d`.
+**Verdict:** **APPROVED** — no Critical/Important findings.
+
+- Focus ring role → `semantic.focus.ring` on the code's actual focusable slots (Clipboard/CodeBlock copy control, ScrollArea viewport), 2px geometry preserved; the Pen-vs-code slot difference is explicitly disclosed (BLOCKED ledger + INFO), not claimed as slot parity.
+- Role corrections verified (Clipboard root `surface.sunken`+`border.subtle`, value `text.primary`, copy `text.secondary`; ScrollArea root `surface.raised`+`border.subtle`, thumb `border.strong`; CodeBlock focus only). No new props/slots/components; no `.tsx`/`index.ts`/`panda.config.ts`/foundation/generated change; D1–D4 evidence preserved.
+- Focused composition `18 pass / 57 expect`, browser `3 files / 19 passed`, full unit `837 pass` reproduced; light focus discriminates, dark value-equal not claimed; value-equal renames regression; all cited ratios reproduce; CodeBlock dark focus `2.08` is `INFO / REVIEW`, never PASS.
+
+**Minor (recorded):** (1) preset comments attribute the ring to the code slot without noting Pen draws it on field/block/root; (2) ScrollArea uses `outlineOffset: -2px` (inset) vs Pen `outer` — width preserved, offset pre-existing and disclosed; (3) evidence "Component `.tsx` files … not touched" should read "implementation `.tsx`" (story/test `.tsx` did change).
