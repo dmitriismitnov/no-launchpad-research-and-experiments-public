@@ -1,0 +1,12 @@
+{
+  "command": "mise run test:visual",
+  "test": "landing-responsive.spec.ts:175",
+  "viewport": "mobile 390",
+  "theme": "light",
+  "menuJustifyItems": "stretch",
+  "linkWidth": 358,
+  "ctaWidth": 129.125,
+  "delta": 228.875,
+  "ctaComputedWidth": "129.125px",
+  "rootCause": "Batch B0 commit b81a080 added Button default width:\"hug\" => width:fit-content, overriding the mobile menu grid justify-items:stretch that previously made the CTA span the column"
+}
