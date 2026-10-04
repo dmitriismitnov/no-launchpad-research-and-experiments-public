@@ -10,8 +10,8 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  *
  * Pen references the newer role layer (`semantic/surface/*`, `semantic/border/*`,
  * `semantic/text/*`):
- * - surface/raised -> common.50.background (white light; dark one step)
- * - border/subtle -> common.200.divider (nearest structural boundary)
+ * - surface/raised -> semantic.surface.raised (trigger chrome; white light; dark one step)
+ * - border/subtle -> semantic.border.subtle (trigger chrome)
  * - text/tertiary -> common.600.background (exact)
  *
  * Approximations: Pen fixes the trigger area at 96px tall (literal; the `xN`
@@ -39,9 +39,9 @@ export const contextMenuRecipe = defineSlotRecipe({
             minHeight: "96px",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
+            borderColor: "semantic.border.subtle",
             borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
+            backgroundColor: "semantic.surface.raised",
             cursor: "context-menu",
             userSelect: "none",
             fontFamily: "body",

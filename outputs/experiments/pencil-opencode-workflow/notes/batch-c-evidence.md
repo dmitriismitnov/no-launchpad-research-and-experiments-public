@@ -441,6 +441,149 @@ Counts moved from the C2 baseline: `+4` unit composition checks (`768 → 772`, 
 
 **Minor (recorded, non-blocking):** (M1) the static-css guard asserts selector presence only, not the `transform: rotate(180deg)` declaration; (M2) the static-css guard lives in `AccordionItem.composition.test.tsx` rather than the canonical `src/shared/styles/panda-static-css.test.ts` — consider consolidating; (M3) the dpr-1 CLI capture should be explicitly marked non-baseline-comparable vs the C1/C2 Storybook-iframe method; (M4) evidence wording "`--colors-semantic-focus-ring` now emitted" is inaccurate (it pre-existed from C1; only the chevron rule is new); (M5) one intermittent browser flake (testing-library timer race) observed, not reproduced, pre-existing; (M6) the added `disabled` static combination has no guard.
 
+## C4 — Menu + ContextMenu cycle 1/2
+
+**Scope:** `Menu`/`MenuItem` row focus-indicator role and the named-role corrections on the Menu overlay card and the Context Menu trigger. Approved contract only; no new public component, prop or API. `MenuItem` remains internal to `menu/`; `ContextMenu` keeps composing the public `Menu`/`MenuItem` (no row re-implementation).
+
+### Pen source node IDs (read-only)
+
+| Role | Master | Documentation / token contract |
+| --- | --- | --- |
+| Menu | `GLufg` | doc `C6zTA` |
+| Menu Item | `CX1vE` | doc `C6zTA` |
+| Context Menu | `rokhq` | doc `w7EbR` |
+
+Contract facts applied:
+
+- `C6zTA` (Menu / Menu Item): row focus-indicator uses `focus/ring`; overlay card uses `surface/overlay` + `border/subtle`; row hover uses `surface/hover`; check glyph uses `text/link`.
+- `w7EbR` (Context Menu): trigger chrome uses `surface/raised` + `border/subtle`.
+
+**Read-only confirmation:** Pen `ex_2.pen` SHA-256 `45916e357faed0c64fffb9a7eba7ca898da7f63c8a1f4a3bdde7874217daf7fa`, `9294654` bytes, unchanged (mtime `2026-10-02 08:35`). No `Insert`/`Update`/`Replace`/`Delete`/`SetVariables`; the Pen was never mutated.
+
+### Enumeration and disposition
+
+| Owner | Axis | Pen values / rule | Disposition |
+| --- | --- | --- | --- |
+| Menu Item | focus indicator | `focus/ring` (`C6zTA`) | **PASS** — `item.outlineColor._focusVisible` now `semantic.focus.ring`; `outlineStyle solid`, `{borderWidths.thick}` (2px), offset `0` retained |
+| Menu | overlay card surface | `surface/overlay` (`C6zTA`) | **PASS** — `root.backgroundColor` now `semantic.surface.overlay` |
+| Menu | overlay card border | `border/subtle` (`C6zTA`) | **PASS** — `root.borderColor` now `semantic.border.subtle` |
+| Menu Item | row hover surface | `surface/hover` (`C6zTA`) | **PASS** — `item._hover.backgroundColor` now `semantic.surface.hover` (recipe-level; browser hover not claimed) |
+| Menu Item | check glyph | `text/link` (`C6zTA`) | **PASS** — `check.color` now `semantic.text.link` |
+| Context Menu | trigger surface | `surface/raised` (`w7EbR`) | **PASS** — `trigger.backgroundColor` now `semantic.surface.raised` |
+| Context Menu | trigger border | `border/subtle` (`w7EbR`) | **PASS** — `trigger.borderColor` now `semantic.border.subtle` |
+| Menu / Context Menu | ARIA / roles / shortcut / check / submenu / danger / disabled / Escape / right-click / positioning | `role=menu`/`menuitem`/`separator`, shortcut, checked/danger/disabled states, Escape close, right-click open, `x`/`y` positioning | regression only — unchanged and re-asserted |
+| Menu Item | disabled background `action/disabled-bg` | Pen disabled rows | **DISABLED / REVIEW** — consistent with C3; `action/disabled-bg` is a Foundation token-role decision (`BLOCKED` below) |
+| Menu Item | leading `icon` | `CX1vE` | **INFO** — left as-is (approved contract) |
+
+### Approved public surface and behaviour
+
+- `menu` recipe: `item.outlineColor._focusVisible` → `semantic.focus.ring`; `root.backgroundColor` → `semantic.surface.overlay`; `root.borderColor` → `semantic.border.subtle`; `item._hover.backgroundColor` → `semantic.surface.hover`; `check.color` → `semantic.text.link`. Geometry, slots, variants (`tone`/`checked`/`disabled`), the `divider` rule (`semantic.common.200.divider`) and `panda.config.ts` (`staticCss.menu` already covers tone/checked/disabled) are unchanged.
+- `contextMenu` recipe: `trigger.backgroundColor` → `semantic.surface.raised`; `trigger.borderColor` → `semantic.border.subtle`. The surface still renders the public `Menu` component (`context-menu.tsx` untouched).
+- Preset doc comments updated to name the resolved role tokens. No component markup changed; `menu.tsx`, `context-menu.tsx` and both `index.ts` barrels are untouched. No export changed, so `check:deps` was not required.
+- Generated `src/shared/styled-system/` was regenerated via `mise run gen` (git-ignored; never hand-edited). New role variables emitted: `--colors-semantic-surface-overlay`, `--colors-semantic-surface-hover`, `--colors-semantic-surface-raised`, `--colors-semantic-text-link`, `--colors-semantic-focus-ring`, `--colors-semantic-border-subtle`.
+
+Changed paths: `src/shared/components/menu/{preset.ts,Menu.composition.test.tsx,Menu.stories.tsx}`, `src/shared/components/context-menu/{preset.ts,ContextMenu.composition.test.tsx,ContextMenu.stories.tsx}`, this evidence, `artifacts/batch-c/menu-context/` (new captures).
+
+### Tests-first proof (RED → GREEN)
+
+Focused composition (Bun), written before the implementation:
+
+| Field | Value |
+| --- | --- |
+| RED command | `bun test src/shared/components/menu/Menu.composition.test.tsx src/shared/components/context-menu/ContextMenu.composition.test.tsx` |
+| RED exit | `1` |
+| RED result | `5 fail` / `12 pass` (17 total, 2 files, `41 expect() calls`) |
+| RED failures | menu `paints the shared focus ring role`; menu `resolves the overlay card surface roles`; menu `resolves the row hover surface role`; menu `resolves the check glyph to the link text role`; context menu `resolves the trigger surface roles` |
+| RED cause | all five recipe fields were still on the common step ramp / brand fill (`common.50.background`, `common.200.divider`, `common.100.background`, `brand.700.background`, `brand.500.background`) |
+| GREEN exit | `0` |
+| GREEN result | `17 pass` / `0 fail` (`41 expect() calls`) |
+
+Focused browser stories (Vitest + Playwright Chromium), run before the implementation (presets untouched, generated CSS still old):
+
+| Field | Value |
+| --- | --- |
+| RED command | `bunx --no-install vitest run --config ./vitest.config.ts src/shared/components/menu/Menu.stories.tsx src/shared/components/context-menu/ContextMenu.stories.tsx` |
+| RED exit | `1` |
+| RED result | `2 failed` files, `6 failed` / `10 passed` (16) |
+| RED failures | context menu `Trigger Surface Light`, `Trigger Surface Dark`; menu `Focus Visible Light`, `Surface Light`, `Surface Dark`, `Checked Glyph Dark` |
+| GREEN exit | `0` |
+| GREEN result | `2 passed` files, `16 passed` (16) |
+
+Non-discriminating stories passed before and after and are **not** claimed as proof: menu `Focus Visible Dark` (dark `brand.500.background` and `focus.ring` both resolve `green.500`), menu `Checked Glyph Light` (light `brand.700.background` and `text.link` both resolve `green.700`), and the regression stories (`Default`, `States`, `Grouped`, context `Default`, `Open`, `RightClick`, `Escape`).
+
+### Both-theme evidence (computed style, in browser)
+
+| Contract | Light | Dark |
+| --- | --- | --- |
+| Menu row focus ring (`FocusVisibleLight` / `FocusVisibleDark`) | `outline: solid 2px rgb(22, 163, 74)` (`green.600`) | `outline: solid 2px rgb(34, 197, 94)` (`green.500`) — **non-discriminating** |
+| Menu overlay card (`SurfaceLight` / `SurfaceDark`) | bg `rgb(255, 255, 255)` (`surface.overlay` = `base.white`; old `neutral.50` `rgb(248, 250, 252)`), border `rgb(226, 232, 240)` (`border.subtle` = `neutral.200`; old `neutral.300` `rgb(203, 213, 225)`) | bg `rgb(30, 41, 59)` (`neutral.800`; old `neutral.950` `rgb(2, 6, 23)`), border `rgb(30, 41, 59)` (`neutral.800`; old `neutral.700` `rgb(51, 65, 85)`) — discriminating both |
+| Menu check glyph (`CheckedGlyphLight` / `CheckedGlyphDark`) | `rgb(21, 128, 61)` (`text.link` = `green.700`; old `green.700` same) — **non-discriminating** | `rgb(74, 222, 128)` (`green.400`; old `green.300` `rgb(134, 239, 172)`) — discriminating |
+| Context Menu trigger (`TriggerSurfaceLight` / `TriggerSurfaceDark`) | bg `rgb(255, 255, 255)` (`surface.raised`; old `neutral.50`), border `rgb(226, 232, 240)` (old `neutral.300`) | bg `rgb(15, 23, 42)` (`neutral.900`; old `neutral.950`), border `rgb(30, 41, 59)` (`neutral.800`; old `neutral.700`) — discriminating both |
+| Menu row hover (`surface.hover`) | recipe assertion only; `neutral.100` (same as old `common.100.background`) | `neutral.800` (old `neutral.900`) — **INFO**: headless hover timing not asserted, as in C1–C3 |
+| Menu divider rule (regression) | `semantic.common.200.divider` (unchanged) | same |
+
+### Command results
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `mise run gen` | `0` | codegen + cssgen; `Successfully extracted css from 426 file(s)`; all six new role variables emitted |
+| focused composition RED | `1` | `5 fail` / `12 pass` (41 expect calls) |
+| focused composition GREEN | `0` | `17 pass` / `0 fail` (41 expect calls) |
+| focused browser RED | `1` | `2 failed` files, `6 failed` / `10 passed` (16) |
+| focused browser GREEN | `0` | `2 passed` files, `16 passed` (16) |
+| unit suite | `0` | `782 pass / 0 fail` (90 files, 4051 expect calls) |
+| browser suite | `0` | `73 passed` files, `639 passed` (639) |
+| `mise run check` | `1` | **blocked at `check:lint`** by an untracked 0-byte `.zed/debug.json` editor artifact (outside this slice's allowed paths; not deleted). Per-stage evidence: `eslint . --ignore-pattern ".zed/**"` exit `0`; `dprint check` exit `0`; `tsc --noEmit` exit `0`; `icons:check` `✓ 38 icons`; `fonts:check` `✓ 2 faces`; unit `782`; browser `639` |
+| `mise run check:deps` | n/a | not run — no export changed |
+| `mise run build` | `0` | `✓ 141 modules transformed`; `dist/assets/index--m47Sug0.css 223.76 kB` |
+| `git diff --check` | `0` | clean |
+
+**Environment note (concurrent sibling, not this slice).** A parallel builder was editing `carousel/`, `pagination/` and `step/` in the same working tree during this cycle (and appended the C5 section of this ledger). Earlier `mise run check` attempts failed on that sibling's transient syntax/format state (`Carousel.stories.tsx`) and on load-induced browser timeouts (`Card.stories.tsx`, `Slider.stories.tsx > Keyboard`). Both flaked files pass in isolation (`Card` `10/10`; the full browser suite `639/639`). None of those files or failures belong to C4.
+
+### Captures
+
+Storybook iframe, `deviceScaleFactor: 2`, Playwright Chromium, in `artifacts/batch-c/menu-context/`: `menu-surface-{light,dark}`, `menu-focus-{light,dark}`, `menu-checked-{light,dark}`, `menu-states`, `context-trigger-surface-{light,dark}`, `context-open`, `context-right-click` (11 PNGs). `menu-focus-light` shows the `green.600` ring on the focused row; `menu-surface-dark` shows the `neutral.800` overlay card over the `neutral.950` shell.
+
+### Row disposition and final status
+
+| Row | Disposition |
+| --- | --- |
+| Menu Item focus indicator → `semantic.focus.ring` | **PASS** |
+| Menu overlay card `surface/overlay` + `border/subtle` | **PASS** |
+| Menu Item row hover `surface/hover` | **PASS** (recipe-level; browser hover not claimed) |
+| Menu Item check glyph `text/link` | **PASS** |
+| Context Menu trigger `surface/raised` + `border/subtle` | **PASS** |
+| Menu / Context Menu ARIA, roles, shortcut, check, submenu, danger, disabled, Escape, right-click, positioning | **PASS** (regression, unchanged) |
+| Disabled background `action/disabled-bg` | **DISABLED / REVIEW** (`BLOCKED` below) |
+| **C4 final status** | **PASS with `DISABLED / REVIEW` and `INFO` rows** — no unresolved `FAIL`; `BLOCKED` items recorded below |
+
+### BLOCKED (recorded, not implemented)
+
+| Item | Pen basis | Reason |
+| --- | --- | --- |
+| Disabled background role `action/disabled-bg` | `C6zTA` disabled rows | Foundation token-role decision; consistent with C3; disabled stays `DISABLED / REVIEW` |
+| Submenu / nesting / flyout behaviour | `CX1vE` submenu affordance | interaction/API decision |
+| Roving focus + arrow-key / Home / End | Menu keyboard model | interaction-policy decision |
+| Menu open-state, Escape, focus-return-to-trigger | Menu interaction contract | interaction-policy decision |
+| Selection-mode / checkable ARIA (`aria-checked`) | `CX1vE` checked row | public-API decision |
+| Context Menu trigger event policy (keyboard / dedicated trigger) | `w7EbR` | interaction-policy decision |
+| Portal / positioning / flip | `rokhq` surface placement | positioning/API decision |
+| Dismiss-on-select policy | Menu selection model | interaction-policy decision |
+| Inline / popup variant | Menu public variants | public-variant decision |
+| Leading `icon` on `MenuItem` | `CX1vE` | **INFO** — left as-is per the approved contract |
+| Group-label ARIA association / accessible name | `GLufg` label | accessibility/API decision |
+| Typeahead | Menu keyboard model | interaction-policy decision |
+| Virtualization | long-menu rendering | performance/API decision |
+| New public component | — | explicitly excluded by the approved contract; `MenuItem` stays internal to `menu/` |
+
+### Unresolved concerns
+
+- **INFO — dark focus stories non-discriminating.** `FocusVisibleDark` passes before and after the role change (`brand.500.background` and `focus.ring` both resolve `green.500` in dark); the light story and the recipe-level composition test are the true guards.
+- **INFO — hover not browser-asserted.** As in C1–C3, headless Chromium did not apply `:hover` reliably; `surface/hover` is proved at the recipe-selector level only. Light `surface/hover` equals the old `common.100.background`, so only the dark role is discriminating and it is recorded as recipe-level.
+- **INFO — leading `icon` on `MenuItem`.** Left as-is (`CX1vE`) per the approved contract; not a regression.
+- **INFO — static positioning.** `ContextMenu` keeps `position: absolute` + `zIndex: 10`; portal/flip is out of scope.
+- **INFO — `check:deps` skipped.** No export changed (`index.ts` barrels, `menu.tsx`, `context-menu.tsx`, `panda.config.ts` untouched).
+
 ## C5 — Step + Pagination + Carousel cycle 1/2
 
 **Scope:** approved recipe/token corrections only — Step upcoming marker number → `text/secondary`; Pagination `item` focus-visible ring → `focus/ring`; Carousel `control` and `dot` focus-visible rings → `focus/ring`. No component `.tsx`, `index.ts` barrel, `panda.config.ts` or new public component changed.

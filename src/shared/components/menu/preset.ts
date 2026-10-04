@@ -10,16 +10,19 @@ import { definePreset, defineSlotRecipe, } from "@pandacss/dev";
  *
  * Pen references the newer role layer (`semantic/surface/*`, `semantic/text/*`,
  * `semantic/action/*`, `semantic/feedback/*`):
- * - surface/overlay -> common.50.background (light exact; dark one step)
- * - surface/hover -> common.100.background (light exact; dark one step)
+ * - surface/overlay -> semantic.surface.overlay (overlay card; light exact; dark one step)
+ * - surface/hover -> semantic.surface.hover (row hover; light exact; dark one step)
  * - surface/selected -> brand.50.background (exact, both themes)
  * - text/primary -> common.50.text (exact)
  * - text/tertiary -> common.600.background (exact)
- * - text/link -> brand.700.background (light exact; dark one step brighter)
+ * - text/link -> semantic.text.link (check glyph; light exact; dark one step brighter)
  * - text/disabled -> common.400.background (exact, both themes)
  * - feedback/negative-fg -> negative.700.background (exact)
- * - border/subtle -> common.200.divider (nearest structural boundary)
+ * - border/subtle -> semantic.border.subtle (overlay card)
  * - shadow/500 -> semantic.shadow.500 (pair with Pen's 0 10px 28px offset)
+ *
+ * The quiet `divider` rule stays on the common step ramp
+ * (`semantic.common.200.divider`).
  *
  * Approximations: Pen fixes the surface at 220px; the component exposes it as a
  * literal `minWidth`. Pen pads the row 8px block / 10px inline (`x4` / `x5`,
@@ -50,9 +53,9 @@ export const menuRecipe = defineSlotRecipe({
             padding: "x3",
             borderWidth: "thin",
             borderStyle: "solid",
-            borderColor: "semantic.common.200.divider",
+            borderColor: "semantic.border.subtle",
             borderRadius: "md",
-            backgroundColor: "semantic.common.50.background",
+            backgroundColor: "semantic.surface.overlay",
             boxShadow: "0 10px 28px {colors.semantic.shadow.500}",
         },
 
@@ -84,8 +87,8 @@ export const menuRecipe = defineSlotRecipe({
             outlineStyle: { _focusVisible: "solid", },
             outlineWidth: { _focusVisible: "{borderWidths.thick}", },
             outlineOffset: { _focusVisible: "0", },
-            outlineColor: { _focusVisible: "semantic.brand.500.background", },
-            _hover: { backgroundColor: "semantic.common.100.background", },
+            outlineColor: { _focusVisible: "semantic.focus.ring", },
+            _hover: { backgroundColor: "semantic.surface.hover", },
         },
 
         icon: {
@@ -115,7 +118,7 @@ export const menuRecipe = defineSlotRecipe({
 
         check: {
             flexShrink: "0",
-            color: "semantic.brand.700.background",
+            color: "semantic.text.link",
         },
 
         submenu: {

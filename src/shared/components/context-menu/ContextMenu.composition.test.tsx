@@ -4,6 +4,7 @@ import { renderToStaticMarkup, } from "react-dom/server";
 import { MenuDivider, MenuItem, } from "@shared/components/menu";
 
 import { ContextMenu, } from "./context-menu";
+import { contextMenuRecipe, } from "./preset";
 
 describe("context menu composition", () => {
     test("renders a trigger area and a labelled menu surface when open by default", () => {
@@ -63,5 +64,14 @@ describe("context menu composition", () => {
         const markup = renderToStaticMarkup(<ContextMenu data-testid="cm" />);
 
         expect(markup).toContain(`data-testid="cm"`);
+    });
+
+    // Pen `rokhq` / doc `w7EbR`: the trigger chrome resolves the raised surface
+    // and subtle border roles rather than the common step ramp.
+    test("resolves the trigger surface roles", () => {
+        expect(contextMenuRecipe.base?.["trigger"]).toMatchObject({
+            backgroundColor: "semantic.surface.raised",
+            borderColor: "semantic.border.subtle",
+        });
     });
 });
