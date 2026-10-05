@@ -1,5 +1,546 @@
 {
   "version": "2.20",
-  "children": [],
+  "children": [
+    {
+      "type": "frame",
+      "id": "Qwxp6",
+      "x": 80,
+      "y": 80,
+      "name": "Foundation",
+      "clip": true,
+      "width": 1200,
+      "height": 680,
+      "fill": "$surface-canvas",
+      "cornerRadius": "$radius-lg",
+      "layout": "vertical",
+      "gap": "$space-6",
+      "padding": "$space-8",
+      "children": [
+        {
+          "type": "text",
+          "id": "QgeuY",
+          "name": "Title",
+          "fill": "$text-primary",
+          "content": "Foundation",
+          "fontFamily": "$font-body",
+          "fontSize": 32,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "H5trt",
+          "name": "Description",
+          "fill": "$text-secondary",
+          "content": "Semantic colour, spacing, shape, type and focus roles — light and dark themed variables.",
+          "fontFamily": "$font-body",
+          "fontSize": "$font-size-md",
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "LXBNs",
+          "name": "Semantic roles",
+          "width": "fill_container",
+          "gap": "$space-4",
+          "children": [
+            {
+              "type": "frame",
+              "id": "kt43W",
+              "name": "Surface",
+              "width": "fill_container",
+              "height": 150,
+              "fill": "$surface-raised",
+              "cornerRadius": "$radius-md",
+              "layout": "vertical",
+              "gap": "$space-4",
+              "padding": "$space-6",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "N3wZag",
+                  "name": "Label",
+                  "fill": "#0F172A",
+                  "content": "Surface",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-md",
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "pcJOo",
+                  "name": "Role",
+                  "fill": "#0F172A",
+                  "content": "$surface-raised",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "K7O2O",
+              "name": "Primary action",
+              "width": "fill_container",
+              "height": 150,
+              "fill": "$action-primary",
+              "cornerRadius": "$radius-md",
+              "layout": "vertical",
+              "gap": "$space-4",
+              "padding": "$space-6",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "xmEWf",
+                  "name": "Label",
+                  "fill": "#FFFFFF",
+                  "content": "Primary action",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-md",
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "kFfer",
+                  "name": "Role",
+                  "fill": "#FFFFFF",
+                  "content": "$action-primary",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "M4WwJ",
+              "name": "Danger action",
+              "width": "fill_container",
+              "height": 150,
+              "fill": "$action-danger",
+              "cornerRadius": "$radius-md",
+              "layout": "vertical",
+              "gap": "$space-4",
+              "padding": "$space-6",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "m8yh8",
+                  "name": "Label",
+                  "fill": "#FFFFFF",
+                  "content": "Danger action",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-md",
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "quxWd",
+                  "name": "Role",
+                  "fill": "#FFFFFF",
+                  "content": "$action-danger",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "G4DUGo",
+              "name": "Focus ring",
+              "width": "fill_container",
+              "height": 150,
+              "fill": "$focus-ring",
+              "cornerRadius": "$radius-md",
+              "layout": "vertical",
+              "gap": "$space-4",
+              "padding": "$space-6",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "L6k2S",
+                  "name": "Label",
+                  "fill": "#FFFFFF",
+                  "content": "Focus ring",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-md",
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "lL5IZ",
+                  "name": "Role",
+                  "fill": "#FFFFFF",
+                  "content": "$focus-ring",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "PgGCm",
+          "name": "Scales",
+          "width": "fill_container",
+          "fill": "$surface-raised",
+          "cornerRadius": "$radius-md",
+          "gap": "$space-6",
+          "padding": "$space-6",
+          "children": [
+            {
+              "type": "frame",
+              "id": "V7wJn",
+              "name": "Spacing",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ZlhdL",
+                  "name": "Title",
+                  "fill": "$text-primary",
+                  "content": "Spacing",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-md",
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "A3rltj",
+                  "name": "Value",
+                  "fill": "$text-secondary",
+                  "content": "4 · 6 · 8 = 16 · 24 · 32",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "c5Y7d",
+              "name": "Radii",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "l1SWA",
+                  "name": "Title",
+                  "fill": "$text-primary",
+                  "content": "Radii",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-md",
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "UT3Db",
+                  "name": "Value",
+                  "fill": "$text-secondary",
+                  "content": "sm 6 · md 10 · lg 16",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "F4VOBW",
+              "name": "Borders",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "F3HROO",
+                  "name": "Title",
+                  "fill": "$text-primary",
+                  "content": "Borders",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-md",
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "YV9ot",
+                  "name": "Value",
+                  "fill": "$text-secondary",
+                  "content": "thin 1 · thick 2",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "sMzi0",
+              "name": "Type",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "pxwJh",
+                  "name": "Title",
+                  "fill": "$text-primary",
+                  "content": "Type",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-md",
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "ImMZY",
+                  "name": "Value",
+                  "fill": "$text-secondary",
+                  "content": "Inter · 14 · 16 · 20",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "mode": [
+      "light",
+      "dark"
+    ]
+  },
+  "variables": {
+    "surface-canvas": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#F8FAFC",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#020617",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "surface-raised": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#1E293B",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "surface-sunken": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#F1F5F9",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#0F172A",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "text-primary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#0F172A",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#F8FAFC",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "text-secondary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#475569",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#CBD5E1",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "border-subtle": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#94A3B8",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#475569",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "border-strong": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#64748B",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#64748B",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "action-primary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#16A34A",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#22C55E",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "action-danger": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#DC2626",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#EF4444",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "focus-ring": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#16A34A",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#22C55E",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "space-4": {
+      "type": "number",
+      "value": 16
+    },
+    "space-6": {
+      "type": "number",
+      "value": 24
+    },
+    "space-8": {
+      "type": "number",
+      "value": 32
+    },
+    "radius-sm": {
+      "type": "number",
+      "value": 6
+    },
+    "radius-md": {
+      "type": "number",
+      "value": 10
+    },
+    "radius-lg": {
+      "type": "number",
+      "value": 16
+    },
+    "border-thin": {
+      "type": "number",
+      "value": 1
+    },
+    "border-thick": {
+      "type": "number",
+      "value": 2
+    },
+    "font-body": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "font-size-sm": {
+      "type": "number",
+      "value": 14
+    },
+    "font-size-md": {
+      "type": "number",
+      "value": 16
+    },
+    "font-size-lg": {
+      "type": "number",
+      "value": 20
+    }
+  },
   "fileToken": "c34a57c1-8b86-4d85-a3be-7abf2b8d01f2"
 }
