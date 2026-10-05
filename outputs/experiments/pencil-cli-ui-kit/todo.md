@@ -6,13 +6,12 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 
 ## Active
 
-- [ ] **Button master and showcase** — `active`
-  - Scope: create one reusable Button master and a clipped showcase.
-  - Verifies against: button structure, `ctx.problems` visitor query and screenshot.
+- [ ] **ButtonIcon master and showcase** — `active`
+  - Scope: create one reusable ButtonIcon master and a clipped showcase.
+  - Verifies against: ButtonIcon structure, `ctx.problems` visitor query and screenshot.
 
 ## Planned
 
-- [ ] **ButtonIcon master and showcase** — create and verify square tones/states.
 - [ ] **Card master and showcase** — create and verify anatomy and variants.
 - [ ] **Final evidence audit** — classify findings before human review.
 
@@ -34,3 +33,6 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 - [x] **Foundation variables and specimen** — `verified`
   - `Foundation` root `Qwxp6` has semantic variables, role cards, scale groups,
     no visitor-reported layout problems and `notes/evidence/foundation.png`.
+- [x] **Button master and showcase** — `verified`
+  - Reusable master `z6FBhy`, clipped showcase `t74zKZ`, no visitor-reported
+    layout problems and `notes/evidence/button.png`.

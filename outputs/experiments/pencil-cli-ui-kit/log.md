@@ -31,6 +31,7 @@ scope expansion blocks work. GUI is only for final user review.
 | 4 | Created and reopened headless target | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** `pen interactive --out` created the 96-byte target; initial and reopened `get_app_state()` report the exact target path; SHA-256 remained `2ba5b42b…3218b1`. |
 | 5 | Queried clean baseline | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** no top-level nodes, no masters and no `Get` visitor layout-problem rows. First `Print(ctx.problems)` query failed/rolled back because `ctx` is visitor-local; correction used `Get((n,c)=>c.problems && …)`. |
 | 6 | Created Foundation section | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** root `Qwxp6`, 22 light/dark colour/layout/type variables, role/scales specimen, no visitor `ctx.problems` rows, screenshot `notes/evidence/foundation.png`; evidence in `notes/evidence/foundation.md`. |
+| 7 | Created Button master and showcase | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** reusable master `z6FBhy`, clipped showcase `t74zKZ`, semantic tone/state evidence, no visitor layout-problem rows and `notes/evidence/button.png`; evidence in `notes/evidence/button.md`. |
 
 ### Rulings
 

@@ -314,6 +314,272 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "z6FBhy",
+      "x": 80,
+      "y": 820,
+      "name": "Button",
+      "reusable": true,
+      "clip": true,
+      "width": 160,
+      "height": 40,
+      "fill": "$action-primary",
+      "cornerRadius": "$radius-md",
+      "gap": 8,
+      "padding": 12,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "text",
+          "id": "a5MK1",
+          "name": "label",
+          "fill": "#FFFFFF",
+          "content": "Continue",
+          "fontFamily": "$font-body",
+          "fontSize": "$font-size-sm",
+          "fontWeight": "bold"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "t74zKZ",
+      "x": 280,
+      "y": 820,
+      "name": "Button showcase",
+      "clip": true,
+      "width": 920,
+      "height": 260,
+      "fill": "$surface-canvas",
+      "cornerRadius": "$radius-lg",
+      "layout": "vertical",
+      "gap": "$space-6",
+      "padding": "$space-8",
+      "children": [
+        {
+          "type": "text",
+          "id": "oBFoY",
+          "name": "Title",
+          "fill": "$text-primary",
+          "content": "Button",
+          "fontFamily": "$font-body",
+          "fontSize": "$font-size-lg",
+          "fontWeight": "bold"
+        },
+        {
+          "type": "frame",
+          "id": "FalII",
+          "name": "Tones",
+          "width": "fill_container",
+          "gap": "$space-4",
+          "children": [
+            {
+              "type": "frame",
+              "id": "QXotC",
+              "name": "Primary",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "$action-primary",
+              "cornerRadius": "$radius-md",
+              "padding": 12,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "r8257Y",
+                  "name": "label",
+                  "fill": "#FFFFFF",
+                  "content": "Continue",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NxIe5",
+              "name": "Secondary",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "$surface-raised",
+              "cornerRadius": "$radius-md",
+              "padding": 12,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "iqQvO",
+                  "name": "label",
+                  "fill": "$text-primary",
+                  "content": "Secondary",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "OSdL5",
+              "name": "Ghost",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "$surface-sunken",
+              "cornerRadius": "$radius-md",
+              "padding": 12,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "jhCZ0",
+                  "name": "label",
+                  "fill": "$text-primary",
+                  "content": "Ghost",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "d0bHo",
+              "name": "Destructive",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "$action-danger",
+              "cornerRadius": "$radius-md",
+              "padding": 12,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "V5ZbHl",
+                  "name": "label",
+                  "fill": "#FFFFFF",
+                  "content": "Delete",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "oBqrW",
+          "name": "States",
+          "width": "fill_container",
+          "gap": "$space-4",
+          "children": [
+            {
+              "type": "frame",
+              "id": "XCWQr",
+              "name": "Small",
+              "width": "fill_container",
+              "height": 32,
+              "fill": "$action-primary",
+              "cornerRadius": "$radius-sm",
+              "padding": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "e9T58e",
+                  "name": "label",
+                  "fill": "#FFFFFF",
+                  "content": "Small",
+                  "fontFamily": "$font-body",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "S7W5Gq",
+              "name": "Focused",
+              "width": "fill_container",
+              "height": 32,
+              "fill": "$action-primary",
+              "cornerRadius": "$radius-sm",
+              "padding": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ZaTc3",
+                  "name": "label",
+                  "fill": "#FFFFFF",
+                  "content": "Focused",
+                  "fontFamily": "$font-body",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mEF8m",
+              "name": "Disabled",
+              "width": "fill_container",
+              "height": 32,
+              "fill": "$border-subtle",
+              "cornerRadius": "$radius-sm",
+              "padding": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "yfNjE",
+                  "name": "label",
+                  "fill": "$text-secondary",
+                  "content": "Disabled",
+                  "fontFamily": "$font-body",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "E5o3Rt",
+              "name": "Loading",
+              "width": "fill_container",
+              "height": 32,
+              "fill": "$action-primary",
+              "cornerRadius": "$radius-sm",
+              "padding": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rN55y",
+                  "name": "label",
+                  "fill": "#FFFFFF",
+                  "content": "Loading",
+                  "fontFamily": "$font-body",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
