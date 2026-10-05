@@ -4,6 +4,11 @@ Operating journal of all work products. `wiki/log.md` tracks wiki changes only.
 
 ## Latest experiment
 
+[[experiments/pencil-cli-ui-kit/README]] — **active** (2026-10-06).
+CLI-only Pencil experiment: verifies both direct `pen` output and headless
+interactive-shell routes before creating a clean foundation, Button, ButtonIcon
+and Card UI Kit. GUI is reserved for final human review.
+
 [[experiments/pencil-opencode-workflow/README]] — **closed** (final closure 2026-10-05; workflow phase completed 2026-10-02).
 Эксперимент проверяет workflow, а не реализацию продукта: способен ли
 project-local OpenCode skill организовать Pencil MCP работу с существующей
