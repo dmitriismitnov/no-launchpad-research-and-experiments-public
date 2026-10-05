@@ -28,6 +28,8 @@ scope expansion blocks work. GUI is only for final user review.
 | 1 | Opened durable experiment state | orchestrator | `openai/gpt-5.6-terra` | Bootstrap files created; no `.pen` file or MCP mutation yet. |
 | 2 | Verified bootstrap contract | orchestrator | `openai/gpt-5.6-terra` | All nine required durable files exist; `outputs/history.md` has the active entry. |
 | 3 | Tested direct `pen --out` route | orchestrator | `pen.dev CLI 0.3.10`, agent `codex` | **BLOCKED:** harness terminated the one permitted invocation after 120 seconds. `direct-cli.stdout.log` contains active `pi-agent` design-operation messages (213,930 bytes); stderr is empty; no target/usage file exists. |
+| 4 | Created and reopened headless target | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** `pen interactive --out` created the 96-byte target; initial and reopened `get_app_state()` report the exact target path; SHA-256 remained `2ba5b42b…3218b1`. |
+| 5 | Queried clean baseline | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** no top-level nodes, no masters and no `Get` visitor layout-problem rows. First `Print(ctx.problems)` query failed/rolled back because `ctx` is visitor-local; correction used `Get((n,c)=>c.problems && …)`. |
 
 ### Rulings
 
@@ -41,3 +43,7 @@ scope expansion blocks work. GUI is only for final user review.
   rerun because the approved plan permits exactly one direct invocation. Cost if
   wrong: this route has no completed direct-output result, but its inability to
   complete within the harness constraint is reproducibly evidenced.
+- Empty canvas baseline has no screenshot. `--enable-preview` emits only after a
+  canvas change, and inserting a test frame would violate the no-mutation
+  baseline. Cost if wrong: there is no image for the empty target, but the
+  active-document, root scan and SHA-256 evidence prove its state.

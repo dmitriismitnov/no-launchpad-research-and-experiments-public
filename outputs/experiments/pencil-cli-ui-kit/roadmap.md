@@ -9,10 +9,10 @@ no `.pen` file or Pencil mutation exists yet.
 
 | Phase | Status | Goal |
 | --- | --- | --- |
-| Bootstrap | active | Create experiment contract, durable state and registry entry. |
-| CLI discovery | planned | Test direct CLI and headless interactive CLI routes. |
-| Gate A baseline | planned | Confirm active clean target and record baseline. |
-| UI Kit | planned | Create foundation, Button, ButtonIcon and Card. |
+| Bootstrap | done | Create experiment contract, durable state and registry entry. |
+| CLI discovery | done | Test direct CLI and headless interactive CLI routes. |
+| Gate A baseline | verified | Confirm active clean target and record baseline. |
+| UI Kit | active | Create foundation, Button, ButtonIcon and Card. |
 | Evidence and human review | planned | Audit evidence and present GUI review to the user. |
 
 ## Decisions
@@ -23,6 +23,7 @@ no `.pen` file or Pencil mutation exists yet.
 | 2 | 2026-10-06 | The target is a clean document, not a copy of an existing `.pen`. | user |
 | 3 | 2026-10-06 | GUI is reserved for final user review. | user |
 | 4 | 2026-10-06 | Create foundation and three masters only in the isolated target. | user |
+| 5 | 2026-10-06 | CLI `ctx.problems` must be accessed inside a `Get` visitor. | orchestrator |
 
 ## Gates
 
@@ -41,4 +42,4 @@ no `.pen` file or Pencil mutation exists yet.
 
 | Date | Position | Durable files updated | Exact next action |
 | --- | --- | --- | --- |
-| 2026-10-06 | Bootstrap | README, roadmap, todo, log, history, notes | Verify the bootstrap contract and test direct CLI creation. |
+| 2026-10-06 | Gate A verified | README, roadmap, todo, log, history, CLI evidence | Read Foundation contracts and create its atomic task. |
