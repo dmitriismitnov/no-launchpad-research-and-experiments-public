@@ -32,6 +32,7 @@ scope expansion blocks work. GUI is only for final user review.
 | 5 | Queried clean baseline | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** no top-level nodes, no masters and no `Get` visitor layout-problem rows. First `Print(ctx.problems)` query failed/rolled back because `ctx` is visitor-local; correction used `Get((n,c)=>c.problems && …)`. |
 | 6 | Created Foundation section | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** root `Qwxp6`, 22 light/dark colour/layout/type variables, role/scales specimen, no visitor `ctx.problems` rows, screenshot `notes/evidence/foundation.png`; evidence in `notes/evidence/foundation.md`. |
 | 7 | Created Button master and showcase | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** reusable master `z6FBhy`, clipped showcase `t74zKZ`, semantic tone/state evidence, no visitor layout-problem rows and `notes/evidence/button.png`; evidence in `notes/evidence/button.md`. |
+| 8 | Retried direct CLI route with user-selected DeepSeek | orchestrator | requested `deepseek/deepseek-flash#high` | **FAIL:** CLI exited 1 before file creation: `Unknown model 'deepseek/deepseek-flash'`. OpenCode model registry confirms the ID/effort, but pen.dev CLI 0.3.10 does not expose it. |
 
 ### Rulings
 
