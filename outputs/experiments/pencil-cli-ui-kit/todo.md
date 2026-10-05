@@ -6,13 +6,12 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 
 ## Active
 
-- [ ] **Direct pen.dev CLI route** — `active`
-  - Scope: direct CLI creation attempt only; no GUI fallback.
-  - Verifies against: CLI logs, usage JSON and target SHA-256 or recorded failure.
+- [ ] **Interactive headless CLI route** — `active`
+  - Scope: create/activate the clean target and baseline it without GUI.
+  - Verifies against: headless transcript, active-document record and SHA-256.
 
 ## Planned
 
-- [ ] **Interactive headless CLI route** — create/activate the clean target and baseline it.
 - [ ] **Foundation variables and specimen** — create and verify one Foundation frame.
 - [ ] **Button master and showcase** — create and verify semantic tones/states.
 - [ ] **ButtonIcon master and showcase** — create and verify square tones/states.
@@ -21,7 +20,10 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 
 ## Blocked
 
-None.
+- [ ] **Direct pen.dev CLI route** — `blocked`
+  - The single direct invocation was terminated by the harness at 120 seconds
+    while `pi-agent` continued design operations. It did not save a target or
+    usage JSON. No GUI fallback or rerun is permitted by the approved plan.
 
 ## Verified
 

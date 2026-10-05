@@ -27,6 +27,7 @@ scope expansion blocks work. GUI is only for final user review.
 | --- | --- | --- | --- | --- |
 | 1 | Opened durable experiment state | orchestrator | `openai/gpt-5.6-terra` | Bootstrap files created; no `.pen` file or MCP mutation yet. |
 | 2 | Verified bootstrap contract | orchestrator | `openai/gpt-5.6-terra` | All nine required durable files exist; `outputs/history.md` has the active entry. |
+| 3 | Tested direct `pen --out` route | orchestrator | `pen.dev CLI 0.3.10`, agent `codex` | **BLOCKED:** harness terminated the one permitted invocation after 120 seconds. `direct-cli.stdout.log` contains active `pi-agent` design-operation messages (213,930 bytes); stderr is empty; no target/usage file exists. |
 
 ### Rulings
 
@@ -36,3 +37,7 @@ scope expansion blocks work. GUI is only for final user review.
 - Direct CLI evidence is retained as logs/hash. The headless route starts an
   empty canvas and overwrites the target to ensure the final UI Kit is clean.
   Cost if wrong: the direct-route canvas itself is not retained.
+- Direct CLI timeout is an external harness limit, not a CLI failure: do not
+  rerun because the approved plan permits exactly one direct invocation. Cost if
+  wrong: this route has no completed direct-output result, but its inability to
+  complete within the harness constraint is reproducibly evidenced.
