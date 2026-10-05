@@ -56,13 +56,20 @@ Canonical icon assets допускаются только из
 canvas structure **только** внутри нового чистого experiment document. Никакие
 existing master, token, icon, source Pen или production-code не меняются.
 
-## 4. Persistent artifacts
+## 4. Experiment protocol and persistent artifacts
+
+Эксперимент создаётся по проектному протоколу: корневой `README.md` фиксирует
+вопрос, гипотезу, scope, non-goals и критерии успеха; `history.md` фиксирует
+старт со статусом `active`. Эксперимент остаётся active до прямой команды
+пользователя о закрытии. При bootstrap в `outputs/history.md` добавляется ссылка
+на этот README со статусом active.
 
 После утверждения implementation plan experiment создаёт:
 
 ```text
 outputs/experiments/pencil-cli-ui-kit/
 ├── README.md
+├── plan.md
 ├── roadmap.md
 ├── todo.md
 ├── log.md
@@ -71,15 +78,17 @@ outputs/experiments/pencil-cli-ui-kit/
 │   ├── design-brief.md
 │   ├── benchmark-protocol.md
 │   ├── cli-discovery.md
+│   ├── results.md
 │   └── evidence/
 └── artifacts/
     └── pencil-cli-ui-kit.pen
 ```
 
+`plan.md` — утверждённый implementation plan и привязка к спецификации.
 `roadmap.md` содержит фазы, decisions и gates; `todo.md` — одну атомарную
 задачу на mutation; `log.md` — команды, результат, evidence, роль и модель;
-`history.md` — короткий human-readable journal. Compaction не является source
-of truth.
+`history.md` — короткий human-readable journal; `notes/results.md` — итог и
+ограничения на закрытии. Compaction не является source of truth.
 
 ## 5. Workflow и gates
 
