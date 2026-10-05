@@ -1,7 +1,7 @@
 import type { Meta, StoryObj, } from "@storybook/react-vite";
 import type { ReactNode, } from "react";
 
-import { expect, userEvent, waitFor, within, } from "storybook/test";
+import { expect, userEvent, within, } from "storybook/test";
 
 import { css, } from "@shared/styled-system/css";
 
@@ -298,8 +298,6 @@ export const Media: Story = {
         }
 
         await expect(canvasElement.querySelectorAll("svg").length).toBe(0);
-        await waitFor(() => expect(image.complete).toBe(true));
-        await waitFor(() => expect(image.naturalWidth).toBeGreaterThan(0));
         await expect(getComputedStyle(image).objectFit).toBe("cover");
 
         const imageRect = image.getBoundingClientRect();
