@@ -6,6 +6,7 @@
 | --- | --- | --- | --- | --- |
 | `pen --out … --prompt … --agent codex` | harness timeout after 120 s | no target file; no usage JSON | `artifacts/direct-cli.stdout.log` (213,930 bytes), `direct-cli.stderr.log` (0 bytes) | `BLOCKED` |
 | `pen --out … --model deepseek/deepseek-flash --effort high` | 1 | target unchanged | `artifacts/direct-cli-deepseek.stderr.log` | `FAIL` — installed pen.dev CLI does not recognize the OpenCode model ID |
+| `pen --out … --model deepseek-flash --effort high` | 1 | target unchanged | `artifacts/direct-cli-deepseek-flash.stderr.log` | `FAIL` — installed pen.dev CLI does not recognize the short ID |
 
 The OpenCode registry identifies **DeepSeek V4.1 Flash** as
 `deepseek/deepseek-flash`, with `high` as a supported effort variant. The
