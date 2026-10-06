@@ -84,3 +84,5 @@ artifacts/pencil-cli-ui-kit.pen # sole writable Pen document
   `ctx.problems`.
 - Closed on the user's direct instruction after visual review. Outcome,
   retrospective and classification: `notes/results.md`.
+- Merged into `main` by fast-forward; `mise run check` green on the merged
+  result. The feature branch is kept (fully merged).

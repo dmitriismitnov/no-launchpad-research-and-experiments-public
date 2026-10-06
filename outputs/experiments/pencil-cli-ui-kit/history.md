@@ -35,3 +35,15 @@ theme axes).
 
 See `notes/results.md` for the PASS/INFO/HUMAN REVIEW classification and the
 closing assessment.
+
+## 2026-10-06 — merged into main
+
+- Branch `experiment/pencil-cli-ui-kit` merged into `main` by fast-forward
+  (`main` was an ancestor; 16 commits, then closure and cleanup commits).
+- `mise run check` on the merged result: 840 unit / 724 browser, green
+  (one Slider dark-theme timeout in the first run was a flaky false negative:
+  the file passed 20/20 in isolation and in the repeated full run).
+- Removed a stray nested export artifact
+  (`artifacts/outputs/.../RBsKd.png`) left by an early `Export` path.
+- The feature branch is kept (fully merged); `main` is not pushed to a remote
+  by this action.
