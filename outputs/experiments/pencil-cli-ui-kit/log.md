@@ -34,6 +34,7 @@ scope expansion blocks work. GUI is only for final user review.
 | 7 | Created Button master and showcase | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** reusable master `z6FBhy`, clipped showcase `t74zKZ`, semantic tone/state evidence, no visitor layout-problem rows and `notes/evidence/button.png`; evidence in `notes/evidence/button.md`. |
 | 8 | Retried direct CLI route with user-selected DeepSeek | orchestrator | requested `deepseek/deepseek-flash#high` | **FAIL:** CLI exited 1 before file creation: `Unknown model 'deepseek/deepseek-flash'`. OpenCode model registry confirms the ID/effort, but pen.dev CLI 0.3.10 does not expose it. |
 | 9 | Retried direct CLI route with short DeepSeek ID | orchestrator | requested `deepseek-flash#high` | **FAIL:** CLI exited 1 before file creation: `Unknown model 'deepseek-flash'`; target unchanged. |
+| 10 | Inventoried built-in Pen skills | orchestrator | `pen.dev CLI 0.3.10` | **INFO:** read-only `read_skill()` lists schema, execute, generation, components, whiteboard, code and design-domain guides; recorded in `notes/pen-skills-inventory.md`. |
 
 ### Rulings
 
