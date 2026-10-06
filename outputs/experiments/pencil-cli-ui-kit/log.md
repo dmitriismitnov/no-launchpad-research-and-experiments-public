@@ -36,6 +36,7 @@ scope expansion blocks work. GUI is only for final user review.
 | 9 | Retried direct CLI route with short DeepSeek ID | orchestrator | requested `deepseek-flash#high` | **FAIL:** CLI exited 1 before file creation: `Unknown model 'deepseek-flash'`; target unchanged. |
 | 10 | Inventoried built-in Pen skills | orchestrator | `pen.dev CLI 0.3.10` | **INFO:** read-only `read_skill()` lists schema, execute, generation, components, whiteboard, code and design-domain guides; recorded in `notes/pen-skills-inventory.md`. |
 | 11 | Snapshotted built-in Pen guides | orchestrator | `pen.dev CLI 0.3.10` | **INFO:** copied all 15 Markdown resources from the installed `pen-dev` skill to `notes/pen-guides/`; source hashes are in `SHA256SUMS`, use protocol in `notes/pen-guides-snapshot.md`. |
+| 12 | Created ButtonIcon master and showcase | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** reusable master `ngKcI`, Lucide plus asset, Foundation-variable paints, clipped showcase `RBsKd`, no visitor layout-problem rows and `notes/evidence/button-icon.png`; evidence in `notes/evidence/button-icon.md`. |
 
 ### Rulings
 
