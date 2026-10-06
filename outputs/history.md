@@ -4,10 +4,13 @@ Operating journal of all work products. `wiki/log.md` tracks wiki changes only.
 
 ## Latest experiment
 
-[[experiments/pencil-cli-ui-kit/README]] — **active** (2026-10-06).
-CLI-only Pencil experiment: verifies both direct `pen` output and headless
-interactive-shell routes before creating a clean foundation, Button, ButtonIcon
-and Card UI Kit. GUI is reserved for final human review.
+[[experiments/pencil-cli-ui-kit/README]] — **closed** (2026-10-06, by direct user instruction).
+CLI-only Pencil experiment: verified the headless `pen interactive` route (the
+direct `pen --out --agent` route exceeded the harness limit and the CLI does not
+expose the requested DeepSeek IDs), then built a clean foundation, Button,
+ButtonIcon and Card UI Kit, a Projects overview, a layered token architecture
+and decomposed theme axes. Worked without the GUI; deterministic `execute`
+operations confirmed. Outcome and retrospective — [[experiments/pencil-cli-ui-kit/notes/results]].
 
 [[experiments/pencil-opencode-workflow/README]] — **closed** (final closure 2026-10-05; workflow phase completed 2026-10-02).
 Эксперимент проверяет workflow, а не реализацию продукта: способен ли

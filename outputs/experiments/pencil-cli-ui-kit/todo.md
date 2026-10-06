@@ -1,6 +1,6 @@
 # Todo: Pencil CLI UI Kit
 
-**Status:** active (2026-10-06).
+**Status:** closed (2026-10-06).
 
 Statuses: `planned`, `active`, `blocked`, `verified`.
 
@@ -47,3 +47,9 @@ None.
 - [x] **Layered token architecture migration** — `verified`
   - Added project-shaped primitive/semantic layers and migrated Foundation,
     masters and Projects overview in place; see `notes/evidence/token-architecture.md`.
+- [x] **Experiment: Foundation theme axes decomposition** — `verified`
+  - Added `palette`, `spacing`, `shape` and `effects` base axes; applied the
+    existing `typography` Default axis to typography primitives. See log entry 18.
+- [x] **Close experiment** — `verified`
+  - The user completed visual review and closed the experiment by direct
+    instruction; classification and retrospective are recorded. See log entry 20.

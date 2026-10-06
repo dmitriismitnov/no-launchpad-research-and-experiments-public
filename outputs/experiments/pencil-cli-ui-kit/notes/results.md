@@ -1,6 +1,6 @@
-# Pre-review audit: Pencil CLI UI Kit
+# Results: Pencil CLI UI Kit
 
-**Status:** ready for human review (2026-10-06).
+**Status:** closed (2026-10-06, direct user instruction).
 
 ## PASS
 
@@ -27,13 +27,33 @@
   layout finding; the final check passes.
 - A token migration initially materialized removed aliases as literal values;
   the final targeted audit found no literal visual tokens or legacy aliases.
+- Deleting a theme axis deletes its dependent variables: after the external
+  removal of the `typography` axis, all 47 text nodes were materialized to
+  `fontSize: 0` / empty weight. Recovered from the committed HEAD artifact and
+  verified clean.
+- `palette`, `typography`, `spacing`, `shape` and `effects` axes now exist with
+  a single value each; only `mode` (`light`/`dark`) carries real variation.
 
-## HUMAN REVIEW
+## HUMAN REVIEW (resolved)
 
-- Open `artifacts/pencil-cli-ui-kit.pen` in GUI and assess visual hierarchy,
-  typography, spacing and the compositional quality of Projects overview.
-- Decide whether the Lucide placeholder in ButtonIcon is visually acceptable
-  for this clean-document experiment or whether an explicit project-icon import
-  gate is desired.
-- Review the Foundation and Projects overview under the new semantic theme
-  projection; mechanical verification does not replace visual approval.
+- The user completed the visual review and closed the experiment on
+  2026-10-06: "Эксперимент можно заканчивать."
+
+## Closing assessment
+
+- **Planned vs done:** the approved spec (CLI-only creation, both CLI routes,
+  Foundation + Button/ButtonIcon/Card, showcase evidence, Gate A–D) is
+  complete. Two user-authorized extensions were added mid-run: the layered
+  token architecture and the theme-axis decomposition.
+- **Not done / deferred:** the direct `pen --out --agent` route never produced
+  an output inside the harness limit, and the CLI does not expose the requested
+  DeepSeek IDs. The Lucide placeholder icon and full palette parity remain
+  deliberate NON-goals.
+- **Scope:** the experiment stayed inside its boundaries; the two extensions
+  were explicit user requests, not unilateral drift.
+- **Pen capability verdict:** workable headless as a platform, strongest when
+  combined with its own guides; deterministic `execute` operations are real but
+  not exposed as a stable standalone API.
+- **Process verdict:** evidence-first durable state worked; the notable process
+  risk is that external GUI edits can silently drop axis-linked variables,
+  which the final audit caught and repaired.
