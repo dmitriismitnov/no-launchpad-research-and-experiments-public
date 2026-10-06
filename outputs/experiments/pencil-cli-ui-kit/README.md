@@ -1,6 +1,8 @@
 # Experiment: Pencil CLI UI Kit
 
-**Status:** active (2026-10-06).
+**Status:** closed (2026-10-06, by direct user instruction).
+
+Branch: `experiment/pencil-cli-ui-kit` from `main`.
 
 ## Question and hypothesis
 
@@ -67,3 +69,18 @@ history.md                # human-readable journal
 notes/                    # brief, protocol and evidence
 artifacts/pencil-cli-ui-kit.pen # sole writable Pen document
 ```
+
+## State (2026-10-06)
+
+- The headless `pen interactive` route created, owned and mutated the clean
+  target without the GUI. The direct `pen --out --agent` route exceeded the
+  harness limit and the CLI does not expose the requested DeepSeek IDs.
+- The target contains the Foundation, the `Button`, `ButtonIcon` and `Card`
+  masters, a `Projects overview` composition, a layered token architecture and
+  decomposed theme axes (`palette`, `typography`, `spacing`, `shape`,
+  `effects`, plus `mode`).
+- `mise run check` passed (840 unit / 724 browser) and the final active-document
+  audit reported three masters, valid typography resolution and no
+  `ctx.problems`.
+- Closed on the user's direct instruction after visual review. Outcome,
+  retrospective and classification: `notes/results.md`.
