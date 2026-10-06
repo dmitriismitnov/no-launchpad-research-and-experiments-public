@@ -40,6 +40,7 @@ scope expansion blocks work. GUI is only for final user review.
 | 13 | Created Card master and showcase | orchestrator | `pen.dev CLI 0.3.10` | **PASS after correction:** reusable master `COzjp`, ref variants in `pNagQ`, Foundation-variable paints; initial media/clipping findings corrected and final visitor query clear; `notes/evidence/card.md`. |
 | 14 | Composed Projects overview and audited target | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** `X3pzJ` composes Button/ButtonIcon/Card refs; 1200×800 root and all three masters read back without visitor layout-problem rows. Pre-review classification is `notes/results.md`. |
 | 15 | Ran token-architecture baseline audit | orchestrator | `openai/gpt-5.6-terra`, pen.dev CLI 0.3.10 | **FAIL as expected:** namespaced primitive/semantic variables are absent; masters `z6FBhy`, `ngKcI`, `COzjp` still use simplified aliases. Transcript/evidence: `notes/evidence/token-architecture-baseline.md`. |
+| 16 | Migrated Pen token architecture in place | orchestrator | `openai/gpt-5.6-terra`, pen.dev CLI 0.3.10 | **PASS after correction:** added palette/scales/typography primitives and light/dark `semantic.*` aliases, then migrated existing masters and composition without recreating ids. `SetVariables(..., true)` materialized legacy references before the first rewrite; targeted diagnosis and update restored semantic/scale references. Final token audit has required names, three masters and refs, with no legacy/literal visual token rows or `ctx.problems`. |
 
 ### Rulings
 
@@ -57,3 +58,6 @@ scope expansion blocks work. GUI is only for final user review.
   canvas change, and inserting a test frame would violate the no-mutation
   baseline. Cost if wrong: there is no image for the empty target, but the
   active-document, root scan and SHA-256 evidence prove its state.
+- Token migration applies references before replacing a variable namespace. Cost
+  if wrong: `SetVariables(..., true)` resolves now-undefined references to their
+  last literal value; targeted post-migration audit is required to catch it.
