@@ -2,6 +2,10 @@
 
 **Observed:** 2026-10-06 via read-only `pen interactive` → `read_skill()`.
 
+**Snapshot:** [`pen-guides/`](pen-guides/) and
+[`pen-guides-snapshot.md`](pen-guides-snapshot.md) preserve the installed
+pen.dev CLI 0.3.10 guidance used by this experiment.
+
 ## Required for `.pen` work
 
 | Path | Purpose |

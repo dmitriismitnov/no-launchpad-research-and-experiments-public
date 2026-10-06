@@ -35,6 +35,7 @@ scope expansion blocks work. GUI is only for final user review.
 | 8 | Retried direct CLI route with user-selected DeepSeek | orchestrator | requested `deepseek/deepseek-flash#high` | **FAIL:** CLI exited 1 before file creation: `Unknown model 'deepseek/deepseek-flash'`. OpenCode model registry confirms the ID/effort, but pen.dev CLI 0.3.10 does not expose it. |
 | 9 | Retried direct CLI route with short DeepSeek ID | orchestrator | requested `deepseek-flash#high` | **FAIL:** CLI exited 1 before file creation: `Unknown model 'deepseek-flash'`; target unchanged. |
 | 10 | Inventoried built-in Pen skills | orchestrator | `pen.dev CLI 0.3.10` | **INFO:** read-only `read_skill()` lists schema, execute, generation, components, whiteboard, code and design-domain guides; recorded in `notes/pen-skills-inventory.md`. |
+| 11 | Snapshotted built-in Pen guides | orchestrator | `pen.dev CLI 0.3.10` | **INFO:** copied all 15 Markdown resources from the installed `pen-dev` skill to `notes/pen-guides/`; source hashes are in `SHA256SUMS`, use protocol in `notes/pen-guides-snapshot.md`. |
 
 ### Rulings
 
