@@ -6,7 +6,11 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 
 ## Active
 
-None.
+- [ ] **Layered token architecture migration** — `active`
+  - Scope: add project-shaped primitive/semantic variable layers and migrate the
+    existing Foundation, masters and Projects overview in place.
+  - Verifies against: `GetVariables`, master/ref scans, `ctx.problems` and
+    focused Foundation/Projects overview screenshots.
 
 ## Planned
 

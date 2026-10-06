@@ -39,6 +39,7 @@ scope expansion blocks work. GUI is only for final user review.
 | 12 | Created ButtonIcon master and showcase | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** reusable master `ngKcI`, Lucide plus asset, Foundation-variable paints, clipped showcase `RBsKd`, no visitor layout-problem rows and `notes/evidence/button-icon.png`; evidence in `notes/evidence/button-icon.md`. |
 | 13 | Created Card master and showcase | orchestrator | `pen.dev CLI 0.3.10` | **PASS after correction:** reusable master `COzjp`, ref variants in `pNagQ`, Foundation-variable paints; initial media/clipping findings corrected and final visitor query clear; `notes/evidence/card.md`. |
 | 14 | Composed Projects overview and audited target | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** `X3pzJ` composes Button/ButtonIcon/Card refs; 1200×800 root and all three masters read back without visitor layout-problem rows. Pre-review classification is `notes/results.md`. |
+| 15 | Ran token-architecture baseline audit | orchestrator | `openai/gpt-5.6-terra`, pen.dev CLI 0.3.10 | **FAIL as expected:** namespaced primitive/semantic variables are absent; masters `z6FBhy`, `ngKcI`, `COzjp` still use simplified aliases. Transcript/evidence: `notes/evidence/token-architecture-baseline.md`. |
 
 ### Rulings
 
