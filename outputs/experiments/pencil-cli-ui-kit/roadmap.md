@@ -12,8 +12,8 @@ no `.pen` file or Pencil mutation exists yet.
 | Bootstrap | done | Create experiment contract, durable state and registry entry. |
 | CLI discovery | done | Test direct CLI and headless interactive CLI routes. |
 | Gate A baseline | verified | Confirm active clean target and record baseline. |
-| UI Kit | active | Create foundation, Button, ButtonIcon and Card. |
-| Evidence and human review | planned | Audit evidence and present GUI review to the user. |
+| UI Kit | done | Create foundation, Button, ButtonIcon and Card, then compose Projects overview. |
+| Evidence and human review | ready for human review | Audit evidence and present GUI review to the user. |
 
 ## Decisions
 
@@ -42,4 +42,4 @@ no `.pen` file or Pencil mutation exists yet.
 
 | Date | Position | Durable files updated | Exact next action |
 | --- | --- | --- | --- |
-| 2026-10-06 | Gate A verified | README, roadmap, todo, log, history, CLI evidence | Read Foundation contracts and create its atomic task. |
+| 2026-10-06 | Human review ready | Pen target, evidence, results, roadmap, todo, log | User opens target in GUI and records visual accept/revise decision. |

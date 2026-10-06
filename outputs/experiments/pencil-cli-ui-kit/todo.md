@@ -6,13 +6,11 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 
 ## Active
 
-- [ ] **Card master and showcase** — `active`
-  - Scope: create one reusable Card master and a clipped showcase.
-  - Verifies against: Card anatomy, `ctx.problems` visitor query and screenshot.
+None.
 
 ## Planned
 
-- [ ] **Final evidence audit** — classify findings before human review.
+None.
 
 ## Blocked
 
@@ -38,3 +36,11 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 - [x] **ButtonIcon master and showcase** — `verified`
   - Reusable master `ngKcI`, clipped showcase `RBsKd`, no visitor-reported
     layout problems and `notes/evidence/button-icon.png`.
+- [x] **Card master and showcase** — `verified`
+  - Reusable master `COzjp`, ref-based variants, corrected Gate C layout and
+    `notes/evidence/card.png`.
+- [x] **Projects overview composition** — `verified`
+  - Screen `X3pzJ` composes Button, ButtonIcon and Card refs with no visitor
+    layout-problem rows; `notes/evidence/projects-overview.png`.
+- [x] **Final evidence audit** — `verified`
+  - `notes/results.md` classifies mechanical findings and explicit human review.

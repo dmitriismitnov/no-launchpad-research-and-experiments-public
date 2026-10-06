@@ -37,6 +37,8 @@ scope expansion blocks work. GUI is only for final user review.
 | 10 | Inventoried built-in Pen skills | orchestrator | `pen.dev CLI 0.3.10` | **INFO:** read-only `read_skill()` lists schema, execute, generation, components, whiteboard, code and design-domain guides; recorded in `notes/pen-skills-inventory.md`. |
 | 11 | Snapshotted built-in Pen guides | orchestrator | `pen.dev CLI 0.3.10` | **INFO:** copied all 15 Markdown resources from the installed `pen-dev` skill to `notes/pen-guides/`; source hashes are in `SHA256SUMS`, use protocol in `notes/pen-guides-snapshot.md`. |
 | 12 | Created ButtonIcon master and showcase | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** reusable master `ngKcI`, Lucide plus asset, Foundation-variable paints, clipped showcase `RBsKd`, no visitor layout-problem rows and `notes/evidence/button-icon.png`; evidence in `notes/evidence/button-icon.md`. |
+| 13 | Created Card master and showcase | orchestrator | `pen.dev CLI 0.3.10` | **PASS after correction:** reusable master `COzjp`, ref variants in `pNagQ`, Foundation-variable paints; initial media/clipping findings corrected and final visitor query clear; `notes/evidence/card.md`. |
+| 14 | Composed Projects overview and audited target | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** `X3pzJ` composes Button/ButtonIcon/Card refs; 1200×800 root and all three masters read back without visitor layout-problem rows. Pre-review classification is `notes/results.md`. |
 
 ### Rulings
 

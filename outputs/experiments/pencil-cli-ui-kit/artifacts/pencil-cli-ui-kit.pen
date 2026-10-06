@@ -836,6 +836,521 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "COzjp",
+      "x": 80,
+      "y": 1420,
+      "name": "Card",
+      "reusable": true,
+      "clip": true,
+      "width": 320,
+      "fill": "$surface-raised",
+      "cornerRadius": "$radius-lg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "iOvfr",
+          "name": "media",
+          "width": 320,
+          "height": 140,
+          "fill": "$surface-sunken",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "h2igw",
+              "name": "mediaIcon",
+              "width": 28,
+              "height": 28,
+              "icon": "image",
+              "library": "lucide",
+              "fill": "$text-secondary"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "UEXOW",
+          "name": "body",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": "$space-4",
+          "padding": "$space-6",
+          "children": [
+            {
+              "type": "frame",
+              "id": "P9sai",
+              "name": "header",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "RZV2s",
+                  "name": "eyebrow",
+                  "fill": "$text-secondary",
+                  "content": "Project",
+                  "fontFamily": "$font-body",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "AOQex",
+                  "name": "meta",
+                  "fill": "$text-secondary",
+                  "content": "Updated today",
+                  "fontFamily": "$font-body",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "nhHcI",
+              "name": "title",
+              "fill": "$text-primary",
+              "content": "Growth initiatives",
+              "fontFamily": "$font-body",
+              "fontSize": "$font-size-lg",
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "KnLfb",
+              "name": "description",
+              "fill": "$text-secondary",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Align the next set of experiments and measurable product improvements.",
+              "fontFamily": "$font-body",
+              "fontSize": "$font-size-sm",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "c8qMAS",
+              "name": "footer",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Q24Y9",
+                  "name": "footerPrimary",
+                  "fill": "$text-secondary",
+                  "content": "8 tasks",
+                  "fontFamily": "$font-body",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "ur0C1",
+                  "name": "footerSecondary",
+                  "fill": "$action-primary",
+                  "content": "View details",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "pNagQ",
+      "x": 460,
+      "y": 1420,
+      "name": "Card showcase",
+      "clip": true,
+      "width": 740,
+      "height": 720,
+      "fill": "$surface-canvas",
+      "cornerRadius": "$radius-lg",
+      "layout": "vertical",
+      "gap": "$space-6",
+      "padding": "$space-8",
+      "children": [
+        {
+          "type": "text",
+          "id": "Q3N1zq",
+          "name": "Title",
+          "fill": "$text-primary",
+          "content": "Card variants",
+          "fontFamily": "$font-body",
+          "fontSize": "$font-size-lg",
+          "fontWeight": "bold"
+        },
+        {
+          "type": "frame",
+          "id": "txiZR",
+          "name": "Variants",
+          "width": "fill_container",
+          "gap": "$space-6",
+          "children": [
+            {
+              "id": "MYDEX",
+              "type": "ref",
+              "ref": "COzjp",
+              "name": "Default",
+              "width": "fill_container",
+              "descendants": {
+                "iOvfr": {
+                  "enabled": true
+                },
+                "nhHcI": {
+                  "content": "Default card"
+                },
+                "KnLfb": {
+                  "content": "Raised surface with media and semantic hierarchy."
+                }
+              }
+            },
+            {
+              "id": "yGE53",
+              "type": "ref",
+              "ref": "COzjp",
+              "name": "Plain",
+              "width": "fill_container",
+              "descendants": {
+                "iOvfr": {
+                  "enabled": false
+                },
+                "nhHcI": {
+                  "content": "Plain card"
+                },
+                "KnLfb": {
+                  "content": "A compact content-only card composition."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "k1KtJ",
+          "type": "ref",
+          "ref": "COzjp",
+          "name": "Compact",
+          "width": 220,
+          "descendants": {
+            "iOvfr": {
+              "enabled": false
+            },
+            "nhHcI": {
+              "content": "Compact card",
+              "fontSize": "$font-size-sm"
+            },
+            "KnLfb": {
+              "content": "Dense content summary."
+            },
+            "Q24Y9": {
+              "content": "3 tasks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "X3pzJ",
+      "x": 1280,
+      "y": 80,
+      "name": "Projects overview",
+      "clip": true,
+      "width": 1200,
+      "height": 800,
+      "fill": "$surface-canvas",
+      "layout": "vertical",
+      "gap": "$space-6",
+      "padding": "$space-8",
+      "children": [
+        {
+          "type": "frame",
+          "id": "z9RhPT",
+          "name": "Header",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "mqSAR",
+              "name": "Heading",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "E8Jvh7",
+                  "name": "Title",
+                  "fill": "$text-primary",
+                  "content": "Projects",
+                  "fontFamily": "$font-body",
+                  "fontSize": 32,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "pcpWn",
+                  "name": "Description",
+                  "fill": "$text-secondary",
+                  "content": "Prioritize initiatives and keep every team aligned.",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-md",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "R5ZSf7",
+              "name": "Actions",
+              "gap": "$space-4",
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "Y9CPl",
+                  "type": "ref",
+                  "ref": "z6FBhy",
+                  "name": "Add project",
+                  "descendants": {
+                    "a5MK1": {
+                      "content": "New project"
+                    }
+                  }
+                },
+                {
+                  "id": "yr7hf",
+                  "type": "ref",
+                  "ref": "ngKcI",
+                  "name": "Project actions"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "q3GQb",
+          "name": "Summary",
+          "width": "fill_container",
+          "gap": "$space-4",
+          "children": [
+            {
+              "type": "frame",
+              "id": "CaDND",
+              "name": "Active",
+              "width": "fill_container",
+              "fill": "$surface-raised",
+              "cornerRadius": "$radius-md",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": "$space-6",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "xlODN",
+                  "name": "Label",
+                  "fill": "$text-secondary",
+                  "content": "Active",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "HTwgd",
+                  "name": "Value",
+                  "fill": "$text-primary",
+                  "content": "12",
+                  "fontFamily": "$font-body",
+                  "fontSize": 28,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "WthUU",
+                  "name": "Detail",
+                  "fill": "$text-secondary",
+                  "content": "Across 4 teams",
+                  "fontFamily": "$font-body",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ZVYf4",
+              "name": "At risk",
+              "width": "fill_container",
+              "fill": "$surface-raised",
+              "cornerRadius": "$radius-md",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": "$space-6",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "P2gdC",
+                  "name": "Label",
+                  "fill": "$text-secondary",
+                  "content": "At risk",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "lgf1y",
+                  "name": "Value",
+                  "fill": "$text-primary",
+                  "content": "3",
+                  "fontFamily": "$font-body",
+                  "fontSize": 28,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "p9Bj2d",
+                  "name": "Detail",
+                  "fill": "$text-secondary",
+                  "content": "Need attention",
+                  "fontFamily": "$font-body",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Z4w58d",
+              "name": "Completed",
+              "width": "fill_container",
+              "fill": "$surface-raised",
+              "cornerRadius": "$radius-md",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": "$space-6",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "cwpBj",
+                  "name": "Label",
+                  "fill": "$text-secondary",
+                  "content": "Completed",
+                  "fontFamily": "$font-body",
+                  "fontSize": "$font-size-sm",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "BAbCg",
+                  "name": "Value",
+                  "fill": "$text-primary",
+                  "content": "28",
+                  "fontFamily": "$font-body",
+                  "fontSize": 28,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "N5U2U",
+                  "name": "Detail",
+                  "fill": "$text-secondary",
+                  "content": "This quarter",
+                  "fontFamily": "$font-body",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "E9oBnX",
+          "name": "Project cards",
+          "width": "fill_container",
+          "gap": "$space-6",
+          "children": [
+            {
+              "id": "K4y50",
+              "type": "ref",
+              "ref": "COzjp",
+              "name": "Growth",
+              "width": "fill_container",
+              "descendants": {
+                "nhHcI": {
+                  "content": "Growth experiments"
+                },
+                "KnLfb": {
+                  "content": "Improve activation with measurable product bets."
+                },
+                "Q24Y9": {
+                  "content": "8 tasks"
+                },
+                "ur0C1": {
+                  "content": "Open project"
+                }
+              }
+            },
+            {
+              "id": "qiaSg",
+              "type": "ref",
+              "ref": "COzjp",
+              "name": "Platform",
+              "width": "fill_container",
+              "descendants": {
+                "nhHcI": {
+                  "content": "Platform reliability"
+                },
+                "KnLfb": {
+                  "content": "Ship a stable release and retire legacy work."
+                },
+                "Q24Y9": {
+                  "content": "5 tasks"
+                },
+                "ur0C1": {
+                  "content": "Open project"
+                }
+              }
+            },
+            {
+              "id": "B1pre",
+              "type": "ref",
+              "ref": "COzjp",
+              "name": "Research",
+              "width": "fill_container",
+              "descendants": {
+                "nhHcI": {
+                  "content": "Customer research"
+                },
+                "KnLfb": {
+                  "content": "Validate the next workflow with target users."
+                },
+                "Q24Y9": {
+                  "content": "4 tasks"
+                },
+                "ur0C1": {
+                  "content": "Open project"
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
