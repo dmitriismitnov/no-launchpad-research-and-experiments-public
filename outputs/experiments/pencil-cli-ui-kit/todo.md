@@ -6,11 +6,7 @@ Statuses: `planned`, `active`, `blocked`, `verified`.
 
 ## Active
 
-- [ ] **Layered token architecture migration** — `active`
-  - Scope: add project-shaped primitive/semantic variable layers and migrate the
-    existing Foundation, masters and Projects overview in place.
-  - Verifies against: `GetVariables`, master/ref scans, `ctx.problems` and
-    focused Foundation/Projects overview screenshots.
+None.
 
 ## Planned
 
@@ -48,3 +44,6 @@ None.
     layout-problem rows; `notes/evidence/projects-overview.png`.
 - [x] **Final evidence audit** — `verified`
   - `notes/results.md` classifies mechanical findings and explicit human review.
+- [x] **Layered token architecture migration** — `verified`
+  - Added project-shaped primitive/semantic layers and migrated Foundation,
+    masters and Projects overview in place; see `notes/evidence/token-architecture.md`.

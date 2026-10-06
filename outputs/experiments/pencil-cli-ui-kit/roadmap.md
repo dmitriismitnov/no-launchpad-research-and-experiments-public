@@ -13,6 +13,7 @@ no `.pen` file or Pencil mutation exists yet.
 | CLI discovery | done | Test direct CLI and headless interactive CLI routes. |
 | Gate A baseline | verified | Confirm active clean target and record baseline. |
 | UI Kit | done | Create foundation, Button, ButtonIcon and Card, then compose Projects overview. |
+| Token architecture migration | done | Mirror the Foundation layering logic and migrate existing canvas usage. |
 | Evidence and human review | ready for human review | Audit evidence and present GUI review to the user. |
 
 ## Decisions
@@ -43,3 +44,4 @@ no `.pen` file or Pencil mutation exists yet.
 | Date | Position | Durable files updated | Exact next action |
 | --- | --- | --- | --- |
 | 2026-10-06 | Human review ready | Pen target, evidence, results, roadmap, todo, log | User opens target in GUI and records visual accept/revise decision. |
+| 2026-10-06 | Token architecture audit ready | Pen target, token evidence, results, roadmap, todo, log | User reviews the layered Foundation and updated screen in GUI. |

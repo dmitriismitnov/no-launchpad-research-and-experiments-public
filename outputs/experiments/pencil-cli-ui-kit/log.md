@@ -41,6 +41,7 @@ scope expansion blocks work. GUI is only for final user review.
 | 14 | Composed Projects overview and audited target | orchestrator | `pen.dev CLI 0.3.10` | **PASS:** `X3pzJ` composes Button/ButtonIcon/Card refs; 1200×800 root and all three masters read back without visitor layout-problem rows. Pre-review classification is `notes/results.md`. |
 | 15 | Ran token-architecture baseline audit | orchestrator | `openai/gpt-5.6-terra`, pen.dev CLI 0.3.10 | **FAIL as expected:** namespaced primitive/semantic variables are absent; masters `z6FBhy`, `ngKcI`, `COzjp` still use simplified aliases. Transcript/evidence: `notes/evidence/token-architecture-baseline.md`. |
 | 16 | Migrated Pen token architecture in place | orchestrator | `openai/gpt-5.6-terra`, pen.dev CLI 0.3.10 | **PASS after correction:** added palette/scales/typography primitives and light/dark `semantic.*` aliases, then migrated existing masters and composition without recreating ids. `SetVariables(..., true)` materialized legacy references before the first rewrite; targeted diagnosis and update restored semantic/scale references. Final token audit has required names, three masters and refs, with no legacy/literal visual token rows or `ctx.problems`. |
+| 17 | Classified token architecture evidence | orchestrator | `openai/gpt-5.6-terra` | **PASS mechanically / HUMAN REVIEW visually:** `notes/evidence/token-architecture.md` records primitive-to-semantic direction, preserved refs, focused screenshots and target hash. GUI remains the user-only visual gate. |
 
 ### Rulings
 
